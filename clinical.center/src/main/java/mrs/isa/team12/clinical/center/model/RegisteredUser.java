@@ -15,6 +15,24 @@ public class RegisteredUser {
 	
 	public RegisteredUser() {}
 	
+	public RegisteredUser(String username, String password, Role role, String name, String surname, String address,
+			String city, String country, String phoneNumber, String securityNumber) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.name = name;
+		this.surname = surname;
+		this.address = address;
+		this.city = city;
+		this.country = country;
+		this.phoneNumber = phoneNumber;
+		this.securityNumber = securityNumber;
+	}
+
+
+
+
 	public String getUsername() {
 		return username;
 	}
