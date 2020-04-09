@@ -12,11 +12,19 @@ public class InMemoryClinicAdminRepository implements ClinicAdminRepository{
 	
 	private static HashMap<String, ClinicAdministrator> clinicAdmins = new HashMap<String, ClinicAdministrator>(); 
 	
+	/*
+	 return all clinic administrators
+	 returns HashMap<String, ClinicAdministrator>
+	 */
 	@Override
 	public Collection<ClinicAdministrator> findAll(){
 		return InMemoryClinicAdminRepository.clinicAdmins.values();
 	}
 
+	/*
+	 adds new clinic administrator
+	 receives ClinicAdministrator object
+	 */
 	@Override
 	public ClinicAdministrator create(ClinicAdministrator clinicAdmin) {
 		if(InMemoryClinicAdminRepository.clinicAdmins.containsKey(clinicAdmin.getUsername())) {
@@ -28,6 +36,11 @@ public class InMemoryClinicAdminRepository implements ClinicAdminRepository{
 		}
 	}
 
+	/*
+	 finds clinic administrator
+	 receives clinic administrator username
+	 returns ClinicAdministrator object
+	 */
 	@Override
 	public ClinicAdministrator findOne(String username) {
 		if(InMemoryClinicAdminRepository.clinicAdmins.containsKey(username)) {
@@ -39,6 +52,11 @@ public class InMemoryClinicAdminRepository implements ClinicAdminRepository{
 		
 	}
 	
+	/*
+	 updates existing clinic administrator
+	 receives ClinicAdministrator object
+	 returns ClinicAdministrator object
+	 */
 	@Override
 	public ClinicAdministrator update(ClinicAdministrator clinicAdmin) {
 		if(InMemoryClinicAdminRepository.clinicAdmins.containsKey(clinicAdmin.getUsername())) {
@@ -51,6 +69,11 @@ public class InMemoryClinicAdminRepository implements ClinicAdminRepository{
 		}
 	}
 
+	/*
+	 deletes clinic administrator
+	 receives clinic administrator username
+	 returns Boolean
+	 */
 	@Override
 	public boolean delete(String username) {
 		if(InMemoryClinicAdminRepository.clinicAdmins.containsKey(username)) {

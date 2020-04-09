@@ -18,10 +18,18 @@ public class DoctorService {
 		this.doctorRepository = doctorRepository;
 	}
 	
+	/*
+	 adds new doctor to clinic center
+	 receives Doctor object
+	 */
 	public void addDoctor(Doctor doctor) {
 		doctorRepository.addDoctor(doctor);
 	}
 	
+	/*
+	 return all doctors in the database
+	 returns ArrayList<Doctor>
+	 */
 	public ArrayList<Doctor> listDoctors(){
 		return doctorRepository.listDoctors();
 	}

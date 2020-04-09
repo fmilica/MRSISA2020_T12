@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
+//Clinic administrator class
 public class ClinicAdministrator extends RegisteredUser {
 	private int clinicID;
 	

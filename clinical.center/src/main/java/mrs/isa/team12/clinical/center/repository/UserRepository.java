@@ -4,13 +4,13 @@ import java.util.Collection;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 
+//Interface for User database access
 public interface UserRepository {
 
 	Collection<RegisteredUser> findAll();
 
 	RegisteredUser create(RegisteredUser user);
-	
-	// za sada mozda nepotrebno
+
 	RegisteredUser findOne(String username);
 	
 	RegisteredUser update(RegisteredUser user);

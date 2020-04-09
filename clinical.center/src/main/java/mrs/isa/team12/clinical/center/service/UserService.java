@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 
+//Interface for user service
 public interface UserService {
 
 	Collection<RegisteredUser> findAll();

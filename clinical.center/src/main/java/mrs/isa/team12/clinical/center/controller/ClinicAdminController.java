@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mrs.isa.team12.clinical.center.model.ClinicAdministrator;
 import mrs.isa.team12.clinical.center.service.ClinicAdminService;
 
+//Controller for receiving client requests from clinic admin input form
 @RestController
 @RequestMapping("/api/clinicAdmins")
 public class ClinicAdminController {
@@ -26,12 +27,24 @@ public class ClinicAdminController {
 		this.clinicAdminService = clinicAdminService;
 	}
 	
+	/*
+	 url: GET localhost:8081/api/clinicAdmins
+	 HTTP request for viewing clinic admins
+	 returns ResponseEntity object
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<ClinicAdministrator>> getClinicAdmins(){
 		Collection<ClinicAdministrator> admins = clinicAdminService.findAll();
 		return new ResponseEntity<Collection<ClinicAdministrator>>(admins, HttpStatus.OK);
 	}
 	
+	
+	/*
+	 url: POST localhost:8081/api/clinicAdmins
+	 HTTP request for adding new clinic admin
+	 receives ClinicAdministrator object
+	 returns ResponseEntity object
+	 */
 	@PostMapping(value = "/addClinicAdmin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ClinicAdministrator> createClinicAdmin(@RequestBody ClinicAdministrator clinicAdmin){
 		ClinicAdministrator admin = clinicAdminService.create(clinicAdmin);

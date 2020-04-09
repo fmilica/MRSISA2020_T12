@@ -2,6 +2,7 @@ package mrs.isa.team12.clinical.center.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+//Doctor class
 public class Doctor extends RegisteredUser {
 
 	private String workingHours;

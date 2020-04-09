@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
+//Registered user classs
 public class RegisteredUser {
 
 	private String username;

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.UserService;
 
+//Controller for receiving client requests from user input form
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -26,12 +27,23 @@ public class UserController {
 		this.userService = userService;
 	}
 	
+	/*
+	 url: GET localhost:8081/api/users
+	 HTTP request for viewing users
+	 returns ResponseEntity object
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<RegisteredUser>> getUsers() {
 		Collection<RegisteredUser> users = userService.findAll();
 		return new ResponseEntity<Collection<RegisteredUser>>(users, HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/api/users
+	 HTTP request for adding new user
+	 receives RegisteredUser object
+	 returns ResponseEntity object
+	 */
 	@PostMapping(value = "/addPatient",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
