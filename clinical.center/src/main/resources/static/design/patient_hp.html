@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+
+	<title>The Good Sheperd</title>
+
+	<!-- google font, tether, bootstrap, jquery and other files-->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css" />
+	<script src="js/jquery.min.js" ></script>
+	<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.3/css/tether.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.3/js/tether.js" ></script>
+	<link href="js/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="js/select2/css/select2.css" rel="stylesheet" type="text/css" />
+	<link href="js/dropzone/dropzone.css" rel="stylesheet" media="screen">
+	<link href="js/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+	<link href="js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
+	<link href="js/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" media="screen">
+	
+	<!-- theme style -->
+	<link href="css/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/plugins.min.css" rel="stylesheet" type="text/css" />
+	<link href="css/formlayout.css" rel="stylesheet" type="text/css" />
+	<link href="css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="css/theme-color.css" rel="stylesheet" type="text/css" />
+	<link href="css/material_style.css" rel="stylesheet" type="text/css" />
+	<link href="css/material.indigo-pink.min.css" rel="stylesheet" type="text/css" />
+	<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/ico" href="img/favicon.ico"/>
+
+	<!-- Project bound files -->
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="js/main.js"></script>
+
+	<!-- FullCalendar -->
+	<link href='fullcalendar/core/main.css' rel='stylesheet' />
+	<link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
+	<link href='fullcalendar/timegrid/main.css' rel='stylesheet' />
+	<link href='fullcalendar/list/main.css' rel='stylesheet' />
+
+	<script src='fullcalendar/core/main.js'></script>
+	<script src='fullcalendar/interaction/main.js'></script>
+	<script src='fullcalendar/daygrid/main.js'></script>
+	<script src='fullcalendar/timegrid/main.js'></script>
+	<script src='fullcalendar/list/main.js'></script>
+
+</head>
+
+
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-cyan">
+    <div class="page-wrapper">
+        <!-- start header -->
+		<div class="page-header navbar navbar-fixed-top">
+            <div class="page-header-inner ">
+                <!-- logo start -->
+                <div class="page-logo">
+                    <a href="#">
+                    <span class="logo-icon fa fa-stethoscope fa-rotate-45"></span>
+                    <span class="logo-default" >The Good Sheperd</span> </a>
+                </div>
+                <!-- logo end -->
+				<ul class="nav navbar-nav navbar-left in ">
+					<li><a href="#" class="menu-toggler sidebar-toggler " ><img src="img/toggle-icon.svg" > </img></a></li>
+				</ul>
+
+				<!-- start banner -->
+				<span class="banner">Ongoing COVID-19 pandemic #StayHome #StaySafe</span>
+				<!-- end banner -->
+
+                <!-- start header menu -->
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+
+ 						<!-- start manage user dropdown -->
+ 						<li class="dropdown dropdown-user">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <img alt="PA" src="img/dp.jpg" style=" border-radius: 90%; border:10px;"/>
+                                <span class="username username-hide-on-mobile">Patient A</span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li>
+                                    <a href="user_profile.html">
+										<img src="img/account.svg"></img>
+										My Profile
+									</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<img src="img/settings.svg"></img>
+										Change Password
+                                    </a>
+								</li>
+								<li class="divider"></li>
+                                <li>
+                                    <a href="#">
+										<img src="img/support.svg"></img>
+										Logout	
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- end manage user dropdown -->
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end header -->
+
+        <!-- start page container -->
+        <div class="page-container">
+ 			<!-- start sidebar menu -->
+ 			<div class="sidebar-container ">
+ 				<div class="sidemenu-container navbar-collapse collapse fixed-menu">
+	                <div id="remove-scroll">
+	                    <ul class="sidemenu  page-header-fixed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+	                        <li class="sidebar-toggler-wrapper hide">
+	                            <div class="sidebar-toggler">
+	                                <span></span>
+	                            </div>
+	                        </li>
+	                        <li class="sidebar-user-panel">
+	                            <div class="user-panel">
+	                                <div class="pull-left image">
+	                                    <img src="img/dp.jpg" class="img-circle user-img-circle" alt="User Image" />
+	                                </div>
+	                                <div class="pull-left info">
+	                                    <p style="font-size: 16px;">Patient A</p>
+	                                </div>
+	                            </div>
+	                        </li>
+	                        <li class="nav-item ">
+	                            <a href="#" class="nav-link nav-toggle">
+	                                <img src="img/png/home_page.png"></img>
+	                                <span class="title">Home Page</span>
+	                                <span class="arrow"></span>
+	                            </a>
+	                        </li>
+                            <li class="nav-item  ">
+	                            <a href="#" class="nav-link nav-toggle">
+									<img src="img/png/clinics.png"></img>
+									<span class="title">Clinics</span>
+									<span class="arrow"></span>
+	                            </a>
+							</li>
+	                        <li class="nav-item  ">
+	                            <a href="#" class="nav-link nav-toggle">
+									<img src="img/png/appointment.png"></img>
+									<span class="title">Appointments</span>
+									<span class="arrow"></span>
+	                            </a>
+							</li>
+							<li class="nav-item  ">
+	                            <a href="#" class="nav-link nav-toggle">
+									<img src="img/png/medical_record.png"></img>
+									<span class="title">Medical Record</span>
+									<span class="arrow"></span>
+								</a>
+							</li>
+	                    </ul>
+	                </div>
+                </div>
+            </div>
+			<!-- end sidebar menu -->
+
+			<!-- start page content -->
+
+			<div class="content-container">
+				<!-- start welcoming text -->
+				<div class="text">
+					<h1 align="center">Welcome to The Good Shepered Clinics</h1>
+					<h2 align="center">Your mind and body deserve only the best!</h2>
+				</div>
+				<!-- end welcoming text -->
+
+				<!-- start calendar -->
+				<div class="calendar" id="calendar"></div>
+				<!-- end calendar -->
+			</div>
+
+			<!-- end page content -->
+		</div>
+        <!-- end page container -->
+        <!-- start footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner"> 2020 &copy; The Good Sheperd Clinics - Your healthcare companion
+            </div>
+            <div class="scroll-to-top">
+                <img src="img/uparrow1.svg"></img>
+			</div>
+		</div>
+   
+</div>
+		<!-- end footer -->
+
+
+</body>
+<!-- Loading script files -->
+<script src="js/jquery.blockui.min.js" ></script>
+<script src="js/jquery.slimscroll.js" ></script>
+
+<!-- Common js-->
+<script src="js/app.js" ></script>
+<script src="js/layout.js" ></script>
+<script src="js/theme-color.js" ></script>
+
+<!-- Material -->
+<script src="js/material/material.min.js" ></script>
+<script src="js/getmdl-select.js" ></script>
+<script src="js/material-datetimepicker/moment-with-locales.min.js" ></script>
+<script src="js/material-datetimepicker/bootstrap-material-datetimepicker.js" ></script>
+<script src="js/material-datetimepicker/datetimepicker.js" ></script>
+<script src="js/select2/js/select2.js" ></script>
+<script src="js/select2/js/select2-init.js" ></script>
+
+<!-- dropzone -->
+
+<script src="js/dropzone/dropzone.js" ></script>
+<script src="js/dropzone/dropzone-call.js" ></script>
+
+
+</html>

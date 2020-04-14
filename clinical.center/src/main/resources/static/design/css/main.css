@@ -1,0 +1,83 @@
+/*
+*   Main .css file for the project MRSISA-Tim12
+*/
+
+/* varela-round-regular - latin */
+@font-face {
+    font-family: 'Varela Round';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/varela-round-v12-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local('Varela Round Regular'), local('VarelaRound-Regular'),
+         url('../fonts/varela-round-v12-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/varela-round-v12-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/varela-round-v12-latin-regular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/varela-round-v12-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/varela-round-v12-latin-regular.svg#VarelaRound') format('svg'); /* Legacy iOS */
+  }
+
+html {
+    font-family: 'Varela Round' !important;
+}
+
+.page-logo {
+
+}
+
+.sidebar-container {
+    height: 120vh !important;
+    background-color: #4ABAD2 !important;
+}
+
+.sidemenu-container {
+    background-color: #4ABAD2 !important;
+}
+
+.logo-default {
+    font-size: medium !important;
+}
+
+.page-header-inner {
+    text-align: center;
+    line-height: 64px;
+}
+
+.banner {
+    font-size: 20px;
+}
+
+.sidebar-container {
+    float: left;
+}
+
+.content-container {
+    background-image: url(../img/background_transparent.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    overflow: hidden;
+    min-height: 250px;
+    padding: 15px;
+    padding-left: auto;
+    padding-right: auto;
+}
+
+.text {
+    margin-left: 170px;
+    margin-right: 170px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 252, 0.8);
+}
+
+.background {
+    width: 100%;
+}
+
+.calendar {
+    margin-top: 50px;
+    margin-left: 150px;
+    margin-right: 150px;
+    padding: 7px;
+    border-radius: 5px;
+    background-color: #fffffc;
+}
