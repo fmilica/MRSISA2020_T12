@@ -21,7 +21,22 @@ html {
 }
 
 .page-logo {
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    padding-top: 10px !important;
+    padding-left: 20px !important;
+}
 
+.logo-icon {
+    display: inline-block;
+    width: 53px;
+    height: 32px;
+    /*background-image: url(../img/png/logo_back.png) !important;
+    background-size: cover;*/
+}
+
+.icon {
+	width: 24px;
 }
 
 .sidebar-container {
