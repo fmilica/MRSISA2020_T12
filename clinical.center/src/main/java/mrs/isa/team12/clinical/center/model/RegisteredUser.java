@@ -1,44 +1,44 @@
 package mrs.isa.team12.clinical.center.model;
 
-//Registered user classs
+import org.hibernate.annotations.Entity;
+
+//Registered user class
+@Entity
 public class RegisteredUser {
 
-	private String username;
+	private String email;
 	private String password;
-	private Role role;
 	private String name;
-	private String surname;
+	private String suername;
 	private String address;
 	private String city;
 	private String country;
 	private String phoneNumber;
-	private String securityNumber;
+	private Integer securityNumber;
 	
-	public RegisteredUser() {}
 	
-	public RegisteredUser(String username, String password, Role role, String name, String surname, String address,
-			String city, String country, String phoneNumber, String securityNumber) {
+	public RegisteredUser() {
+		
+	}
+	
+	public RegisteredUser(String email, String password, String name, String suername, String address, String city,
+			String country, String phoneNumber, Integer securityNumber) {
 		super();
-		this.username = username;
+		this.email = email;
 		this.password = password;
-		this.role = role;
 		this.name = name;
-		this.surname = surname;
+		this.suername = suername;
 		this.address = address;
 		this.city = city;
 		this.country = country;
 		this.phoneNumber = phoneNumber;
 		this.securityNumber = securityNumber;
 	}
-
-
-
-
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getPassword() {
 		return password;
@@ -46,23 +46,17 @@ public class RegisteredUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Role getRole() {
-		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getSurname() {
-		return surname;
+	public String getSuername() {
+		return suername;
 	}
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setSuername(String suername) {
+		this.suername = suername;
 	}
 	public String getAddress() {
 		return address;
@@ -88,10 +82,12 @@ public class RegisteredUser {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String getSecurityNumber() {
+	public Integer getSecurityNumber() {
 		return securityNumber;
 	}
-	public void setSecurityNumber(String securityNumber) {
+	public void setSecurityNumber(Integer securityNumber) {
 		this.securityNumber = securityNumber;
 	}
+	
+	
 }
