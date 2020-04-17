@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,26 +33,32 @@ public class UserController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<RegisteredUser>> getUsers() {
-		Collection<RegisteredUser> users = userService.findAll();
-		return new ResponseEntity<Collection<RegisteredUser>>(users, HttpStatus.OK);
+	public ResponseEntity<List<RegisteredUser>> getAllUsers() {
+		
+		List<RegisteredUser> users = userService.findAll();
+		
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
 	/*
-	 url: POST localhost:8081/api/users
+	 url: POST localhost:8081/api/users/addRegisteredUser
 	 HTTP request for adding new user
 	 receives RegisteredUser object
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "/addPatient",
+	@PostMapping(value = "/addRegisteredUser",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RegisteredUser> createGreeting(@RequestBody RegisteredUser user) {
-		RegisteredUser newUser = userService.create(user);
+	public ResponseEntity<RegisteredUser> createRegisteredUser(@RequestBody RegisteredUser user) {
+		
+		RegisteredUser newUser = userService.save(user);
+		
 		System.out.println(user.getName());
+		
 		if (newUser == null) {
 			return new ResponseEntity<RegisteredUser>(newUser, HttpStatus.BAD_REQUEST);
 		}
+		
 		return new ResponseEntity<RegisteredUser>(newUser, HttpStatus.CREATED);
 	}
 

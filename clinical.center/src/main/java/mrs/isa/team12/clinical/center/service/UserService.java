@@ -1,19 +1,12 @@
 package mrs.isa.team12.clinical.center.service;
 
-import java.util.Collection;
+import java.util.List;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 
-//Interface for user service
 public interface UserService {
 
-	Collection<RegisteredUser> findAll();
+	List<RegisteredUser> findAll();
 	
-	RegisteredUser findOne(String username);
-	
-	RegisteredUser create(RegisteredUser user);
-	
-	RegisteredUser update(RegisteredUser user);
-	
-	boolean delete(String username);
+	public RegisteredUser save(RegisteredUser ru);
 }
