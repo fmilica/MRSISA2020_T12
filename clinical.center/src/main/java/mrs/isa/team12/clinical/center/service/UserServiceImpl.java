@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.repository.UserRepository;
+import mrs.isa.team12.clinical.center.service.interfaces.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {

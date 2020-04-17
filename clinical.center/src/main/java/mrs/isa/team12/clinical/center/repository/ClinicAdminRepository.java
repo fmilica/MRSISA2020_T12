@@ -1,8 +1,10 @@
 package mrs.isa.team12.clinical.center.repository;
 
-//Interface for Clinic Admin database access
-public interface ClinicAdminRepository {
-	
+import org.springframework.data.jpa.repository.JpaRepository;
 
-	boolean delete(String username);
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+
+//Interface for Clinic Admin database access
+public interface ClinicAdminRepository extends JpaRepository<ClinicAdmin, Long> {
+	
 }

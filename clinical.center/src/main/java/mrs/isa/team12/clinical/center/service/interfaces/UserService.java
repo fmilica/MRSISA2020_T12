@@ -1,4 +1,4 @@
-package mrs.isa.team12.clinical.center.service;
+package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
 

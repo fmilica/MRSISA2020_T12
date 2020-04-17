@@ -12,9 +12,7 @@ public class Patient extends RegisteredUser {
 	
 	private Clinic clinic;
 
-	public Patient() {
-		// TODO Auto-generated constructor stub
-	}
+	public Patient() {}
 
 	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre,
 			Clinic clinic) {

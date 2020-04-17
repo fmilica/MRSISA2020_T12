@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
-import mrs.isa.team12.clinical.center.service.UserService;
+import mrs.isa.team12.clinical.center.service.interfaces.UserService;
 
 //Controller for receiving client requests from user input form
 @RestController
@@ -59,7 +59,7 @@ public class UserController {
 			return new ResponseEntity<RegisteredUser>(newUser, HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<RegisteredUser>(newUser, HttpStatus.CREATED);
+		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
 
 }

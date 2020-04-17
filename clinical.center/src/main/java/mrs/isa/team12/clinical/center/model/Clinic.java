@@ -1,15 +1,45 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Clinic {
 	
-	private String name;
-	private String address;
-	private String city;
-	private String country;
-	private String description;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 	
+	@Column(name="name", unique=false, nullable=false)
+	private String name;
+	
+	@Column(name="address", unique=false, nullable=false)
+	private String address;
+	
+	@Column(name="city", unique=false, nullable=false)
+	private String city;
+	
+	@Column(name="country", unique=false, nullable=false)
+	private String country;
+	
+	@Column(name="description", unique=false, nullable=false)
+	private String description;
+
+	//private ClinicalCentre clinicalCentre;
+	
+	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="clinic")
+	private Set<ClinicAdmin> admins;
+	
+	/*
 	private Pricelist priceList;
 	
 	private Set<Doctor> doctors;
@@ -30,13 +60,17 @@ public class Clinic {
 	
 	private Set<AppointmentRequest> appointmentRequests;
 	
-	private ClinicalCentre clinicalCentre;
-	
-	private Set<ClinicAdmin> admins;
+	*/
 
-	public Clinic() {
-		// TODO Auto-generated constructor stub
+	public void add(ClinicAdmin clinicAdmin) {
+		if (clinicAdmin.getClinic() != null) {
+			clinicAdmin.getClinic().getAdmins().remove(clinicAdmin);
+		}
+		clinicAdmin.setClinic(this);
+		this.getAdmins().add(clinicAdmin);
 	}
+
+	public Clinic() {}
 
 	public Clinic(String name, String address, String city, String country, String description, Pricelist priceList,
 			Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients, Set<Appointment> appointments,
@@ -49,6 +83,7 @@ public class Clinic {
 		this.city = city;
 		this.country = country;
 		this.description = description;
+		/*
 		this.priceList = priceList;
 		this.doctors = doctors;
 		this.nurses = nurses;
@@ -60,6 +95,7 @@ public class Clinic {
 		this.leaveRequests = leaveRequests;
 		this.appointmentRequests = appointmentRequests;
 		this.clinicalCentre = clinicalCentre;
+		*/
 		this.admins = admins;
 	}
 
@@ -104,7 +140,7 @@ public class Clinic {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+/*
 	public Pricelist getPriceList() {
 		return priceList;
 	}
@@ -192,7 +228,7 @@ public class Clinic {
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
-
+*/
 	public Set<ClinicAdmin> getAdmins() {
 		return admins;
 	}
