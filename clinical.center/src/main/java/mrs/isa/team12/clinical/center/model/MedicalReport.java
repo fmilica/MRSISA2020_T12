@@ -2,26 +2,42 @@ package mrs.isa.team12.clinical.center.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+@Entity
 public class MedicalReport {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	
+	@Column(name = "diagnosis", unique = false, nullable = false)
 	private String diagnosis;
+	
+	@Column(name = "description", unique = false, nullable = false)
 	private String description;
 	
-	private Appointment appointment;
-	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "medicalReport_perscription", 
+				joinColumns = @JoinColumn(name = "medical_report_id"),
+				inverseJoinColumns = @JoinColumn(name = "prescription_id"))
 	private Set<Prescription> prescriptions;
-	
 
-	public MedicalReport() {
-		super();
-	}
+	public MedicalReport() {}
 
-	public MedicalReport(String diagnosis, String description, Appointment appointment,
+	public MedicalReport(String diagnosis, String description,
 			Set<Prescription> prescriptions) {
 		super();
 		this.diagnosis = diagnosis;
 		this.description = description;
-		this.appointment = appointment;
 		this.prescriptions = prescriptions;
 	}
 
@@ -40,15 +56,6 @@ public class MedicalReport {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Appointment getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
-
 	public Set<Prescription> getPrescriptions() {
 		return prescriptions;
 	}
@@ -56,7 +63,4 @@ public class MedicalReport {
 	public void setPrescriptions(Set<Prescription> prescriptions) {
 		this.prescriptions = prescriptions;
 	}
-	
-	
-
 }

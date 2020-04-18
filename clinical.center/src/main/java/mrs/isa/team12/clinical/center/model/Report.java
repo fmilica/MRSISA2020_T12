@@ -1,21 +1,29 @@
 package mrs.isa.team12.clinical.center.model;
 
-import java.util.HashMap;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Report {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	
+	@Column(name = "clinicRating", unique = false, nullable = true)
 	private Double clinicRating;
-	private HashMap<Doctor, Double> doctorsRatings;
+	
+	@Column(name = "income", unique = false, nullable = true)
 	private Double income;
 
-	public Report() {
-		// TODO Auto-generated constructor stub
-	}
+	public Report() {}
 
-	public Report(Double clinicRating, HashMap<Doctor, Double> doctorsRatings, Double income) {
+	public Report(Double clinicRating, Double income) {
 		super();
 		this.clinicRating = clinicRating;
-		this.doctorsRatings = doctorsRatings;
 		this.income = income;
 	}
 
@@ -26,15 +34,6 @@ public class Report {
 	public void setClinicRating(Double clinicRating) {
 		this.clinicRating = clinicRating;
 	}
-
-	public HashMap<Doctor, Double> getDoctorsRatings() {
-		return doctorsRatings;
-	}
-
-	public void setDoctorsRatings(HashMap<Doctor, Double> doctorsRatings) {
-		this.doctorsRatings = doctorsRatings;
-	}
-
 	public Double getIncome() {
 		return income;
 	}
@@ -42,7 +41,4 @@ public class Report {
 	public void setIncome(Double income) {
 		this.income = income;
 	}
-	
-	
-
 }

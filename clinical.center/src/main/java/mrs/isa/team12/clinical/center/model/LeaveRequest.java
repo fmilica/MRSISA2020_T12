@@ -1,23 +1,38 @@
 package mrs.isa.team12.clinical.center.model;
 
+import javax.persistence.Column;
+import static javax.persistence.FetchType.LAZY;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity
 public class LeaveRequest {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "leave_id")
 	private Leave leave;
+	
+	@Column(name = "approved", nullable = false, unique = false)
 	private Boolean approved;
+	
+	@Column(name = "description", nullable = true, unique = false)
 	private String description;
 	
-	private Clinic clinic;
+	public LeaveRequest() {}
 
-	public LeaveRequest() {
-		super();
-	}
-
-	public LeaveRequest(Leave leave, Boolean approved, String description, Clinic clinic) {
+	public LeaveRequest(Leave leave, Boolean approved, String description) {
 		super();
 		this.leave = leave;
 		this.approved = approved;
 		this.description = description;
-		this.clinic = clinic;
 	}
 
 	public Leave getLeave() {
@@ -43,13 +58,4 @@ public class LeaveRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Clinic getClinic() {
-		return clinic;
-	}
-
-	public void setClinic(Clinic clinic) {
-		this.clinic = clinic;
-	}
-
 }

@@ -1,26 +1,37 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Patient extends RegisteredUser {
 	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
 	private Set<Appointment> appointments;
 	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "medical_record_id")
 	private MedicalRecords medicalRecords;
 	
+	@ManyToOne
+	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
 	
-	private Clinic clinic;
-
 	public Patient() {}
 
-	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre,
-			Clinic clinic) {
+	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre) {
 		super();
 		this.appointments = appointments;
 		this.medicalRecords = medicalRecords;
 		this.clinicalCentre = clinicalCentre;
-		this.clinic = clinic;
 	}
 
 	public Set<Appointment> getAppointments() {
@@ -46,15 +57,4 @@ public class Patient extends RegisteredUser {
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
-
-	public Clinic getClinic() {
-		return clinic;
-	}
-
-	public void setClinic(Clinic clinic) {
-		this.clinic = clinic;
-	}
-	
-	
-
 }

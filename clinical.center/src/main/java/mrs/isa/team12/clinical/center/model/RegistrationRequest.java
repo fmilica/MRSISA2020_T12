@@ -1,14 +1,34 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.FetchType.LAZY;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity
 public class RegistrationRequest {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "registered_user_id")
 	private RegisteredUser user;
+	
+	@Column(name = "approved", unique = false, nullable = false)
 	private Boolean approved;
+	
+	@Column(name = "description", unique = false, nullable = true)
 	private String description;
 	
-	public RegistrationRequest() {
-		super();
-	}
+	public RegistrationRequest() {}
+	
 	public RegistrationRequest(RegisteredUser user, Boolean approved, String description) {
 		super();
 		this.user = user;
@@ -33,7 +53,4 @@ public class RegistrationRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
-
 }

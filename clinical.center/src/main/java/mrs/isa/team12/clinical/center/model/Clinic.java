@@ -10,7 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Clinic {
@@ -34,34 +37,46 @@ public class Clinic {
 	@Column(name="description", unique=false, nullable=false)
 	private String description;
 
-	//private ClinicalCentre clinicalCentre;
+	@ManyToOne
+	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
+	private ClinicalCentre clinicalCentre;
+		
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "pricelist_id")
+	private Pricelist priceList;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "report_id")
+	private Report report;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "diagnose_perscription_id")
+	private DiagnosePerscription diagnosePerscription;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	private Set<Doctor> doctors;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	private Set<Nurse> nurses;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	private Set<Patient> patients;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	private Set<Appointment> appointments;
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="clinic")
 	private Set<ClinicAdmin> admins;
 	
-	/*
-	private Pricelist priceList;
-	
-	private Set<Doctor> doctors;
-	
-	private Set<Nurse> nurses;
-	
-	private Set<Patient> patients;
-	
-	private Set<Appointment> appointments;
-	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
 	private Set<Ordination> ordinations;
 	
-	private Report report;
-	
-	private DiagnosePerscription diagnosePerscription;
-	
-	private Set<LeaveRequest> leaveRequests;
-	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
 	private Set<AppointmentRequest> appointmentRequests;
 	
-	*/
-
+	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	private Set<LeaveRequest> leaveRequests;
+	
 	public void add(ClinicAdmin clinicAdmin) {
 		if (clinicAdmin.getClinic() != null) {
 			clinicAdmin.getClinic().getAdmins().remove(clinicAdmin);
@@ -83,7 +98,6 @@ public class Clinic {
 		this.city = city;
 		this.country = country;
 		this.description = description;
-		/*
 		this.priceList = priceList;
 		this.doctors = doctors;
 		this.nurses = nurses;
@@ -95,7 +109,6 @@ public class Clinic {
 		this.leaveRequests = leaveRequests;
 		this.appointmentRequests = appointmentRequests;
 		this.clinicalCentre = clinicalCentre;
-		*/
 		this.admins = admins;
 	}
 
@@ -140,7 +153,7 @@ public class Clinic {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-/*
+
 	public Pricelist getPriceList() {
 		return priceList;
 	}
@@ -228,7 +241,6 @@ public class Clinic {
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
-*/
 	public Set<ClinicAdmin> getAdmins() {
 		return admins;
 	}

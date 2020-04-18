@@ -1,13 +1,22 @@
 package mrs.isa.team12.clinical.center.model;
 
-public class Prescription {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class Prescription {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+
+	@Column(name = "medicine", unique = false, nullable = false)
 	private String medicine;
 	
-	
-	public Prescription() {
-		super();
-	}
+	public Prescription() {}
 
 	public Prescription(String medicine) {
 		super();

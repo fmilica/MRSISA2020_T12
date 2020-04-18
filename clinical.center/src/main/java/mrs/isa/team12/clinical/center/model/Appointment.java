@@ -1,25 +1,68 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Appointment {
 	
-	private Date date;
-	private Date time;
-	private AppointmentType type;
-	private Integer duration;
-	private Double price;
-	private Double discount;
-	private Boolean confirmed;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 	
+	@Column(name = "date", unique = false, nullable = false )
+	private Date date;
+	
+	@Column(name = "time", unique = false, nullable = false )
+	private Date time;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "type_id")
+	private AppointmentType type;
+	
+	@Column(name = "duration", unique = false, nullable = false )
+	private Integer duration;
+	
+	@Column(name = "price", unique = false, nullable = false )
+	private Double price;
+	
+	@Column(name = "discount", unique = false, nullable = true )
+	private Double discount;
+	
+	@Column(name = "confirmed", unique = false, nullable = false )
+	private Boolean confirmed;
+
+	@ManyToOne
+	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
 	private Patient patient;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "medical_report_id")
 	private MedicalReport medicalReport;
+	
+	@ManyToOne
+	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
 	private Ordination ordination;
+	
+	@ManyToOne
+	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	private Clinic clinic;
+	
+	@ManyToOne
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
 	private Doctor doctor;
 
-	public Appointment() {
-		// TODO Auto-generated constructor stub
-	}
+	public Appointment() {}
 	
 	public Appointment(Date date, Date time, AppointmentType type, Integer duration, Double price, Double discount,
 			Boolean confirmed, Patient patient, MedicalReport medicalReport, Ordination ordination, Doctor doctor) {
@@ -36,9 +79,6 @@ public class Appointment {
 		this.ordination = ordination;
 		this.doctor = doctor;
 	}
-
-
-
 
 	public Date getDate() {
 		return date;

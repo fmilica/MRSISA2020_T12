@@ -11,9 +11,7 @@ public class ClinicAdmin extends RegisteredUser {
 	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=false)
 	private Clinic clinic;
 
-	public ClinicAdmin() {
-		super();
-	}
+	public ClinicAdmin() {}
 
 	public ClinicAdmin(String email, String password, String name, String surname, String address, String city,
 			String country, String phoneNumber, Integer securityNumber) {
