@@ -23,13 +23,16 @@
     [ Validate ]*/
     var input = $('.validate-input .input100');
 
-    $('.validate-form').on('submit',function(){
-
+    $('.validate-form').on('submit',function(event){
+    	event.preventDefault()
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
                 showValidate(input[i]);
             }
         }
+        
+        //samo za probu
+        var user_type = "patient"
         
         var email = $("#email").val()
         var password = $("#password").val()

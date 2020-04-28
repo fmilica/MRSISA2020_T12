@@ -1,7 +1,5 @@
 package mrs.isa.team12.clinical.center.service;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +15,6 @@ public class DoctorImpl implements DoctorService {
 	@Autowired
 	public DoctorImpl(DoctorRepository doctorRep) {
 		this.doctorRep = doctorRep;
-	}
-
-	@Override
-	public void addDoctor(Doctor doctor) {
-		doctorRep.addDoctor(doctor);
-		
-	}
-
-	@Override
-	public ArrayList<Doctor> listDoctors() {
-		return doctorRep.listDoctors();
 	}
 
 	@Override
