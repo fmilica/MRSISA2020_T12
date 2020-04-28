@@ -20,6 +20,9 @@ html {
     font-family: 'Varela Round' !important;
 }
 
+/*
+*   Home pages css styles
+*/
 .page-logo {
     padding-right: 0px !important;
     padding-bottom: 0px !important;
@@ -104,4 +107,31 @@ html {
     padding: 7px;
     border-radius: 5px;
     background-color: #fffffc;
+}
+
+/*
+*   Patient registration css styles
+*/
+.page-content-wrapper {
+    background-image: url(../img/background_transparent.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.page-content {
+    background-color: #defbff !important;
+    margin: 0px 200px !important;
+}
+.page-bar {
+    background-color: transparent;
+    padding: 10px;
+}
+.page-title {
+    margin: 0px !important;
+}
+.card-box:hover {
+    transform: none;
+}
+.form-buttons {
+    padding-left: 350px;
 }
