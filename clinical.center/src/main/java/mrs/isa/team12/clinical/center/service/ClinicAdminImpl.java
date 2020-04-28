@@ -15,10 +15,10 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	private ClinicAdminRepository clinicAdminRep;
 	
 	@Autowired
-	public void setUserRepository(ClinicAdminRepository repository) {
-		this.clinicAdminRep = repository;
+	public ClinicAdminImpl(ClinicAdminRepository clinicAdminRep) {
+		this.clinicAdminRep = clinicAdminRep;
 	}
-	
+
 	@Override
 	public List<ClinicAdmin> findAll() {
 		return this.clinicAdminRep.findAll();

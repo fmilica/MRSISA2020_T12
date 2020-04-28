@@ -2,13 +2,17 @@ package mrs.isa.team12.clinical.center.repository;
 
 import java.util.ArrayList;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import mrs.isa.team12.clinical.center.model.Doctor;
 
 //Interface for Doctor database access
-public interface DoctorRepository {
+public interface DoctorRepository extends JpaRepository<Doctor, Long>{
 	
-	public void addDoctor(Doctor doctor);
+	void addDoctor(Doctor doctor);
 	
-	public ArrayList<Doctor> listDoctors();
+	ArrayList<Doctor> listDoctors();
+	
+	Doctor findOneByEmail(String email);
 	
 }

@@ -1,4 +1,4 @@
-
+/*Moze biti user_type, pa da imas patient, doctor, clinic_admin, center_admin*/
 (function ($) {
     "use strict";
 
@@ -34,18 +34,16 @@
         var email = $("#email").val()
         var password = $("#password").val()
         
-        $.ajax({
-    		type : "POST",
-    		async: false,
-    		url : "theGoodSheperd/clinicAdmin/logIn//" + email + "//" + password ,
-    		dataType: "json",
-    		success : function(response)  {
-    			alert("Uspeo")
-    		},
-    		error : function(response) {
-    			alert("Nije uspeo")
-    		}
-    	})
+        if(user_type == "patient"){
+        	logInPatient(email, password)
+        }else if(user_type == "doctor"){
+        	logInDoctor(email, password)
+        }else if(user_type == "clinic_admin"){
+        	logInClinicAdmin(email, password)
+        }else if(user_type == "center_admin"){
+        	logInClinicalCentreAdmin(email, password)
+        }
+        
     });
 
 

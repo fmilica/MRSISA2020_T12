@@ -20,7 +20,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 
 
 @RestController
-@RequestMapping("theGoodSheperd/clinicAdmin")
+@RequestMapping("theGoodShepherd/clinicAdmin")
 public class ClinicAdminController {
 	
 	private ClinicAdminService adminService;
@@ -33,7 +33,7 @@ public class ClinicAdminController {
 	}
 	
 	/*
-	 url: GET localhost:8081/theGoodSheperd/clinicAdmin
+	 url: GET localhost:8081/theGoodShepherd/clinicAdmin
 	 HTTP request for viewing clinic administrators
 	 returns ResponseEntity object
 	 */
@@ -46,7 +46,7 @@ public class ClinicAdminController {
 	}
 	
 	/*
-	 url: POST localhost:8081/theGoodSheperd/clinicAdmin/addNewClinicAdmin/{clinicName}
+	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/addNewClinicAdmin/{clinicName}
 	 HTTP request for adding new clinic administrator
 	 receives ClinicAdmin object
 	 returns ResponseEntity object
@@ -74,12 +74,16 @@ public class ClinicAdminController {
 	 * 5) ispisemo kliniku
 	 */
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/logIn/{email}/{password}
+	 HTTP request for checking email and password
+	 receives String email and String password
+	 returns ResponseEntity object
+	 */
 	@PostMapping(value = "logIn/{email}/{password}")
 	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
 		
 		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
-		
-		System.out.println(clinicAdmin);
 		
 		if(clinicAdmin == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
