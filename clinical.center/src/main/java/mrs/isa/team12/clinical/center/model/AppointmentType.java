@@ -1,10 +1,19 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class AppointmentType {
@@ -16,17 +25,37 @@ public class AppointmentType {
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
-	@Column(name = "price", unique = false, nullable = false)
-	private Double price;
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "type")
+	private Set<Appointment> appointments;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "pricelist_item_id", referencedColumnName = "id", nullable = true)
+	private PricelistItem pricelistItem;
 
+	@ManyToOne
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
+	private Doctor doctor;
+	
 	public AppointmentType() {}
 
-	public AppointmentType(String name, Double price) {
+	public AppointmentType(Long id, String name, Set<Appointment> appointments, PricelistItem pricelistItem,
+			Doctor doctor) {
 		super();
+		this.id = id;
 		this.name = name;
-		this.price = price;
+		this.appointments = appointments;
+		this.pricelistItem = pricelistItem;
+		this.doctor = doctor;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -35,11 +64,27 @@ public class AppointmentType {
 		this.name = name;
 	}
 
-	public Double getPrice() {
-		return price;
+	public Set<Appointment> getAppointments() {
+		return appointments;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setAppointments(Set<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+	public PricelistItem getPricelistItem() {
+		return pricelistItem;
+	}
+
+	public void setPricelistItem(PricelistItem pricelistItem) {
+		this.pricelistItem = pricelistItem;
+	}
+
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
 	}
 }

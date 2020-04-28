@@ -19,21 +19,30 @@ public class Pricelist {
 	private Long id;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
-	private Set<AppointmentType> appointmentTypes;
+	private Set<PricelistItem> pricelistItems;
 
 	public Pricelist() {}
 
-	public Pricelist(Set<AppointmentType> appointmentTypes) {
+	public Pricelist(Long id, Set<PricelistItem> pricelistItems) {
 		super();
-		this.appointmentTypes = appointmentTypes;
+		this.id = id;
+		this.pricelistItems = pricelistItems;
 	}
 
-	public Set<AppointmentType> getAppointmentTypes() {
-		return appointmentTypes;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
-		this.appointmentTypes = appointmentTypes;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Set<PricelistItem> getPricelistItems() {
+		return pricelistItems;
+	}
+
+	public void setPricelistItems(Set<PricelistItem> pricelistItems) {
+		this.pricelistItems = pricelistItems;
 	}
 	
 }

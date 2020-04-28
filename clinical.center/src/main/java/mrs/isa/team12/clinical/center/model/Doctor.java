@@ -31,68 +31,94 @@ public class Doctor extends MedicalPersonnel {
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
 	private Set<Appointment> appointments;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
+	private Set<Rating> ratings;
+	
 
 	public Doctor() {}
 
-	public Doctor(String email, String password, String name, String suername, String address, String city,
-			String country, String phoneNumber, Integer securityNumber, Set<Leave> leaveList, Set<Patient> patients,
-			Date startWork, Date endWork, Double rating, Set<AppointmentType> appointmentTypes, Clinic clinic,
-			Set<Appointment> appointments) {
-		super(email, password, name, suername, address, city, country, phoneNumber, securityNumber, leaveList,
-				patients);
+
+	public Doctor(Date startWork, Date endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
+			Set<Appointment> appointments, Set<Rating> ratings) {
+		super();
 		this.startWork = startWork;
 		this.endWork = endWork;
 		this.rating = rating;
-		this.appointmentTypes = appointmentTypes;
 		this.clinic = clinic;
-		this.appointments = appointments;
-	}
-
-	public Set<AppointmentType> getAppointmentTypes() {
-		return appointmentTypes;
-	}
-
-	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
 		this.appointmentTypes = appointmentTypes;
-	}
-
-	public Clinic getClinic() {
-		return clinic;
-	}
-
-	public void setClinic(Clinic clinic) {
-		this.clinic = clinic;
-	}
-
-	public Set<Appointment> getAppointments() {
-		return appointments;
-	}
-
-	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
+		this.ratings = ratings;
 	}
+
 
 	public Date getStartWork() {
 		return startWork;
 	}
 
+
 	public void setStartWork(Date startWork) {
 		this.startWork = startWork;
 	}
+
 
 	public Date getEndWork() {
 		return endWork;
 	}
 
+
 	public void setEndWork(Date endWork) {
 		this.endWork = endWork;
 	}
+
 
 	public Double getRating() {
 		return rating;
 	}
 
+
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
+
+
+	public Clinic getClinic() {
+		return clinic;
+	}
+
+
+	public void setClinic(Clinic clinic) {
+		this.clinic = clinic;
+	}
+
+
+	public Set<AppointmentType> getAppointmentTypes() {
+		return appointmentTypes;
+	}
+
+
+	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
+		this.appointmentTypes = appointmentTypes;
+	}
+
+
+	public Set<Appointment> getAppointments() {
+		return appointments;
+	}
+
+
+	public void setAppointments(Set<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+
+
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+
+
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	
 }

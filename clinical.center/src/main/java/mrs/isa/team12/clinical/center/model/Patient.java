@@ -25,13 +25,18 @@ public class Patient extends RegisteredUser {
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
 	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
+	private Set<Rating> ratings;
+	
 	public Patient() {}
 
-	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre) {
+	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre,
+			Set<Rating> ratings) {
 		super();
 		this.appointments = appointments;
 		this.medicalRecords = medicalRecords;
 		this.clinicalCentre = clinicalCentre;
+		this.ratings = ratings;
 	}
 
 	public Set<Appointment> getAppointments() {
@@ -57,4 +62,14 @@ public class Patient extends RegisteredUser {
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
+
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
+	
 }

@@ -26,7 +26,7 @@ public class Appointment {
 	@Column(name = "time", unique = false, nullable = false )
 	private Date time;
 	
-	@OneToOne(fetch = LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "type_id")
 	private AppointmentType type;
 	
@@ -61,6 +61,10 @@ public class Appointment {
 	@ManyToOne
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
 	private Doctor doctor;
+	
+	@ManyToOne
+	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = false)
+	private MedicalRecords medicalRecords;
 
 	public Appointment() {}
 	

@@ -77,6 +77,9 @@ public class Clinic {
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
 	private Set<LeaveRequest> leaveRequests;
 	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	private Set<Rating> ratings;
+	
 	public void add(ClinicAdmin clinicAdmin) {
 		if (clinicAdmin.getClinic() != null) {
 			clinicAdmin.getClinic().getAdmins().remove(clinicAdmin);
@@ -87,32 +90,40 @@ public class Clinic {
 
 	public Clinic() {}
 
-	public Clinic(String name, String address, String city, String country, String description, Pricelist priceList,
-			Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients, Set<Appointment> appointments,
-			Set<Ordination> ordinations, Report report, DiagnosePerscription diagnosePerscription,
-			Set<LeaveRequest> leaveRequests, Set<AppointmentRequest> appointmentRequests, ClinicalCentre clinicalCentre,
-			Set<ClinicAdmin> admins) {
+	public Clinic(Long id, String name, String address, String city, String country, String description,
+			ClinicalCentre clinicalCentre, Pricelist priceList, Report report,
+			DiagnosePerscription diagnosePerscription, Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients,
+			Set<Appointment> appointments, Set<ClinicAdmin> admins, Set<Ordination> ordinations,
+			Set<AppointmentRequest> appointmentRequests, Set<LeaveRequest> leaveRequests, Set<Rating> ratings) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.city = city;
 		this.country = country;
 		this.description = description;
+		this.clinicalCentre = clinicalCentre;
 		this.priceList = priceList;
+		this.report = report;
+		this.diagnosePerscription = diagnosePerscription;
 		this.doctors = doctors;
 		this.nurses = nurses;
 		this.patients = patients;
 		this.appointments = appointments;
-		this.ordinations = ordinations;
-		this.report = report;
-		this.diagnosePerscription = diagnosePerscription;
-		this.leaveRequests = leaveRequests;
-		this.appointmentRequests = appointmentRequests;
-		this.clinicalCentre = clinicalCentre;
 		this.admins = admins;
+		this.ordinations = ordinations;
+		this.appointmentRequests = appointmentRequests;
+		this.leaveRequests = leaveRequests;
+		this.ratings = ratings;
 	}
 
+	public Long getId() {
+		return id;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -154,12 +165,36 @@ public class Clinic {
 		this.description = description;
 	}
 
+	public ClinicalCentre getClinicalCentre() {
+		return clinicalCentre;
+	}
+
+	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
+		this.clinicalCentre = clinicalCentre;
+	}
+
 	public Pricelist getPriceList() {
 		return priceList;
 	}
 
 	public void setPriceList(Pricelist priceList) {
 		this.priceList = priceList;
+	}
+
+	public Report getReport() {
+		return report;
+	}
+
+	public void setReport(Report report) {
+		this.report = report;
+	}
+
+	public DiagnosePerscription getDiagnosePerscription() {
+		return diagnosePerscription;
+	}
+
+	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
+		this.diagnosePerscription = diagnosePerscription;
 	}
 
 	public Set<Doctor> getDoctors() {
@@ -194,36 +229,20 @@ public class Clinic {
 		this.appointments = appointments;
 	}
 
+	public Set<ClinicAdmin> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(Set<ClinicAdmin> admins) {
+		this.admins = admins;
+	}
+
 	public Set<Ordination> getOrdinations() {
 		return ordinations;
 	}
 
 	public void setOrdinations(Set<Ordination> ordinations) {
 		this.ordinations = ordinations;
-	}
-
-	public Report getReport() {
-		return report;
-	}
-
-	public void setReport(Report report) {
-		this.report = report;
-	}
-
-	public DiagnosePerscription getDiagnosePerscription() {
-		return diagnosePerscription;
-	}
-
-	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
-		this.diagnosePerscription = diagnosePerscription;
-	}
-
-	public Set<LeaveRequest> getLeaveRequests() {
-		return leaveRequests;
-	}
-
-	public void setLeaveRequests(Set<LeaveRequest> leaveRequests) {
-		this.leaveRequests = leaveRequests;
 	}
 
 	public Set<AppointmentRequest> getAppointmentRequests() {
@@ -234,21 +253,20 @@ public class Clinic {
 		this.appointmentRequests = appointmentRequests;
 	}
 
-	public ClinicalCentre getClinicalCentre() {
-		return clinicalCentre;
+	public Set<LeaveRequest> getLeaveRequests() {
+		return leaveRequests;
 	}
 
-	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
-		this.clinicalCentre = clinicalCentre;
-	}
-	public Set<ClinicAdmin> getAdmins() {
-		return admins;
+	public void setLeaveRequests(Set<LeaveRequest> leaveRequests) {
+		this.leaveRequests = leaveRequests;
 	}
 
-	public void setAdmins(Set<ClinicAdmin> admins) {
-		this.admins = admins;
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
 	}
 	
-	
-
 }

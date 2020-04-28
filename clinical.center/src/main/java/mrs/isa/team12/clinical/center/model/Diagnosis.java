@@ -1,5 +1,8 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Diagnosis {
@@ -27,14 +31,18 @@ public class Diagnosis {
 				joinColumns = @JoinColumn(name = "perscription_id"),
 				inverseJoinColumns = @JoinColumn(name = "diagnosis_id"))
 	private Set<Prescription> prescriptions;
+	
+	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="diagnosis")
+	private Set<MedicalReport> medicalReports;
 
 	public Diagnosis() {}
 
-	public Diagnosis(Long id, String name, Set<Prescription> prescriptions) {
+	public Diagnosis(Long id, String name, Set<Prescription> prescriptions, Set<MedicalReport> medicalReports) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.prescriptions = prescriptions;
+		this.medicalReports = medicalReports;
 	}
 
 	public Long getId() {
@@ -60,4 +68,13 @@ public class Diagnosis {
 	public void setPrescriptions(Set<Prescription> prescriptions) {
 		this.prescriptions = prescriptions;
 	}
+
+	public Set<MedicalReport> getMedicalReports() {
+		return medicalReports;
+	}
+
+	public void setMedicalReports(Set<MedicalReport> medicalReports) {
+		this.medicalReports = medicalReports;
+	}
+	
 }
