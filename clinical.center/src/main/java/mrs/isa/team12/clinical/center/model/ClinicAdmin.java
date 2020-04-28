@@ -3,12 +3,15 @@ package mrs.isa.team12.clinical.center.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "clinic_admin")
 public class ClinicAdmin extends RegisteredUser {
 	
+	/*Treba da bude false*/
 	@ManyToOne
-	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=false)
+	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=true)
 	private Clinic clinic;
 
 	public ClinicAdmin() {}
@@ -30,4 +33,16 @@ public class ClinicAdmin extends RegisteredUser {
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
+
+	@Override
+	public String toString() {
+		return "ClinicAdmin [clinic=" + clinic + ", getClinic()=" + getClinic() + ", getEmail()=" + getEmail()
+				+ ", getPassword()=" + getPassword() + ", getName()=" + getName() + ", getSurname()=" + getSurname()
+				+ ", getAddress()=" + getAddress() + ", getCity()=" + getCity() + ", getCountry()=" + getCountry()
+				+ ", getPhoneNumber()=" + getPhoneNumber() + ", getSecurityNumber()=" + getSecurityNumber()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
+	}
+	
+	
 }

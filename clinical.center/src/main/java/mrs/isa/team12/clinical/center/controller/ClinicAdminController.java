@@ -56,8 +56,6 @@ public class ClinicAdminController {
 				 produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ClinicAdmin> createClinicAdmin(@RequestBody ClinicAdmin clinicAdmin, @PathVariable String clinicName) {
 		
-		System.out.println(clinicName);
-		
 		Clinic clinic = clinicService.findOneByName(clinicName);
 		
 		clinic.add(clinicAdmin);
@@ -66,6 +64,8 @@ public class ClinicAdminController {
 		
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
 	}
+	
+
 	/* testiranje ove sotone
 	 * 1) kreiramo kliniku
 	 * 2) ispisemo kliniku
@@ -73,4 +73,22 @@ public class ClinicAdminController {
 	 * 4) ispisemo admina
 	 * 5) ispisemo kliniku
 	 */
+	
+	@PostMapping(value = "logIn/{email}/{password}")
+	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
+		
+		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
+		
+		System.out.println(clinicAdmin);
+		
+		if(clinicAdmin == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		if(!clinicAdmin.getPassword().equals(password)) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
+	}
 }

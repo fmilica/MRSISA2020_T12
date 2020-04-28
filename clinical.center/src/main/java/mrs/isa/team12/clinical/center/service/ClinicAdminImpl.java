@@ -29,4 +29,9 @@ public class ClinicAdminImpl implements ClinicAdminService {
 		return this.clinicAdminRep.save(ca);
 	}
 
+	@Override
+	public ClinicAdmin findOneByEmail(String email) {
+		return clinicAdminRep.findOneByEmail(email);
+	}
+
 }

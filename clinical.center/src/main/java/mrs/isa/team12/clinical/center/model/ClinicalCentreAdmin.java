@@ -3,12 +3,15 @@ package mrs.isa.team12.clinical.center.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "clinical_centre_admin")
 public class ClinicalCentreAdmin extends RegisteredUser{
 	
+	/*Nullable sam promenila na true samo da bih mogla nesto da probam inace treba da bude false*/
 	@ManyToOne
-	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	private ClinicalCentre clinicalCentre;
 	
 	public ClinicalCentreAdmin() {}

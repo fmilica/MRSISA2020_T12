@@ -9,4 +9,6 @@ public interface ClinicAdminService {
 	List<ClinicAdmin> findAll();
 	
 	public ClinicAdmin save(ClinicAdmin ca);
+	
+	public ClinicAdmin findOneByEmail(String email);
 }
