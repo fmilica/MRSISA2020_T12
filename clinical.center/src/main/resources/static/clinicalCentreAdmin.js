@@ -6,7 +6,6 @@ function logInClinicalCentreAdmin(email, password){
 		url : "theGoodShepherd/clinicalCenterAdmin/logIn//" + email + "//" + password ,
 		dataType: "json",
 		success : function(response)  {
-			alert("Clinical center admin logged in")
 			window.location.href = "html/home-pages/centar_admin_hp.html"
 		},
 		error : function(response) {

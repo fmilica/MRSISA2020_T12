@@ -1,29 +1,36 @@
 package mrs.isa.team12.clinical.center.model;
 
-import java.util.Date;
-import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+
+import java.util.Date;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="doctor")
 public class Doctor extends MedicalPersonnel {
 	
-	@Column(name = "startWork", nullable = false, unique = false)
+	/*nullable = false*/
+	@Column(name = "startWork", nullable = true, unique = false)
 	private Date startWork;
 	
-	@Column(name = "endWork", nullable = false, unique = false)
+	/*nullable = false*/
+	@Column(name = "endWork", nullable = true, unique = false)
 	private Date endWork;
 	
 	@Column(name = "rating", nullable = true, unique = false)
 	private Double rating;
 	
+	/*nullable = false*/
 	@ManyToOne
-	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
 	private Clinic clinic;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)

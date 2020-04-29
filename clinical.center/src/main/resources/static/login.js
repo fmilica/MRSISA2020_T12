@@ -3,6 +3,14 @@
     "use strict";
 
 
+    /*index.html page buttons*/
+    $(".user_type").on('click',function(event){
+    	event.preventDefault()
+    	var user_type = $(this).attr('id')
+    	sessionStorage.setItem('user_type', user_type);
+    	window.location.href = "login.html"
+    })
+    
     /*==================================================================
     [ Focus input ]*/
     $('.input100').each(function(){
@@ -30,12 +38,11 @@
                 showValidate(input[i]);
             }
         }
-        
-    	//ovo je samo za probu inace ce se ovaj podataka dobijati preko index.js kog pravi Eva <3
-    	var user_type = "center_admin"
     	
         var email = $("#email").val()
         var password = $("#password").val()
+        
+        var user_type = sessionStorage.getItem('user_type')
         
         if(user_type == "patient"){
         	logInPatient(email, password)

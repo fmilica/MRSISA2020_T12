@@ -10,8 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "patient")
 public class Patient extends RegisteredUser {
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
@@ -21,8 +23,9 @@ public class Patient extends RegisteredUser {
 	@JoinColumn(name = "medical_record_id")
 	private MedicalRecords medicalRecords;
 	
+	/*nullable = false*/
 	@ManyToOne
-	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
