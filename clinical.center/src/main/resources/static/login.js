@@ -1,4 +1,4 @@
-/*Moze biti user_type, pa da imas patient, doctor, clinic_admin, center_admin*/
+/*user_type: patient, doctor, clinic_admin, center_admin, nurse*/
 (function ($) {
     "use strict";
 
@@ -31,9 +31,9 @@
             }
         }
         
-        //samo za probu
-        var user_type = "patient"
-        
+    	//ovo je samo za probu inace ce se ovaj podataka dobijati preko index.js kog pravi Eva <3
+    	var user_type = "center_admin"
+    	
         var email = $("#email").val()
         var password = $("#password").val()
         
@@ -45,6 +45,8 @@
         	logInClinicAdmin(email, password)
         }else if(user_type == "center_admin"){
         	logInClinicalCentreAdmin(email, password)
+        }else{
+        	logInNurse(email, password)
         }
         
     });
@@ -57,6 +59,7 @@
     });
 
     function validate (input) {
+    	//mozda ce nam nekada trebati ovo
         /*if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
             if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
                 return false;

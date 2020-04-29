@@ -1,2 +1,2 @@
-insert into clinic_admin (id,email, password, name,surname, address, city, country,phone_number,security_number) 
+insert into clinical_centre_admin (id,email, password, name,surname, address, city, country,phone_number,security_number) 
 values ('1','admin', 'admin', 'Ksenija', 'Prcic','Adresa', 'City','Country', '55','55' );
