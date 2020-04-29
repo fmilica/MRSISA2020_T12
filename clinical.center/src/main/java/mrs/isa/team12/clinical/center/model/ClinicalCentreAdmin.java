@@ -11,14 +11,14 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	
 	/*Nullable sam promenila na true samo da bih mogla nesto da probam inace treba da bude false*/
 	@ManyToOne
-	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
 	
 	public ClinicalCentreAdmin() {}
 
-	public ClinicalCentreAdmin(String email, String password, String name, String suername, String address, String city,
+	public ClinicalCentreAdmin(String email, String password, String name, String surname, String address, String city,
 			String country, String phoneNumber, Integer securityNumber, ClinicalCentre clinicalCentre) {
-		super(email, password, name, suername, address, city, country, phoneNumber, securityNumber);
+		super(email, password, name, surname, address, city, country, phoneNumber, securityNumber);
 		this.clinicalCentre = clinicalCentre;
 	}
 

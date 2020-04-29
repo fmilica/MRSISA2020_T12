@@ -9,27 +9,27 @@ $(document).ready(function() {
         var address = $('#address').val()
         var phone = $('#phone').val()
         var security = $('#security').val()
-        var clinic = $('#clinic').val()
         var username = $('#username').val()
         var password = $('#password').val()
         
         $.ajax({
             type : "POST",
-            url : "/api/clinicAdmins/addClinicAdmin",
+            url : "/theGoodShepherd/clinicalCenterAdmin/addNewClinicalCentreAdmin",
             contentType : "application/json",
             dataType: "json",
             data : JSON.stringify({
-                "username" : username,
+                "email" : username,
                 "password" : password,
-                "role": "ClinicAdmin",
                 "name" : name,
                 "surname" : surname,
-                "country" : country,
-                "city": city,
                 "address" : address,
-                "phone" : phone,
-                "security" : security,
-                "clinicID" : clinic
+                "city": city,
+                "country" : country,
+                "phoneNumber" : phone,
+                "securityNumber" : security,
+                "clinicalCentre" : {
+                	"name" : "The Good Shepherd"
+                }
             }),
             success : function(response)  {
                 alert("uspelo")
