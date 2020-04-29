@@ -1983,13 +1983,10 @@ form.search-form-opened .btn.submit {
 }
 .sidemenu-container .sidemenu li>a>.arrow:before,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu li>a>.arrow:before {
-    float: right;
-    width: 20px;
     text-align: center;
     display: inline;
     font-size: 16px;
     font-family: FontAwesome;
-    height: auto;
     content: "\f105";
     font-weight: 300;
     text-shadow: none;

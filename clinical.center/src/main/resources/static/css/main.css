@@ -49,6 +49,15 @@ html {
     margin-right: auto;
     width: 30%;
 }
+/*
+.notification {
+    text-align: center;
+    display: inline;
+    text-shadow: none;
+    position: absolute;
+    right: 50px;
+    background-color: red;
+}*/
 
 .sidebar-container {
     height: 144vh !important;
