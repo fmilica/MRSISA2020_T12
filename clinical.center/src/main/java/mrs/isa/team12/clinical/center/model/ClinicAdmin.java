@@ -11,7 +11,7 @@ public class ClinicAdmin extends RegisteredUser {
 	
 	/*Treba da bude false*/
 	@ManyToOne
-	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=true)
+	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=false)
 	private Clinic clinic;
 
 	public ClinicAdmin() {}

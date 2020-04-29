@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
 
 @RestController
-@RequestMapping("/theGoodSheperd/clinics")
+@RequestMapping("/theGoodShepherd/clinics")
 public class ClinicController {
 	
 	private ClinicService service;
+	private ClinicalCenterService centerService;
 	
 	@Autowired
-	public ClinicController(ClinicService service) {
+	public ClinicController(ClinicService service, ClinicalCenterService centerService) {
 		this.service = service;
+		this.centerService = centerService;
 	}
 	
 	/*
@@ -50,7 +54,12 @@ public class ClinicController {
 				 produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Clinic> createClinic(@RequestBody Clinic clinic) {
 		
+		ClinicalCentre clinicalCenter = centerService.findOneByName(clinic.getClinicalCentre().getName());
+		clinicalCenter.addClinic(clinic);
+		
+		clinic.setClinicalCentre(clinicalCenter);
 		Clinic newClinic = service.save(clinic);
+		centerService.save(clinicalCenter);
 
 		return new ResponseEntity<>(newClinic, HttpStatus.CREATED);
 	}

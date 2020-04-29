@@ -230,7 +230,7 @@ public class Clinic {
 	}
 
 	public Set<ClinicAdmin> getAdmins() {
-		return admins;
+		return null;
 	}
 
 	public void setAdmins(Set<ClinicAdmin> admins) {

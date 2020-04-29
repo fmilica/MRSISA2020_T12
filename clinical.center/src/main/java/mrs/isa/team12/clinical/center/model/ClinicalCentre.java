@@ -67,7 +67,7 @@ public class ClinicalCentre {
 	}
 	
 	public Set<Clinic> getClinics() {
-		return clinics;
+		return null;
 	}
 	
 	public void setClinics(Set<Clinic> clinics) {
@@ -101,6 +101,12 @@ public class ClinicalCentre {
 	public void add(ClinicalCentreAdmin clinicalCentreAdmin) {
 		if(!this.admins.contains(clinicalCentreAdmin)) {
 			this.admins.add(clinicalCentreAdmin);
+		}
+	}
+	
+	public void addClinic(Clinic clinic) {
+		if(!this.clinics.contains(clinic)) {
+			this.clinics.add(clinic);
 		}
 	}
 

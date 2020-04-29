@@ -1,11 +1,19 @@
 <html>
     <header>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<script type="text/javascript" src="../js/old/ac.js"></script>
+		<script type="text/javascript" src="../clinicalCentreAdmin.js"></script>
     </header>
     <body>
-        <form method="POST" action="/api/clinicAdmins" id="ac_form">
+        <form method="POST" action="clinical_admin.html" id="ac_form">
             <table border="1">
+                <tr>
+                    <td>Email:</td>
+                    <td><input id="username" type="text"></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input id="password" type="text"></td>
+                </tr>
                 <tr>
                     <td>Name:</td>
                     <td><input id="name" type="text"></td>
@@ -15,16 +23,16 @@
                     <td><input id="surname" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Country:</td>
-                    <td><input id="country" type="text"></td>
+                    <td>Address:</td>
+                    <td><input id="address" type="text"></td>
                 </tr>
                 <tr>
                     <td>City:</td>
                     <td><input id="city" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Address:</td>
-                    <td><input id="address" type="text"></td>
+                    <td>Country:</td>
+                    <td><input id="country" type="text"></td>
                 </tr>
                 <tr>
                     <td>Phone number:</td>
@@ -35,15 +43,11 @@
                     <td><input id="security" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Username:</td>
-                    <td><input id="username" type="text"></td>
+                    <td>Clinical Center:</td>
+                    <td><input id="clinic" type="text"></td>
                 </tr>
                 <tr>
-                    <td>Password:</td>
-                    <td><input id="password" type="text"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input id="addCA" type="submit" value="Register"></td>
+                    <td colspan="2"><input id="addCA" type="button" value="Register"></td>
                 </tr>
             </table>
         </form>
