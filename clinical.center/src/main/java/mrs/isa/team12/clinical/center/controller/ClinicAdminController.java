@@ -2,6 +2,8 @@ package mrs.isa.team12.clinical.center.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -81,7 +83,12 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "logIn/{email}/{password}")
-	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
+	public ResponseEntity<ClinicAdmin> logIn(HttpServletRequest req, @PathVariable String email, @PathVariable String password){
+		
+		if (req.getSession().getAttribute("currentUser") != null) {
+			// vec postoji ulogovani, ne moze se ponovo logovati
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 		
 		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
 		
@@ -92,6 +99,11 @@ public class ClinicAdminController {
 		if(!clinicAdmin.getPassword().equals(password)) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
+		// postavlja trenutno ulogovanog na sesiju
+		req.getSession().setAttribute("currentUser", clinicAdmin);
+		System.out.println("HELOOOOOOOOOOOOOOOOOOO");
+		System.out.println(req);
+		System.out.println(req.getSession().getAttribute("currentUser"));
 		
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
 	}
