@@ -5,4 +5,6 @@ import mrs.isa.team12.clinical.center.model.Doctor;
 public interface DoctorService {
 	
 	Doctor findOneByEmail(String email);
+	
+	Doctor save(Doctor d);
 }

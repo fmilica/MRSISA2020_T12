@@ -217,7 +217,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="email" name="email" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="doctorEmail" name="doctorEmail" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -226,7 +226,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="firstName" name="firstname" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="firstNameDoctor" name="firstNameDoctor" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -235,7 +235,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="lastName" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="lastNameDoctor" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -244,7 +244,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="password" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="passwordDoctor" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -253,7 +253,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="confirm-password" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="confirm-passwordDoctor" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -262,7 +262,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <select class="form-control input-height" id="gender">
+                                                    <select class="form-control input-height" id="genderDoctor">
                                                         <option selected="selected" value="male">Male</option>
                                                         <option value="female">Female</option>
                                                     </select>
@@ -283,13 +283,18 @@
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-md-3">
-                                                    Specialisation
+                                                    Specialization
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <select class="form-control input-height" id="specs">
-                                                        <option selected="selected" value="nesto">Nesto</option>
-                                                        <option value="nesto-nesto">Nesto nesto</option>
+                                                    <select class="form-control input-height" id="specializationDoctor">
+                                                        <option selected="selected" value="Paediatrics">Paediatrics</option>
+                                                        <option value="Dermatology">Dermatology</option>
+                                                        <option value="Rheumatology">Rheumatology</option>
+                                                        <option value="Ophthalmology">Ophthalmology</option>
+                                                        <option value="Gynaecology">Gynaecology</option>
+                                                        <option value="Dentist">Dentist</option>
+                                                        <option value="Cardiology">Cardiology</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -299,7 +304,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
+                                                    <input id="securityNumberDoctor" type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -308,7 +313,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="phoneNumber" data-required="1"  class="form-control input-height" />
+                                                    <input id="phoneNumberDoctor" type="text" id="phoneNumber" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -317,7 +322,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="address" data-required="1"  class="form-control input-height" />
+                                                    <input id="addressDoctor" type="text" id="address" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -326,7 +331,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="city" data-required="1"  class="form-control input-height" />
+                                                    <input id="cityDoctor" type="text" id="city" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -335,15 +340,15 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="country" data-required="1"  class="form-control input-height" />
+                                                    <input id="countryDoctor" type="text" id="country" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-actions">
                                             <div class="row">
                                                 <div class="offset-md-3 col-md-12 form-buttons">
-                                                    <button type="submit" class="btn btn-info">Create</button>
-                                                    <button type="button" class="btn btn-default">Cancel</button>
+                                                    <button id="submit_doctor" type="submit" class="btn btn-info">Create</button>
+                                                    <button id="cancel_doctor" type="button" class="btn btn-default">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -369,5 +374,6 @@
 		</div>
     <!-- end footer -->
 	</div>
+	<script src="../../clinicAdmin.js"></script>
 </body>
 </html>

@@ -15,6 +15,55 @@ function logInClinicAdmin(email, password){
 }
 
 $(document).ready(function() {
+	
+	/*Adding new doctor*/
+	$("#submit_doctor").on('click', function(event){
+		event.preventDefault()
+		
+		var emailV = $("#doctorEmail").val()
+		var nameV = $("#firstNameDoctor").val()
+		var surnameV = $("#lastNameDoctor").val()
+		var passwordV = $("#passwordDoctor").val()
+		var confirmPasswordV = $("#confirm-passwordDoctor").val()
+		var genderV = $("#genderDoctor").val()
+		var dateOfBirthV = "11.11.1978."
+		var specializationV = $("#specializationDoctor").val()
+		var securityNumV = $("#securityNumberDoctor").val()
+		var phoneNumberV = $("#phoneNumberDoctor").val()
+		var addressV = $("#addressDoctor").val()
+		var cityV = $("#cityDoctor").val()
+		var countryV = $("#countryDoctor").val()
+		
+		var newDoctor = {
+			email: emailV,
+			name: nameV,
+			surname: surnameV,
+			password: passwordV,
+			gender: genderV,
+			dateOfBirth: dateOfBirthV,
+			securityNumber: securityNumV,
+			phoneNumber: phoneNumberV,
+			address: addressV,
+			city: cityV,
+			country: countryV,
+			specialization: specializationV
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/doctor/addNewDoctor",
+			contentType : "application/json",
+			dataType : "json",
+			data : JSON.stringify(newDoctor),
+			success : function(response){
+				alert("New doctor saved!")
+			},
+			error : function(response) {
+				alert("Doctor with given email already exists");
+			}
+		})
+	})
+	
 	/*Adding new operating room*/
 	$("#submit_ordination").on('click', function(event){
 		event.preventDefault()

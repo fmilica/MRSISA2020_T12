@@ -3,7 +3,6 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,24 +12,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import mrs.isa.team12.clinical.center.model.enums.Specialization;
+
 @Entity
 @Table(name="doctor")
 public class Doctor extends MedicalPersonnel {
 	
+	@Column(name = "specialization", unique = false, nullable = false)
+	private Specialization specialization;
+	
 	/*nullable = false*/
 	@Column(name = "startWork", nullable = true, unique = false)
-	private Date startWork;
+	private String startWork;
 	
 	/*nullable = false*/
 	@Column(name = "endWork", nullable = true, unique = false)
-	private Date endWork;
+	private String endWork;
 	
 	@Column(name = "rating", nullable = true, unique = false)
 	private Double rating;
 	
 	/*nullable = false*/
 	@ManyToOne
-	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Clinic clinic;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
@@ -46,7 +53,7 @@ public class Doctor extends MedicalPersonnel {
 	public Doctor() {}
 
 
-	public Doctor(Date startWork, Date endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
+	public Doctor(String startWork, String endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
 			Set<Appointment> appointments, Set<Rating> ratings) {
 		super();
 		this.startWork = startWork;
@@ -59,22 +66,22 @@ public class Doctor extends MedicalPersonnel {
 	}
 
 
-	public Date getStartWork() {
+	public String getStartWork() {
 		return startWork;
 	}
 
 
-	public void setStartWork(Date startWork) {
+	public void setStartWork(String startWork) {
 		this.startWork = startWork;
 	}
 
 
-	public Date getEndWork() {
+	public String getEndWork() {
 		return endWork;
 	}
 
 
-	public void setEndWork(Date endWork) {
+	public void setEndWork(String endWork) {
 		this.endWork = endWork;
 	}
 
@@ -127,5 +134,25 @@ public class Doctor extends MedicalPersonnel {
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
 	}
+
+	
+	public Specialization getSpecialization() {
+		return specialization;
+	}
+
+
+	public void setSpecialization(Specialization specialization) {
+		this.specialization = specialization;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Doctor [specialization=" + specialization + ", startWork=" + startWork + ", endWork=" + endWork
+				+ ", rating=" + rating + ", clinic=" + clinic + ", appointmentTypes=" + appointmentTypes
+				+ ", appointments=" + appointments + ", ratings=" + ratings + "]";
+	}
+	
+	
 	
 }

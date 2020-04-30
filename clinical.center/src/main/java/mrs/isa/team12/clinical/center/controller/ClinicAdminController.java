@@ -2,7 +2,7 @@ package mrs.isa.team12.clinical.center.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,11 +29,14 @@ public class ClinicAdminController {
 	private ClinicService clinicService;
 	
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	public ClinicAdminController(ClinicAdminService adminService, ClinicService clinicService) {
 		this.adminService = adminService;
 		this.clinicService = clinicService;
 	}
-	
+
 	/*
 	 url: GET localhost:8081/theGoodShepherd/clinicAdmin
 	 HTTP request for viewing clinic administrators
@@ -83,15 +86,14 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "logIn/{email}/{password}")
-	public ResponseEntity<ClinicAdmin> logIn(HttpServletRequest req, @PathVariable String email, @PathVariable String password){
+	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
 		
-		if (req.getSession().getAttribute("currentUser") != null) {
+		if (session.getAttribute("currentUser") != null) {
 			// vec postoji ulogovani, ne moze se ponovo logovati
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		
 		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
-		
 		if(clinicAdmin == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
@@ -100,11 +102,9 @@ public class ClinicAdminController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		// postavlja trenutno ulogovanog na sesiju
-		req.getSession().setAttribute("currentUser", clinicAdmin);
-		System.out.println("HELOOOOOOOOOOOOOOOOOOO");
-		System.out.println(req);
-		System.out.println(req.getSession().getAttribute("currentUser"));
+		session.setAttribute("currentUser", clinicAdmin);
 		
+		//treba da vraca clinicAdmin
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
 	}
 }

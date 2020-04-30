@@ -22,4 +22,9 @@ public class DoctorImpl implements DoctorService {
 		return doctorRep.findOneByEmail(email);
 	}
 
+	@Override
+	public Doctor save(Doctor d) {
+		return doctorRep.save(d);
+	}
+
 }
