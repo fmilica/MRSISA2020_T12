@@ -49,32 +49,31 @@ public class Ordination {
 	public OrdinationType getType() {
 		return type;
 	}
-
 	public void setType(OrdinationType type) {
 		this.type = type;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
-
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
+	}
+
+	@Override
+	public String toString() {
+		return "Ordination [id=" + id + ", type=" + type + ", name=" + name + ", clinic=" + clinic + ", appointments="
+				+ appointments + "]";
 	}
 }

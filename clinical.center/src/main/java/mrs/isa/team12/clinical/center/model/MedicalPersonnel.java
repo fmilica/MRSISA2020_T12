@@ -25,9 +25,10 @@ public abstract class MedicalPersonnel extends RegisteredUser {
 	
 	public MedicalPersonnel() {}
 
-	public MedicalPersonnel(String email, String password, String name, String suername, String address, String city,
-			String country, String phoneNumber, Integer securityNumber, Set<Leave> leaveList, Set<Patient> patients) {
-		super(email, password, name, suername, address, city, country, phoneNumber, securityNumber);
+	public MedicalPersonnel(String email, String password, String name, String suername, String gender,
+			String dateOfBirth, String address, String city, String country, 
+			String phoneNumber, Integer securityNumber, Set<Leave> leaveList, Set<Patient> patients) {
+		super(email, password, name, suername, gender, dateOfBirth, address, city, country, phoneNumber, securityNumber);
 		this.leaveList = leaveList;
 		this.patients = patients;
 	}

@@ -22,4 +22,8 @@ public class PatientImpl implements PatientService {
 		return patientRep.findOneByEmail(email);
 	}
 
+	@Override
+	public Patient save(Patient p) {
+		return patientRep.save(p);
+	}
 }

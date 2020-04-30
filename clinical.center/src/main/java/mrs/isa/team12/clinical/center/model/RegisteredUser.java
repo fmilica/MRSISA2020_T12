@@ -30,6 +30,12 @@ public class RegisteredUser {
 	@Column(name="surname", unique=false, nullable=false)
 	private String surname;
 	
+	@Column(name="gender", unique=false, nullable=false)
+	private String gender;
+	
+	@Column(name="dateOfBirth", unique=false, nullable=false)
+	private String dateOfBirth;
+	
 	@Column(name="address", unique=false, nullable=false)
 	private String address;
 	
@@ -48,12 +54,15 @@ public class RegisteredUser {
 	
 	public RegisteredUser() {}
 	
-	public RegisteredUser(String email, String password, String name, String surname, String address, String city,
-			String country, String phoneNumber, Integer securityNumber) {
+	public RegisteredUser(String email, String password, String name, String surname, String gender, 
+			String dateOfBirth, String address, String city, String country, 
+			String phoneNumber, Integer securityNumber) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.name = name;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
 		this.surname = surname;
 		this.address = address;
 		this.city = city;
@@ -61,6 +70,7 @@ public class RegisteredUser {
 		this.phoneNumber = phoneNumber;
 		this.securityNumber = securityNumber;
 	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -84,6 +94,18 @@ public class RegisteredUser {
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getDateOfBirth() {
+		return dateOfBirth;
+	}
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 	public String getAddress() {
 		return address;
@@ -114,5 +136,13 @@ public class RegisteredUser {
 	}
 	public void setSecurityNumber(Integer securityNumber) {
 		this.securityNumber = securityNumber;
+	}
+
+	@Override
+	public String toString() {
+		return "RegisteredUser [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
+				+ ", surname=" + surname + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth + ", address="
+				+ address + ", city=" + city + ", country=" + country + ", phoneNumber=" + phoneNumber
+				+ ", securityNumber=" + securityNumber + "]";
 	}
 }

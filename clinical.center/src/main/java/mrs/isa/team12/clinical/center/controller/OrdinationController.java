@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,26 +34,26 @@ public class OrdinationController {
 	 receives Ordination object
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "/addNewOrdination/{name}/{type}",
+	@PostMapping(value = "/addNewOrdination",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Ordination> createOrdination(HttpServletRequest req, @PathVariable String name, @PathVariable String type) {
-		System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-		ClinicAdmin adim = (ClinicAdmin) req.getSession().getAttribute("currentUser");
+	public ResponseEntity<Ordination> createOrdination(HttpServletRequest req, @RequestBody Ordination ordination) {
 		
 		if (req.getSession().getAttribute("currentUser") == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user loged in!");
 		}
 	
-		System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-		System.out.println(adim.getClinic().getId());
-		Ordination o = ordinationService.findOneByName(name);
+		ClinicAdmin admin = (ClinicAdmin) req.getSession().getAttribute("currentUser");
 		
-		if(o==null) {
-			ordinationService.save(o);
+		Ordination o = ordinationService.findOneByName(ordination.getName());
+		
+		if(o == null) {
+			ordination.setClinic(admin.getClinic());
+			ordinationService.save(ordination);
+			return new ResponseEntity<>(ordination, HttpStatus.CREATED);
 		}
 		
-		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name already exists!");
 		
 	}
 	

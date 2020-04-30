@@ -1,15 +1,18 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 
@@ -30,7 +33,7 @@ public class PatientController {
 	 receives String email and String password
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "logIn/{email}/{password}")
+	@PostMapping(value = "/logIn/{email}/{password}")
 	public ResponseEntity<Patient> logIn(@PathVariable String email, @PathVariable String password){
 		
 		Patient patient = patientService.findOneByEmail(email);
@@ -47,21 +50,31 @@ public class PatientController {
 	}
 	
 	/*
-	 * url: POST localhost:8081/theGoodShepherd/patinet/register
+	 * url: POST localhost:8081/theGoodShepherd/patient/register
 	 * HTTP request for creating new patient profile
 	 * receives: Patient instance
 	 * returns: ReponseEntity instance
 	 */
-	/*
-	@PostMapping(value = "register")
-	public ResponseEntity<Patient> registerPatient(@RequestBody Patient patient) {
+	
+	@PostMapping(value = "/register",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Patient> registerPatient(HttpServletRequest req, @RequestBody Patient patient) {
+		// vec postoji ulogovani korisnik, ne moze se registrovati
+		if (req.getSession().getAttribute("currentUser") != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already loged in!");
+		}
 		
-		Clinic clinic = clinicService.findOneByName(clinicName);
-		
-		clinic.add(clinicAdmin);
-		
-		Clinic savedClinic = clinicService.save(clinic);
-		
-		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
-	}*/
+		// provera da li postoji
+		// TREBA DA PROVERAVA U SVIM BAZAMA, JEDINSTVEN MEDJU SVIMA!!!
+		Patient existing = patientService.findOneByEmail(patient.getEmail());
+		if (existing != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		// ne postoji u bazi
+		// sacuvamo ga
+		Patient saved = patientService.save(patient);
+		return new ResponseEntity<>(saved, HttpStatus.CREATED);
+	}
+
 }

@@ -17,11 +17,12 @@
 
     <!-- Project bound files -->
     <link href="../../css/main.css" rel="stylesheet" />
+    <script src="../../patient.js"></script>
     
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
     
-    <title>Patient Registration - The Good Sheperd</title>
+    <title>Patient Registration - The Good Shepherd</title>
 </head>
 <body>
     <div class="page-content-wrapper">
@@ -42,7 +43,7 @@
                             <header>Basic Information</header>
                         </div>
                         <div class="card-body" id="bar-parent">
-                            <form action="#" id="form_sample_1" class="form-horizontal">
+                            <form role="form" action="#" method="post" id="patinetRegistration" class="form-horizontal">
                                 <div class="form-body">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">
@@ -50,7 +51,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="email" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -59,7 +60,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="name" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -68,7 +69,16 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="lastname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="surname" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Password
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="password" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -77,7 +87,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <select class="form-control input-height" name="gender">
+                                            <select class="form-control input-height" id="gender">
                                                 <option selected="selected" value="male">Male</option>
                                                 <option value="female">Female</option>
                                             </select>
@@ -102,7 +112,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="designation" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -111,16 +121,16 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="designation" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="phoneNumber" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">
-                                            Street
+                                            Address
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="address" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -129,16 +139,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3">
-                                            State
-                                            <span class="required"> * </span>
-                                        </label>
-                                        <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="city" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -147,15 +148,15 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input type="text" name="firstname" data-required="1"  class="form-control input-height" />
+                                            <input type="text" id="country" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="offset-md-3 col-md-9 form-buttons">
-                                            <button type="submit" class="btn btn-info">Submit</button>
-                                            <button type="button" class="btn btn-default">Cancel</button>
+                                            <button id="register" type="submit" class="btn btn-info">Register</button>
+                                            <button id="cancel" type="button" class="btn btn-default">Cancel</button>
                                         </div>
                                     </div>
                                 </div>

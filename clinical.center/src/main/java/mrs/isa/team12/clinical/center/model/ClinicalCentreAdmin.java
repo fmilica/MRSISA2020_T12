@@ -16,9 +16,10 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	
 	public ClinicalCentreAdmin() {}
 
-	public ClinicalCentreAdmin(String email, String password, String name, String surname, String address, String city,
-			String country, String phoneNumber, Integer securityNumber, ClinicalCentre clinicalCentre) {
-		super(email, password, name, surname, address, city, country, phoneNumber, securityNumber);
+	public ClinicalCentreAdmin(String email, String password, String name, String surname, String gender, 
+			String dateOfBirth, String address, String city,String country, 
+			String phoneNumber, Integer securityNumber, ClinicalCentre clinicalCentre) {
+		super(email, password, name, surname, gender, dateOfBirth, address, city, country, phoneNumber, securityNumber);
 		this.clinicalCentre = clinicalCentre;
 	}
 

@@ -25,10 +25,11 @@ public class Nurse extends MedicalPersonnel{
 
 	public Nurse() {}
 
-	public Nurse(String email, String password, String name, String suername, String address, String city,
-			String country, String phoneNumber, Integer securityNumber, Set<Leave> leaveList, Set<Patient> patients,
+	public Nurse(String email, String password, String name, String suername, String gender,
+			String dateOfBirth, String address, String city, String country, 
+			String phoneNumber, Integer securityNumber, Set<Leave> leaveList, Set<Patient> patients,
 			Clinic clinic) {
-		super(email, password, name, suername, address, city, country, phoneNumber, securityNumber, leaveList,
+		super(email, password, name, suername, gender, dateOfBirth, address, city, country, phoneNumber, securityNumber, leaveList,
 				patients);
 		this.clinic = clinic;
 	}

@@ -38,6 +38,20 @@ public class AppointmentType {
 	
 	public AppointmentType() {}
 
+	public AppointmentType(String name) {
+		super();
+		this.name = name;
+	}
+	
+	public AppointmentType(String name, Set<Appointment> appointments, PricelistItem pricelistItem,
+			Doctor doctor) {
+		super();
+		this.name = name;
+		this.appointments = appointments;
+		this.pricelistItem = pricelistItem;
+		this.doctor = doctor;
+	}
+	
 	public AppointmentType(Long id, String name, Set<Appointment> appointments, PricelistItem pricelistItem,
 			Doctor doctor) {
 		super();

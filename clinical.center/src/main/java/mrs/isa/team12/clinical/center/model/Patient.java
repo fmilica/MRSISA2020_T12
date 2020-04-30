@@ -74,5 +74,9 @@ public class Patient extends RegisteredUser {
 		this.ratings = ratings;
 	}
 
-	
+	@Override
+	public String toString() {
+		return super.toString() + "Patient [appointments=" + appointments + ", medicalRecords=" + medicalRecords + ", clinicalCentre="
+				+ clinicalCentre + ", ratings=" + ratings + "]";
+	}
 }
