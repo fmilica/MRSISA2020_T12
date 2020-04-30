@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 
@@ -21,7 +23,6 @@ public class PatientController {
 	public PatientController(PatientService patientService) {
 		this.patientService = patientService;
 	}
-	
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/patient/logIn/{email}/{password}
@@ -44,4 +45,23 @@ public class PatientController {
 		
 		return new ResponseEntity<>(patient, HttpStatus.OK);
 	}
+	
+	/*
+	 * url: POST localhost:8081/theGoodShepherd/patinet/register
+	 * HTTP request for creating new patient profile
+	 * receives: Patient instance
+	 * returns: ReponseEntity instance
+	 */
+	/*
+	@PostMapping(value = "register")
+	public ResponseEntity<Patient> registerPatient(@RequestBody Patient patient) {
+		
+		Clinic clinic = clinicService.findOneByName(clinicName);
+		
+		clinic.add(clinicAdmin);
+		
+		Clinic savedClinic = clinicService.save(clinic);
+		
+		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
+	}*/
 }

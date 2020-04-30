@@ -145,7 +145,7 @@ html {
     transform: none;
 }
 .form-buttons {
-    padding-left: 350px;
+    padding-left: 290px;
 }
 
 /*
@@ -164,4 +164,8 @@ html {
 }
 .card-box {
     border-radius: 20px !important;
+}
+
+.textarea-height {
+    height: 100px !important;
 }
