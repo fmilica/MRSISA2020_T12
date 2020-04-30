@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#addClinic').click(function(e){
+    $('#add_clinic').click(function(e){
         e.preventDefault()
         
         var name = $('#name').val()
@@ -7,7 +7,6 @@ $(document).ready(function() {
         var city = $('#city').val()
         var address = $('#address').val()
         var description = $('#description').val()
-        var clinicalCenter = $('#clinicalCenter').val()
         
         $.ajax({
             type : "POST",
@@ -21,15 +20,22 @@ $(document).ready(function() {
                 "country" : country,
                 "description" : description,
                 "clinicalCentre" : {
-                	"name" : clinicalCenter
+                	"name" : "The Good Shepherd"
                 }
             }),
-            success : function(response)  {
-                alert("uspelo")
-            },
             error : function(response) {
-                alert("nije uspelo")
+                alert("Clinic with specified name already exists!")
             }
         })
+    })
+    
+    $('cancel_clinic').click(function(e){
+    	e.preventDefault()
+    	
+    	$('#name').val('')
+        $('#country').val('')
+        $('#city').val('')
+        $('#address').val('')
+        $('#description').val('')
     })
 })

@@ -54,6 +54,12 @@ public class ClinicController {
 				 produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Clinic> createClinic(@RequestBody Clinic clinic) {
 		
+		Clinic c = service.findOneByName(clinic.getName());
+		
+		if(c != null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
 		ClinicalCentre clinicalCenter = centerService.findOneByName(clinic.getClinicalCentre().getName());
 		clinicalCenter.addClinic(clinic);
 		
