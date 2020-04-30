@@ -23,13 +23,10 @@ public class Ordination {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name = "number", unique = true, nullable = false)
-	private Integer number;
-	
 	@Column(name = "type", unique = false, nullable = false)
 	private OrdinationType type;
 	
-	@Column(name = "name", unique = false, nullable = false)
+	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
 	@ManyToOne
@@ -41,21 +38,12 @@ public class Ordination {
 
 	public Ordination() {}
 	
-	public Ordination(Integer number, OrdinationType type, String name, Clinic clinic, Set<Appointment> appointments) {
+	public Ordination(OrdinationType type, String name, Clinic clinic, Set<Appointment> appointments) {
 		super();
-		this.number = number;
 		this.type = type;
 		this.name = name;
 		this.clinic = clinic;
 		this.appointments = appointments;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
 	}
 
 	public OrdinationType getType() {

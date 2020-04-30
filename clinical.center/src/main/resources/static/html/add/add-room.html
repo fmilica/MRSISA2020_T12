@@ -217,7 +217,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <input type="text" id="email" name="email" data-required="1"  class="form-control input-height" />
+                                                    <input type="text" id="ordination_name" name="ordination_name" data-required="1"  class="form-control input-height" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -226,7 +226,7 @@
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-7">
-                                                    <select class="form-control input-height" id="type">
+                                                    <select class="form-control input-height" id="ordination_type" name="ordination_type">
                                                         <option selected="selected" value="operatingRoom">Operating room</option>
                                                         <option value="consultingRoom">Consulting room</option>
                                                     </select>
@@ -235,8 +235,8 @@
                                         <div class="form-actions">
                                             <div class="row">
                                                 <div class="offset-md-3 col-md-12 form-buttons">
-                                                    <button type="submit" class="btn btn-info">Create</button>
-                                                    <button type="button" class="btn btn-default">Cancel</button>
+                                                    <button id="submit_ordination" name="submit_ordination" type="submit" class="btn btn-info">Create</button>
+                                                    <button id="cancel-ordination" name="cancel-ordination" type="button" class="btn btn-default">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,5 +262,7 @@
 		</div>
     <!-- end footer -->
 	</div>
+	
+	<script src="../../clinicAdmin.js"></script>
 </body>
 </html>
