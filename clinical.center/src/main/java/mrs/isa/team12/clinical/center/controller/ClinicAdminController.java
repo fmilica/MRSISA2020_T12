@@ -65,7 +65,7 @@ public class ClinicAdminController {
 		
 		clinic.add(clinicAdmin);
 		
-		Clinic savedClinic = clinicService.save(clinic);
+		clinicService.save(clinic);
 		
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
 	}
@@ -89,13 +89,18 @@ public class ClinicAdminController {
 	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
 		
 		if (session.getAttribute("currentUser") != null) {
-			// vec postoji ulogovani, ne moze se ponovo logovati
+			// some user is already logged in, can not have two logged in users!
+			//return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		
 		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
 		if(clinicAdmin == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			/*HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.set("400", "Bad Request");
+			
+			return new ResponseEntity<ClinicAdmin>(null, responseHeaders, HttpStatus.BAD_REQUEST);*/
 		}
 		
 		if(!clinicAdmin.getPassword().equals(password)) {
@@ -106,5 +111,7 @@ public class ClinicAdminController {
 		
 		//treba da vraca clinicAdmin
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
+		
+		
 	}
 }

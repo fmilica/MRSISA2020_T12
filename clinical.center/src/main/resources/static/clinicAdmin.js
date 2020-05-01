@@ -8,8 +8,8 @@ function logInClinicAdmin(email, password){
 		success : function(data,textStatus)  {
 			window.location.href = "html/home-pages/clinic_admin_hp.html"
 		},
-		error : function(response) {
-			alert("Clinic admin login failed")
+		error : function(data) {
+			alert('Clinic admin login failed');
 		}
 	})
 }

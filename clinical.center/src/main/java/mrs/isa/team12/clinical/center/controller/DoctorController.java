@@ -1,9 +1,12 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +53,29 @@ public class DoctorController {
 		}
 		
 		return new ResponseEntity<>(doctor, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/getAll
+	 HTTP request for viewing all doctors
+	 returns ResponseEntity object
+	 */
+	@RequestMapping(value = "getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Doctor>> getAllDoctors() {
+		
+		List<Doctor> doctors = doctorService.findAll();
+		
+		return new ResponseEntity<>(doctors, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/findOne/{id}
+	 HTTP request for getting doctor from database with given id
+	 returns ResponseEntity object
+	 */
+	@RequestMapping(value = "findOne/{id}")
+	public Doctor getDoctorById(@PathVariable("id") Long id){
+		return doctorService.getDoctorById(id);
 	}
 	
 	/*
