@@ -8,6 +8,8 @@ public interface ClinicService {
 	
 	public List<Clinic> findAll();
 	
+	public Clinic findOneById(Long id);
+	
 	public Clinic findOneByName(String name);
 
 	public Clinic save(Clinic c);

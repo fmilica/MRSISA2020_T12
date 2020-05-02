@@ -12,7 +12,7 @@ public interface DoctorService {
 	
 	List<Doctor> findAll();
 	
-	Doctor getDoctorById(Long id);
-	
 	List<Doctor> findAllByClinicId(Long id);
+	
+	Doctor getDoctorById(Long id);
 }

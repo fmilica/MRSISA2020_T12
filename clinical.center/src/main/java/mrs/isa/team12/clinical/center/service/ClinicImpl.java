@@ -25,6 +25,11 @@ public class ClinicImpl implements ClinicService {
 	}
 
 	@Override
+	public Clinic findOneById(Long id) {
+		return this.repository.findOneById(id);
+	}
+	
+	@Override
 	public Clinic findOneByName(String name) {
 		return this.repository.findOneByName(name);
 	}

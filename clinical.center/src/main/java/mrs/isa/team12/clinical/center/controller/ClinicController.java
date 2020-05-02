@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 @RestController
 @RequestMapping("/theGoodShepherd/clinics")
@@ -27,18 +30,21 @@ public class ClinicController {
 	
 	private ClinicService service;
 	private ClinicalCenterService centerService;
+	private DoctorService doctorService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public ClinicController(ClinicService service, ClinicalCenterService centerService) {
+	public ClinicController(ClinicService service, ClinicalCenterService centerService, 
+			DoctorService doctorService) {
 		this.service = service;
 		this.centerService = centerService;
+		this.doctorService = doctorService;
 	}
 	
 	/*
-	 url: GET localhost:8081/theGoodSheperd/clinics
+	 url: GET localhost:8081/theGoodShepherd/clinics
 	 HTTP request for viewing clinics
 	 returns ResponseEntity object
 	 */
@@ -51,7 +57,22 @@ public class ClinicController {
 	}
 	
 	/*
-	 url: POST localhost:8081/theGoodSheperd/clinics/addNewClinic
+	 url: GET localhost:8081/theGoodShepherd/clinics/getDoctors/{clinicId}
+	 HTTP request for viewing all doctors from clinic given by id
+	 receives Long object
+	 returns ResponseEntity object
+	 */
+	@RequestMapping(value = "getDoctors/{id}")
+	public ResponseEntity<List<Doctor>> getAllClinicDoctors(@PathVariable("id") Long id) {
+		// ko ima pravo?
+		System.out.println(id);
+		List<Doctor> doctors = doctorService.findAllByClinicId(id);
+		
+		return new ResponseEntity<>(doctors, HttpStatus.OK);
+	}
+
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/addNewClinic
 	 HTTP request for adding new clinic
 	 receives Clinic object
 	 returns ResponseEntity object

@@ -1,6 +1,34 @@
 
 $(document).ready(function() {
 
+	// inicijalizacija tabele sa klinikama
+	var clinicsTable = $('#clinicsTable').DataTable({
+		responsive: true,
+		ajax: {
+			url: "../../theGoodShepherd/clinics",
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'name'},
+			//{ data: 'rating'},
+			{ data: 'address'},
+			//{ data: 'price'},
+			{
+				data: null,
+				render: function (data) {
+					var button = '<button id="'+data.id+'" class="btn btn-info table-button" name="'+data.name+'">View doctors</button>';
+					// pretplata na dogadjaj klika dugmeta klinike
+					$('.table-button').click(function(e) {
+						// inicijalizacija tabele sa doktorima odabrane klinike
+						var clinicId = $(this).attr('id')
+						var clinicName = $(this).attr('name')
+						initialiseClinicDoctors(clinicId, clinicName)
+					})
+				  	return button;
+				}
+			}]
+	})
+
 	$('#register').click(function(e) {
 		e.preventDefault();
 
@@ -46,6 +74,32 @@ $(document).ready(function() {
 		})
 	})
 })
+
+function initialiseClinicDoctors(clinicId, clinicName) {
+	// dodavanje imena klinike u naslov tabele
+	$('#doctorsClinic').append(clinicName)
+	// inicijalizacija same tabele
+	var doctorsClinicTable = $('#doctorsClinicTable').DataTable({
+		responsive: true,
+		ajax: {
+			url: "../../theGoodShepherd/clinics/getDoctors/"+clinicId,
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'name'},
+			{ data: 'surname'},
+			{ data: 'rating'},
+			{
+				data: null,
+				render: function (data) {
+				return '<select class="form-control input-height available-times" id="'+data.id+'">' + 
+							'<option selected="selected" value="12:00">12:00</option>' + 
+							'<option value="14:00">14:00</option>' +
+					   '</select>'
+				}
+			}]
+	})
+}
 
 function logInPatient(email, password) {
 

@@ -212,7 +212,7 @@ body {
     border-radius: 20px;
     background-color: rgb(255, 255, 252, 0.8);
 }
-.card-body button {
+.card-body .add-button {
     margin-left: 17px;
 }
 .dataTables_wrapper {
@@ -222,6 +222,25 @@ body {
     border-radius: 10px;
 }
 
+/*
+* Schedule appointment (patient)
+*/
+.schedule-appointment {
+    margin-top: 30px;
+    margin-left: 120px;
+    margin-right: 120px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 252, 0.8);
+}
+.schedule-appointment .form-body{
+    padding: 0 !important;
+}
+.schedule-appointment .form-actions {
+    padding: 0 !important;
+}
+.table-button {
+    margin: 0 !important;
+}
 /*
 * jQuery dynamic
 */

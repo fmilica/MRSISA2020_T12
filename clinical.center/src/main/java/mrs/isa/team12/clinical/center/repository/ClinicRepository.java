@@ -6,6 +6,8 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 
 public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 
+	Clinic findOneById(Long id);
+	
 	Clinic findOneByName(String name);
 	
 }
