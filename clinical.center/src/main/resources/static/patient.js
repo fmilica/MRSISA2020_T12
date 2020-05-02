@@ -1,9 +1,6 @@
 
 $(document).ready(function() {
 
-	// prikaz linka za registraciju
-	$('#register').show()
-
 	$('#register').click(function(e) {
 		e.preventDefault();
 

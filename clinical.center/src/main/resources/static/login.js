@@ -8,7 +8,12 @@
     	event.preventDefault()
     	var user_type = $(this).attr('id')
     	sessionStorage.setItem('user_type', user_type);
-    	window.location.href = "login.html"
+    	if(user_type == 'patient'){
+    		window.location.href = "loginP.html"
+    	}else{
+    		window.location.href = "loginO.html"
+    	}
+    	
     })
     
     /*==================================================================
