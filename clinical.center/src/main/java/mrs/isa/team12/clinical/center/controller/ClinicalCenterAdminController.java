@@ -86,6 +86,8 @@ public class ClinicalCenterAdminController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and password do not match!");
 		}
 		
+		session.setAttribute("currentUser", clinicalCentreAdmin);
+		
 		return new ResponseEntity<>(clinicalCentreAdmin, HttpStatus.OK);
 	}
 	

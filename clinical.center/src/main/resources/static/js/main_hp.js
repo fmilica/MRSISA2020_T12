@@ -43,7 +43,7 @@ $(document).ready( function () {
     /* dropdown links */
     // My Profile
     $('#dropdownProfile').click(function() {
-        alert("hello")
+    	alert("Hello")
     })
     // Change password
     $('#dropdownChangePass').click(function() {
@@ -51,7 +51,17 @@ $(document).ready( function () {
     })
     // Logout
     $('#dropdownLogout').click(function() {
-        alert("hello")
+    	$.ajax({
+    		type : "GET",
+    		async: false,
+    		url : "../../theGoodShepherd/logOut",
+    		success : function(response)  {
+    			window.location.href = "../../index.html"
+    		},
+    		error : function(response) {
+    			alert(response.responseJSON.message)
+    		}
+    	})
     })
 
     /* sidebar navigation */

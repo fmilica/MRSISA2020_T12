@@ -125,4 +125,5 @@ public class ClinicAdminController {
 		//treba da vraca clinicAdmin
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
 	}
+	
 }
