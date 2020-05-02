@@ -12,8 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "price_list_item")
 public class PricelistItem {
 	
 	@Id
@@ -23,20 +25,22 @@ public class PricelistItem {
 	@Column(name = "price", unique = false, nullable = false )
 	private Double price;
 	
-	@Column(name = "start_date", unique = false, nullable = false )
+	/*nullable sam stavila na true za sada jer ce nam ova polja trebati tek kasnije kada budemo radili izvestaj*/
+	@Column(name = "start_date", unique = false, nullable = true )
 	private Date startDate;
-	
-	@Column(name = "end_date", unique = false, nullable = false )
+	/*nullable sam stavila na true za sada jer ce nam ova polja trebati tek kasnije kada budemo radili izvestaj*/
+	@Column(name = "end_date", unique = false, nullable = true )
 	private Date endDate;
 	
-	@ManyToOne
-	@JoinColumn(name = "pricelist_id", referencedColumnName = "id", nullable = true)
-	private Pricelist pricelist;
-	
+	/*za sada je one to one jer racunamo da cena traje zauvek ali kada start i end date ne budu null onda ce ovde biti many to one*/
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "appointment_type_id", referencedColumnName = "id", nullable = true)
 	private AppointmentType appointmentType;
 	
+	@ManyToOne
+	@JoinColumn(name = "pricelist_id", referencedColumnName = "id", nullable = false)
+	private Pricelist pricelist;
+
 	public PricelistItem() {}
 
 	public PricelistItem(Long id, Double price, Date startDate, Date endDate, Pricelist pricelist,

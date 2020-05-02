@@ -34,7 +34,6 @@ public class Doctor extends MedicalPersonnel {
 	@Column(name = "rating", nullable = true, unique = false)
 	private Double rating;
 	
-	/*nullable = false*/
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
 	@JsonBackReference

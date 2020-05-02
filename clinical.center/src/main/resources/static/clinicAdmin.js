@@ -16,57 +16,6 @@ function logInClinicAdmin(email, password){
 
 $(document).ready(function() {
 	
-	/*Adding new doctor*/
-	$("#submit_doctor").on('click', function(event){
-		event.preventDefault()
-		
-		var emailV = $("#doctorEmail").val()
-		var nameV = $("#firstNameDoctor").val()
-		var surnameV = $("#lastNameDoctor").val()
-		var passwordV = $("#passwordDoctor").val()
-		var confirmPasswordV = $("#confirm-passwordDoctor").val()
-		var genderV = $("#genderDoctor").val()
-		var dateOfBirthV = "11.11.1978."
-		var specializationV = $("#specializationDoctor").val()
-		var securityNumV = $("#securityNumberDoctor").val()
-		var phoneNumberV = $("#phoneNumberDoctor").val()
-		var addressV = $("#addressDoctor").val()
-		var cityV = $("#cityDoctor").val()
-		var countryV = $("#countryDoctor").val()
-		
-		var newDoctor = {
-			email: emailV,
-			name: nameV,
-			surname: surnameV,
-			password: passwordV,
-			gender: genderV,
-			dateOfBirth: dateOfBirthV,
-			securityNumber: securityNumV,
-			phoneNumber: phoneNumberV,
-			address: addressV,
-			city: cityV,
-			country: countryV,
-			specialization: specializationV
-		}
-		
-		$.ajax({
-			type : "POST",
-			url : "../../theGoodShepherd/doctor/addNewDoctor",
-			contentType : "application/json",
-			dataType : "json",
-			data : JSON.stringify(newDoctor),
-			success : function(response){
-				// vrati ga na pregled svih doktora
-				$('.content').hide()
-        		$('.clinic-doctors').show()
-				alert("New doctor saved!")
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
-	})
-	
 	/*Adding new operating room*/
 	$("#submit_ordination").on('click', function(event){
 		event.preventDefault()
@@ -135,5 +84,79 @@ $(document).ready(function() {
 		$("#ordination_name").val('')
 		
 	})
-
+	
+	$("#clinicDoctors").on('click', function(event){
+		event.preventDefault()
+		var doctorsTable = $('#doctorTable').DataTable({
+		ajax: {
+			url: "../../theGoodShepherd/clinicAdmin/getDoctors",
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'email'},
+			{ data: 'name'},
+			{ data: 'surname'},
+			{ data: 'gender'},
+			{ data: 'dateOfBirth'},
+			{ data: 'address'},
+			{ data: 'city'},
+			{ data: 'country'},
+			{ data: 'phoneNumber'},
+			{ data: 'securityNumber'},
+			{ data: 'specialization'}]
+		})
+	})
+	
+	/*Adding new doctor*/
+	$("#submit_doctor").on('click', function(event){
+		event.preventDefault()
+		
+		var emailV = $("#doctorEmail").val()
+		var nameV = $("#firstNameDoctor").val()
+		var surnameV = $("#lastNameDoctor").val()
+		var passwordV = $("#passwordDoctor").val()
+		var confirmPasswordV = $("#confirm-passwordDoctor").val()
+		var genderV = $("#genderDoctor").val()
+		var dateOfBirthV = "11.11.1978."
+		var specializationV = $("#specializationDoctor").val()
+		var securityNumV = $("#securityNumberDoctor").val()
+		var phoneNumberV = $("#phoneNumberDoctor").val()
+		var addressV = $("#addressDoctor").val()
+		var cityV = $("#cityDoctor").val()
+		var countryV = $("#countryDoctor").val()
+		
+		var newDoctor = {
+			email: emailV,
+			name: nameV,
+			surname: surnameV,
+			password: passwordV,
+			gender: genderV,
+			dateOfBirth: dateOfBirthV,
+			securityNumber: securityNumV,
+			phoneNumber: phoneNumberV,
+			address: addressV,
+			city: cityV,
+			country: countryV,
+			specialization: specializationV
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/doctor/addNewDoctor",
+			contentType : "application/json",
+			dataType : "json",
+			data : JSON.stringify(newDoctor),
+			success : function(response){
+				// vrati ga na pregled svih doktora
+				$('.content').hide()
+        		$('.clinic-doctors').show()
+				alert("New doctor saved!")
+				var table = $('#doctorTable').DataTable();
+				table.ajax.reload();
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
 })

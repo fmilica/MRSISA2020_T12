@@ -30,12 +30,6 @@ public class Appointment {
 	@JoinColumn(name = "type_id")
 	private AppointmentType type;
 	
-	@Column(name = "duration", unique = false, nullable = false )
-	private Integer duration;
-	
-	@Column(name = "price", unique = false, nullable = false )
-	private Double price;
-	
 	@Column(name = "discount", unique = false, nullable = true )
 	private Double discount;
 	
@@ -68,14 +62,12 @@ public class Appointment {
 
 	public Appointment() {}
 	
-	public Appointment(Date date, Date time, AppointmentType type, Integer duration, Double price, Double discount,
+	public Appointment(Date date, Date time, AppointmentType type, Double discount,
 			Boolean confirmed, Patient patient, MedicalReport medicalReport, Ordination ordination, Doctor doctor) {
 		super();
 		this.date = date;
 		this.time = time;
 		this.type = type;
-		this.duration = duration;
-		this.price = price;
 		this.discount = discount;
 		this.confirmed = confirmed;
 		this.patient = patient;
@@ -106,22 +98,6 @@ public class Appointment {
 
 	public void setType(AppointmentType type) {
 		this.type = type;
-	}
-
-	public Integer getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
 	}
 
 	public Double getDiscount() {

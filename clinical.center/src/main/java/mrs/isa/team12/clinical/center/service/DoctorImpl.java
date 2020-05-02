@@ -39,4 +39,9 @@ public class DoctorImpl implements DoctorService {
 		return doctorRep.findOneById(id);
 	}
 
+	@Override
+	public List<Doctor> findAllByClinicId(Long id) {
+		return doctorRep.findAllByClinicId(id);
+	}
+
 }

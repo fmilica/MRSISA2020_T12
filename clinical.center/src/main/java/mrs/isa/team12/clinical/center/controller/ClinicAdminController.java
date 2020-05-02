@@ -19,8 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 
 @RestController
@@ -29,14 +31,17 @@ public class ClinicAdminController {
 	
 	private ClinicAdminService adminService;
 	private ClinicService clinicService;
+	private DoctorService doctorService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public ClinicAdminController(ClinicAdminService adminService, ClinicService clinicService) {
+	public ClinicAdminController(ClinicAdminService adminService, ClinicService clinicService,
+			DoctorService doctorService) {
 		this.adminService = adminService;
 		this.clinicService = clinicService;
+		this.doctorService = doctorService;
 	}
 
 	/*
@@ -63,7 +68,7 @@ public class ClinicAdminController {
 		
 		return new ResponseEntity<>(clinicAdmins, HttpStatus.OK);
 	}
-	
+
 	/*
 	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/addNewClinicAdmin/{clinicName}
 	 HTTP request for adding new clinic administrator
@@ -83,15 +88,6 @@ public class ClinicAdminController {
 		
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
 	}
-	
-
-	/* testiranje ove sotone
-	 * 1) kreiramo kliniku
-	 * 2) ispisemo kliniku
-	 * 3) kreiramo admina (sa parametrom path-a imenom klinike)
-	 * 4) ispisemo admina
-	 * 5) ispisemo kliniku
-	 */
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/logIn/{email}/{password}
@@ -124,6 +120,34 @@ public class ClinicAdminController {
 		
 		//treba da vraca clinicAdmin
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/clinicAdmin/getDoctors
+	 HTTP request for viewing doctors in clinic admins clinic
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "getDoctors" ,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Doctor>> getDoctors() {
+		
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinic administrators.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		System.out.println("Dosao do ovde");
+		
+		List<Doctor> doctors = doctorService.findAllByClinicId(currentUser.getClinic().getId());
+		
+		System.out.println("Dosao i do ovde");
+		return new ResponseEntity<>(doctors, HttpStatus.OK);
 	}
 	
 }

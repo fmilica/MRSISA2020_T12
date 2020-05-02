@@ -14,8 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "appointment_type")
 public class AppointmentType {
 	
 	@Id
@@ -25,11 +27,16 @@ public class AppointmentType {
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
+	@Column(name = "duration", unique = false, nullable = false )
+	private Integer duration;
+	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "type")
 	private Set<Appointment> appointments;
 	
+	/*mislim da appointment type po svom kreiranju mora da dobije neku pocetnu cenu*/
+	/*takodje ovde ce kasnije biti one to many zbog razlicitih vremena vazenja cena*/
 	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "pricelist_item_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name = "pricelist_item_id", referencedColumnName = "id", nullable = false)
 	private PricelistItem pricelistItem;
 
 	@ManyToOne
@@ -37,21 +44,24 @@ public class AppointmentType {
 	private Doctor doctor;
 	
 	public AppointmentType() {}
-
-	public AppointmentType(String name) {
-		super();
-		this.name = name;
-	}
 	
-	public AppointmentType(String name, Set<Appointment> appointments, PricelistItem pricelistItem,
-			Doctor doctor) {
+	public AppointmentType(String name, Integer duration) {
 		super();
 		this.name = name;
+		this.duration = duration;
+	}
+
+	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments,
+			PricelistItem pricelistItem, Doctor doctor) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.duration = duration;
 		this.appointments = appointments;
 		this.pricelistItem = pricelistItem;
 		this.doctor = doctor;
 	}
-	
+
 	public AppointmentType(Long id, String name, Set<Appointment> appointments, PricelistItem pricelistItem,
 			Doctor doctor) {
 		super();
@@ -101,4 +111,15 @@ public class AppointmentType {
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
+
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
 }
