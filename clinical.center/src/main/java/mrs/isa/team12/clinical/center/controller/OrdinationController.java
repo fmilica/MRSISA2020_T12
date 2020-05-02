@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,9 @@ public class OrdinationController {
 	private OrdinationService ordinationService;
 	
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	public OrdinationController(OrdinationService ordinationService) {
 		this.ordinationService = ordinationService;
 	}
@@ -37,13 +40,17 @@ public class OrdinationController {
 	@PostMapping(value = "/addNewOrdination",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Ordination> createOrdination(HttpServletRequest req, @RequestBody Ordination ordination) {
+	public ResponseEntity<Ordination> createOrdination(@RequestBody Ordination ordination) {
 		
-		if (req.getSession().getAttribute("currentUser") == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user loged in!");
+		ClinicAdmin admin;
+		try {
+			admin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can add new ordinations.");
 		}
-	
-		ClinicAdmin admin = (ClinicAdmin) req.getSession().getAttribute("currentUser");
+		if (admin == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
 		
 		Ordination o = ordinationService.findOneByName(ordination.getName());
 		

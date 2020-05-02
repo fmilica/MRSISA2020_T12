@@ -1,13 +1,18 @@
 $(document).ready( function () {
+	// prebaceno u clinicAdmin.js jer on poziva da vidi sve doktore
+	// ili je mozda zapravo bolje imati ga ovde
+	// jer ce ga pozivati i pacijent posle?
+	// ili se nece iste stvari prikazati pacijentu i adminu?
+	// tinkr tinkr
 	
 	var table = $('#doctorTable').DataTable({
 		"sAjaxSource": "../../theGoodShepherd/doctor/getAll",
 		"sAjaxDataProp": "",
 		"order": [[ 0, "asc" ]],
 		"aoColumns": [
-		    { "mData": "id"},
+		    //{ "mData": "id"},
 		    { "mData": "email" },
-			{ "mData": "password" },
+			//{ "mData": "password" },
 			{ "mData": "name" },
 			{ "mData": "surname" },
 			{ "mData": "gender" },
@@ -34,7 +39,7 @@ function logInDoctor(email, password){
 			window.location.href = "html/home-pages/doctor_hp.html"
 		},
 		error : function(response) {
-			alert("Doctor log in failed")
+			alert(response.responseJSON.message)
 		}
 	})
 }

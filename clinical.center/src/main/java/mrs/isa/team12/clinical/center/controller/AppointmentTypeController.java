@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 
 @RestController
@@ -20,6 +21,9 @@ import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 public class AppointmentTypeController {
 
 	private AppointmentTypeService appointmentTypeService;
+	
+	@Autowired
+	private HttpSession session;
 	
 	@Autowired
 	public AppointmentTypeController(AppointmentTypeService appointmentTypeService) {
@@ -35,13 +39,17 @@ public class AppointmentTypeController {
 	@PostMapping(value = "/addNewAppointmentType",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentType> createOrdination(HttpServletRequest req, @RequestBody AppointmentType appType) {
+	public ResponseEntity<AppointmentType> createOrdination(@RequestBody AppointmentType appType) {
 		
 		// potrebno dodati kliniku i u model, pa i ovde
-		//ClinicAdmin admin = (ClinicAdmin) req.getSession().getAttribute("currentUser");
-		
-		if (req.getSession().getAttribute("currentUser") == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user loged in!");
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can create new appointment types.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 	
 		AppointmentType existing = appointmentTypeService.findOneByName(appType.getName());

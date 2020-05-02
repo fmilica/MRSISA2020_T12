@@ -5,11 +5,11 @@ function logInClinicAdmin(email, password){
 		async: false,
 		url : "theGoodShepherd/clinicAdmin/logIn//" + email + "//" + password ,
 		dataType: "json",
-		success : function(data,textStatus)  {
+		success : function(response)  {
 			window.location.href = "html/home-pages/clinic_admin_hp.html"
 		},
-		error : function(data) {
-			alert('Clinic admin login failed');
+		error : function(response) {
+			alert(response.responseJSON.message)
 		}
 	})
 }
@@ -56,10 +56,13 @@ $(document).ready(function() {
 			dataType : "json",
 			data : JSON.stringify(newDoctor),
 			success : function(response){
+				// vrati ga na pregled svih doktora
+				$('.content').hide()
+        		$('.clinic-doctors').show()
 				alert("New doctor saved!")
 			},
 			error : function(response) {
-				alert("Doctor with given email already exists");
+				alert(response.responseJSON.message)
 			}
 		})
 	})
@@ -83,12 +86,11 @@ $(document).ready(function() {
 			contentType : "application/json",
 			dataType : "json",
 			data : JSON.stringify(ordination),
-			success : function(response)  {
+			success : function()  {
 				alert("Successfully added new ordination!")
-				window.location.href = "../../html/home-pages/clinic_admin_hp.html"
 			},
 			error : function(response) {
-				alert("Clinic admin login failed")
+				alert(response.responseJSON.message)
 			}
 		})
 	})
@@ -118,12 +120,11 @@ $(document).ready(function() {
 			contentType : "application/json",
 			dataType : "json",
 			data : JSON.stringify(appType),
-			success : function(response)  {
-				alert("Successfully added new appointmentType!")
-				window.location.href = "../../html/home-pages/clinic_admin_hp.html"
+			success : function()  {
+				alert("Successfully added new appointment type!")
 			},
 			error : function(response) {
-				alert("Clinic admin login failed")
+				alert(response.responseJSON.message)
 			}
 		})
 	})

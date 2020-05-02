@@ -178,7 +178,7 @@
 .white-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li:hover>a{
 	background-color: #ffffff;
     border-top-color: transparent;
-    color: #4680ff;
+    /*color: #4680ff;*/
 }
 .white-sidebar-color .user-panel,
 .white-sidebar-color .txtOnline,
@@ -208,6 +208,7 @@
 .white-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu .sub-menu>li>a{
 	color : #444;
 }
+/*
 .white-sidebar-color .sidemenu-container .sidemenu .sub-menu>li.active>a, 
 .white-sidebar-color .sidemenu-container .sidemenu .sub-menu>li.open>a, 
 .white-sidebar-color .sidemenu-container .sidemenu .sub-menu>li:hover>a, 
@@ -216,9 +217,12 @@
 .white-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu .sub-menu>li:hover>a{
 	color: #4680ff;
 }
+*/
+/*
 .white-sidebar-color .page-container{
 	background-color : #ffffff;
 }
+*/
 .selector-title{
 	margin-top: 0px !important; 
 }

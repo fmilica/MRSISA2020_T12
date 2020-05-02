@@ -54,7 +54,7 @@
                 <!-- logo start -->
                 <div class="page-logo">
                     <a href="#">
-                    <img class="logo-icon" src="../../img/icons/logo/logo_plain.png"></img>
+                    <img class="logo-icon" src="../../img/icons/logo/logo_plain.png">
                     <span class="logo-default">The Good Shepherd</span> </a>
                 </div>
                 <!-- logo end -->
@@ -76,21 +76,21 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="user_profile.html">
-										<img class="icon" src="../../img/icons/profile.png"></img>
+									<a id="dropdownProfile">
+										<img class="icon" src="../../img/icons/profile.png">
 										My Profile
 									</a>
                                 </li>
                                 <li>
-                                    <a href="#">
-										<img src="../../img/settings.svg"></img>
+                                    <a id="dropdownChangePass">
+										<img src="../../img/settings.svg">
 										Change Password
                                     </a>
 								</li>
 								<li class="divider"></li>
                                 <li>
-                                    <a href="#">
-										<img class="icon" src="../../img/icons/logout.png"></img>
+                                    <a id="dropdownLogout">
+										<img class="icon" src="../../img/icons/logout.png">
 										Logout	
                                     </a>
                                 </li>
@@ -126,44 +126,44 @@
 	                                </div>
 	                            </div>
 	                        </li>
-	                        <li class="nav-item ">
-	                            <a href="#" class="nav-link nav-toggle">
-	                                <img class="icon" src="../../img/icons/home.png"></img>
+	                        <li class="nav-item">
+	                            <a id="homePage" class="nav-link nav-toggle">
+	                                <img class="icon" src="../../img/icons/home.png">
 	                                <span class="title">Home Page</span>
 	                                <span class="arrow"></span>
 	                            </a>
 	                        </li>
-                            <li class="nav-item  ">
-	                            <a href="../add/add-clinic.html" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/clinics.png"></img>
+                            <li class="nav-item">
+	                            <a id="clinics" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/clinics.png">
 									<span class="title">Clinics</span>
 									<span class="arrow"></span>
 	                            </a>
 							</li>
-	                        <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/appointment.png"></img>
+	                        <li class="nav-item">
+	                            <a id="clinicAdmins" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/appointment.png">
 									<span class="title">Clinic Admins</span>
 									<span class="arrow"></span>
 	                            </a>
 							</li>
-							<li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png"></img>
+							<li class="nav-item">
+	                            <a id="centerAdmins" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
 									<span class="title">Clinical Center Admins</span>
 									<span class="arrow"></span>
 								</a>
                             </li>
-                            <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png"></img>
+                            <li class="nav-item">
+	                            <a id="registrationReq" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
 									<span class="title">Registration requests</span>
 									<span class="arrow"></span>
 								</a>
                             </li>
-                            <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png"></img>
+                            <li class="nav-item">
+	                            <a id="prescriptionBook" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
 									<span class="title">Prescription Book</span>
 									<span class="arrow"></span>
 								</a>
@@ -177,17 +177,117 @@
 			<!-- start page content -->
 
 			<div class="content-container">
-				<!-- start welcoming text -->
-				<div class="text">
-					<h1 align="center">Welcome to The Good Shepherd Clinics</h1>
-					<img class="text-logo" src="../../img/icons/logo/logo_text.png"></img>
-					<h2 align="center">Your mind and body deserve only the best!</h2>
-				</div>
-				<!-- end welcoming text -->
+				<!-- Home page content -->
+				<div class="content home-page">
+					<!-- start welcoming text -->
+					<div class="text">
+						<h1 align="center">Welcome to The Good Shepherd Clinics</h1>
+						<img class="text-logo" src="../../img/icons/logo/logo_text.png">
+						<h2 align="center">Your mind and body deserve only the best!</h2>
+					</div>
+					<!-- end welcoming text -->
 
-				<!-- start calendar -->
-				<div class="calendar" id="calendar"></div>
-				<!-- end calendar -->
+					<!-- start calendar -->
+					<div class="calendar" id="calendar"></div>
+					<!-- end calendar -->
+				</div>
+
+				<!-- Clinics content -->
+				<!-- add form -->
+				<div class="content clinics">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new clinic - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form action="#" id="form_sample_1" class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="address" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="city" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="country" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Description
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<textarea id="description" data-required="1"  class="form-control textarea-height">
+														</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_clinic" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_clinic type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
+				</div>
+
+				<!-- Clinic admins content -->
+				<div class="content clinic-admins">
+					clinic-admins
+				</div>
+
+				<!-- Center admins content -->
+				<div class="content center-admins">
+					center-admins
+				</div>
+
+				<!-- Registration requests content -->
+				<div class="content registration-req">
+					registration-req
+				</div>
+				
+				<!-- Prescription book content -->
+				<div class="content prescription-book">
+					prescription-book
+				</div>
 			</div>
 
 			<!-- end page content -->
@@ -198,7 +298,7 @@
             <div class="page-footer-inner"> 2020 &copy; The Good Shepherd Clinics - Your health care companion
             </div>
             <div class="scroll-to-top">
-                <img src="../../img/uparrow1.svg"></img>
+                <img src="../../img/uparrow1.svg">
 			</div>
 		</div>
     <!-- end footer -->

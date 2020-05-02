@@ -16,8 +16,36 @@
          url('../fonts/varela-round-v12-latin-regular.svg#VarelaRound') format('svg'); /* Legacy iOS */
   }
 
+  @font-face {
+    font-family: Poppins-Regular;
+    src: url('../css/fonts/poppins/Poppins-Regular.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Poppins-Medium;
+    src: url('../css/fonts/poppins/Poppins-Medium.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Poppins-Bold;
+    src: url('../css/fonts/poppins/Poppins-Bold.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Poppins-SemiBold;
+    src: url('../css/fonts/poppins/Poppins-SemiBold.ttf'); 
+  }
+
 html {
-    font-family: 'Varela Round' !important;
+    font-family: Poppins-Regular, sans-serif !important;
+    /*font-family: 'Varela Round' !important;*/
+}
+
+body {
+    background-image: url(../img/background_transparent.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 /*
@@ -60,7 +88,7 @@ html {
 }*/
 
 .sidebar-container {
-    height: 144vh;
+    min-height: 160vh;
     background-color: #defbff !important;
 }
 
@@ -92,10 +120,6 @@ html {
 }
 
 .content-container {
-    background-image: url(../img/background_transparent.png);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
     overflow: hidden;
     min-height: 100vh;
     padding: 15px;
@@ -149,6 +173,16 @@ html {
 }
 
 /*
+* Sidebar
+*/
+.active-nav-item {
+    background-color: white;
+    color: #006e97 !important;
+}
+.nav-item > a:hover {
+	color: #006e97 !important;
+}
+/*
 * Add form
 */
 .add {
@@ -168,4 +202,109 @@ html {
 
 .textarea-height {
     height: 100px !important;
+}
+
+/*
+* View table
+*/
+.table-view {
+    margin-top: 30px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 252, 0.8);
+}
+.card-body button {
+    margin-left: 17px;
+}
+.dataTables_wrapper {
+    border: 1px solid rgb(58, 201, 214, 0.3) !important;
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+/*
+* jQuery dynamic
+*/
+/* Clinical center admin */
+.clinics {
+    display: none;
+}
+.clinic-admins {
+    display: none;
+}
+.center-admins {
+    display: none;
+}
+.registration-req {
+    display: none;
+}
+.prescription-book {
+    display: none;
+}
+
+/* Clinic admin */
+.clinic-information {
+    display: none;
+}
+.clinic-appointments {
+    display: none;
+}
+.clinic-doctors {
+    display: none;
+}
+.clinic-ordinations {
+    display: none;
+}
+.clinic-appTypes {
+    display: none;
+}
+.clinic-pricelist {
+    display: none;
+}
+.clinic-createClinicApp {
+    display: none;
+}
+.clinic-reports {
+    display: none;
+}
+.clinic-clinicExamReq {
+    display: none;
+}
+.clinic-vacation {
+    display: none;
+}
+.clinic-addDoctor {
+    display: none;
+}
+
+/* Medical personnel */
+.medical-calendar {
+    display: none;
+}
+.medical-vacation {
+    display: none;
+}
+
+/* Doctor */
+.doctor-patients {
+    display: none;
+}
+
+/* Nurse */
+.nurse-verifyPrescription {
+    display: none;
+}
+.nurse-patients {
+    display: none;
+}
+
+/* Patient */
+.patient-clinics {
+    display: none;
+}
+.patient-apps {
+    display: none;
+}
+.patient-medicalRecord {
+    display: none;
 }

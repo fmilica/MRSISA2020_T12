@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 
@@ -44,6 +46,18 @@ public class ClinicAdminController {
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ClinicAdmin>> getAllClinicAdmins() {
+		
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinic administrators.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
 		
 		List<ClinicAdmin> clinicAdmins = adminService.findAll();
 		
@@ -89,14 +103,13 @@ public class ClinicAdminController {
 	public ResponseEntity<ClinicAdmin> logIn(@PathVariable String email, @PathVariable String password){
 		
 		if (session.getAttribute("currentUser") != null) {
-			// some user is already logged in, can not have two logged in users!
-			//return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			// postoji ulogovani korisnik
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already loged in!");
 		}
 		
 		ClinicAdmin clinicAdmin = adminService.findOneByEmail(email);
 		if(clinicAdmin == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic administrator with given email does not exist.");
 			/*HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("400", "Bad Request");
 			
@@ -104,14 +117,12 @@ public class ClinicAdminController {
 		}
 		
 		if(!clinicAdmin.getPassword().equals(password)) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and password do not match!");
 		}
 		// postavlja trenutno ulogovanog na sesiju
 		session.setAttribute("currentUser", clinicAdmin);
 		
 		//treba da vraca clinicAdmin
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.OK);
-		
-		
 	}
 }

@@ -37,3 +37,160 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
   });
+
+$(document).ready( function () {
+
+    /* dropdown links */
+    // My Profile
+    $('#dropdownProfile').click(function() {
+        alert("hello")
+    })
+    // Change password
+    $('#dropdownChangePass').click(function() {
+        alert("hello")
+    })
+    // Logout
+    $('#dropdownLogout').click(function() {
+        alert("hello")
+    })
+
+    /* sidebar navigation */
+    $('.nav-item').click(function(e) {
+        $('.nav-item').removeClass('active-nav-item')
+        $(this).addClass('active-nav-item')
+    })
+    // Home Page
+    $('#homePage').click(function() {
+        $('.content').hide()
+        $('.home-page').show()
+    })
+    
+    /* Clinical center administrator */
+    // Clinics
+    $('#clinics').click(function() {
+        $('.content').hide()
+        $('.clinics').show()
+    })
+    // Clinic admins
+    $('#clinicAdmins').click(function() {
+        $('.content').hide()
+        $('.clinic-admins').show()
+    })
+    // Center admins
+    $('#centerAdmins').click(function() {
+        $('.content').hide()
+        $('.center-admins').show()
+    })
+    // Registration requests
+    $('#registrationReq').click(function() {
+        $('.content').hide()
+        $('.registration-req').show()
+    })
+    // Prescription book
+    $('#prescriptionBook').click(function() {
+        $('.content').hide()
+        $('.prescription-book').show()
+    })
+
+    /* Clinic administrator */
+    // Clinic information
+    $('#clinicInformation').click(function() {
+        $('.content').hide()
+        $('.clinic-information').show()
+    })
+    // Clinic appointments
+    $('#clinicAppointments').click(function() {
+        $('.content').hide()
+        $('.clinic-appointments').show()
+    })
+    // Clinic doctors
+    $('#clinicDoctors').click(function() {
+        $('.content').hide()
+        $('.clinic-doctors').show()
+    })
+    // Clinic ordinations
+    $('#clinicOrdinations').click(function() {
+        $('.content').hide()
+        $('.clinic-ordinations').show()
+    })
+    // Clinic appointment types
+    $('#clinicAppTypes').click(function() {
+        $('.content').hide()
+        $('.clinic-appTypes').show()
+    })
+    // Clinic pricelist
+    $('#clinicPricelist').click(function() {
+        $('.content').hide()
+        $('.clinic-pricelist').show()
+    })
+    // Create appointment type
+    $('#createClinicApp').click(function() {
+        $('.content').hide()
+        $('.clinic-createClinicApp').show()
+    })
+    // Clinic reports
+    $('#clinicReports').click(function() {
+        $('.content').hide()
+        $('.clinic-reports').show()
+    })
+    // Clinic examination requests
+    $('#clinicExamReq').click(function() {
+        $('.content').hide()
+        $('.clinic-clinicExamReq').show()
+    })
+    // Clinic vacation/paid leave
+    $('#clinicVacation').click(function() {
+        $('.content').hide()
+        $('.clinic-vacation').show()
+    })
+    // Clinic vacation/paid leave
+    $('#addDoctor').click(function() {
+        $('.content').hide()
+        $('.clinic-addDoctor').show()
+    })
+
+    /* Medical personnel */
+    // Medical personnel calendar
+    $('#medicalCalendar').click(function() {
+        $('.content').hide()
+        $('.medical-calendar').show()
+    })
+    // Medical personnel vacation
+    $('#medicalVacation').click(function() {
+        $('.content').hide()
+        $('.medical-vacation').show()
+    })
+
+    /* Doctor */
+    // Doctor patients
+    $('#doctorPatients').click(function() {
+        $('.content').hide()
+        $('.doctor-patients').show()
+    })
+
+    /* Nurse */
+    // Nurse verify prescription
+    $('#nurseVerifyPrescription').click(function() {
+        $('.content').hide()
+        $('.nurse-verifyPrescription').show()
+    })
+    // Nurse patients
+    $('#nursePatients').click(function() {
+        $('.content').hide()
+        $('.nurse-patients').show()
+    })
+
+    /* Patient */
+    $('#patientClinics').click(function() {
+        $('.content').hide()
+        $('.patient-clinics').show()
+    })
+    $('#patientApps').click(function() {
+        $('.content').hide()
+        $('.patient-apps').show()
+    })
+    $('#patientMedicalRecord').click(function() {
+        $('.content').hide()
+        $('.patient-medicalRecord').show()
+    })
+})

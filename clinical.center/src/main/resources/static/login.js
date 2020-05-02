@@ -44,18 +44,19 @@
         
         var user_type = sessionStorage.getItem('user_type')
         
-        if(user_type == "patient"){
-        	logInPatient(email, password)
-        }else if(user_type == "doctor"){
-        	logInDoctor(email, password)
-        }else if(user_type == "clinic_admin"){
-        	logInClinicAdmin(email, password)
-        }else if(user_type == "center_admin"){
-        	logInClinicalCentreAdmin(email, password)
-        }else{
-        	logInNurse(email, password)
+        if (email && password) {
+            if(user_type == "patient"){
+            	logInPatient(email, password)
+            }else if(user_type == "doctor"){
+            	logInDoctor(email, password)
+            }else if(user_type == "clinic_admin"){
+            	logInClinicAdmin(email, password)
+            }else if(user_type == "center_admin"){
+            	logInClinicalCentreAdmin(email, password)
+            }else{
+            	logInNurse(email, password)
+            }
         }
-        
     });
 
 

@@ -1,5 +1,9 @@
 
 $(document).ready(function() {
+
+	// prikaz linka za registraciju
+	$('#register').show()
+
 	$('#register').click(function(e) {
 		e.preventDefault();
 
@@ -40,7 +44,7 @@ $(document).ready(function() {
 				window.location.href = "../../html/home-pages/patient_hp.html"
 			},
 			error : function(response) {
-				alert("Patient registration failed.");
+				alert(response.responseJSON.message)
 			}
 		})
 	})
@@ -57,7 +61,7 @@ function logInPatient(email, password) {
 			window.location.href = "html/home-pages/patient_hp.html"
 		},
 		error : function(response) {
-			alert("Patient log in failed")
+			alert(response.responseJSON.message)
 		}
 	})
 }

@@ -35,7 +35,7 @@ $(document).ready(function() {
                 alert("uspelo")
             },
             error : function(response) {
-                alert("nije uspelo")
+            	alert(response.responseJSON.message)
             }
         })
     })
@@ -52,7 +52,7 @@ function logInClinicalCentreAdmin(email, password){
 			window.location.href = "html/home-pages/centar_admin_hp.html"
 		},
 		error : function(response) {
-			alert("Clinical center admin login failed")
-			}
+			alert(response.responseJSON.message)
+		}
 	})
 }

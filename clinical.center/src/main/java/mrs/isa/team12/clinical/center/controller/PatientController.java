@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class PatientController {
 	private PatientService patientService;
 	
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	public PatientController(PatientService patientService) {
 		this.patientService = patientService;
 	}
@@ -36,15 +40,21 @@ public class PatientController {
 	@PostMapping(value = "/logIn/{email}/{password}")
 	public ResponseEntity<Patient> logIn(@PathVariable String email, @PathVariable String password){
 		
+		if (session.getAttribute("currentUser") != null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already loged in!");
+		}
+		
 		Patient patient = patientService.findOneByEmail(email);
 		
 		if(patient == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient with given email does not exist.");
 		}
 		
 		if(!patient.getPassword().equals(password)) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and password do not match!");
 		}
+		
+		session.setAttribute("currentUser", patient);
 		
 		return new ResponseEntity<>(patient, HttpStatus.OK);
 	}

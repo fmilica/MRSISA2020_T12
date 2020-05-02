@@ -1544,7 +1544,7 @@ form.search-form-opened .btn.submit {
     margin: 0;
     padding: 0;
     position: relative;
-    background-color: #222c3c;
+    /*background-color: #222c3c;*/
 }
 .page-container:after,
 .page-container:before {
@@ -4133,7 +4133,8 @@ body[ng-controller] .modal {
     font-size: 24px;
 }
 .card-body {
-    padding: 1px 20px 15px 12px;
+    /*padding: 1px 20px 15px 12px;*/
+    padding: 10px;
     position: relative;
 }
 .card-body:before,

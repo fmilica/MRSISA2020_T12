@@ -9,7 +9,7 @@ function logInNurse(email, password){
 			window.location.href = "html/home-pages/nurse_hp.html"
 		},
 		error : function(response) {
-			alert("Patient log in failed")
+			alert(response.responseJSON.message)
 		}
 	})
 }

@@ -54,7 +54,7 @@
                 <!-- logo start -->
                 <div class="page-logo">
                     <a href="#">
-                    <img class="logo-icon" src="../../img/icons/logo/logo_plain.png"></img>
+                    <img class="logo-icon" src="../../img/icons/logo/logo_plain.png">
                     <span class="logo-default" >The Good Shepherd</span> </a>
                 </div>
                 <!-- logo end -->
@@ -76,21 +76,21 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="user_profile.html">
-										<img class="icon" src="../../img/icons/profile.png"></img>
+                                    <a id="dropdownProfile">
+										<img class="icon" src="../../img/icons/profile.png">
 										My Profile
 									</a>
                                 </li>
                                 <li>
-                                    <a href="#">
-										<img src="../../img/settings.svg"></img>
+                                    <a id="dropdownChangePass">
+										<img src="../../img/settings.svg">
 										Change Password
                                     </a>
 								</li>
 								<li class="divider"></li>
                                 <li>
-                                    <a href="#">
-										<img class="icon" src="../../img/icons/logout.png"></img>
+                                    <a id="dropdownLogout">
+										<img class="icon" src="../../img/icons/logout.png">
 										Logout	
                                     </a>
                                 </li>
@@ -126,38 +126,38 @@
 	                                </div>
 	                            </div>
 	                        </li>
-	                        <li class="nav-item ">
-	                            <a href="#" class="nav-link nav-toggle">
-	                                <img class="icon" src="../../img/icons/home.png"></img>
+	                        <li class="nav-item">
+	                            <a id="homePage" class="nav-link nav-toggle">
+	                                <img class="icon" src="../../img/icons/home.png">
 	                                <span class="title">Home Page</span>
 	                                <span class="arrow"></span>
 	                            </a>
                             </li>
-                            <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png"></img>
+                            <li class="nav-item">
+	                            <a id="nurseVerifyPrescription" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
                                     <span class="title">Verify prescription</span>
                                     <!--<span class="notification">&nbsp;4&nbsp;</span>-->
 									<span class="arrow"></span>
 								</a>
 							</li>
-                            <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/clinics.png"></img>
+                            <li class="nav-item">
+	                            <a id="nursePatients" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/clinics.png">
 									<span class="title">Patients</span>
 									<span class="arrow"></span>
 	                            </a>
 							</li>
-	                        <li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/appointment.png"></img>
+	                        <li class="nav-item">
+	                            <a id="medicalCalendar" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/appointment.png">
 									<span class="title">Calendar</span>
 									<span class="arrow"></span>
 	                            </a>
 							</li>
-							<li class="nav-item  ">
-	                            <a href="#" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png"></img>
+							<li class="nav-item">
+	                            <a id="medicalVacation" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
 									<span class="title">Vacation/Paid leave</span>
 									<span class="arrow"></span>
 								</a>
@@ -171,17 +171,40 @@
 			<!-- start page content -->
 
 			<div class="content-container">
-				<!-- start welcoming text -->
-				<div class="text">
-					<h1 align="center">Welcome to The Good Shepherd Clinics</h1>
-					<img class="text-logo" src="../../img/icons/logo/logo_text.png"></img>
-					<h2 align="center">Your mind and body deserve only the best!</h2>
-				</div>
-				<!-- end welcoming text -->
+				<!-- Home page content-->
+				<div class="content home-page">
+					<!-- start welcoming text -->
+					<div class="text">
+						<h1 align="center">Welcome to The Good Shepherd Clinics</h1>
+						<img class="text-logo" src="../../img/icons/logo/logo_text.png">
+						<h2 align="center">Your mind and body deserve only the best!</h2>
+					</div>
+					<!-- end welcoming text -->
 
-				<!-- start calendar -->
-				<div class="calendar" id="calendar"></div>
-				<!-- end calendar -->
+					<!-- start calendar -->
+					<div class="calendar" id="calendar"></div>
+					<!-- end calendar -->
+				</div>
+
+				<!-- Verify prescription content -->
+				<div class="content nurse-verifyPrescription">
+					nurse verify prescription
+				</div>
+
+				<!-- Nurse patients content -->
+				<div class="content nurse-patients">
+					nurse patients
+				</div>
+
+				<!-- Medical personnel calendar content -->
+				<div class="content medical-calendar">
+					nurse calendar
+				</div>
+
+				<!-- Medical personnel vacation content -->
+				<div class="content medical-vacation">
+					nurse vacation
+				</div>
 			</div>
 
 			<!-- end page content -->
@@ -192,7 +215,7 @@
             <div class="page-footer-inner"> 2020 &copy; The Good Shepherd Clinics - Your health care companion
             </div>
             <div class="scroll-to-top">
-                <img src="../../img/uparrow1.svg"></img>
+                <img src="../../img/uparrow1.svg">
 			</div>
 		</div>
     <!-- end footer -->

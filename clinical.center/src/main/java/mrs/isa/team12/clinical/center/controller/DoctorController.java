@@ -42,15 +42,22 @@ public class DoctorController {
 	@PostMapping(value = "logIn/{email}/{password}")
 	public ResponseEntity<Doctor> logIn(@PathVariable String email, @PathVariable String password){
 		
+		if (session.getAttribute("currentUser") != null) {
+			// postoji ulogovani korisnik
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already loged in!");
+		}
+		
 		Doctor doctor = doctorService.findOneByEmail(email);
 		
 		if(doctor == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor with given email does not exist.");
 		}
 		
 		if(!doctor.getPassword().equals(password)) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and password do not match!");
 		}
+		
+		session.setAttribute("currentUser", doctor);
 		
 		return new ResponseEntity<>(doctor, HttpStatus.OK);
 	}
@@ -75,6 +82,7 @@ public class DoctorController {
 	 */
 	@RequestMapping(value = "findOne/{id}")
 	public Doctor getDoctorById(@PathVariable("id") Long id){
+		// ko koristi ovo od korisnika, ko ima prava?
 		return doctorService.getDoctorById(id);
 	}
 	
@@ -87,7 +95,15 @@ public class DoctorController {
 	@PostMapping(value = "addNewDoctor")
 	public ResponseEntity<Doctor> addNewDoctor(@RequestBody Doctor doctor){
 		
-		ClinicAdmin admin = (ClinicAdmin) session.getAttribute("currentUser");
+		ClinicAdmin admin;
+		try {
+			admin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can add new doctors.");
+		}
+		if (admin == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
 		
 		// provera da li postoji
 		// TREBA DA PROVERAVA U SVIM BAZAMA, JEDINSTVEN MEDJU SVIMA!!!
