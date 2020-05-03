@@ -41,17 +41,18 @@ public class Pricelist {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Set<PricelistItem> getPricelistItems() {
 		return pricelistItems;
 	}
-
 	public void setPricelistItems(Set<PricelistItem> pricelistItems) {
 		this.pricelistItems = pricelistItems;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Pricelist [id=" + id + "]";
+	}
 }

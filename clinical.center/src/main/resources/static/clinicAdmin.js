@@ -54,18 +54,22 @@ $(document).ready(function() {
 	
 	/*Adding new appointment type*/
 	$("#submit_appointment_type").on('click', function(event){
+		
 		event.preventDefault()
 		
 		var nameV = $("#appointment_name").val()
+		var durationV = $("#appointment_duration").val()
+		var priceV = $("#appointment_price").val()
 
 		var appType = {
-			name: nameV
+			name: nameV,
+			duration: durationV
 		}
 
 		$.ajax({
 			type : "POST",
 			async: false,
-			url : "../../theGoodShepherd/appointmentType/addNewAppointmentType",
+			url : "../../theGoodShepherd/appointmentType/addNewAppointmentType/" + priceV,
 			contentType : "application/json",
 			dataType : "json",
 			data : JSON.stringify(appType),

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class ClinicalCentre {
 	
@@ -26,6 +28,7 @@ public class ClinicalCentre {
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "pricelist_id", referencedColumnName = "id", nullable = true)
+	@JsonBackReference
 	private Pricelist priceList;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinicalCentre")

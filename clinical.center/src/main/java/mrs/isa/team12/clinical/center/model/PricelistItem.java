@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class PricelistItem {
 	private Date endDate;
 	
 	/*za sada je one to one jer racunamo da cena traje zauvek ali kada start i end date ne budu null onda ce ovde biti many to one*/
-	@OneToOne(fetch = LAZY)
+	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "appointment_type_id", referencedColumnName = "id", nullable = true)
 	private AppointmentType appointmentType;
 	
@@ -42,6 +43,12 @@ public class PricelistItem {
 	private Pricelist pricelist;
 
 	public PricelistItem() {}
+	
+	public PricelistItem(Double price, Pricelist pricelist) {
+		super();
+		this.price = price;
+		this.pricelist = pricelist;
+	}
 
 	public PricelistItem(Long id, Double price, Date startDate, Date endDate, Pricelist pricelist,
 			AppointmentType appointmentType) {
@@ -57,48 +64,43 @@ public class PricelistItem {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Double getPrice() {
 		return price;
 	}
-
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-
 	public Date getStartDate() {
 		return startDate;
 	}
-
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
 	public Date getEndDate() {
 		return endDate;
 	}
-
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
 	public Pricelist getPricelist() {
 		return pricelist;
 	}
-
 	public void setPricelist(Pricelist pricelist) {
 		this.pricelist = pricelist;
 	}
-
 	public AppointmentType getAppointmentType() {
 		return appointmentType;
 	}
-
 	public void setAppointmentType(AppointmentType appointmentType) {
 		this.appointmentType = appointmentType;
+	}
+
+	@Override
+	public String toString() {
+		return "PricelistItem [id=" + id + ", price=" + price + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", appointmentType=" + appointmentType + ", pricelist=" + pricelist + "]";
 	}
 }
