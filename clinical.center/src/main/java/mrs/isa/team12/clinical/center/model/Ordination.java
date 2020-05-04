@@ -13,23 +13,28 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 @Entity
+@Table(name = "ordination")
 public class Ordination {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name = "type", unique = false, nullable = false)
+	@Column(name = "ordination_type", unique = false, nullable = false)
 	private OrdinationType type;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "name", unique = false, nullable = false)
 	private String name;
+	
+	@Column(name = "ordination_number", unique = false, nullable = false)
+	private Integer ordinationNumber;
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
@@ -41,10 +46,11 @@ public class Ordination {
 
 	public Ordination() {}
 	
-	public Ordination(OrdinationType type, String name, Clinic clinic, Set<Appointment> appointments) {
+	public Ordination(OrdinationType type, String name, Integer ordinationNumber, Clinic clinic, Set<Appointment> appointments) {
 		super();
 		this.type = type;
 		this.name = name;
+		this.ordinationNumber = ordinationNumber;
 		this.clinic = clinic;
 		this.appointments = appointments;
 	}
@@ -72,6 +78,18 @@ public class Ordination {
 	}
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Integer getOrdinationNumber() {
+		return ordinationNumber;
+	}
+	public void setOrdinationNumber(Integer ordinationNumber) {
+		this.ordinationNumber = ordinationNumber;
 	}
 
 	@Override

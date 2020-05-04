@@ -1,8 +1,9 @@
 package mrs.isa.team12.clinical.center.model;
 
-import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

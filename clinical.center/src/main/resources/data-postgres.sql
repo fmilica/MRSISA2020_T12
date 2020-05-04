@@ -22,6 +22,12 @@ values ('17', 'Clinic2', 'Adresa', 'City','Country', 'Description', '1');
 insert into clinic (id, name, address, city, country, description, clinical_center_id) 
 values ('18', 'Clinic3', 'Adresa', 'City','Country', 'Description', '1');
 
+insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
+values('19', '0', 'Ordinacija1', '1', '6');
+
+insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
+values('20', '1', 'Ordinacija2', '2', '6');
+
 /*Admin klinickog centra*/
 insert into clinical_centre_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
 values ('7', 'admin', 'admin', 'Ksenija', 'Prcic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '22', '1');

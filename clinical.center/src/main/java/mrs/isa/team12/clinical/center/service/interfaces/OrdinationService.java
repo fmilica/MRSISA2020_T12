@@ -8,6 +8,8 @@ public interface OrdinationService {
 
 	Ordination findOneByName(String name);
 	
+	Ordination findOneByNameAndOrdinationNumber(String name, Integer ordinationNumber);
+	
 	List<Ordination> findAllByClinicId(Long clinicId);
 	
 	Ordination save(Ordination o);

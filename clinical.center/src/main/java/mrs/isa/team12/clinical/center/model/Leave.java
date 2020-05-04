@@ -7,23 +7,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import mrs.isa.team12.clinical.center.model.enums.LeaveType;
 
 @Entity
+@Table(name = "leave")
 public class Leave {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name = "startDate", nullable = false, unique = false)
+	@Column(name = "start_date", nullable = false, unique = false)
 	private Date startDate;
 	
-	@Column(name = "endDate", nullable = false, unique = false)
+	@Column(name = "end_date", nullable = false, unique = false)
 	private Date endDate;
 	
-	@Column(name = "type", nullable = false, unique = false)
+	@Column(name = "leave_type", nullable = false, unique = false)
 	private LeaveType type;
 
 	public Leave() {}

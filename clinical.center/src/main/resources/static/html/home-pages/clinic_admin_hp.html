@@ -49,12 +49,11 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
-	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
-	
 	<!-- Validate -->
 	<link rel="stylesheet" type="text/css" href="../../css/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
 </head>
 
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-cyan">
@@ -315,12 +314,14 @@
 											<thead>
 												<tr>
 													<th>Name</th>
+													<th>Number</th>
 													<th>Type</th>
 												</tr>
 											</thead>
 											<tfoot>
 												<tr>
 													<th>Name</th>
+													<th>Number</th>
 													<th>Type</th>
 												</tr>
 											</tfoot>
@@ -529,7 +530,7 @@
 														Password
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7 validate-input"  data-validate="Passwords dont match!">
+													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
 														<input type="text" id="passwordDoctor" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
@@ -538,7 +539,7 @@
 														Confirm password
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7 validate-input"  data-validate="Passwords dont match!">
+													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
 														<input type="text" id="confirm-passwordDoctor" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
@@ -556,16 +557,12 @@
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
-														Date Of Birth
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<div class="input-group date form_date " data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-															<input id="dateOfBirth" class="form-control input-height" size="16" placeholder="date of Birth" type="text" value="23/07/1988">
-															<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-														</div>
-														<input type="hidden" id="dtp_input2" value="" />
-													</div>
+			                                            Date Of Birth
+			                                            <span class="required"> * </span>
+			                                        </label>
+			                                        <div class="col-md-7">
+			                                        <input id="dateOfBirthDoctor" type="date" class="form-control">
+			                                        </div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
@@ -589,7 +586,7 @@
 														Security Number
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7">
+													<div class="col-md-7 validate-input"  data-validate="Must be a number!">
 														<input id="securityNumberDoctor" type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
@@ -667,6 +664,15 @@
 													</label>
 													<div class="col-md-7">
 														<input type="text" id="ordination_name" name="ordination_name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="ordination_number" name="ordination_number" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">

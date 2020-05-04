@@ -24,11 +24,11 @@ public class Doctor extends MedicalPersonnel {
 	private Specialization specialization;
 	
 	/*nullable = false*/
-	@Column(name = "startWork", nullable = true, unique = false)
+	@Column(name = "start_work", nullable = true, unique = false)
 	private String startWork;
 	
 	/*nullable = false*/
-	@Column(name = "endWork", nullable = true, unique = false)
+	@Column(name = "end_work", nullable = true, unique = false)
 	private String endWork;
 	
 	@Column(name = "rating", nullable = true, unique = false)

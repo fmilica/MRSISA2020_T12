@@ -4,21 +4,25 @@
     <script src="../../js/library/jquery.min.js" ></script>
     <link href="../../js/library/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-    <!-- datetimepicker -->
-    <link href="../../js/library/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-    
     <!-- theme style -->
     <link href="../../css/theme/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
     <link href="../../css/theme/plugins.min.css" rel="stylesheet" type="text/css" />
     <link href="../../css/theme/responsive.css" rel="stylesheet" type="text/css" />
+
+	<!-- Loading script files -->
+	<script src="../../js/library/jquery-validation/js/jquery.validate.min.js" ></script>
+	<script src="../../js/library/jquery-validation/js/additional-methods.min.js" ></script>
+	<script src="../../registration.js"></script>
 
     <!-- icons -->
     <link href="../../css/theme/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Project bound files -->
     <link href="../../css/main.css" rel="stylesheet" />
-    <script src="../../patient.js"></script>
-    
+   
+    <!-- Validate -->
+	<link rel="stylesheet" type="text/css" href="../../css/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
     
@@ -43,7 +47,7 @@
                             <header>Basic Information</header>
                         </div>
                         <div class="card-body" id="bar-parent">
-                            <form role="form" action="#" method="post" id="patinetRegistration" class="form-horizontal">
+                            <form id="patinetRegistration" class="form-horizontal">
                                 <div class="form-body">
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">
@@ -77,10 +81,19 @@
                                             Password
                                             <span class="required"> * </span>
                                         </label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
                                             <input type="text" id="password" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
+                                    <div class="form-group row"  >
+										<label class="control-label col-md-3">
+											Confirm Password
+											<span class="required"> * </span>
+										</label>
+										<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+											<input type="text" id="passwordConfirm" data-required="1"  class="form-control input-height" />
+										</div>
+									</div>
                                     <div class="form-group row">
                                         <label class="control-label col-md-3">
                                             Gender
@@ -99,11 +112,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7">
-                                            <div id="datePickerId" class="input-group date form_date " data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                                <input id="registreDateOfBirth"class="form-control input-height" size="16" placeholder="date of Birth" type="text" value="23/07/1988">
-                                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                            </div>
-                                            <input type="hidden" id="dtp_input2" value="" />
+                                        <input id="dateOfBirth" type="date" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -111,7 +120,7 @@
                                             Security Number
                                             <span class="required"> * </span>
                                         </label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-7 validate-input"  data-validate="Must be a number!">
                                             <input type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
                                         </div>
                                     </div>
@@ -155,7 +164,7 @@
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="offset-md-3 col-md-9 form-buttons">
-                                            <button id="register" type="submit" class="btn btn-info">Register</button>
+                                            <button id="register" type="button" class="btn btn-info">Register</button>
                                             <button id="cancel" type="button" class="btn btn-default">Cancel</button>
                                         </div>
                                     </div>
@@ -168,14 +177,6 @@
         </div>
     </div>
     <!-- end page content -->
+     
 </body>
-
-<!-- Loading script files -->
-<script src="../../js/library/jquery-validation/js/jquery.validate.min.js" ></script>
-<script src="../../js/library/jquery-validation/js/additional-methods.min.js" ></script>
-
-<!--Bootstrap -->
-<script src="../../js/library/bootstrap/js/bootstrap.min.js"></script>
-<script src="../../js/library/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"  charset="UTF-8"></script>
-<script src="../../js/library/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js"  charset="UTF-8"></script>
 </html>

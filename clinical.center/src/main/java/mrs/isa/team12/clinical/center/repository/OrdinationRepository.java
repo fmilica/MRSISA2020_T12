@@ -10,5 +10,7 @@ public interface OrdinationRepository extends JpaRepository<Ordination, Long>{
 
 	Ordination findOneByName(String name);
 	
+	Ordination findOneByNameAndOrdinationNumber(String name, Integer ordinationNumber);
+	
 	List<Ordination> findAllByClinicId(Long clinicId);
 }

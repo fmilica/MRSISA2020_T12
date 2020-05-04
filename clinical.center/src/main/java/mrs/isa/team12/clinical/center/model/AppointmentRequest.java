@@ -12,8 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "appointment_request")
 public class AppointmentRequest {
 	
 	@Id
@@ -24,7 +26,7 @@ public class AppointmentRequest {
 	@JoinColumn(name = "appointment_id")
 	private Appointment appointment;
 	
-	@Column(name = "requestDate", unique = false, nullable = false)
+	@Column(name = "request_date", unique = false, nullable = false)
 	private Date requestDate;
 	
 	@Column(name = "approved", unique = false, nullable = false)

@@ -1,8 +1,10 @@
 package mrs.isa.team12.clinical.center.model;
 
-import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "medical_records")
 public class MedicalRecords {
 	
 	@Id
@@ -25,16 +29,16 @@ public class MedicalRecords {
 	@Column(name = "weight", unique = false, nullable = false)
 	private Integer weight;
 	
-	@Column(name = "bloodPressure", unique = false, nullable = false)
+	@Column(name = "blood_pressure", unique = false, nullable = false)
 	private Integer bloodPressure;
 	
-	@Column(name = "bloodType", unique = false, nullable = false)
+	@Column(name = "blood_type", unique = false, nullable = false)
 	private String bloodType;
 	
 	@Column(name = "allergies", unique = false, nullable = false)
 	private String allergies;
 	
-	@Column(name = "medicalHistory", unique = false, nullable = false)
+	@Column(name = "medical_history", unique = false, nullable = false)
 	private String medicalHistory;
 	
 	@OneToOne(fetch = LAZY)

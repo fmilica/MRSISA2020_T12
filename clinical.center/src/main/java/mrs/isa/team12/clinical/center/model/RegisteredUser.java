@@ -8,9 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.Table;
 
 // Registered user class
 @Entity
+@Table(name = "registered_user")
 @Inheritance(strategy=TABLE_PER_CLASS)
 public class RegisteredUser {
 
@@ -33,7 +35,7 @@ public class RegisteredUser {
 	@Column(name="gender", unique=false, nullable=false)
 	private String gender;
 	
-	@Column(name="dateOfBirth", unique=false, nullable=false)
+	@Column(name="date_of_birth", unique=false, nullable=false)
 	private String dateOfBirth;
 	
 	@Column(name="address", unique=false, nullable=false)
@@ -45,10 +47,10 @@ public class RegisteredUser {
 	@Column(name="country", unique=false, nullable=false)
 	private String country;
 	
-	@Column(name="phoneNumber", unique=false, nullable=false)
+	@Column(name="phone_number", unique=false, nullable=false)
 	private String phoneNumber;
 	
-	@Column(name="securityNumber", unique=false, nullable=false)
+	@Column(name="security_number", unique=false, nullable=false)
 	private Integer securityNumber;
 	
 	

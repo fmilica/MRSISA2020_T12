@@ -26,6 +26,7 @@ $(document).ready(function() {
 		},
 		columns: [
 			{ data: 'name'},
+			{ data: 'ordinationNumber'},
 			{ data: 'type'}]
 		})
 	})
@@ -35,10 +36,12 @@ $(document).ready(function() {
 		event.preventDefault()
 		
 		var nameV = $("#ordination_name").val()
+		var numberV = $("#ordination_number").val()
 		var typeV = $("#ordination_type").val()
 		
 		var ordination = {
 			name: nameV,
+			ordinationNumber: numberV,
 			type: typeV
 		}
 		
@@ -168,7 +171,7 @@ $(document).ready(function() {
 		var passwordV = $("#passwordDoctor").val()
 		var confirmPasswordV = $("#confirm-passwordDoctor").val()
 		var genderV = $("#genderDoctor").val()
-		var dateOfBirthV = "11.11.1978."
+		var dateOfBirthV = $("#dateOfBirthDoctor").val()
 		var specializationV = $("#specializationDoctor").val()
 		var securityNumV = $("#securityNumberDoctor").val()
 		var phoneNumberV = $("#phoneNumberDoctor").val()
@@ -176,14 +179,18 @@ $(document).ready(function() {
 		var cityV = $("#cityDoctor").val()
 		var countryV = $("#countryDoctor").val()
 		
-		if(emailV == '' || nameV == '' || surnameV == '' || passwordV == '' || confirmPasswordV == '' || genderV == '' ||
-				dateOfBirthV == '' || specializationV == '' || securityNumV == '' || phoneNumberV == '' ||
-				addressV == '' || cityV == '' || countryV == ''){
+		if(!emailV || !nameV || !surnameV || !passwordV || !confirmPasswordV || !genderV ||
+				!dateOfBirthV || !specializationV || !securityNumV || !phoneNumberV ||
+				!addressV || !cityV || !countryV){
 			alert("Not all required fields are filled !")
 			return;
 		}
 		
 		if(passwordV != confirmPasswordV){
+			return;
+		}
+		
+		if(isNaN(securityNumV)){
 			return;
 		}
 		
@@ -272,6 +279,19 @@ $(document).ready(function() {
 		$("#countryDoctor").val('')
 		$('.clinic-addDoctor').hide()
 		$('.clinic-doctors').show()
+	})
+	
+	/*Check if securityNumber is number*/
+	
+	$("#securityNumberDoctor").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#securityNumberDoctor").val())){
+			showValidate($("#securityNumberDoctor"))
+		}
+	})
+	
+	$("#securityNumberDoctor").on('click', function(e){
+		hideValidate($("#securityNumberDoctor"))
 	})
 
 	/**********/

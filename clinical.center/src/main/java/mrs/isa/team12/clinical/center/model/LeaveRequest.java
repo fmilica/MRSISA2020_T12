@@ -1,15 +1,18 @@
 package mrs.isa.team12.clinical.center.model;
 
-import javax.persistence.Column;
 import static javax.persistence.FetchType.LAZY;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "leave_request")
 public class LeaveRequest {
 	
 	@Id

@@ -25,6 +25,11 @@ public class OrdinationImpl implements OrdinationService {
 	}
 	
 	@Override
+	public Ordination findOneByNameAndOrdinationNumber(String name, Integer ordinationNumber) {
+		return ordinationRep.findOneByNameAndOrdinationNumber(name, ordinationNumber);
+	}
+	
+	@Override
 	public List<Ordination> findAllByClinicId(Long clinicId) {
 		return ordinationRep.findAllByClinicId(clinicId);
 	}
