@@ -1,12 +1,16 @@
 insert into clinical_centre (id, name) values ('1', 'The Good Shepherd');
 
 /*Price list */
-insert into pricelist (id, clinical_centre_id) values ('2', '1');
+/*insert into pricelist (id, clinical_centre_id) values ('2', '1');*/
+/*
+update clinical_centre
+set pricelist_id = '2'
+where id = '1';*/
 
 /*Price list items, recimo za sada da imamo 3 tipa pregleda pa cemo imati i 3 price itema*/
-insert into price_list_item (id, price, pricelist_id) values ('3', '50', '2');
+/*insert into price_list_item (id, price, pricelist_id) values ('3', '50', '2');
 insert into price_list_item (id, price, pricelist_id) values ('4', '30', '2');
-insert into price_list_item (id, price, pricelist_id) values ('5', '40', '2');
+insert into price_list_item (id, price, pricelist_id) values ('5', '40', '2');*/
 
 /*Jedina klinika koju imamo za sada*/
 insert into clinic (id, name, address, city, country, description, clinical_center_id) 
@@ -14,6 +18,9 @@ values ('6', 'Clinic1', 'Adresa', 'City','Country', 'Description', '1');
 /*Druga samo za probu*/
 insert into clinic (id, name, address, city, country, description, clinical_center_id) 
 values ('17', 'Clinic2', 'Adresa', 'City','Country', 'Description', '1');
+/*Treca samo za probu*/
+insert into clinic (id, name, address, city, country, description, clinical_center_id) 
+values ('18', 'Clinic3', 'Adresa', 'City','Country', 'Description', '1');
 
 /*Admin klinickog centra*/
 insert into clinical_centre_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
@@ -35,9 +42,11 @@ insert into doctor (id, email, password, name, surname, gender, date_of_birth, a
 values ('11', 'gova', 'gova', 'Gova', 'Govic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '55', '17', '5');
 
 /*Tri tipa pregleda*/
-insert into appointment_type (id, name, duration, pricelist_item_id, doctor_id) values ('12', 'Gynecological', '1', '3', '9');
-insert into appointment_type (id, name, duration, pricelist_item_id, doctor_id) values ('13', 'Dermatological', '2', '4', '10');
-insert into appointment_type (id, name, duration, pricelist_item_id, doctor_id) values ('14', 'Dentist', '3', '5', '11');
+insert into appointment_type (id, name, duration, price, doctor_id, clinic_id) values ('12', 'Gynecological', '1', '30', '9', '6');
+insert into appointment_type (id, name, duration, price, doctor_id, clinic_id) values ('13', 'Dermatological', '2', '40', '10', '6');
+insert into appointment_type (id, name, duration, price, doctor_id, clinic_id) values ('14', 'Dentist', '3', '60', '11', '6');
+/*Jedan tip pregleda ce imati i klinika2*/
+insert into appointment_type (id, name, duration, price, clinic_id) values ('19', 'Dentist', '4', '90', '17');
 
 /* Medicinske sestre */
 insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number) 

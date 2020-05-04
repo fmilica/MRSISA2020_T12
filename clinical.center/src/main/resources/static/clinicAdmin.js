@@ -16,7 +16,7 @@ function logInClinicAdmin(email, password){
 
 $(document).ready(function() {
 	
-	/*View all appointment types*/
+	/*View all ordinations*/
 	$("#clinicOrdinations").on('click', function(event){
 		event.preventDefault()
 		var ordinationTable = $('#ordinationTable').DataTable({
@@ -30,7 +30,7 @@ $(document).ready(function() {
 		})
 	})
 
-	/*Adding new operating room*/
+	/*Adding new ordination*/
 	$("#submit_ordination").on('click', function(event){
 		event.preventDefault()
 		
@@ -62,10 +62,12 @@ $(document).ready(function() {
 		})
 	})
 	
+	/*Cancel add ordination*/
 	$("#cancel-ordination").on('click', function(event){
 		event.preventDefault()
-		
 		$("#ordination_name").val('')
+		$('.clinic-addOrdination').hide()
+		$('.clinic-ordinations').show()
 		
 	})
 	
@@ -121,8 +123,12 @@ $(document).ready(function() {
 		})
 	})
 	
+	/*Cancel add appointment*/
 	$("#cancel-appointment-type").on('click', function(event){
 		event.preventDefault()
+		$("#appointment_name").val('')
+		$("#appointment_duration").val('')
+		$("#appointment_price").val('')
 		$('.clinic-addAppType').hide()
 		$('.clinic-appTypes').show()
 	})
@@ -170,6 +176,17 @@ $(document).ready(function() {
 		var cityV = $("#cityDoctor").val()
 		var countryV = $("#countryDoctor").val()
 		
+		if(emailV == '' || nameV == '' || surnameV == '' || passwordV == '' || confirmPasswordV == '' || genderV == '' ||
+				dateOfBirthV == '' || specializationV == '' || securityNumV == '' || phoneNumberV == '' ||
+				addressV == '' || cityV == '' || countryV == ''){
+			alert("Not all required fields are filled !")
+			return;
+		}
+		
+		if(passwordV != confirmPasswordV){
+			return;
+		}
+		
 		var newDoctor = {
 			email: emailV,
 			name: nameV,
@@ -205,8 +222,54 @@ $(document).ready(function() {
 		})
 	})
 	
+	/*Adding new doctor check if passwords match*/
+	$("#passwordDoctor").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#passwordDoctor").val()
+		var rep = $("#confirm-passwordDoctor").val()
+		if(pass != rep){
+			showValidate($("#passwordDoctor"))
+			showValidate($("#confirm-passwordDoctor"))
+		}else{
+			hideValidate($("#passwordDoctor"))
+			hideValidate($("#confirm-passwordDoctor"))
+		}
+	})
+	$("#confirm-passwordDoctor").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#passwordDoctor").val()
+		var rep = $("#confirm-passwordDoctor").val()
+		if(pass != rep){
+			showValidate($("#passwordDoctor"))
+			showValidate($("#confirm-passwordDoctor"))
+		}else{
+			hideValidate($("#passwordDoctor"))
+			hideValidate($("#confirm-passwordDoctor"))
+		}
+	})
+	$("#passwordDoctor").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#passwordDoctor"))
+		hideValidate($("#confirm-passwordDoctor"))
+	})
+	$("#confirm-passwordDoctor").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#passwordDoctor"))
+		hideValidate($("#confirm-passwordDoctor"))
+	})
+	
 	$("#cancel_doctor").on('click', function(event){
 		event.preventDefault()
+		$("#doctorEmail").val('')
+		$("#firstNameDoctor").val('')
+		$("#lastNameDoctor").val('')
+		$("#passwordDoctor").val('')
+		$("#confirm-passwordDoctor").val('')
+		$("#securityNumberDoctor").val('')
+		$("#phoneNumberDoctor").val('')
+		$("#addressDoctor").val('')
+		$("#cityDoctor").val('')
+		$("#countryDoctor").val('')
 		$('.clinic-addDoctor').hide()
 		$('.clinic-doctors').show()
 	})
@@ -284,8 +347,19 @@ $(document).ready(function() {
 					}
 				}]
 		})
-
-		
 	})
+	
+    function showValidate(input) {
+        var thisAlert = $(input).parent();
+
+        $(thisAlert).addClass('alert-validate');
+    }
+
+    function hideValidate(input) {
+        var thisAlert = $(input).parent();
+
+        $(thisAlert).removeClass('alert-validate');
+    }
+    
 
 })

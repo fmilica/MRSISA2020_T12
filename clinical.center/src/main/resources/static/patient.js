@@ -11,6 +11,8 @@ var clinicsTable;
 var doctorsClinicTable;
 
 $(document).ready(function() {
+	
+	
 
 	// pretplata svih elemenata sa klasom na klik
 	$('body').on('click', 'button.table-button', function() {
@@ -131,6 +133,8 @@ $(document).ready(function() {
 				}
 			}]
 	})
+	
+
 
 	$('#register').click(function(e) {
 		e.preventDefault();
