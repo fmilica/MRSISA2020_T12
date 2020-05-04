@@ -40,10 +40,6 @@ public class Clinic {
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
-		
-	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "pricelist_id")
-	private Pricelist priceList;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "report_id")
@@ -61,6 +57,9 @@ public class Clinic {
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
 	private Set<Patient> patients;
+	
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
 	private Set<Appointment> appointments;
@@ -91,10 +90,11 @@ public class Clinic {
 	public Clinic() {}
 
 	public Clinic(Long id, String name, String address, String city, String country, String description,
-			ClinicalCentre clinicalCentre, Pricelist priceList, Report report,
+			ClinicalCentre clinicalCentre, Report report,
 			DiagnosePerscription diagnosePerscription, Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients,
-			Set<Appointment> appointments, Set<ClinicAdmin> admins, Set<Ordination> ordinations,
-			Set<AppointmentRequest> appointmentRequests, Set<LeaveRequest> leaveRequests, Set<Rating> ratings) {
+			Set<AppointmentType> appointmentTypes, Set<Appointment> appointments, Set<ClinicAdmin> admins, 
+			Set<Ordination> ordinations, Set<AppointmentRequest> appointmentRequests, 
+			Set<LeaveRequest> leaveRequests, Set<Rating> ratings) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -103,12 +103,12 @@ public class Clinic {
 		this.country = country;
 		this.description = description;
 		this.clinicalCentre = clinicalCentre;
-		this.priceList = priceList;
 		this.report = report;
 		this.diagnosePerscription = diagnosePerscription;
 		this.doctors = doctors;
 		this.nurses = nurses;
 		this.patients = patients;
+		this.appointmentTypes = appointmentTypes;
 		this.appointments = appointments;
 		this.admins = admins;
 		this.ordinations = ordinations;
@@ -120,153 +120,131 @@ public class Clinic {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getAddress() {
 		return address;
 	}
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
 	public String getCity() {
 		return city;
 	}
-
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 	public String getCountry() {
 		return country;
 	}
-
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public ClinicalCentre getClinicalCentre() {
 		return clinicalCentre;
 	}
-
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
-
-	public Pricelist getPriceList() {
-		return priceList;
-	}
-
-	public void setPriceList(Pricelist priceList) {
-		this.priceList = priceList;
-	}
-
 	public Report getReport() {
 		return report;
 	}
-
 	public void setReport(Report report) {
 		this.report = report;
 	}
-
 	public DiagnosePerscription getDiagnosePerscription() {
 		return diagnosePerscription;
 	}
-
 	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
 		this.diagnosePerscription = diagnosePerscription;
 	}
-
 	public Set<Doctor> getDoctors() {
 		return doctors;
 	}
-
 	public void setDoctors(Set<Doctor> doctors) {
 		this.doctors = doctors;
 	}
-
 	public Set<Nurse> getNurses() {
 		return nurses;
 	}
-
 	public void setNurses(Set<Nurse> nurses) {
 		this.nurses = nurses;
 	}
-
 	public Set<Patient> getPatients() {
 		return patients;
 	}
-
 	public void setPatients(Set<Patient> patients) {
 		this.patients = patients;
 	}
-
+	public Set<AppointmentType> getAppointmentTypes() {
+		return appointmentTypes;
+	}
+	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
+		this.appointmentTypes = appointmentTypes;
+	}
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
-
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}
-
 	public Set<ClinicAdmin> getAdmins() {
 		return null;
 	}
-
 	public void setAdmins(Set<ClinicAdmin> admins) {
 		this.admins = admins;
 	}
-
 	public Set<Ordination> getOrdinations() {
 		return ordinations;
 	}
-
 	public void setOrdinations(Set<Ordination> ordinations) {
 		this.ordinations = ordinations;
 	}
-
 	public Set<AppointmentRequest> getAppointmentRequests() {
 		return appointmentRequests;
 	}
-
 	public void setAppointmentRequests(Set<AppointmentRequest> appointmentRequests) {
 		this.appointmentRequests = appointmentRequests;
 	}
-
 	public Set<LeaveRequest> getLeaveRequests() {
 		return leaveRequests;
 	}
-
 	public void setLeaveRequests(Set<LeaveRequest> leaveRequests) {
 		this.leaveRequests = leaveRequests;
 	}
-
 	public Set<Rating> getRatings() {
 		return ratings;
 	}
-
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
 	}
+
+	public void addAppType(AppointmentType appType) {
+		if(!this.appointmentTypes.contains(appType)) {
+			this.appointmentTypes.add(appType);
+		}
+		if(appType.getClinic() != this) {
+			appType.setClinic(this);
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Clinic [appointmentTypes=" + appointmentTypes + "]";
+	}
+	
 	
 }

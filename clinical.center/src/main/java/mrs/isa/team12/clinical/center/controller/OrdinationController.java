@@ -1,11 +1,14 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,28 @@ public class OrdinationController {
 		this.ordinationService = ordinationService;
 	}
 	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/ordination/getClinicsOrdinations
+	 HTTP request for getting all ordinations from one clinic
+	 receives Ordination object
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/getClinicsOrdinations",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Ordination>> getClinicsOrdinations() {
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view all ordinations.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Ordination> clinicsOrdins = ordinationService.findAllByClinicId(currentUser.getClinic().getId());
+		return new ResponseEntity<>(clinicsOrdins, HttpStatus.OK);
+	}
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/ordination/addNewOrdination/{name}/{type}

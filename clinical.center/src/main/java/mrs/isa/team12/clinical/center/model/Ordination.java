@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 @Entity
@@ -31,6 +33,7 @@ public class Ordination {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Clinic clinic;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "ordination")

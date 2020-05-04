@@ -299,112 +299,68 @@
 
 				<!-- Clinic ordinations content -->
 				<div class="content clinic-ordinations">
-					<!-- add form -->
-					<div class="add">
+					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Add new ordination</header>
+										<header>Ordinations</header>
 									</div>
-									<div class="card-body" id="bar-parent">
-										<form class="form-horizontal">
-											<div class="form-body">
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="ordination_name" name="ordination_name" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Type
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<select class="form-control input-height" id="ordination_type" name="ordination_type">
-															<option selected="selected" value="OperatingRoom">Operating room</option>
-															<option value="ConsultingRoom">Consulting room</option>
-														</select>
-													</div>
-												</div>
-												<div class="form-actions">
-													<div class="row">
-														<div class="offset-md-3 col-md-12 form-buttons">
-															<button id="submit_ordination" name="submit_ordination" type="submit" class="btn btn-info">Create</button>
-															<button id="cancel-ordination" name="cancel-ordination" type="button" class="btn btn-default">Cancel</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
+									<div class="card-body">
+										<button id="addOrdination" class="btn btn-info add-button">Add new ordination</button>
+										<table id="ordinationTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Type</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Type</th>
+												</tr>
+											</tfoot>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- end add form -->
 				</div>
 
 				<!-- Clinic appointment types content -->
 				<div class="content clinic-appTypes">
-					<!-- add form -->
-					<div class="add">
+					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Add new appointment type</header>
+										<header>Appointment Types</header>
 									</div>
 									<div class="card-body">
-										<form class="form-horizontal">
-											<div class="form-body">
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="appointment_name" name="name" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Duration
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="appointment_duration" name="duration" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Price
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="appointment_price" name="price" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-actions">
-													<div class="row">
-														<div class="offset-md-3 col-md-12 form-buttons">
-															<button id="submit_appointment_type" type="submit" class="btn btn-info">Create</button>
-															<button id="cancel-appointment-type" type="button" class="btn btn-default">Cancel</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
+										<button id="addAppType" class="btn btn-info add-button">Add new appointment type</button>
+										<table id="appTypeTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Duration</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Duration</th>
+													<th>Price</th>
+												</tr>
+											</tfoot>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- end add form -->
 				</div>
 
 				<!-- Clinic pricelist content -->
@@ -424,7 +380,99 @@
 
 				<!-- Clinic examination request content -->
 				<div class="content clinic-clinicExamReq">
-					clinic examination request
+					<!-- Active examination requests -->
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Active examination requests</header>
+									</div>
+									<div class="card-body">
+										<table id="examReqTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment Type</th>
+													<th>Doctor</th>
+													<th>Date</th>
+													<th>Time</th>
+													<th>Schedule Exam Room</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment Type</th>
+													<th>Doctor</th>
+													<th>Date</th>
+													<th>Time</th>
+													<th>Schedule Exam Room</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Examination rooms -->
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header id="examRequests">Examination rooms</header>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="examRoomName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Number:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="examRoomNumber" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Date:
+											</label>
+											<div class="col-md-3">
+												<div class="input-group date form_date " data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+													<input id="examRoomDate" class="form-control doctor-input-height" size="16" placeholder="date of Birth" type="text" value="23/07/1988">
+													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+												</div>
+												<input type="hidden" id="dtp_input2" value="" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterExamRoom" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
+										<table id="examRoomTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Broj sale traze u specifikaciji?</th>
+													<th>First available time</th>
+													<th>Schedule</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Broj sale traze u specifikaciji?</th>
+													<th>First available time</th>
+													<th>Schedule</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Clinic vacation/paid leave content -->
@@ -596,6 +644,115 @@
 					<!-- end add form -->
 				</div>
 
+				<!-- Add ordination -->
+				<div class="content clinic-addOrdination">
+					<!-- add form -->
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new ordination</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="ordination_name" name="ordination_name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Type
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<select class="form-control input-height" id="ordination_type" name="ordination_type">
+															<option selected="selected" value="OperatingRoom">Operating room</option>
+															<option value="ConsultingRoom">Consulting room</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-actions">
+													<div class="row">
+														<div class="offset-md-3 col-md-12 form-buttons">
+															<button id="submit_ordination" name="submit_ordination" type="submit" class="btn btn-info">Create</button>
+															<button id="cancel-ordination" name="cancel-ordination" type="button" class="btn btn-default">Cancel</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
+				</div>
+
+				<!-- Add appointment type -->
+				<div class="content clinic-addAppType">
+					<!-- add form -->
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new appointment type</header>
+									</div>
+									<div class="card-body">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="appointment_name" name="name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Duration
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="appointment_duration" name="duration" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Price
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="appointment_price" name="price" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-actions">
+													<div class="row">
+														<div class="offset-md-3 col-md-12 form-buttons">
+															<button id="submit_appointment_type" type="submit" class="btn btn-info">Create</button>
+															<button id="cancel-appointment-type" type="button" class="btn btn-default">Cancel</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
+				</div>
 			</div>
 
 			<!-- end page content -->

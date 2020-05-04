@@ -212,20 +212,14 @@
 													</label>
 													<div class="col-md-3">
 														<select class="form-control input-height" id="filterAppType">
-															<option selected="selected" value="Pediatrics">Pediatrics</option>
-															<option value="Dermatology">Dermatology</option>
-															<option value="Rheumatology">Rheumatology</option>
-															<option value="Ophthalmology">Ophthalmology</option>
-															<option value="Gynecology">Gynecology</option>
-															<option value="Dentist">Dentist</option>
-															<option value="Cardiology">Cardiology</option>
 														</select>
 													</div>
 												</div>
 												<div class="form-actions">
 													<div class="row">
 														<div class="offset-md-3 col-md-12 form-buttons">
-															<button id="filterClinics" type="submit" class="btn btn-info">Filter clinics</button>
+															<button id="filterClinics" type="submit" class="btn btn-info filter-btn">Filter clinics</button>
+															<button id="clearClinicsFilter" type="submit" class="btn btn-info filter-btn">Clear filter</button>
 														</div>
 													</div>
 												</div>
@@ -285,6 +279,29 @@
 										<header id="doctorsClinic"></header>
 									</div>
 									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="doctorFilterName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Surname:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="doctorFilterSurname" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Rating:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="doctorFilterRating" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterDoctors" type="submit" class="btn btn-info doctor-filter-btn">Filter doctors</button>
+											</div>
+										</div>
 										<table id="doctorsClinicTable" class="display">
 											<thead>
 												<tr>

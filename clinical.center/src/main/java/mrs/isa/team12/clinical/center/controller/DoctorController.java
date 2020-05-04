@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +68,8 @@ public class DoctorController {
 	 HTTP request for viewing all doctors
 	 returns ResponseEntity object
 	 */
-	@RequestMapping(value = "getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getAll",
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Doctor>> getAllDoctors() {
 		
 		List<Doctor> doctors = doctorService.findAll();
@@ -80,7 +82,8 @@ public class DoctorController {
 	 HTTP request for getting doctor from database with given id
 	 returns ResponseEntity object
 	 */
-	@RequestMapping(value = "findOne/{id}")
+	@GetMapping(value = "/findOne/{id}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Doctor getDoctorById(@PathVariable("id") Long id){
 		// ko koristi ovo od korisnika, ko ima prava?
 		return doctorService.getDoctorById(id);
@@ -92,7 +95,7 @@ public class DoctorController {
 	 receives Doctor object doctor
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "addNewDoctor")
+	@PostMapping(value = "/addNewDoctor")
 	public ResponseEntity<Doctor> addNewDoctor(@RequestBody Doctor doctor){
 		
 		ClinicAdmin admin;

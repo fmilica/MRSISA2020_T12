@@ -1,6 +1,5 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +68,9 @@ public class PatientController {
 	@PostMapping(value = "/register",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Patient> registerPatient(HttpServletRequest req, @RequestBody Patient patient) {
+	public ResponseEntity<Patient> registerPatient(@RequestBody Patient patient) {
 		// vec postoji ulogovani korisnik, ne moze se registrovati
-		if (req.getSession().getAttribute("currentUser") != null) {
+		if (session.getAttribute("currentUser") != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already loged in!");
 		}
 		

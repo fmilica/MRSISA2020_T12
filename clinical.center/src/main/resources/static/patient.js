@@ -26,16 +26,55 @@ $(document).ready(function() {
 		createAppointment(doctorId, time)
 	});
 
+	// filtriranje doktora
+	$('#filterDoctors').click(function(e) {
+		e.preventDefault()
+		var nameV = $('#doctorFilterName').val()
+		var surnameV = $('#doctorFilterSurname').val()
+		var ratingV = $('#doctorFilterRating').val()
+		alert("pls da radimo filtriranje na frontu, pls pls pls")
+		//doctorsClinicTable.ajax.url("../../theGoodShepherd/clinics/getDoctors/"+clinicId/*+"/"+newAppointment.appType*/+"/"+nameV+"/"+surnameV+"/"+ratingV)
+	})
+
+	// dobavljanje vrednosti tipova pregleda i dodavanje u select
+	$('#patientClinics').click(function() {
+		$.ajax({
+			type : "GET",
+			url : "../../theGoodShepherd/appointmentType/getAllTypesNames",
+			success : function(data) {
+				$.each(data, function(index, appType) {
+					$("#filterAppType").append(new Option(appType.name, appType.name));
+				})
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+
+	// ponistavanje filtera klinika
+	$('#clearClinicsFilter').click(function(e) {
+		e.preventDefault()
+		// skidanje parametra pregleda
+		newAppointment.date = ""
+		newAppointment.appType = ""
+		// dobavljanje svih klinika ponovo
+		clinicsTable.ajax.url("../../theGoodShepherd/clinics")
+		clinicsTable.ajax.reload()
+	})
+
 	// filtriranje klinika
 	$('#filterClinics').click(function(e) {
 		e.preventDefault()
 		// postavljanje parametara pregleda
 		var date = "datum"//$('#filterAppDate').val()
 		newAppointment.date = date
-		var appType = $('#filterAppType').val()
-		newAppointment.appType = appType
+		var appTypeName = $('#filterAppType').val()
+		newAppointment.appType = appTypeName
 
 		// filtriranje klinika na beku
+		clinicsTable.ajax.url("../../theGoodShepherd/clinics/"+appTypeName)
+		clinicsTable.ajax.reload()
 		// TODO
 		// sakrije doktore
 		$('#doctorTableDiv').hide()
@@ -154,7 +193,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		doctorsClinicTable = $('#doctorsClinicTable').DataTable({
 			responsive: true,
 			ajax: {
-				url: "../../theGoodShepherd/clinics/getDoctors/"+clinicId,
+				url: "../../theGoodShepherd/clinics/getDoctors/"+clinicId/*+"/"+newAppointment.appType*/,
 				dataSrc: ''
 			},
 			columns: [

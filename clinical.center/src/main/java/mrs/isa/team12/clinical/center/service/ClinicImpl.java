@@ -23,6 +23,16 @@ public class ClinicImpl implements ClinicService {
 	public List<Clinic> findAll() {
 		return this.repository.findAll();
 	}
+	
+	@Override
+	public List<Clinic> findAllByAppointmentTypeId(Long appTypeId) {
+		return this.repository.findAllByAppointmentTypeId(appTypeId);
+	}
+	
+	@Override
+	public List<Clinic> findAllByAppointmentTypeName(String appTypeName) {
+		return this.repository.findAllByAppointmentTypeName(appTypeName);
+	}
 
 	@Override
 	public Clinic findOneById(Long id) {

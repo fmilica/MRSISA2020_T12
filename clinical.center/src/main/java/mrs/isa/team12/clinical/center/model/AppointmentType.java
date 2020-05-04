@@ -13,8 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "appointment_type")
@@ -24,51 +25,59 @@ public class AppointmentType {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	// ime ne mora biti jedinstveno jer razlicite klinike mogu imati isti naziv za tip pregleda
+	@Column(name = "name", unique = false, nullable = false)
 	private String name;
 	
 	@Column(name = "duration", unique = false, nullable = false )
 	private Integer duration;
 	
+	@Column(name = "price", unique = false, nullable = false)
+	private Double price;
+	
+	@ManyToOne
+	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
+	private Clinic clinic;
+	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "type")
 	private Set<Appointment> appointments;
-	
-	/*mislim da appointment type po svom kreiranju mora da dobije neku pocetnu cenu*/
-	/*takodje ovde ce kasnije biti one to many zbog razlicitih vremena vazenja cena*/
-	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "pricelist_item_id", referencedColumnName = "id", nullable = false)
-	private PricelistItem pricelistItem;
 
+	/*many to many veza jer eto znamo i sami*/
+	/*@ManyToMany(cascade = {
+    CascadeType.PERSIST,
+    CascadeType.MERGE
+	})
+	@JoinTable(name = "post_tag",
+	    joinColumns = @JoinColumn(name = "post_id"),
+	    inverseJoinColumns = @JoinColumn(name = "tag_id")
+	)*/
 	@ManyToOne
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
 	private Doctor doctor;
 	
 	public AppointmentType() {}
 	
-	public AppointmentType(String name, Integer duration) {
-		super();
+	public AppointmentType(String name, Integer duration, Double price) {
 		this.name = name;
 		this.duration = duration;
+		this.price = price;
 	}
 
-	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments,
-			PricelistItem pricelistItem, Doctor doctor) {
+	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments, Doctor doctor) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
 		this.appointments = appointments;
-		this.pricelistItem = pricelistItem;
 		this.doctor = doctor;
 	}
 
-	public AppointmentType(Long id, String name, Set<Appointment> appointments, PricelistItem pricelistItem,
-			Doctor doctor) {
+	public AppointmentType(Long id, String name, Set<Appointment> appointments, Doctor doctor) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.appointments = appointments;
-		this.pricelistItem = pricelistItem;
 		this.doctor = doctor;
 	}
 
@@ -96,14 +105,6 @@ public class AppointmentType {
 		this.appointments = appointments;
 	}
 
-	public PricelistItem getPricelistItem() {
-		return pricelistItem;
-	}
-
-	public void setPricelistItem(PricelistItem pricelistItem) {
-		this.pricelistItem = pricelistItem;
-	}
-
 	public Doctor getDoctor() {
 		return doctor;
 	}
@@ -122,4 +123,42 @@ public class AppointmentType {
 		this.duration = duration;
 	}
 
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Clinic getClinic() {
+		return clinic;
+	}
+
+	public void setClinic(Clinic clinic) {
+		this.clinic = clinic;
+	}
+
+	@Override
+	public String toString() {
+		return "AppointmentType [name=" + name + ", duration=" + duration + ", price=" + price + "]";
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o)
+	        return true;
+	    if (o == null)
+	        return false;
+	    if (this.getClass() != o.getClass())
+	        return false;
+	    AppointmentType appType = (AppointmentType) o;
+	    return this.name.equals(appType.getName());
+	}
+	
+	@Override
+	public int hashCode() {
+	      return name.hashCode();
+	}
+	
 }

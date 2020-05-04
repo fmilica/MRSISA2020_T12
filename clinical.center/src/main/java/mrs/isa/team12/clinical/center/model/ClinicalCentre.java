@@ -10,11 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class ClinicalCentre {
@@ -25,11 +21,6 @@ public class ClinicalCentre {
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
-	
-	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "pricelist_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
-	private Pricelist priceList;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinicalCentre")
 	private Set<Clinic> clinics;
@@ -50,12 +41,11 @@ public class ClinicalCentre {
 		this.name = name;
 	}
 	
-	public ClinicalCentre(Long id, String name, Pricelist priceList, Set<Clinic> clinics,
+	public ClinicalCentre(Long id, String name, Set<Clinic> clinics,
 			Set<ClinicalCentreAdmin> admins, Set<RegistrationRequest> registrationRequests, Set<Patient> patients) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.priceList = priceList;
 		this.clinics = clinics;
 		this.admins = admins;
 		this.registrationRequests = registrationRequests;
@@ -108,14 +98,6 @@ public class ClinicalCentre {
 	
 	public void setPatients(Set<Patient> patients) {
 		this.patients = patients;
-	}
-	
-	public Pricelist getPriceList() {
-		return priceList;
-	}
-
-	public void setPriceList(Pricelist priceList) {
-		this.priceList = priceList;
 	}
 	
 	public void add(ClinicalCentreAdmin clinicalCentreAdmin) {

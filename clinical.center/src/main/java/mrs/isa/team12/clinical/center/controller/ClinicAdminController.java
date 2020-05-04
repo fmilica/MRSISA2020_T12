@@ -142,11 +142,8 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		System.out.println("Dosao do ovde");
-		
 		List<Doctor> doctors = doctorService.findAllByClinicId(currentUser.getClinic().getId());
 		
-		System.out.println("Dosao i do ovde");
 		return new ResponseEntity<>(doctors, HttpStatus.OK);
 	}
 	

@@ -169,9 +169,17 @@ body {
     transform: none;
 }
 .form-buttons {
-    padding-left: 290px;
+    padding-left: 230px;
 }
-
+.filter-btn {
+    margin: -3px 15px 5px 0 !important;
+}
+.doctor-filter-btn {
+    margin: -3px 15px 5px 35px !important;
+}
+.doctor-input-height {
+    height: 30px !important;
+}
 /*
 * Sidebar
 */
@@ -302,6 +310,12 @@ body {
     display: none;
 }
 .clinic-addDoctor {
+    display: none;
+}
+.clinic-addOrdination {
+    display: none;
+}
+.clinic-addAppType {
     display: none;
 }
 

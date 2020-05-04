@@ -153,10 +153,20 @@ $(document).ready( function () {
         $('.content').hide()
         $('.clinic-vacation').show()
     })
-    // Clinic vacation/paid leave
+    // Clinic add doctor
     $('#addDoctor').click(function() {
         $('.content').hide()
         $('.clinic-addDoctor').show()
+    })
+    // Clinic add ordination
+    $('#addOrdination').click(function() {
+        $('.content').hide()
+        $('.clinic-addOrdination').show()
+    })
+    // Clinic add appointment type
+    $('#addAppType').click(function() {
+    	$('.content').hide()
+    	$('.clinic-addAppType').show()
     })
 
     /* Medical personnel */

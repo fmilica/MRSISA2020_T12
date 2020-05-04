@@ -8,6 +8,10 @@ public interface ClinicService {
 	
 	public List<Clinic> findAll();
 	
+	public List<Clinic> findAllByAppointmentTypeId(Long appTypeId);
+	
+	public List<Clinic> findAllByAppointmentTypeName(String appTypeName);
+	
 	public Clinic findOneById(Long id);
 	
 	public Clinic findOneByName(String name);

@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,11 @@ public class OrdinationImpl implements OrdinationService {
 	@Override
 	public Ordination findOneByName(String name) {
 		return ordinationRep.findOneByName(name);
+	}
+	
+	@Override
+	public List<Ordination> findAllByClinicId(Long clinicId) {
+		return ordinationRep.findAllByClinicId(clinicId);
 	}
 
 	@Override

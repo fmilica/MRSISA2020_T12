@@ -16,6 +16,20 @@ function logInClinicAdmin(email, password){
 
 $(document).ready(function() {
 	
+	/*View all appointment types*/
+	$("#clinicOrdinations").on('click', function(event){
+		event.preventDefault()
+		var ordinationTable = $('#ordinationTable').DataTable({
+		ajax: {
+			url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'name'},
+			{ data: 'type'}]
+		})
+	})
+
 	/*Adding new operating room*/
 	$("#submit_ordination").on('click', function(event){
 		event.preventDefault()
@@ -37,6 +51,10 @@ $(document).ready(function() {
 			data : JSON.stringify(ordination),
 			success : function()  {
 				alert("Successfully added new ordination!")
+				$('.content').hide()
+        		$('.clinic-ordinations').show()
+				var table = $('#ordinationTable').DataTable();
+				table.ajax.reload();
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -50,7 +68,23 @@ $(document).ready(function() {
 		$("#ordination_name").val('')
 		
 	})
+	
+	/**********/
 
+	/*View all appointment types*/
+	$("#clinicAppTypes").on('click', function(event){
+		event.preventDefault()
+		var appTypeTable = $('#appTypeTable').DataTable({
+		ajax: {
+			url: "../../theGoodShepherd/appointmentType/getClinicsTypes",
+			dataSrc: ''
+		},
+		columns: [
+			{ data: 'name'},
+			{ data: 'duration'},
+			{ data: 'price'}]
+		})
+	})
 	
 	/*Adding new appointment type*/
 	$("#submit_appointment_type").on('click', function(event){
@@ -63,18 +97,23 @@ $(document).ready(function() {
 
 		var appType = {
 			name: nameV,
-			duration: durationV
+			duration: durationV,
+			price: priceV
 		}
 
 		$.ajax({
 			type : "POST",
 			async: false,
-			url : "../../theGoodShepherd/appointmentType/addNewAppointmentType/" + priceV,
+			url : "../../theGoodShepherd/appointmentType/addNewAppointmentType",
 			contentType : "application/json",
 			dataType : "json",
 			data : JSON.stringify(appType),
 			success : function()  {
 				alert("Successfully added new appointment type!")
+				$('.content').hide()
+        		$('.clinic-appTypes').show()
+				var table = $('#appTypeTable').DataTable();
+				table.ajax.reload();
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -84,11 +123,13 @@ $(document).ready(function() {
 	
 	$("#cancel-appointment-type").on('click', function(event){
 		event.preventDefault()
-		
-		$("#ordination_name").val('')
-		
+		$('.clinic-addAppType').hide()
+		$('.clinic-appTypes').show()
 	})
 	
+	/**********/
+
+	/*View all doctors */
 	$("#clinicDoctors").on('click', function(event){
 		event.preventDefault()
 		var doctorsTable = $('#doctorTable').DataTable({
@@ -163,4 +204,88 @@ $(document).ready(function() {
 			}
 		})
 	})
+	
+	$("#cancel_doctor").on('click', function(event){
+		event.preventDefault()
+		$('.clinic-addDoctor').hide()
+		$('.clinic-doctors').show()
+	})
+
+	/**********/
+
+	// pretplata svih elemenata sa klasom na klik
+	$('body').on('click', 'button.table-button', function() {
+		// odabrao je da zakaze neki pregled, sada je to zapamceno
+		alert("You choose this appointment to schedule!")
+		// podesi parametre koji je aktivan
+		var examReqId = $(this).attr('id')
+	});
+	$('body').on('click', 'button.table-button-examReq', function() {
+		// prikupljanje podataka i kreiranje pregleda
+		var doctorId = $(this).attr('id')
+		var time = $('#time'+doctorId).val()
+		createAppointment(doctorId, time)
+	});
+
+	$('#clinicExamReq').click(function(event) {
+		// tabela sa svim zahtevima
+		event.preventDefault()
+		var examReqTable = $('#examReqTable').DataTable({
+			ajax: {
+				// napraviti transportni objekat koji moze da se salje dovde
+				// ne znam kako drugacije bi mogao da dobavlja ove informacije
+				// mislim da bi pucalo sve
+				// a samo nam trebaju stringovi realno
+				// neki mali transportni objekat, da se ne vidi, negde sakriven...
+				// mada i on bi pucao jer bi se getovale vrednosti iz onog
+				// ne bi trebalo da puca ako se kreira u okviru servisa, tada je, mislim, konekcija i dalje otvorena
+				// objekat recimo ovakav
+				/*
+				var appointmentReq = {
+					id: "",
+					date: "",
+					appType: "",
+					doctorId: "",
+					time: ""
+				}
+				*/
+				url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appointmentType'},
+				{ data: 'doctor'},
+				{ data: 'date'},
+				{ data: 'time'},
+				{
+					data: null,
+					render: function (data) {
+						var button = '<button id="'+data.id+'" class="btn btn-info table-button">Choose</button>';
+						return button;
+					}
+				}]
+		})
+
+		// tabela sa sobama za pregled
+		var examRoomTable = $('#examRoomTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{ data: 'number'},
+				{ data: 'firstFreeTime'},
+				{
+					data: null,
+					render: function (data) {
+						var button = '<button id="'+data.id+'" class="btn btn-info table-button">Schedule</button>';
+						return button;
+					}
+				}]
+		})
+
+		
+	})
+
 })
