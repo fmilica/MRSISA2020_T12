@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
+import mrs.isa.team12.clinical.center.model.wrapper.ClinicAdminWrapper;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
@@ -63,7 +65,7 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ClinicAdmin>> getAllClinicAdmins() {
+	public ResponseEntity<List<ClinicAdminWrapper>> getAllClinicAdmins() {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -78,10 +80,13 @@ public class ClinicAdminController {
 		}
 		
 		List<ClinicAdmin> clinicAdmins = adminService.findAll();
+		List<ClinicAdminWrapper> clinicAdminWrapper = new ArrayList<ClinicAdminWrapper>();
 		
-		System.out.println(clinicAdmins);
+		for(ClinicAdmin ca : clinicAdmins) {
+			clinicAdminWrapper.add(new ClinicAdminWrapper(ca, ca.getClinic().getName()));
+		}
 		
-		return new ResponseEntity<>(clinicAdmins, HttpStatus.OK);
+		return new ResponseEntity<>(clinicAdminWrapper, HttpStatus.OK);
 	}
 
 	/*

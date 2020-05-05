@@ -5,15 +5,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name = "clinic_admin")
 public class ClinicAdmin extends RegisteredUser {
 	
+	//@JsonManagedReference
 	/*Treba da bude false*/
 	@ManyToOne
 	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=false)
-	//@JsonBackReference
+	@JsonBackReference
 	private Clinic clinic;
 
 	public ClinicAdmin() {}
@@ -38,7 +41,9 @@ public class ClinicAdmin extends RegisteredUser {
 		this.clinic = clinic;
 	}
 
-	
-	
-	
+	@Override
+	public String toString() {
+		return "ClinicAdmin [clinic=" + clinic + "]";
+	}
+
 }

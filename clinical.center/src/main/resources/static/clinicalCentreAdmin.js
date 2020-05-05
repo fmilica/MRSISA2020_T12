@@ -13,20 +13,20 @@ $(document).ready(function() {
 					dataSrc: ''
 				},
 				columns: [
-					{ data: 'email'},
-					{ data: 'name'},
-					{ data: 'surname'},
-					{ data: 'gender'},
-					{ data: 'dateOfBirth'},
-					{ data: 'address'},
-					{ data: 'city'},
-					{ data: 'country'},
-					{ data: 'phoneNumber'},
-					{ data: 'securityNumber'},
+					{ data: 'clinicAdmin.email'},
+					{ data: 'clinicAdmin.name'},
+					{ data: 'clinicAdmin.surname'},
+					{ data: 'clinicAdmin.gender'},
+					{ data: 'clinicAdmin.dateOfBirth'},
+					{ data: 'clinicAdmin.address'},
+					{ data: 'clinicAdmin.city'},
+					{ data: 'clinicAdmin.country'},
+					{ data: 'clinicAdmin.phoneNumber'},
+					{ data: 'clinicAdmin.securityNumber'},
 					{
 						data: null,
 						render: function (data) {
-							return data.clinic.name;
+							return data.clinicName;
 						}
 					}]
 				})

@@ -7,6 +7,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+
+
 @Entity
 @Table(name = "clinical_centre_admin")
 public class ClinicalCentreAdmin extends RegisteredUser{
