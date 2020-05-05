@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "appointment")
 public class Appointment {
@@ -28,9 +30,7 @@ public class Appointment {
 	@Column(name = "time", unique = false, nullable = false )
 	private Date time;
 	
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "type_id")
-	private AppointmentType type;
+	//type
 	
 	@Column(name = "discount", unique = false, nullable = true )
 	private Double discount;
@@ -52,6 +52,7 @@ public class Appointment {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Clinic clinic;
 	
 	@ManyToOne
@@ -59,8 +60,12 @@ public class Appointment {
 	private Doctor doctor;
 	
 	@ManyToOne
-	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
 	private MedicalRecords medicalRecords;
+	
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "type_id")
+	private AppointmentType type;
 
 	public Appointment() {}
 	
@@ -150,5 +155,17 @@ public class Appointment {
 		this.doctor = doctor;
 	}
 
-	
+	public Clinic getClinic() {
+		return clinic;
+	}
+
+	public void setClinic(Clinic clinic) {
+		this.clinic = clinic;
+	}
+
+	@Override
+	public String toString() {
+		return "Appointment [date=" + date + ", time=" + time + ", type=" + type + ", discount=" + discount
+				+ ", ordination=" + ordination + ", clinic=" + clinic + "]";
+	}
 }

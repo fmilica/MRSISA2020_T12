@@ -210,6 +210,10 @@ public class ClinicController {
 		
 		// isto i ovde, posto ulogovani administrator centra pravi kliniku, odatle moze da se dobavi njeno ime
 		ClinicalCentre clinicalCenter = centerService.findOneByName(clinic.getClinicalCentre().getName());
+		if(clinicalCenter == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Clinical centre with given name doesn't exist.");
+		}
+		
 		clinicalCenter.addClinic(clinic);
 		
 		clinic.setClinicalCentre(clinicalCenter);

@@ -5,6 +5,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "clinical_centre_admin")
 public class ClinicalCentreAdmin extends RegisteredUser{
@@ -12,6 +14,7 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	/*Nullable sam promenila na true samo da bih mogla nesto da probam inace treba da bude false*/
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private ClinicalCentre clinicalCentre;
 	
 	public ClinicalCentreAdmin() {}

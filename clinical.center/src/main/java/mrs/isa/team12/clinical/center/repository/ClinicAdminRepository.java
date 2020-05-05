@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -8,4 +10,6 @@ import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 public interface ClinicAdminRepository extends JpaRepository<ClinicAdmin, Long> {
 	
 	ClinicAdmin findOneByEmail(String email);
+	
+	List<ClinicAdmin> findAllByClinicId(Long clinicId);
 }

@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "appointment_request")
 public class AppointmentRequest {
@@ -34,6 +36,7 @@ public class AppointmentRequest {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Clinic clinic;
 
 	public AppointmentRequest() {}
@@ -43,6 +46,13 @@ public class AppointmentRequest {
 		this.requestDate = requestDate;
 		this.approved = approved;
 		this.clinic = clinic;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Appointment getAppointment() {
@@ -75,5 +85,11 @@ public class AppointmentRequest {
 
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
+	}
+	
+	@Override
+	public String toString() {
+		return "AppointmentRequest [id=" + id + ", appointment=" + appointment + ", requestDate=" + requestDate
+				+ ", approved=" + approved + ", clinic=" + clinic + "]";
 	}
 }

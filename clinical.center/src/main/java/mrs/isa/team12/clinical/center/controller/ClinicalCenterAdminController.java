@@ -121,6 +121,10 @@ public class ClinicalCenterAdminController {
 		// treba dodati proveru da li email vec postoji
 		// i sta je vec jedinstveno...... (tuga, sve, malte ne)
 		ClinicalCentre clinicalCentre = centreService.findOneByName(clinicalCentreAdmin.getClinicalCentre().getName());
+		if(clinicalCentre == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinical centre with given name does not exist.");
+		}
+		
 		clinicalCentre.add(clinicalCentreAdmin);
 		
 		clinicalCentreAdmin.setClinicalCentre(clinicalCentre);

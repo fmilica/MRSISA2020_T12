@@ -91,7 +91,11 @@ public class Ordination {
 	public void setOrdinationNumber(Integer ordinationNumber) {
 		this.ordinationNumber = ordinationNumber;
 	}
-
+	
+	public void addAppointment(Appointment a) {
+		this.appointments.add(a);
+	}
+	
 	@Override
 	public String toString() {
 		return "Ordination [id=" + id + ", type=" + type + ", name=" + name + ", clinic=" + clinic + ", appointments="

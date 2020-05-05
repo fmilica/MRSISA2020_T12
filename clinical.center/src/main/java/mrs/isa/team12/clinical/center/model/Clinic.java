@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "clinic")
 public class Clinic {
@@ -41,6 +43,7 @@ public class Clinic {
 
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToOne(fetch = LAZY)
@@ -82,9 +85,9 @@ public class Clinic {
 	private Set<Rating> ratings;
 	
 	public void add(ClinicAdmin clinicAdmin) {
-		if (clinicAdmin.getClinic() != null) {
+		/*if (clinicAdmin.getClinic() != null) {
 			clinicAdmin.getClinic().getAdmins().remove(clinicAdmin);
-		}
+		}*/
 		clinicAdmin.setClinic(this);
 		this.getAdmins().add(clinicAdmin);
 	}
@@ -204,7 +207,7 @@ public class Clinic {
 		this.appointments = appointments;
 	}
 	public Set<ClinicAdmin> getAdmins() {
-		return null;
+		return admins;
 	}
 	public void setAdmins(Set<ClinicAdmin> admins) {
 		this.admins = admins;
@@ -242,11 +245,32 @@ public class Clinic {
 			appType.setClinic(this);
 		}
 	}
-	
-	@Override
-	public String toString() {
-		return "Clinic [appointmentTypes=" + appointmentTypes + "]";
+	public Set<ClinicAdmin> getClinicAdmins(){
+		return this.admins;
 	}
 	
+	public void addAppointmentRequest(AppointmentRequest ar) {
+		ar.setClinic(this);
+		this.appointmentRequests.add(ar);
+	}
+	
+	public void addAppointment(Appointment a) {
+		a.setClinic(this);
+		this.appointments.add(a);
+	}
+	
+	public AppointmentType getOneAppointmentType(String name) {
+		for (AppointmentType ap : appointmentTypes) {
+			if(ap.getName().equals(name)) {
+				return ap;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "Clinic [id=" + id + ", name=" + name + ", address=" + address + ", city=" + city + "]";
+	}
 	
 }

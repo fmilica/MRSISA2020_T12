@@ -39,15 +39,7 @@ public class ClinicAdmin extends RegisteredUser {
 		this.clinic = clinic;
 	}
 
-	@Override
-	public String toString() {
-		return "ClinicAdmin [clinic=" + clinic + ", getClinic()=" + getClinic() + ", getEmail()=" + getEmail()
-				+ ", getPassword()=" + getPassword() + ", getName()=" + getName() + ", getSurname()=" + getSurname()
-				+ ", getAddress()=" + getAddress() + ", getCity()=" + getCity() + ", getCountry()=" + getCountry()
-				+ ", getPhoneNumber()=" + getPhoneNumber() + ", getSecurityNumber()=" + getSecurityNumber()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
-				+ "]";
-	}
+	
 	
 	
 }

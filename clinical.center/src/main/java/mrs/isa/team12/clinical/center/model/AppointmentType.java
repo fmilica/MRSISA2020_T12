@@ -39,6 +39,10 @@ public class AppointmentType {
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
 	@JsonBackReference
 	private Clinic clinic;
+
+	@ManyToOne
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
+	private Doctor doctor;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "type")
 	private Set<Appointment> appointments;
@@ -52,9 +56,6 @@ public class AppointmentType {
 	    joinColumns = @JoinColumn(name = "post_id"),
 	    inverseJoinColumns = @JoinColumn(name = "tag_id")
 	)*/
-	@ManyToOne
-	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
-	private Doctor doctor;
 	
 	public AppointmentType() {}
 	
@@ -98,7 +99,7 @@ public class AppointmentType {
 	}
 
 	public Set<Appointment> getAppointments() {
-		return appointments;
+		return null;
 	}
 
 	public void setAppointments(Set<Appointment> appointments) {
@@ -156,9 +157,16 @@ public class AppointmentType {
 	    return this.name.equals(appType.getName());
 	}
 	
+	public void addAppointment(Appointment a) {
+		if(!this.appointments.contains(a)) {
+			this.appointments.add(a);
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 	      return name.hashCode();
 	}
+	
 	
 }

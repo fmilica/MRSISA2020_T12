@@ -116,7 +116,7 @@ public class Doctor extends MedicalPersonnel {
 
 
 	public Set<Appointment> getAppointments() {
-		return appointments;
+		return null;
 	}
 
 
@@ -144,6 +144,10 @@ public class Doctor extends MedicalPersonnel {
 		this.specialization = specialization;
 	}
 
+	public void addAppointment(Appointment appointment) {
+		appointment.setDoctor(this);
+		this.appointments.add(appointment);
+	}
 
 	@Override
 	public String toString() {

@@ -71,7 +71,7 @@ public class ClinicalCentre {
 	}
 	
 	public Set<Clinic> getClinics() {
-		return null;
+		return clinics;
 	}
 	
 	public void setClinics(Set<Clinic> clinics) {
@@ -79,7 +79,7 @@ public class ClinicalCentre {
 	}
 	
 	public Set<ClinicalCentreAdmin> getAdmins() {
-		return null;
+		return admins;
 	}
 	
 	public void setAdmins(Set<ClinicalCentreAdmin> admins) {
@@ -112,6 +112,26 @@ public class ClinicalCentre {
 		if(!this.clinics.contains(clinic)) {
 			this.clinics.add(clinic);
 		}
+	}
+	
+	public Clinic getOneClinic(Long id) {
+		for (Clinic clinic : clinics) {
+			if(clinic.getId() == id) {
+				return clinic;
+			}
+		}
+		return null;
+	}
+	
+	public Doctor getDoctor(Long id) {
+		for (Clinic clinic : clinics) {
+			for (Doctor doctor : clinic.getDoctors()) {
+				if(doctor.getId() == id) {
+					return doctor;
+				}
+			}
+		}
+		return null;
 	}
 	
 	@Override
