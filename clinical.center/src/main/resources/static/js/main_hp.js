@@ -110,6 +110,11 @@ $(document).ready( function () {
         $('.content').hide()
         $('.addClinicAdmin').show()
     })
+    // Add new clinic
+    $('#addClinic').click(function() {
+        $('.content').hide()
+        $('.addNewClinic').show()
+    })
 
     /* Clinic administrator */
     // Clinic information

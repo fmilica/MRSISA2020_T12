@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "clinic")
 public class Clinic {
@@ -24,7 +26,7 @@ public class Clinic {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name="name", unique=false, nullable=false)
+	@Column(name="name", unique=true, nullable=false)
 	private String name;
 	
 	@Column(name="address", unique=false, nullable=false)
@@ -39,6 +41,7 @@ public class Clinic {
 	@Column(name="description", unique=false, nullable=false)
 	private String description;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;

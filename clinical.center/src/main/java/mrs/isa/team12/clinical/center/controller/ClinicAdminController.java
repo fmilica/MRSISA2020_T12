@@ -24,6 +24,7 @@ import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.wrapper.ClinicAdminWrapper;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
@@ -31,6 +32,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
 
 @RestController
@@ -43,6 +45,7 @@ public class ClinicAdminController {
 	private AppointmentRequestService appointmentReqService;
 	private AppointmentService appointmentService;
 	private OrdinationService ordinationService;
+	private RegisteredUserService userService;
 	
 	@Autowired
 	private HttpSession session;
@@ -50,13 +53,14 @@ public class ClinicAdminController {
 	@Autowired
 	public ClinicAdminController(ClinicAdminService adminService, ClinicService clinicService,
 			DoctorService doctorService, AppointmentRequestService appointmentReqService, AppointmentService appointmentService,
-			OrdinationService ordinationService) {
+			OrdinationService ordinationService, RegisteredUserService userService) {
 		this.adminService = adminService;
 		this.clinicService = clinicService;
 		this.doctorService = doctorService;
 		this.appointmentReqService = appointmentReqService;
 		this.appointmentService = appointmentService;
 		this.ordinationService = ordinationService;
+		this.userService = userService;
 	}
 
 	/*
@@ -95,10 +99,10 @@ public class ClinicAdminController {
 	 receives ClinicAdmin object
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "/addNewClinicAdmin",
+	@PostMapping(value = "/addNewClinicAdmin/{clinicId}",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ClinicAdmin> createClinicAdmin(@RequestBody ClinicAdmin clinicAdmin) {
+	public ResponseEntity<ClinicAdmin> createClinicAdmin(@RequestBody ClinicAdmin clinicAdmin, @PathVariable String clinicId) {
 		
 		ClinicalCentreAdmin currentUser;
 		try {
@@ -110,14 +114,25 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Clinic clinic = clinicService.findOneByName(clinicAdmin.getClinic().getName());
+		System.out.println(clinicAdmin.getEmail());
+		RegisteredUser user = userService.findOneByEmail(clinicAdmin.getEmail());
+		if( user != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
+		}
+		
+		user = userService.findOneBySecurityNumber(clinicAdmin.getSecurityNumber());
+		if( user != null) {
+			System.out.println("Hallo");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given security number already exists!");
+		}
+		
+		Clinic clinic = clinicService.findOneById(Long.parseLong(clinicId));
 		
 		if(clinic == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic with given name does not exist.");
 		}
 		
 		clinic.add(clinicAdmin);
-		
 		clinicService.save(clinic);
 		
 		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);

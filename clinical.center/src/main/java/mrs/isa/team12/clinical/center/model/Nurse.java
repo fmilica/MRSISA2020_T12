@@ -7,11 +7,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "nurse")
 public class Nurse extends MedicalPersonnel{
 	
 	/*nullable = false*/
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
 	private Clinic clinic;

@@ -45,6 +45,9 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
+	<!-- Validate -->
+	<link rel="stylesheet" type="text/css" href="../../css/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
 
@@ -199,72 +202,35 @@
 				<!-- Clinics content -->
 				<!-- add form -->
 				<div class="content clinics">
-					<div class="add">
+					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Add new clinic - Basic information</header>
+										<header>Clinics</header>
 									</div>
-									<div class="card-body" id="bar-parent">
-										<form class="form-horizontal">
-											<div class="form-body">
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="name" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Address
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="address" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														City
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="city" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Country
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="country" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Description
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<textarea id="description" data-required="1"  class="form-control textarea-height">
-														</textarea>
-													</div>
-												</div>
-											</div>
-											<div class="form-actions">
-												<div class="row">
-													<div class="offset-md-3 col-md-12 form-buttons">
-														<button id="add_clinic" type="submit" class="btn btn-info">Create</button>
-														<button id="cancel_clinic type="button" class="btn btn-default">Cancel</button>
-													</div>
-												</div>
-											</div>
-										</form>
+									<div class="card-body">
+										<button id="addClinic" class="btn btn-info add-button">Add new clinic</button>
+										<table id="clinicTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Description</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Description</th>
+												</tr>
+											</tfoot>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -501,8 +467,17 @@
 														Password
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7">
+													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
 														<input type="text" id="passwordC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Repeat password
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+														<input type="text" id="passwordRepeatC" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
@@ -537,12 +512,12 @@
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
-														Date of Birth
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="dateBirthC" data-required="1"  class="form-control input-height" />
-													</div>
+			                                            Date Of Birth
+			                                            <span class="required"> * </span>
+			                                        </label>
+			                                        <div class="col-md-7">
+			                                        <input id="dateBirthC" type="date" class="form-control">
+			                                        </div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
@@ -550,7 +525,8 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="clinicName" data-required="1"  class="form-control input-height" />
+														<select class="form-control input-height" id="availableClinics">
+														</select>
 													</div>
 												</div>
 												<div class="form-group row">
@@ -594,7 +570,7 @@
 														Security number
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7">
+													<div class="col-md-7 validate-input"  data-validate="Must be a number!">
 														<input type="text" id="securityC" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
@@ -614,8 +590,83 @@
 						</div>
 					</div>
 				</div>
+			
+				<!-- Add new clinic -->
+				<div class = "content addNewClinic">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new clinic - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="address" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="city" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="country" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Description
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<textarea id="description" data-required="1"  class="form-control textarea-height">
+														</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_clinic" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_clinic" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
-
 			<!-- end page content -->
 		</div>
         <!-- end page container -->

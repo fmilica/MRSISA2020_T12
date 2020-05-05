@@ -1,6 +1,25 @@
 var clinicAdminsTable;
+var clinicsTable;
 
 $(document).ready(function() {
+	
+	/*Clinic options when adding clinic admin*/
+	$('#addClinicAdmin').click(function() {
+		$.ajax({
+            type : "GET",
+            url : "/theGoodShepherd/clinics",
+            dataType: "json",
+            success : function(data)  {
+            	$("#availableClinics").empty()
+            	$.each(data, function(index, clinic) {
+					$("#availableClinics").append(new Option(clinic.name, clinic.id));
+				})
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+	})
 	
 	/*View all clinic admins*/
 	$('#clinicAdmins').click(function(event) {
@@ -45,13 +64,35 @@ $(document).ready(function() {
         var security = $('#securityC').val()
         var username = $('#emailC').val()
         var password = $('#passwordC').val()
-        var clinic = $('#clinicName').val()
+        var repeatPassword = $("#passwordRepeatC").val()
+        var clinicId = $('#availableClinics').val()
         var gender = $('#genderC').val()
-        var birth = new Date($('#dateBirthC').val())
+        var birth = $('#dateBirthC').val()
+        
+        if(!name || !surname || !country || !city || !address || !phone || !security || !username ||
+        		!password || !repeatPassword || !clinicId || !gender || !birth){
+        	alert("All required fields must be filled!")
+        	return;
+        }
+        
+        if(password != repeatPassword){
+        	return;
+        }
+        
+        if(isNaN(security)){
+        	return;
+        }
+        var dateObject = new Date(birth);
+        var currentDate = new Date();
+        
+        if(currentDate < dateObject){
+            alert("Wrong date of birth!")
+            return;
+        }
         
         $.ajax({
             type : "POST",
-            url : "/theGoodShepherd/clinicAdmin/addNewClinicAdmin",
+            url : "/theGoodShepherd/clinicAdmin/addNewClinicAdmin/" + clinicId,
             contentType : "application/json",
             dataType: "json",
             data : JSON.stringify({
@@ -65,13 +106,24 @@ $(document).ready(function() {
                 "city": city,
                 "country" : country,
                 "phoneNumber" : phone,
-                "securityNumber" : security,
-                "clinic" : {
-                	"name" : clinic
-                }
+                "securityNumber" : security
             }),
             success : function(response)  {
             	alert("New clinic admin added!")
+            	
+            	$('#emailC').val('')
+		    	$('#passwordC').val('')
+		    	$('#nameC').val('')
+		    	$('#surnameC').val('')
+		        $('#countryC').val('')
+		        $('#cityC').val('')
+		        $('#addressC').val('')
+		        $('#phoneC').val('')
+		        $('#securityC').val('')
+		        $('#clinicName').val('')
+		        $('#genderC').val('')
+		        $('#dateBirthC').val('')
+		        
             	$('.content').hide()
         		$('.clinic-admins').show()
             	clinicAdminsTable.ajax.reload();
@@ -81,6 +133,53 @@ $(document).ready(function() {
             }
         })
     })
+    
+    /*Check if passwords match*/
+    $("#passwordC").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#passwordC").val()
+		var rep = $("#passwordRepeatC").val()
+		if(pass != rep){
+			showValidate($("#passwordC"))
+			showValidate($("#passwordRepeatC"))
+		}else{
+			hideValidate($("#passwordC"))
+			hideValidate($("#passwordRepeatC"))
+		}
+	})
+	$("#passwordRepeatC").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#passwordC").val()
+		var rep = $("#passwordRepeatC").val()
+		if(pass != rep){
+			showValidate($("#passwordC"))
+			showValidate($("#passwordRepeatC"))
+		}else{
+			hideValidate($("#passwordC"))
+			hideValidate($("#passwordRepeatC"))
+		}
+	})
+	$("#passwordC").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#passwordC"))
+		hideValidate($("#passwordRepeatC"))
+	})
+	$("#passwordRepeatC").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#passwordC"))
+		hideValidate($("#passwordRepeatC"))
+	})
+	
+	/*Check if securityNumber is number*/
+	$("#securityC").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#securityC").val())){
+			showValidate($("#securityC"))
+		}
+	})
+	$("#securityC").on('click', function(e){
+		hideValidate($("#securityC"))
+	})
     
     $('#cancel_clinicAdmin').click(function(e){
     	e.preventDefault()
@@ -96,17 +195,44 @@ $(document).ready(function() {
         $('#clinicName').val('')
         $('#genderC').val('')
         $('#dateBirthC').val('')
+        $('.addClinicAdmin').hide()
+		$('.clinic-admins').show()
     })
 	
+    
+	/*View all clinics*/
+    $('#clinics').click(function(event) {
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#clinicTable')) {
+			clinicsTable = $('#clinicTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/clinics",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'name'},
+					{ data: 'address'},
+					{ data: 'city'},
+					{ data: 'country'},
+					{ data: 'description'}]
+			})
+		}
+	})
 	
+    /*Add new clinic*/
 	$('#add_clinic').click(function(e){
         e.preventDefault()
-        console.log("kliknuto")
         var name = $('#name').val()
         var country = $('#country').val()
         var city = $('#city').val()
         var address = $('#address').val()
         var description = $('#description').val()
+        
+        if( !name || !country || !city || !address || !description){
+        	alert("All required fields must be filled!")
+        	return;
+        }
         
         $.ajax({
             type : "POST",
@@ -118,16 +244,21 @@ $(document).ready(function() {
                 "address" : address,
                 "city": city,
                 "country" : country,
-                "description" : description,
-                "clinicalCentre" : {
-                	"name" : "The Good Shepherd"
-                }
+                "description" : description
             }),
             success: function(data){
             	alert("Successfully added new clinic!")
+            	$('#name').val('')
+		        $('#country').val('')
+		        $('#city').val('')
+		        $('#address').val('')
+		        $('#description').val('')
+            	$('.content').hide()
+        		$('.clinics').show()
+            	clinicsTable.ajax.reload();
             },
             error : function(response) {
-                alert("Clinic with specified name already exists!")
+            	alert(response.responseJSON.message)
             }
         })
     })
@@ -139,6 +270,8 @@ $(document).ready(function() {
         $('#city').val('')
         $('#address').val('')
         $('#description').val('')
+        $('.content').hide()
+        $('.clinics').show()
     })
 	
     $('#add_centreAdmin').click(function(e){
@@ -221,4 +354,16 @@ function logInClinicalCentreAdmin(email, password){
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+function showValidate(input) {
+    var thisAlert = $(input).parent();
+
+    $(thisAlert).addClass('alert-validate');
+}
+
+function hideValidate(input) {
+    var thisAlert = $(input).parent();
+
+    $(thisAlert).removeClass('alert-validate');
 }

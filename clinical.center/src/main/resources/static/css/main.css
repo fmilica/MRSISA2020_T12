@@ -346,6 +346,12 @@ body {
 .prescription-book {
     display: none;
 }
+.addClinicAdmin {
+    display: none;
+}
+.addNewClinic {
+    display: none;
+}
 
 /* Clinic admin */
 .clinic-information {

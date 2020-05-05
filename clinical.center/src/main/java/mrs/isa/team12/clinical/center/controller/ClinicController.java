@@ -203,22 +203,11 @@ public class ClinicController {
 		}
 		
 		Clinic c = clinicService.findOneByName(clinic.getName());
-		
 		if(c != null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Clinic with given name already exists.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Clinic with given name already exists!");
 		}
-		
-		// isto i ovde, posto ulogovani administrator centra pravi kliniku, odatle moze da se dobavi njeno ime
-		ClinicalCentre clinicalCenter = centerService.findOneByName(clinic.getClinicalCentre().getName());
-		if(clinicalCenter == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Clinical centre with given name doesn't exist.");
-		}
-		
-		clinicalCenter.addClinic(clinic);
-		
-		clinic.setClinicalCentre(clinicalCenter);
+		clinic.setClinicalCentre(currentUser.getClinicalCentre());
 		Clinic newClinic = clinicService.save(clinic);
-		centerService.save(clinicalCenter);
 
 		return new ResponseEntity<>(newClinic, HttpStatus.CREATED);
 	}
