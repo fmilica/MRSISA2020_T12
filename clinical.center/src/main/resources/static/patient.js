@@ -98,9 +98,29 @@ $(document).ready(function() {
 		columns: [
 			{ data: 'name'},
 			//{ data: 'rating'},
+			//{ data: 'appType.price.price'}
 			{ data: 'address'},
-			{ data: 'address'},
-			{ data: 'address'},
+			{
+				data: null,
+				render: function () {
+					return "Not known"
+				}
+			},
+			{
+				data: null,
+				render: function (data) {
+					if (newAppointment.appType) {
+						for (var i = 0; i < data.appointmentTypes.length; i++) {
+							if (data.appointmentTypes[i].name == newAppointment.appType) {
+								return data.appointmentTypes[i].price
+							}
+						}
+						return ""
+					} else {
+						return "Not specified"
+					}
+				}
+			},
 			{
 				data: null,
 				render: function () {
@@ -156,7 +176,13 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 			columns: [
 				{ data: 'name'},
 				{ data: 'surname'},
-				{ data: 'rating'},
+				//{ data: 'rating'},
+				/*{
+					data: null,
+					render: function () {
+						return "";
+					}
+				},*/
 				{
 					data: null,
 					render: function (data) {

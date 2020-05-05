@@ -13,7 +13,7 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 	
 	Clinic findOneByName(String name);
 	
-	@Query("SELECT c FROM Clinic c, AppointmentType a WHERE c.id = a.clinic AND a.name = ?1")
+	@Query("SELECT c FROM Clinic c, AppointmentType a WHERE c.id = a.clinic AND a.id = ?1")
 	List<Clinic> findAllByAppointmentTypeId(Long appTypeId);
 	
 	// ovo radi, ovo je da samo da klinika ima taj appType

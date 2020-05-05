@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -112,18 +114,38 @@ public class ClinicController {
 		
 		// mislim da mora da se radi join klinike sa appType da bismo dobili sve klinike sa tim imenom appType-a
 		List<Clinic> clinicsByAppTypeName = clinicService.findAllByAppointmentTypeName(appTypeName);
-		
-		//List<AppointmentType> appType = appointmentTypeService.findAllByName(appTypeName);
-		
-		
-		
-		//List<Clinic> clinicsByAppType = clinicService.findAllByAppointmentTypeId(appType.getId());
-		
+		List<Doctor> proba = new ArrayList<Doctor>();
+		for (Clinic c : clinicsByAppTypeName) {
+			for (AppointmentType at : c.getAppointmentTypes()) {
+				if (at.getName().equals(appTypeName)) {
+					proba.add(at.getDoctor());
+				}
+			}
+		}
+		session.setAttribute("proba", proba);
+		HashMap<Long, List<Doctor>> clinicsSertifiedDoctors = new HashMap<Long, List<Doctor>>();
+		for (Clinic c : clinicsByAppTypeName) {
+			for (Doctor d : c.getDoctors()) {
+				if (!clinicsSertifiedDoctors.containsKey(c.getId())) {
+					clinicsSertifiedDoctors.put(c.getId(), new ArrayList<Doctor>());
+		        }
+				System.out.println(d.getName());
+				System.out.println(d.getAppointmentTypes());
+				for (AppointmentType at : d.getAppointmentTypes()) {
+					if (at.getName().equals(appTypeName)) {
+						clinicsSertifiedDoctors.get(c.getId()).add(d);
+					}
+				}
+			}
+		}
+		session.setAttribute("clinicsSertifiedDoctors", clinicsSertifiedDoctors);
+		System.out.println(session.getAttribute("clinicsSertifiedDoctors"));
+		System.out.println("HELOOOOOOOOOOOOOOOOOOOOOOOOOO DODAO NA SESIJUUUUUUUUUUUUUUUUUUUu");
 		return new ResponseEntity<>(clinicsByAppTypeName, HttpStatus.OK);
 	}
 	
 	/*
-	 url: GET localhost:8081/theGoodShepherd/clinics/getDoctors/{clinicId}/{appTypeId}
+	 url: GET localhost:8081/theGoodShepherd/clinics/getDoctors/{clinicId}
 	 HTTP request for viewing all doctors from clinic given by id
 	 receives Long object
 	 returns ResponseEntity object
@@ -132,9 +154,16 @@ public class ClinicController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Doctor>> getAllClinicDoctors(@PathVariable("id") Long id) {
 		// ko ima pravo?
-		List<Doctor> doctors = doctorService.findAllByClinicId(id);
+		//List<Doctor> doctors = doctorService.findAllByClinicId(id);
 		
-		return new ResponseEntity<>(doctors, HttpStatus.OK);
+		HashMap<Long, List<Doctor>> sertifiedDoctors = (HashMap<Long, List<Doctor>>) session.getAttribute("clinicsSertifiedDoctors");
+		
+		List<Doctor> sertifiedClinicDoctors = sertifiedDoctors.get(id);
+		System.out.println(sertifiedClinicDoctors);
+		
+		List<Doctor> proba = (List<Doctor>) session.getAttribute("proba");
+		System.out.println(proba);
+		return new ResponseEntity<>(proba, HttpStatus.OK);
 	}
 	
 	/*

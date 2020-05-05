@@ -1,3 +1,9 @@
+var ordinationTable;
+var appTypeTable;
+var doctorsTable;
+var examReqTable;
+var examRoomTable;
+
 function logInClinicAdmin(email, password){
 	
     $.ajax({
@@ -19,16 +25,19 @@ $(document).ready(function() {
 	/*View all ordinations*/
 	$("#clinicOrdinations").on('click', function(event){
 		event.preventDefault()
-		var ordinationTable = $('#ordinationTable').DataTable({
-		ajax: {
-			url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
-			dataSrc: ''
-		},
-		columns: [
-			{ data: 'name'},
-			{ data: 'ordinationNumber'},
-			{ data: 'type'}]
-		})
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#ordinationTable')) {
+			var ordinationTable = $('#ordinationTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'name'},
+					{ data: 'ordinationNumber'},
+					{ data: 'type'}]
+				})
+		}
 	})
 
 	/*Adding new ordination*/
@@ -39,6 +48,11 @@ $(document).ready(function() {
 		var numberV = $("#ordination_number").val()
 		var typeV = $("#ordination_type").val()
 		
+		if (!nameV || !numberV || !typeV) {
+			alert("Not all required fields are filled!")
+			return
+		}
+
 		var ordination = {
 			name: nameV,
 			ordinationNumber: numberV,
@@ -69,9 +83,22 @@ $(document).ready(function() {
 	$("#cancel-ordination").on('click', function(event){
 		event.preventDefault()
 		$("#ordination_name").val('')
+		$("#ordination_number").val('')
 		$('.clinic-addOrdination').hide()
 		$('.clinic-ordinations').show()
 		
+	})
+
+	/*Check if ordination number is number*/
+	$("#ordination_number").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#ordination_number").val())){
+			showValidate($("#ordination_number"))
+		}
+	})
+	
+	$("#ordination_number").on('click', function(e){
+		hideValidate($("#ordination_number"))
 	})
 	
 	/**********/
@@ -79,16 +106,29 @@ $(document).ready(function() {
 	/*View all appointment types*/
 	$("#clinicAppTypes").on('click', function(event){
 		event.preventDefault()
-		var appTypeTable = $('#appTypeTable').DataTable({
-		ajax: {
-			url: "../../theGoodShepherd/appointmentType/getClinicsTypes",
-			dataSrc: ''
-		},
-		columns: [
-			{ data: 'name'},
-			{ data: 'duration'},
-			{ data: 'price'}]
-		})
+		if (!$.fn.DataTable.isDataTable('#appTypeTable')) {
+			appTypeTable = $('#appTypeTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointmentType/getClinicsTypes",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{
+					data: null,
+					render: function (data) {
+						return data.duration + " h";
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						return data.price + " &euro;";
+					}
+				}]
+				//{ data: 'price'}]
+			})
+		}
 	})
 	
 	/*Adding new appointment type*/
@@ -99,6 +139,11 @@ $(document).ready(function() {
 		var nameV = $("#appointment_name").val()
 		var durationV = $("#appointment_duration").val()
 		var priceV = $("#appointment_price").val()
+
+		if (!nameV || !durationV || !priceV) {
+			alert("Not all required fields are filled!")
+			return
+		}
 
 		var appType = {
 			name: nameV,
@@ -117,8 +162,7 @@ $(document).ready(function() {
 				alert("Successfully added new appointment type!")
 				$('.content').hide()
         		$('.clinic-appTypes').show()
-				var table = $('#appTypeTable').DataTable();
-				table.ajax.reload();
+				appTypeTable.ajax.reload();
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -135,30 +179,53 @@ $(document).ready(function() {
 		$('.clinic-addAppType').hide()
 		$('.clinic-appTypes').show()
 	})
+
+	/*Check if appointment type duration and price are numbers*/
+	$("#appointment_duration").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#appointment_duration").val())){
+			showValidate($("#appointment_duration"))
+		}
+	})
+	$("#appointment_duration").on('click', function(e){
+		hideValidate($("#appointment_duration"))
+	})
+	$("#appointment_price").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#appointment_price").val())){
+			showValidate($("#appointment_price"))
+		}
+	})
+	$("#appointment_price").on('click', function(e){
+		hideValidate($("#appointment_price"))
+	})
 	
 	/**********/
 
 	/*View all doctors */
 	$("#clinicDoctors").on('click', function(event){
 		event.preventDefault()
-		var doctorsTable = $('#doctorTable').DataTable({
-		ajax: {
-			url: "../../theGoodShepherd/clinicAdmin/getDoctors",
-			dataSrc: ''
-		},
-		columns: [
-			{ data: 'email'},
-			{ data: 'name'},
-			{ data: 'surname'},
-			{ data: 'gender'},
-			{ data: 'dateOfBirth'},
-			{ data: 'address'},
-			{ data: 'city'},
-			{ data: 'country'},
-			{ data: 'phoneNumber'},
-			{ data: 'securityNumber'},
-			{ data: 'specialization'}]
-		})
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#ordinationTable')) {
+			var doctorsTable = $('#doctorTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/clinicAdmin/getDoctors",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'email'},
+				{ data: 'name'},
+				{ data: 'surname'},
+				{ data: 'gender'},
+				{ data: 'dateOfBirth'},
+				{ data: 'address'},
+				{ data: 'city'},
+				{ data: 'country'},
+				{ data: 'phoneNumber'},
+				{ data: 'securityNumber'},
+				{ data: 'specialization'}]
+			})
+		}
 	})
 	
 	/*Adding new doctor*/
@@ -220,8 +287,7 @@ $(document).ready(function() {
 				$('.content').hide()
         		$('.clinic-doctors').show()
 				alert("New doctor saved!")
-				var table = $('#doctorTable').DataTable();
-				table.ajax.reload();
+				doctorTable.ajax.reload();
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -282,7 +348,6 @@ $(document).ready(function() {
 	})
 	
 	/*Check if securityNumber is number*/
-	
 	$("#securityNumberDoctor").on('blur', function(e){
 		e.preventDefault()
 		if(isNaN($("#securityNumberDoctor").val())){
@@ -313,60 +378,65 @@ $(document).ready(function() {
 	$('#clinicExamReq').click(function(event) {
 		// tabela sa svim zahtevima
 		event.preventDefault()
-		var examReqTable = $('#examReqTable').DataTable({
-			ajax: {
-				// napraviti transportni objekat koji moze da se salje dovde
-				// ne znam kako drugacije bi mogao da dobavlja ove informacije
-				// mislim da bi pucalo sve
-				// a samo nam trebaju stringovi realno
-				// neki mali transportni objekat, da se ne vidi, negde sakriven...
-				// mada i on bi pucao jer bi se getovale vrednosti iz onog
-				// ne bi trebalo da puca ako se kreira u okviru servisa, tada je, mislim, konekcija i dalje otvorena
-				// objekat recimo ovakav
-				/*
-				var appointmentReq = {
-					id: "",
-					date: "",
-					appType: "",
-					doctorId: "",
-					time: ""
-				}
-				*/
-				url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
-				dataSrc: ''
-			},
-			columns: [
-				{ data: 'appointmentType'},
-				{ data: 'doctor'},
-				{ data: 'date'},
-				{ data: 'time'},
-				{
-					data: null,
-					render: function (data) {
-						var button = '<button id="'+data.id+'" class="btn btn-info table-button">Choose</button>';
-						return button;
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#examReqTable')) {
+			examReqTable = $('#examReqTable').DataTable({
+				ajax: {
+					// napraviti transportni objekat koji moze da se salje dovde
+					// ne znam kako drugacije bi mogao da dobavlja ove informacije
+					// mislim da bi pucalo sve
+					// a samo nam trebaju stringovi realno
+					// neki mali transportni objekat, da se ne vidi, negde sakriven...
+					// mada i on bi pucao jer bi se getovale vrednosti iz onog
+					// ne bi trebalo da puca ako se kreira u okviru servisa, tada je, mislim, konekcija i dalje otvorena
+					// objekat recimo ovakav
+					/*
+					var appointmentReq = {
+						id: "",
+						date: "",
+						appType: "",
+						doctorId: "",
+						time: ""
 					}
-				}]
-		})
+					*/
+					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'appointmentType'},
+					{ data: 'doctor'},
+					{ data: 'date'},
+					{ data: 'time'},
+					{
+						data: null,
+						render: function (data) {
+							var button = '<button id="'+data.id+'" class="btn btn-info table-button">Choose</button>';
+							return button;
+						}
+					}]
+			})
+		}
 
 		// tabela sa sobama za pregled
-		var examRoomTable = $('#examRoomTable').DataTable({
-			ajax: {
-				url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
-				dataSrc: ''
-			},
-			columns: [
-				{ data: 'name'},
-				{ data: 'number'},
-				{ data: 'firstFreeTime'},
-				{
-					data: null,
-					render: function (data) {
-						var button = '<button id="'+data.id+'" class="btn btn-info table-button">Schedule</button>';
-						return button;
-					}
-				}]
-		})
+		if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
+			examRoomTable = $('#examRoomTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'name'},
+					{ data: 'number'},
+					{ data: 'firstFreeTime'},
+					{
+						data: null,
+						render: function (data) {
+							var button = '<button id="'+data.id+'" class="btn btn-info table-button">Schedule</button>';
+							return button;
+						}
+					}]
+			})
+		}
 	})
 	
     function showValidate(input) {

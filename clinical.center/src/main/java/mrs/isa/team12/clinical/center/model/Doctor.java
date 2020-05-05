@@ -147,7 +147,7 @@ public class Doctor extends MedicalPersonnel {
 
 	@Override
 	public String toString() {
-		return "Doctor [specialization=" + specialization + ", startWork=" + startWork + ", endWork=" + endWork
+		return super.toString() + "Doctor [specialization=" + specialization + ", startWork=" + startWork + ", endWork=" + endWork
 				+ ", rating=" + rating + ", clinic=" + clinic + ", appointmentTypes=" + appointmentTypes
 				+ ", appointments=" + appointments + ", ratings=" + ratings + "]";
 	}
