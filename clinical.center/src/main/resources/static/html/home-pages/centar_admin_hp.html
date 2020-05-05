@@ -40,6 +40,10 @@
 	<script src='../../js/library/fullcalendar/daygrid/main.js'></script>
 	<script src='../../js/library/fullcalendar/timegrid/main.js'></script>
 	<script src='../../js/library/fullcalendar/list/main.js'></script>
+	
+	<!-- for tables -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
@@ -71,7 +75,7 @@
  						<li class="dropdown dropdown-user">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <img alt="PA" src="../../img/dp.jpg" style=" border-radius: 90%; border:10px;"/>
-                                <span class="username username-hide-on-mobile">Clinical Center Admin A</span>
+                                <span id="shownNameSurname" class="username username-hide-on-mobile"></span>
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
@@ -122,7 +126,7 @@
 	                                    <img src="../../img/dp.jpg" class="img-circle user-img-circle" alt="User Image" />
 	                                </div>
 	                                <div class="pull-left info">
-	                                    <p style="font-size: 16px;">Clinical Center Admin A</p>
+	                                    <p id="bigNameSurname" style="font-size: 16px;"></p>
 	                                </div>
 	                            </div>
 	                        </li>
@@ -271,137 +275,47 @@
 
 				<!-- Clinic admins content -->
 				<div class="content clinic-admins">
-					<div class="add">
+					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Add new clinic's administrator - Basic information</header>
+										<header>Clinic Administrators</header>
 									</div>
-									<div class="card-body" id="bar-parent">
-										<form class="form-horizontal">
-											<div class="form-body">
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Email
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="emailC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Password
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="passwordC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="nameC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Surname
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="surnameC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Gender
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<select class="form-control input-height" id="genderC">
-															<option selected="selected" value="male">Male</option>
-															<option value="female">Female</option>
-														</select>
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Date of Birth
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="dateBirthC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Address
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="addressC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														City
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="cityC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Country
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="countryC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Phone number
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="phoneC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Security number
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="securityC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Clinic Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="clinicName" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-											</div>
-											<div class="form-actions">
-												<div class="row">
-													<div class="offset-md-3 col-md-12 form-buttons">
-														<button id="add_clinicAdmin" type="submit" class="btn btn-info">Create</button>
-														<button id="cancel_clinicAdmin type="button" class="btn btn-default">Cancel</button>
-													</div>
-												</div>
-											</div>
-										</form>
+									<div class="card-body">
+										<button id="addClinicAdmin" class="btn btn-info add-button">Add new clinic administrator</button>
+										<table id="clinicAdminsTable" class="display">
+											<thead>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
+													<th>Date of Birth</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Phone Number</th>
+													<th>Security Number</th>
+													<th>Clinic name</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
+													<th>Date of Birth</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Phone Number</th>
+													<th>Security Number</th>
+													<th>Clinic name</th>
+												</tr>
+											</tfoot>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -411,7 +325,8 @@
 
 				<!-- Center admins content -->
 				<div class="content center-admins">
-					<div class="add">
+					clinical center administrators
+					<!--<div class="add">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
@@ -546,7 +461,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- end add form -->
 				</div>
 
@@ -558,6 +473,146 @@
 				<!-- Prescription book content -->
 				<div class="content prescription-book">
 					prescription-book
+				</div>
+				
+				<!-- Add new clinic administrator -->
+				<div class="content addClinicAdmin">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new clinic's administrator - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Email
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="emailC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Password
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="passwordC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nameC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Surname
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="surnameC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Gender
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<select class="form-control input-height" id="genderC">
+															<option selected="selected" value="male">Male</option>
+															<option value="female">Female</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Date of Birth
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="dateBirthC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Clinic Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="clinicName" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="addressC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="cityC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="countryC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Phone number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="phoneC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Security number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="securityC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_clinicAdmin" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_clinicAdmin" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 

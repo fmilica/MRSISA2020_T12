@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 $(document).ready( function () {
+	
+	var nameSurname = sessionStorage.getItem('nameSurname')
+	$("#shownNameSurname").html(nameSurname)
+	$("#bigNameSurname").text(nameSurname)
 
     /* dropdown links */
     // My Profile
@@ -100,6 +104,11 @@ $(document).ready( function () {
     $('#prescriptionBook').click(function() {
         $('.content').hide()
         $('.prescription-book').show()
+    })
+    // Add new clinic administrator
+    $('#addClinicAdmin').click(function() {
+        $('.content').hide()
+        $('.addClinicAdmin').show()
     })
 
     /* Clinic administrator */

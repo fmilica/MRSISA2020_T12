@@ -1,4 +1,104 @@
+var clinicAdminsTable;
+
 $(document).ready(function() {
+	
+	/*View all clinic admins*/
+	$('#clinicAdmins').click(function(event) {
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#clinicAdminsTable')) {
+			clinicAdminsTable = $('#clinicAdminsTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/clinicAdmin",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'email'},
+					{ data: 'name'},
+					{ data: 'surname'},
+					{ data: 'gender'},
+					{ data: 'dateOfBirth'},
+					{ data: 'address'},
+					{ data: 'city'},
+					{ data: 'country'},
+					{ data: 'phoneNumber'},
+					{ data: 'securityNumber'},
+					{
+						data: null,
+						render: function (data) {
+							return data.clinic.name;
+						}
+					}]
+				})
+		}
+	})
+	/*Add new clinic admin*/
+	$('#add_clinicAdmin').click(function(e){
+        e.preventDefault()
+        
+        var name = $('#nameC').val()
+        var surname = $('#surnameC').val()
+        var country = $('#countryC').val()
+        var city = $('#cityC').val()
+        var address = $('#addressC').val()
+        var phone = $('#phoneC').val()
+        var security = $('#securityC').val()
+        var username = $('#emailC').val()
+        var password = $('#passwordC').val()
+        var clinic = $('#clinicName').val()
+        var gender = $('#genderC').val()
+        var birth = new Date($('#dateBirthC').val())
+        
+        $.ajax({
+            type : "POST",
+            url : "/theGoodShepherd/clinicAdmin/addNewClinicAdmin",
+            contentType : "application/json",
+            dataType: "json",
+            data : JSON.stringify({
+                "email" : username,
+                "password" : password,
+                "name" : name,
+                "surname" : surname,
+                "gender" : gender,
+                "dateOfBirth" : birth,
+                "address" : address,
+                "city": city,
+                "country" : country,
+                "phoneNumber" : phone,
+                "securityNumber" : security,
+                "clinic" : {
+                	"name" : clinic
+                }
+            }),
+            success : function(response)  {
+            	alert("New clinic admin added!")
+            	$('.content').hide()
+        		$('.clinic-admins').show()
+            	clinicAdminsTable.ajax.reload();
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+    })
+    
+    $('#cancel_clinicAdmin').click(function(e){
+    	e.preventDefault()
+    	$('#emailC').val('')
+    	$('#passwordC').val('')
+    	$('#nameC').val('')
+    	$('#surnameC').val('')
+        $('#countryC').val('')
+        $('#cityC').val('')
+        $('#addressC').val('')
+        $('#phoneC').val('')
+        $('#securityC').val('')
+        $('#clinicName').val('')
+        $('#genderC').val('')
+        $('#dateBirthC').val('')
+    })
+	
+	
 	$('#add_clinic').click(function(e){
         e.preventDefault()
         console.log("kliknuto")
@@ -24,7 +124,7 @@ $(document).ready(function() {
                 }
             }),
             success: function(data){
-            	alert("dodata nova klinika")
+            	alert("Successfully added new clinic!")
             },
             error : function(response) {
                 alert("Clinic with specified name already exists!")
@@ -34,7 +134,6 @@ $(document).ready(function() {
     
     $('#cancel_clinic').click(function(e){
     	e.preventDefault()
-    	alert("prekinuto dodavanje")
     	$('#name').val('')
         $('#country').val('')
         $('#city').val('')
@@ -105,70 +204,6 @@ $(document).ready(function() {
         $('#gender').val('')
         $('#dateBirth').val('')
     })
-    
-    $('#add_clinicAdmin').click(function(e){
-        e.preventDefault()
-        
-        var name = $('#nameC').val()
-        var surname = $('#surnameC').val()
-        var country = $('#countryC').val()
-        var city = $('#cityC').val()
-        var address = $('#addressC').val()
-        var phone = $('#phoneC').val()
-        var security = $('#securityC').val()
-        var username = $('#emailC').val()
-        var password = $('#passwordC').val()
-        var clinic = $('#clinicName').val()
-        var gender = $('#genderC').val()
-        var birth = new Date($('#dateBirthC').val())
-        
-        $.ajax({
-            type : "POST",
-            url : "/theGoodShepherd/clinicAdmin/addNewClinicAdmin",
-            contentType : "application/json",
-            dataType: "json",
-            data : JSON.stringify({
-                "email" : username,
-                "password" : password,
-                "name" : name,
-                "surname" : surname,
-                "gender" : gender,
-                "dateOfBirth" : birth,
-                "address" : address,
-                "city": city,
-                "country" : country,
-                "phoneNumber" : phone,
-                "securityNumber" : security,
-                "clinic" : {
-                	"name" : clinic
-                }
-            }),
-            success : function(response)  {
-            	$('.content').hide()
-        		$('.clinic-admins').show()
-                alert("New clinic admin added!")
-            },
-            error : function(response) {
-            	alert(response.responseJSON.message)
-            }
-        })
-    })
-    
-    $('#cancel_clinicAdmin').click(function(e){
-    	e.preventDefault()
-    	$('#emailC').val('')
-    	$('#passwordC').val('')
-    	$('#nameC').val('')
-    	$('#surnameC').val('')
-        $('#countryC').val('')
-        $('#cityC').val('')
-        $('#addressC').val('')
-        $('#phoneC').val('')
-        $('#securityC').val('')
-        $('#clinicName').val('')
-        $('#genderC').val('')
-        $('#dateBirthC').val('')
-    })
 })
 
 function logInClinicalCentreAdmin(email, password){
@@ -178,7 +213,8 @@ function logInClinicalCentreAdmin(email, password){
 		async: false,
 		url : "theGoodShepherd/clinicalCenterAdmin/logIn//" + email + "//" + password ,
 		dataType: "json",
-		success : function(response)  {
+		success : function(output, status, xhr)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
 			window.location.href = "html/home-pages/centar_admin_hp.html"
 		},
 		error : function(response) {

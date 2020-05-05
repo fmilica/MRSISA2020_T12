@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -79,6 +78,8 @@ public class ClinicAdminController {
 		}
 		
 		List<ClinicAdmin> clinicAdmins = adminService.findAll();
+		
+		System.out.println(clinicAdmins);
 		
 		return new ResponseEntity<>(clinicAdmins, HttpStatus.OK);
 	}

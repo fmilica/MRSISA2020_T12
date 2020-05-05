@@ -16,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 @Entity
 @Table(name = "clinic")
@@ -43,45 +45,57 @@ public class Clinic {
 
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	@JsonIgnore
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "report_id")
+	@JsonIgnore
 	private Report report;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "diagnose_perscription_id")
+	@JsonIgnore
 	private DiagnosePerscription diagnosePerscription;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<Doctor> doctors;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<Nurse> nurses;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@JsonIgnore
 	private Set<Patient> patients;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<Appointment> appointments;
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="clinic")
+	@JsonIgnore
 	private Set<ClinicAdmin> admins;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<Ordination> ordinations;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<AppointmentRequest> appointmentRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@JsonIgnore
 	private Set<LeaveRequest> leaveRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonIgnore
 	private Set<Rating> ratings;
 	
 	public void add(ClinicAdmin clinicAdmin) {
