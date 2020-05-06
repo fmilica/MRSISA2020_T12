@@ -183,7 +183,10 @@ $(document).ready(function() {
 	})
     
     $('#cancel_clinicAdmin').click(function(e){
-    	e.preventDefault()
+		e.preventDefault()
+		hideValidate($("#securityC"))
+    	hideValidate($("#passwordC"))
+		hideValidate($("#passwordRepeatC"))
     	$('#emailC').val('')
     	$('#passwordC').val('')
     	$("#passwordRepeatC").val('')

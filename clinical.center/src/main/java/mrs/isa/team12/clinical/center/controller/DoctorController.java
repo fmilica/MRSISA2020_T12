@@ -1,6 +1,5 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -22,9 +21,11 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
 @RestController
 @RequestMapping("theGoodShepherd/doctor")
@@ -33,16 +34,18 @@ public class DoctorController {
 	private DoctorService doctorService;
 	private AppointmentTypeService appointmentTypeService;
 	private ClinicService clinicService;
+	private RegisteredUserService userService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService,
-			ClinicService clinicService) {
+			ClinicService clinicService, RegisteredUserService userService) {
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
 		this.clinicService = clinicService;
+		this.userService = userService;
 	}
 	
 	/*
@@ -176,11 +179,13 @@ public class DoctorController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		// provera da li postoji
-		// TREBA DA PROVERAVA U SVIM BAZAMA, JEDINSTVEN MEDJU SVIMA!!!
-		Doctor existing = doctorService.findOneByEmail(doctor.getEmail());
+		RegisteredUser existing = userService.findOneByEmail(doctor.getEmail());
 		if (existing != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		existing = userService.findOneBySecurityNumber(doctor.getSecurityNumber());
+		if (existing != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified security number already exists!");
 		}
 		// ne postoji u bazi
 		// sacuvamo ga

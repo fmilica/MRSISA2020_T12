@@ -59,6 +59,13 @@ values ('15', 'zika', 'zika', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City'
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
 values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '77', '1');
 
-/*Jedan pregled*/
-insert into appointment (id, app_date, app_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('21', '2020-5-6', '15:00:00', 'true', '16', '17', '11', '19');
+/*Jedan pregled potvrdjen*/
+insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('21', '2020-5-6', '15:00:00', '19:00:00', 'true', '16', '17', '11', '19');
+/*Jedan pregled NEpotvrdjen*/
+insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('23', '2020-5-5', '15:00:00', '19:00:00', 'false', '16', '17', '11', '19');
+
+/*Jedan zahtev za nepotvrdjen pregled*/
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
+values ('24', '23', '2020-5-5', 'false', '17');

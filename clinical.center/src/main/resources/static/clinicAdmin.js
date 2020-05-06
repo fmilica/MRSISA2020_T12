@@ -95,6 +95,7 @@ $(document).ready(function() {
 		clearOrdinationForm()
 		$('.clinic-addOrdination').hide()
 		$('.clinic-ordinations').show()
+		hideValidate($("#ordination_number"))
 		// scroll to top of page
 		document.body.scrollTop = 0
   		document.documentElement.scrollTop = 0
@@ -202,6 +203,8 @@ $(document).ready(function() {
 		clearAppTypeForm()
 		$('.clinic-addAppType').hide()
 		$('.clinic-appTypes').show()
+		hideValidate($("#appointment_duration"))
+		hideValidate($("#appointment_price"))
 		// scroll to top of page
 		document.body.scrollTop = 0
   		document.documentElement.scrollTop = 0
@@ -378,6 +381,9 @@ $(document).ready(function() {
 		clearDoctorForm()
 		$('.clinic-addDoctor').hide()
 		$('.clinic-doctors').show()
+		hideValidate($("#passwordDoctor"))
+		hideValidate($("#confirm-passwordDoctor"))
+		hideValidate($("#securityNumberDoctor"))
 		// scroll to top of page
 		document.body.scrollTop = 0
   		document.documentElement.scrollTop = 0
@@ -409,7 +415,7 @@ $(document).ready(function() {
 		var time = $('#time'+doctorId).val()
 		createAppointment(doctorId, time)
 	});
-
+/*
 	$('#clinicExamReq').click(function(event) {
 		// tabela sa svim zahtevima
 		event.preventDefault()
@@ -433,15 +439,15 @@ $(document).ready(function() {
 						doctorId: "",
 						time: ""
 					}
-					*/
+					*//*
 					url: "../../theGoodShepherd/appointmentRequest",
 					dataSrc: ''
 				},
 				columns: [
-					{ data: 'appointmentType'},
 					{ data: 'doctor'},
 					{ data: 'date'},
-					{ data: 'time'},
+					{ data: 'startTime'},
+					{ data: 'endTime'},
 					{
 						data: null,
 						render: function (data) {
@@ -451,17 +457,18 @@ $(document).ready(function() {
 					}]
 			})
 		}
-
+*/
+	$('#clinicExamReq').click(function(event) {
 		// tabela sa sobama za pregled
 		if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
 			examRoomTable = $('#examRoomTable').DataTable({
 				ajax: {
-					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+					url: "../../theGoodShepherd/ordination/getClinicsExamination",
 					dataSrc: ''
 				},
 				columns: [
 					{ data: 'name'},
-					{ data: 'number'},
+					{ data: 'ordinationNumber'},
 					//{ data: 'firstFreeTime'},
 					{
 						data: null,
@@ -479,6 +486,36 @@ $(document).ready(function() {
 			})
 		}
 	})
+
+	// filtriranje soba za preglede
+	$('#filterExamRoom').click(function(e) {
+		e.preventDefault()
+
+		var nameV = $('#examRoomName').val()
+		var numberV = $('#examRoomNumber').val()
+		var dateV = $('#examRoomDate').val()
+
+		if (isNaN(numberV)) {
+			alert("Ordination number must be a number.")
+			return
+		}
+
+		// filtriranje klinika na beku
+		if (nameV && numberV) {
+			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExamination/"+nameV+"/"+numberV)
+			examRoomTable.ajax.reload()
+		} else if (!nameV && numberV) {
+			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExaminationNumber/"+numberV)
+			examRoomTable.ajax.reload()
+		} else if (nameV && !numberV) {
+			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExaminationName/"+nameV)
+			examRoomTable.ajax.reload()
+		} else if (!nameV && !numberV) {
+			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExamination")
+			examRoomTable.ajax.reload()
+		}
+	})
+
 })
 
 /*Validation and forms*/

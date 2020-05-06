@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -31,9 +32,13 @@ public class Appointment {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
-	@Column(name = "app_time", unique = false, nullable = false )
+	@Column(name = "app_start_time", unique = false, nullable = false )
 	@Temporal(TemporalType.TIME)
-	private Date time;
+	private Date startTime;
+	
+	@Column(name = "app_end_time", unique = false, nullable = false)
+	@Temporal(TemporalType.TIME)
+	private Date endTime;
 	
 	//type
 	
@@ -51,11 +56,12 @@ public class Appointment {
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "medical_report_id")
+	@JsonBackReference
 	private MedicalReport medicalReport;
 	
 	@ManyToOne
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
-	//@JsonBackReference
+	@JsonBackReference
 	private Ordination ordination;
 	
 	@ManyToOne
@@ -66,24 +72,52 @@ public class Appointment {
 	
 	@ManyToOne
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference("doctor-apps")
 	private Doctor doctor;
 	
 	@ManyToOne
 	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
+	@JsonBackReference
 	private MedicalRecords medicalRecords;
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
 	@JsonBackReference("appType-apps")
 	private AppointmentType appType;
-
+	/*
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "appointment_id")
+	@JsonBackReference("appReq-app")
+	private AppointmentRequest request;
+*/
 	public Appointment() {}
-	
-	public Appointment(Date date, Date time, AppointmentType type, Double discount,
+	/*
+	public Appointment(Long id, Date date, Date startTime, Double discount, Boolean confirmed, Patient patient,
+			MedicalReport medicalReport, Ordination ordination, Clinic clinic, Doctor doctor,
+			MedicalRecords medicalRecords, AppointmentType appType, AppointmentRequest request) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = new Date(startTime.getTime() + appType.getDuration()*3600*1000);
+		this.discount = discount;
+		this.confirmed = confirmed;
+		this.patient = patient;
+		this.medicalReport = medicalReport;
+		this.ordination = ordination;
+		this.clinic = clinic;
+		this.doctor = doctor;
+		this.medicalRecords = medicalRecords;
+		this.appType = appType;
+		this.request = request;
+	}*/
+
+	public Appointment(Date date, Date startTime, AppointmentType type, Double discount,
 			Boolean confirmed, Patient patient, MedicalReport medicalReport, Ordination ordination, Doctor doctor) {
 		super();
 		this.date = date;
-		this.time = time;
+		this.startTime = startTime;
+		this.endTime = new Date(startTime.getTime() + appType.getDuration()*3600*1000);
 		this.appType = type;
 		this.discount = discount;
 		this.confirmed = confirmed;
@@ -101,12 +135,20 @@ public class Appointment {
 		this.date = date;
 	}
 
-	public Date getTime() {
-		return time;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setTime(Date time) {
-		this.time = time;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public AppointmentType getAppType() {
@@ -173,9 +215,35 @@ public class Appointment {
 		this.clinic = clinic;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public MedicalRecords getMedicalRecords() {
+		return medicalRecords;
+	}
+
+	public void setMedicalRecords(MedicalRecords medicalRecords) {
+		this.medicalRecords = medicalRecords;
+	}
+/*
+	public AppointmentRequest getRequest() {
+		return request;
+	}
+
+	public void setRequest(AppointmentRequest request) {
+		this.request = request;
+	}
+*/
 	@Override
 	public String toString() {
-		return "Appointment [date=" + date + ", time=" + time + ", appType=" + appType + ", discount=" + discount
-				+ ", ordination=" + ordination + ", clinic=" + clinic + "]";
+		return "Appointment [id=" + id + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
+				+ ", discount=" + discount + ", confirmed=" + confirmed + ", patient=" + patient + ", medicalReport="
+				+ medicalReport + ", ordination=" + ordination + ", clinic=" + clinic + ", doctor=" + doctor
+				+ ", medicalRecords=" + medicalRecords + ", appType=" + appType + "]";
 	}
 }

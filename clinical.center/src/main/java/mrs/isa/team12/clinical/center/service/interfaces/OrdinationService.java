@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.service.interfaces;
 import java.util.List;
 
 import mrs.isa.team12.clinical.center.model.Ordination;
+import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 public interface OrdinationService {
 
@@ -11,6 +12,14 @@ public interface OrdinationService {
 	Ordination findOneByNameAndOrdinationNumber(String name, Integer ordinationNumber);
 	
 	List<Ordination> findAllByClinicId(Long clinicId);
+	
+	List<Ordination> findAllByClinicIdAndType(Long clinicId, OrdinationType type);
+	
+	List<Ordination> findAllByClinicIdAndNameContainingIgnoreCaseAndType(Long clinicId, String name, OrdinationType type);
+	
+	List<Ordination> findAllByClinicIdAndOrdinationNumberAndType(Long clinicId, Integer ordinationNumber, OrdinationType type);
+	
+	List<Ordination> findAllByClinicIdAndNameContainingIgnoreCaseAndOrdinationNumberAndType(Long clinicId, String name, Integer ordinationNumber, OrdinationType type);
 	
 	Ordination save(Ordination o);
 	

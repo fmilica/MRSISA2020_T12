@@ -34,6 +34,14 @@ $(document).ready(function() {
 			return;
 		}
 		
+		var dateObject = new Date(dateOfBirthV);
+        var currentDate = new Date();
+        
+        if(currentDate < dateObject){
+            alert("Impossible date of birth!")
+            return;
+        }
+
 		var newPatient = {
 			email: emailV,
 			name: nameV,

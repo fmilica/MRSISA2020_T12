@@ -24,6 +24,7 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
@@ -31,6 +32,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
 @RestController
 @RequestMapping("theGoodShepherd/patient")
@@ -43,6 +45,7 @@ public class PatientController {
 	private AppointmentService appointmentService;
 	private AppointmentTypeService appointmentTypeService;
 	private ClinicAdminService clinicAdminService;
+	private RegisteredUserService userService;
 	
 	@Autowired
 	private HttpSession session;
@@ -50,7 +53,8 @@ public class PatientController {
 	@Autowired
 	public PatientController(PatientService patientService, AppointmentRequestService appointmentRequestService,
 			ClinicService clinicService, DoctorService doctorService, AppointmentService appointmentService,
-			AppointmentTypeService appointmentTypeService, ClinicAdminService clinicAdminService) {
+			AppointmentTypeService appointmentTypeService, ClinicAdminService clinicAdminService,
+			RegisteredUserService userService) {
 		this.patientService = patientService;
 		this.appointmentRequestService = appointmentRequestService;
 		this.clinicService = clinicService;
@@ -58,6 +62,7 @@ public class PatientController {
 		this.appointmentService = appointmentService;
 		this.appointmentTypeService = appointmentTypeService;
 		this.clinicAdminService = clinicAdminService;
+		this.userService = userService;
 	}
 	
 	/*
@@ -105,10 +110,13 @@ public class PatientController {
 		}
 		
 		// provera da li postoji
-		// TREBA DA PROVERAVA U SVIM BAZAMA, JEDINSTVEN MEDJU SVIMA!!!
-		Patient existing = patientService.findOneByEmail(patient.getEmail());
+		RegisteredUser existing = userService.findOneByEmail(patient.getEmail());
 		if (existing != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		existing = userService.findOneBySecurityNumber(patient.getSecurityNumber());
+		if (existing != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified security number already exists!");
 		}
 		// ne postoji u bazi
 		// sacuvamo ga
@@ -132,7 +140,7 @@ public class PatientController {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
 		appointment.setDate(sdf1.parse("12.6.2020."));
-		appointment.setTime(sdf2.parse("12:00"));
+		appointment.setStartTime(sdf2.parse("12:00"));
 		//ovo je izdvojeno odeljenje i brise se cim posaljemo datum preko ajaxa
 		
 		if (session.getAttribute("currentUser") == null) {

@@ -64,7 +64,7 @@ public class ClinicAdminImpl implements ClinicAdminService {
 			mail.setSubject("Appointment request accepted!");
 			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your appointment request!\n" + 
 					appointment.getAppType().getName() + " appointment scheduled for " + 
-					sdf1.format(appointment.getDate()) + " at " + sdf2.format(appointment.getTime()) +
+					sdf1.format(appointment.getDate()) + " at " + sdf2.format(appointment.getStartTime()) +
 					" in clinic " + appointment.getClinic().getName() + ", ordination " + appointment.getOrdination().getName() +
 					", by doctor "+ appointment.getDoctor().getName() + " " + appointment.getDoctor().getSurname() + ".\n" +
 					"Your appointment costs " + appointment.getAppType().getPrice() + " with " + disc + "% of discount." +

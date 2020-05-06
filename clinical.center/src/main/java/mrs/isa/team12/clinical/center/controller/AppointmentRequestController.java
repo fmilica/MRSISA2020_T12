@@ -50,7 +50,7 @@ public class AppointmentRequestController {
 		
 		List<AppointmentRequest> reqs = appointmentRequestService.findAllByClinic(currentUser.getClinic());
 		System.out.println(reqs);
-		System.out.println(reqs.get(0).getAppointment().getAppType().getName());
+		//System.out.println(reqs.get(0).getAppointment().getAppType().getName());
 		return new ResponseEntity<>(reqs, HttpStatus.OK);
 	}
 }
