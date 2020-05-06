@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import mrs.isa.team12.clinical.center.model.enums.Specialization;
 
@@ -25,10 +26,10 @@ public class Doctor extends MedicalPersonnel {
 	private Specialization specialization;
 	
 	// u rasponu od 0 do 24
-	@Column(name = "start_work", unique = false, nullable = false)
+	@Column(name = "start_work", unique = false, nullable = true)
 	private Integer startWork;
 	
-	@Column(name = "end_work", unique = false, nullable = false)
+	@Column(name = "end_work", unique = false, nullable = true)
 	private Integer endWork;
 	
 	@Column(name = "rating", unique = false, nullable = true)
@@ -36,11 +37,14 @@ public class Doctor extends MedicalPersonnel {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-doctors")
 	private Clinic clinic;
 	
 	//@OneToMany(cascade = {ALL}, fetch = LAZY)
 	@ManyToMany(mappedBy = "doctors")
+	//@JsonManagedReference("doctor-appTypes")
+	@JsonBackReference("doctor-appTypes")
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")

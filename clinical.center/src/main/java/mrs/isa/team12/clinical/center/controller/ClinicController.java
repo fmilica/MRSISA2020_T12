@@ -94,11 +94,11 @@ public class ClinicController {
 	}
 	
 	/*
-	 url: GET localhost:8081/theGoodShepherd/clinics/{appTypeName}
+	 url: GET localhost:8081/theGoodShepherd/clinics/filterClinics/{appTypeName}
 	 HTTP request for viewing clinics that have appointmentType specified by name
 	 returns ResponseEntity object
 	 */
-	@GetMapping(value = "/{appTypeName}",
+	@GetMapping(value = "/filterClinics/{appTypeName}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Clinic>> getClinicsByAppTypeName(@PathVariable("appTypeName") String appTypeName) {
 		Patient currentUser;

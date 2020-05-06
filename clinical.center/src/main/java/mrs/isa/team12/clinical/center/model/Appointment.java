@@ -45,7 +45,8 @@ public class Appointment {
 
 	@ManyToOne
 	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("patient-apps")
 	private Patient patient;
 	
 	@OneToOne(fetch = LAZY)
@@ -53,13 +54,14 @@ public class Appointment {
 	private MedicalReport medicalReport;
 	
 	@ManyToOne
-	@JsonBackReference
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
+	//@JsonBackReference
 	private Ordination ordination;
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-apps")
 	private Clinic clinic;
 	
 	@ManyToOne
@@ -72,6 +74,7 @@ public class Appointment {
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
+	@JsonBackReference("appType-apps")
 	private AppointmentType appType;
 
 	public Appointment() {}

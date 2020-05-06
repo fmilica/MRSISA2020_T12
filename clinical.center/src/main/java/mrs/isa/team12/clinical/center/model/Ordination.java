@@ -38,7 +38,8 @@ public class Ordination {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-ordinations")
 	private Clinic clinic;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "ordination")

@@ -16,7 +16,8 @@ public class Nurse extends MedicalPersonnel{
 	/*nullable = false*/
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-nurses")
 	private Clinic clinic;
 
 	public Nurse() {}

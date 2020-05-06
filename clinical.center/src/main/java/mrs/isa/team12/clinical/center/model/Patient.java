@@ -13,13 +13,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "patient")
 public class Patient extends RegisteredUser {
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonManagedReference("patient-apps")
 	private Set<Appointment> appointments;
 	
 	@OneToOne(fetch = LAZY)
@@ -29,7 +31,8 @@ public class Patient extends RegisteredUser {
 	/*nullable = false*/
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinicalcentre-patients")
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")

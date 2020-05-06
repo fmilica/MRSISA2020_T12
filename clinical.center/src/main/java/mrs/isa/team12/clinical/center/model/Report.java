@@ -36,7 +36,8 @@ public class Report {
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-report")
 	private Clinic clinic;
 	
 	@ManyToMany(cascade = {ALL}, fetch = LAZY)

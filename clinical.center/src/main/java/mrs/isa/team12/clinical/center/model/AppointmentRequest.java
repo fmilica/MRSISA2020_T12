@@ -39,7 +39,8 @@ public class AppointmentRequest {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-appReqs")
 	private Clinic clinic;
 
 	public AppointmentRequest() {}

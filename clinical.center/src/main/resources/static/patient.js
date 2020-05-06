@@ -78,7 +78,7 @@ $(document).ready(function() {
 		newAppointment.appType = appTypeName
 
 		// filtriranje klinika na beku
-		clinicsTable.ajax.url("../../theGoodShepherd/clinics/"+appTypeName)
+		clinicsTable.ajax.url("../../theGoodShepherd/clinics/filterClinics/"+appTypeName)
 		clinicsTable.ajax.reload()
 		// sakrije doktore
 		$('#doctorTableDiv').hide()

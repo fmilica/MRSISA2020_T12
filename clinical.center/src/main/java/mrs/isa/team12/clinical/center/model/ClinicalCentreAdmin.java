@@ -16,7 +16,9 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	/*Nullable sam promenila na true samo da bih mogla nesto da probam inace treba da bude false*/
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
+	//@JsonBackReference("clinicalcentre-admins")
+	@JsonBackReference("clinicalcentre-admins")
 	private ClinicalCentre clinicalCentre;
 	
 	public ClinicalCentreAdmin() {}

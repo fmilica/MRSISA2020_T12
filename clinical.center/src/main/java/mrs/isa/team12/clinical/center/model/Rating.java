@@ -34,7 +34,8 @@ public class Rating {
 	
 	@ManyToOne
 	@JoinColumn(name="clinic_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonBackReference("clinic-ratings")
 	private Clinic clinic;
 	
 	@ManyToOne
