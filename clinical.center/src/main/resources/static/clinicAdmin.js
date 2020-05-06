@@ -290,6 +290,14 @@ $(document).ready(function() {
 			return;
 		}
 		
+		var dateObject = new Date(dateOfBirthV);
+        var currentDate = new Date();
+        
+        if(currentDate < dateObject){
+            alert("Wrong date of birth!")
+            return;
+        }
+		
 		var newDoctor = {
 			email: emailV,
 			name: nameV,

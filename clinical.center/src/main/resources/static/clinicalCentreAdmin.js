@@ -113,6 +113,7 @@ $(document).ready(function() {
             	
             	$('#emailC').val('')
 		    	$('#passwordC').val('')
+		    	$("#passwordRepeatC").val('')
 		    	$('#nameC').val('')
 		    	$('#surnameC').val('')
 		        $('#countryC').val('')
@@ -185,6 +186,7 @@ $(document).ready(function() {
     	e.preventDefault()
     	$('#emailC').val('')
     	$('#passwordC').val('')
+    	$("#passwordRepeatC").val('')
     	$('#nameC').val('')
     	$('#surnameC').val('')
         $('#countryC').val('')
