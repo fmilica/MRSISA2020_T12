@@ -117,6 +117,23 @@ $(document).ready(function() {
 
 	/*View all appointment types*/
 	$("#clinicAppTypes").on('click', function(event){
+		
+		$('#certifiedDoctors').select2();
+		
+		$.ajax({
+			type : "GET",
+			url : "../../theGoodShepherd/clinicAdmin/getDoctors",
+			success : function(data) {
+				$('#certifiedDoctors').empty();
+				$.each(data, function(index, appType) {
+					$("#certifiedDoctors").append(new Option(appType.name, appType.name));
+				})
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+		
 		event.preventDefault()
 		if (!$.fn.DataTable.isDataTable('#appTypeTable')) {
 			appTypeTable = $('#appTypeTable').DataTable({

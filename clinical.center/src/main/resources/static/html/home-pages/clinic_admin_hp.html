@@ -51,6 +51,10 @@
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
+	
+	<!-- Select2 -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 </head>
 
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-cyan">
@@ -732,7 +736,23 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7 validate-input"  data-validate="Duration must be a number!">
-														<input type="text" id="appointment_duration" name="duration" data-required="1"  class="form-control input-height" />
+														<select class="form-control input-height" id="appointment_duration">
+															<option selected="selected" value="1">1</option>
+															<option value="2">2</option>
+															<option value="2">3</option>
+															<option value="2">4</option>
+															<option value="2">5</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Certified Doctors
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input"  data-validate="Price must be a number!">
+														<select class="form-control input-height" multiple="multiple" id="certifiedDoctors">
+														</select>
 													</div>
 												</div>
 												<div class="form-group row">
