@@ -41,6 +41,9 @@ public class Clinic {
 	
 	@Column(name="description", unique=false, nullable=false)
 	private String description;
+	
+	@Column(name="rating", unique=false, nullable=true)
+	private Double rating;
 
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
@@ -131,7 +134,7 @@ public class Clinic {
 		this.name = name;
 	}
 
-	public Clinic(Long id, String name, String address, String city, String country, String description,
+	public Clinic(Long id, String name, String address, String city, String country, String description, Double rating,
 			ClinicalCentre clinicalCentre, Report report,
 			DiagnosePerscription diagnosePerscription, Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients,
 			Set<AppointmentType> appointmentTypes, Set<Appointment> appointments, Set<ClinicAdmin> admins, 
@@ -144,6 +147,7 @@ public class Clinic {
 		this.city = city;
 		this.country = country;
 		this.description = description;
+		this.rating = rating;
 		this.clinicalCentre = clinicalCentre;
 		this.report = report;
 		this.diagnosePerscription = diagnosePerscription;
@@ -195,6 +199,13 @@ public class Clinic {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public Double getRating() {
+		return rating;
+	}
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
 	public ClinicalCentre getClinicalCentre() {
 		return clinicalCentre;
 	}

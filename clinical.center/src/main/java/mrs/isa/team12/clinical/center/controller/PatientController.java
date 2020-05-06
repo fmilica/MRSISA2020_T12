@@ -148,7 +148,7 @@ public class PatientController {
 		}
 		Patient currentPatient = (Patient) session.getAttribute("currentUser");
 		try {
-			Doctor doctor = doctorService.getDoctorById(appointment.getDoctor().getId());
+			Doctor doctor = doctorService.findOneById(appointment.getDoctor().getId());
 			Clinic clinic = clinicService.findOneById(appointment.getClinic().getId());
 			
 			AppointmentRequest appointmentRequest = new AppointmentRequest(appointment, new Date(), false, clinic);

@@ -16,7 +16,7 @@ public interface DoctorService {
 	
 	List<Doctor> findAllByClinicId(Long id);
 	
-	Doctor getDoctorById(Long id);
+	Doctor findOneById(Long id);
 	
 	List<Doctor> findAllByAppointmentTypes(AppointmentType a);
 	

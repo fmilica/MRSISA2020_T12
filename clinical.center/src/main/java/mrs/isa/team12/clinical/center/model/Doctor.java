@@ -55,6 +55,9 @@ public class Doctor extends MedicalPersonnel {
 
 	public Doctor() {}
 
+	public Doctor(Long id) {
+		this.setId(id);
+	}
 
 	public Doctor(Integer startWork, Integer endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
 			Set<Appointment> appointments, Set<Rating> ratings) {

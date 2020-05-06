@@ -36,7 +36,6 @@ $(document).ready(function() {
 		var nameV = $('#doctorFilterName').val()
 		var surnameV = $('#doctorFilterSurname').val()
 		var ratingV = $('#doctorFilterRating').val()
-		alert("pls da radimo filtriranje na frontu, pls pls pls")
 		//doctorsClinicTable.ajax.url("../../theGoodShepherd/clinics/getDoctors/"+clinicId/*+"/"+newAppointment.appType*/+"/"+nameV+"/"+surnameV+"/"+ratingV)
 	})
 
@@ -102,13 +101,7 @@ $(document).ready(function() {
 			//{ data: 'rating'},
 			//{ data: 'appType.price.price'}
 			{ data: 'address'},
-			{
-				// rating
-				data: null,
-				render: function () {
-					return "Not known"
-				}
-			},
+			{ data: 'rating'},
 			{
 				// price
 				data: null,
@@ -116,7 +109,7 @@ $(document).ready(function() {
 					if (newAppointment.appType) {
 						for (var i = 0; i < data.appointmentTypes.length; i++) {
 							if (data.appointmentTypes[i].name == newAppointment.appType) {
-								return data.appointmentTypes[i].price
+								return data.appointmentTypes[i].price + " &euro;"
 							}
 						}
 						return ""
@@ -183,7 +176,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 			columns: [
 				{ data: 'name'},
 				{ data: 'surname'},
-				//{ data: 'rating'},
+				{ data: 'rating'},
 				/*{
 					data: null,
 					render: function () {
@@ -224,8 +217,9 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 function createAppointment(doctorId, time) {
 	newAppointment.doctorId = doctorId;
 	newAppointment.time = time
-	alert("redirekt na stranicu sa svim podacima")
+	//alert("redirekt na stranicu sa svim podacima")
 	alert(JSON.stringify(newAppointment))
+	alert("U narednom sprintu, veza sa slanjem emaila!")
 }
 
 function logInPatient(email, password) {

@@ -19,21 +19,25 @@ import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 @RestController
 @RequestMapping("theGoodShepherd/appointmentType")
 public class AppointmentTypeController {
 
 	private AppointmentTypeService appointmentTypeService;
+	private DoctorService doctorService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public AppointmentTypeController(AppointmentTypeService appointmentTypeService) {
+	public AppointmentTypeController(AppointmentTypeService appointmentTypeService, DoctorService doctorService) {
 		this.appointmentTypeService = appointmentTypeService;
+		this.doctorService = doctorService;
 	}
 	
 	/*
@@ -108,7 +112,13 @@ public class AppointmentTypeController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-
+		
+		Set<Doctor> certified = new HashSet<Doctor>();
+		for(Doctor d : appType.getDoctors()) {
+			Doctor d1 = doctorService.findOneById(d.getId());
+			certified.add(d1);
+		}
+		
 		AppointmentType existing = appointmentTypeService.findOneByNameAndClinicId(appType.getName(), currentUser.getClinic().getId());
 		
 		if (existing == null) {
@@ -117,6 +127,7 @@ public class AppointmentTypeController {
 			
 			//currentUser.getClinic().addAppType(appType);
 			appType.setClinic(currentUser.getClinic());
+			appType.setDoctors(certified);
 			
 			AppointmentType saved = appointmentTypeService.save(appType);
 			

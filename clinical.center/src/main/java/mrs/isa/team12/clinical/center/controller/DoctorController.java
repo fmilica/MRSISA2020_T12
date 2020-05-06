@@ -114,8 +114,6 @@ public class DoctorController {
 		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
 		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicAndAppointmentTypesIn(clinic, types);
 		
-		System.out.println(certifiedClinicDoctors);
-		
 		return new ResponseEntity<>(certifiedClinicDoctors, HttpStatus.OK);
 	}
 	
@@ -157,7 +155,7 @@ public class DoctorController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Doctor getDoctorById(@PathVariable("id") Long id) {
 		// ko koristi ovo od korisnika, ko ima prava?
-		return doctorService.getDoctorById(id);
+		return doctorService.findOneById(id);
 	}
 	
 	/*

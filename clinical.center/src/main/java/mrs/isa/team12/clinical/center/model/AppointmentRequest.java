@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 
 import java.util.Date;
 
@@ -26,7 +26,7 @@ public class AppointmentRequest {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@OneToOne(fetch = LAZY)
+	@OneToOne(fetch = EAGER)
 	@JoinColumn(name = "appointment_id")
 	private Appointment appointment;
 	

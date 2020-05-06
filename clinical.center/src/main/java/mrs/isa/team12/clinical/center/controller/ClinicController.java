@@ -126,7 +126,7 @@ public class ClinicController {
 		}
 		
 		
-		System.out.println(sertifiedDoctors);
+		//System.out.println(sertifiedDoctors);
 		//System.out.println(clinicsWithSertifiedDoctors.get(0).getAppointmentTypes());
 		
 		//System.out.println(doctorsByAppTypeName);

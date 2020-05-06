@@ -4,6 +4,13 @@ var doctorTable;
 var examReqTable;
 var examRoomTable;
 
+var examReq = {
+	reqId: "",
+	ordId: "",
+	date: "",
+	time: ""
+}
+
 function logInClinicAdmin(email, password){
 	
     $.ajax({
@@ -125,8 +132,8 @@ $(document).ready(function() {
 			url : "../../theGoodShepherd/clinicAdmin/getDoctors",
 			success : function(data) {
 				$('#certifiedDoctors').empty();
-				$.each(data, function(index, appType) {
-					$("#certifiedDoctors").append(new Option(appType.name, appType.name));
+				$.each(data, function(index, doctor) {
+					$("#certifiedDoctors").append(new Option(doctor.name + " " + doctor.surname, doctor.id));
 				})
 			},
 			error : function(response) {
@@ -168,6 +175,7 @@ $(document).ready(function() {
 		var nameV = $("#appointment_name").val()
 		var durationV = $("#appointment_duration").val()
 		var priceV = $("#appointment_price").val()
+		var doctorsV1 = $("#certifiedDoctors").val()
 
 		if (!nameV || !durationV || !priceV) {
 			alert("Not all required fields are filled!")
@@ -184,10 +192,16 @@ $(document).ready(function() {
 			return
 		}
 
+		var doctorsV = []
+		for (var i = 0; i < doctorsV1.length; i++) {
+			doctorsV.push(parseInt(doctorsV1[i]))
+		}
+
 		var appType = {
 			name: nameV,
 			duration: durationV,
-			price: priceV
+			price: priceV,
+			doctors: doctorsV
 		}
 
 		$.ajax({
@@ -422,17 +436,19 @@ $(document).ready(function() {
 	// pretplata svih elemenata sa klasom na klik
 	$('body').on('click', 'button.table-button', function() {
 		// odabrao je da zakaze neki pregled, sada je to zapamceno
-		alert("You choose this appointment to schedule!")
+		alert("Examination request chosen for scheduling!")
 		// podesi parametre koji je aktivan
 		var examReqId = $(this).attr('id')
+		examReq.reqId = examReqId
+		examRoomTable.ajax.reload()
 	});
-	$('body').on('click', 'button.table-button-examReq', function() {
+	$('body').on('click', 'button.table-button-schedule', function() {
 		// prikupljanje podataka i kreiranje pregleda
-		var doctorId = $(this).attr('id')
-		var time = $('#time'+doctorId).val()
-		createAppointment(doctorId, time)
+		var ordinationId = $(this).attr('id')
+		var time = $('#time'+ordinationId).val()
+		scheduleOrdination(ordinationId, time)
 	});
-/*
+
 	$('#clinicExamReq').click(function(event) {
 		// tabela sa svim zahtevima
 		event.preventDefault()
@@ -456,26 +472,31 @@ $(document).ready(function() {
 						doctorId: "",
 						time: ""
 					}
-					*//*
+					*/
 					url: "../../theGoodShepherd/appointmentRequest",
 					dataSrc: ''
 				},
 				columns: [
-					{ data: 'doctor'},
-					{ data: 'date'},
-					{ data: 'startTime'},
-					{ data: 'endTime'},
 					{
 						data: null,
 						render: function (data) {
-							var button = '<button id="'+data.id+'" class="btn btn-info table-button">Choose</button>';
+							return data.appointment.doctor.name + " " + data.appointment.doctor.surname
+						}
+					},
+					{ data: 'appointment.date'},
+					{ data: 'appointment.startTime'},
+					{ data: 'appointment.endTime'},
+					{
+						data: null,
+						render: function (data) {
+							var button = '<button id="'+data.id+'" class="btn btn-info table-button">Choose request</button>';
 							return button;
 						}
 					}]
 			})
 		}
-*/
-	$('#clinicExamReq').click(function(event) {
+
+		//$('#clinicExamReq').click(function(event) {
 		// tabela sa sobama za pregled
 		if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
 			examRoomTable = $('#examRoomTable').DataTable({
@@ -486,18 +507,22 @@ $(document).ready(function() {
 				columns: [
 					{ data: 'name'},
 					{ data: 'ordinationNumber'},
-					//{ data: 'firstFreeTime'},
 					{
 						data: null,
-						render: function () {
-							return "NOW RUN"
+						render: function (data) {
+						return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
+									'<option selected="selected" value="12:00">12:00</option>' + 
+									'<option value="14:00">14:00</option>' +
+							'</select>'
 						}
 					},
 					{
 						data: null,
 						render: function (data) {
-							var button = '<button id="'+data.id+'" class="btn btn-info table-button">Schedule</button>';
-							return button;
+							if (!examReq.reqId) {
+								return "Specify examination request to schedule"
+							}
+							return '<button id="'+data.id+'" class="btn btn-info table-button-schedule">Schedule ordination</button>';
 						}
 					}]
 			})
@@ -532,6 +557,12 @@ $(document).ready(function() {
 			examRoomTable.ajax.reload()
 		}
 	})
+	
+	function scheduleOrdination(ordinationId, time) {
+		examReq.ordId = ordinationId
+		//examReq.time = time
+		alert("You scheduled an examination room for an appointment!")
+	}
 
 })
 
@@ -556,6 +587,7 @@ function clearAppTypeForm() {
 	$("#appointment_name").val('')
 	$("#appointment_duration").val('')
 	$("#appointment_price").val('')
+	$('#certifiedDoctors').val(null).trigger('change')
 }
 
 function clearDoctorForm() {

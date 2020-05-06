@@ -17,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -32,11 +31,11 @@ public class Appointment {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
-	@Column(name = "app_start_time", unique = false, nullable = false )
+	@Column(name = "app_start_time", unique = false, nullable = true )
 	@Temporal(TemporalType.TIME)
 	private Date startTime;
 	
-	@Column(name = "app_end_time", unique = false, nullable = false)
+	@Column(name = "app_end_time", unique = false, nullable = true)
 	@Temporal(TemporalType.TIME)
 	private Date endTime;
 	
@@ -56,12 +55,10 @@ public class Appointment {
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "medical_report_id")
-	@JsonBackReference
 	private MedicalReport medicalReport;
 	
 	@ManyToOne
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
 	private Ordination ordination;
 	
 	@ManyToOne
@@ -72,12 +69,10 @@ public class Appointment {
 	
 	@ManyToOne
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
-	@JsonBackReference("doctor-apps")
 	private Doctor doctor;
 	
 	@ManyToOne
 	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
-	@JsonBackReference
 	private MedicalRecords medicalRecords;
 	
 	@ManyToOne(fetch = LAZY)

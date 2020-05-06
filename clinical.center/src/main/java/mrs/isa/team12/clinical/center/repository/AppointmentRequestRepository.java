@@ -14,4 +14,6 @@ public interface AppointmentRequestRepository extends JpaRepository<AppointmentR
 	AppointmentRequest findOneById(Long id);
 	
 	List<AppointmentRequest> findAllByClinic(Clinic clinic);
+	
+	List<AppointmentRequest> findAllByClinicAndApproved(Clinic clinic, Boolean approved);
 }

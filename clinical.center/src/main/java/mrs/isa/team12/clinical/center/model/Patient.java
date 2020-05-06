@@ -30,7 +30,7 @@ public class Patient extends RegisteredUser {
 	
 	/*nullable = false*/
 	@ManyToOne
-	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	//@JsonBackReference
 	@JsonBackReference("clinicalcentre-patients")
 	private ClinicalCentre clinicalCentre;
@@ -48,11 +48,11 @@ public class Patient extends RegisteredUser {
 		this.clinicalCentre = clinicalCentre;
 		this.ratings = ratings;
 	}
-/*
+
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
-*/
+
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}

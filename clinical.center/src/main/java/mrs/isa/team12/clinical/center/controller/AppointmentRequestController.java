@@ -48,8 +48,8 @@ public class AppointmentRequestController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		List<AppointmentRequest> reqs = appointmentRequestService.findAllByClinic(currentUser.getClinic());
-		System.out.println(reqs);
+		List<AppointmentRequest> reqs = appointmentRequestService.findAllByClinicAndApproved(currentUser.getClinic(), false);
+		//System.out.println(reqs);
 		//System.out.println(reqs.get(0).getAppointment().getAppType().getName());
 		return new ResponseEntity<>(reqs, HttpStatus.OK);
 	}

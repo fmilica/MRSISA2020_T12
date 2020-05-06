@@ -12,4 +12,6 @@ public interface AppointmentRequestService {
 	AppointmentRequest save(AppointmentRequest ar);
 	
 	List<AppointmentRequest> findAllByClinic(Clinic clinic);
+	
+	List<AppointmentRequest> findAllByClinicAndApproved(Clinic clinic, Boolean approved);
 }

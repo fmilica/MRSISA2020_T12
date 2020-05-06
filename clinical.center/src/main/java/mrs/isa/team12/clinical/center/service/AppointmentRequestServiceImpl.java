@@ -39,4 +39,10 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 	public List<AppointmentRequest> findAllByClinic(Clinic clinic) {
 		return appointmentRequestRep.findAllByClinic(clinic);
 	}
+
+	@Override
+	public List<AppointmentRequest> findAllByClinicAndApproved(Clinic clinic, Boolean approved) {
+		return appointmentRequestRep.findAllByClinicAndApproved(clinic, approved);
+	}
+
 }
