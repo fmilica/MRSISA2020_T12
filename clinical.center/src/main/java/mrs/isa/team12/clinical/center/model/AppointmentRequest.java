@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -29,6 +31,7 @@ public class AppointmentRequest {
 	private Appointment appointment;
 	
 	@Column(name = "request_date", unique = false, nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date requestDate;
 	
 	@Column(name = "approved", unique = false, nullable = false)

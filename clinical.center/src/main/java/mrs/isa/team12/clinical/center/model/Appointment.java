@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -25,10 +27,12 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name = "date", unique = false, nullable = false )
+	@Column(name = "app_date", unique = false, nullable = false )
+	@Temporal(TemporalType.DATE)
 	private Date date;
 	
-	@Column(name = "time", unique = false, nullable = false )
+	@Column(name = "app_time", unique = false, nullable = false )
+	@Temporal(TemporalType.TIME)
 	private Date time;
 	
 	//type
@@ -41,6 +45,7 @@ public class Appointment {
 
 	@ManyToOne
 	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
+	@JsonBackReference
 	private Patient patient;
 	
 	@OneToOne(fetch = LAZY)
@@ -48,6 +53,7 @@ public class Appointment {
 	private MedicalReport medicalReport;
 	
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
 	private Ordination ordination;
 	
@@ -65,8 +71,8 @@ public class Appointment {
 	private MedicalRecords medicalRecords;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "type_id")
-	private AppointmentType type;
+	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
+	private AppointmentType appType;
 
 	public Appointment() {}
 	
@@ -75,7 +81,7 @@ public class Appointment {
 		super();
 		this.date = date;
 		this.time = time;
-		this.type = type;
+		this.appType = type;
 		this.discount = discount;
 		this.confirmed = confirmed;
 		this.patient = patient;
@@ -100,12 +106,12 @@ public class Appointment {
 		this.time = time;
 	}
 
-	public AppointmentType getType() {
-		return type;
+	public AppointmentType getAppType() {
+		return appType;
 	}
 
-	public void setType(AppointmentType type) {
-		this.type = type;
+	public void setAppType(AppointmentType appType) {
+		this.appType = appType;
 	}
 
 	public Double getDiscount() {
@@ -166,7 +172,7 @@ public class Appointment {
 
 	@Override
 	public String toString() {
-		return "Appointment [date=" + date + ", time=" + time + ", type=" + type + ", discount=" + discount
+		return "Appointment [date=" + date + ", time=" + time + ", appType=" + appType + ", discount=" + discount
 				+ ", ordination=" + ordination + ", clinic=" + clinic + "]";
 	}
 }

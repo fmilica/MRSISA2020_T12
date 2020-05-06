@@ -12,7 +12,9 @@ var doctorsClinicTable;
 
 $(document).ready(function() {
 	
-	
+	// postavljanje minimalne vrednosti koju pacijent moze da odabere za datum
+	// (danas)
+	document.getElementById("filterAppDate").min = new Date().toISOString().split("T")[0];
 
 	// pretplata svih elemenata sa klasom na klik
 	$('body').on('click', 'button.table-button', function() {
@@ -44,6 +46,7 @@ $(document).ready(function() {
 			type : "GET",
 			url : "../../theGoodShepherd/appointmentType/getAllTypesNames",
 			success : function(data) {
+				$('#filterAppType').find('option').remove()
 				$.each(data, function(index, appType) {
 					$("#filterAppType").append(new Option(appType.name, appType.name));
 				})
@@ -69,7 +72,7 @@ $(document).ready(function() {
 	$('#filterClinics').click(function(e) {
 		e.preventDefault()
 		// postavljanje parametara pregleda
-		var date = "datum"//$('#filterAppDate').val()
+		var date = $('#filterAppDate').val()
 		newAppointment.date = date
 		var appTypeName = $('#filterAppType').val()
 		newAppointment.appType = appTypeName
@@ -77,7 +80,6 @@ $(document).ready(function() {
 		// filtriranje klinika na beku
 		clinicsTable.ajax.url("../../theGoodShepherd/clinics/"+appTypeName)
 		clinicsTable.ajax.reload()
-		// TODO
 		// sakrije doktore
 		$('#doctorTableDiv').hide()
 		// doda novu vrednost
@@ -101,12 +103,14 @@ $(document).ready(function() {
 			//{ data: 'appType.price.price'}
 			{ data: 'address'},
 			{
+				// rating
 				data: null,
 				render: function () {
 					return "Not known"
 				}
 			},
 			{
+				// price
 				data: null,
 				render: function (data) {
 					if (newAppointment.appType) {
@@ -122,6 +126,7 @@ $(document).ready(function() {
 				}
 			},
 			{
+				// appointmentType
 				data: null,
 				render: function () {
 					if (newAppointment.appType) {
@@ -144,10 +149,12 @@ $(document).ready(function() {
 					}
 				}
 			},*/
-			//{ data: 'price'},
 			{
 				data: null,
 				render: function (data) {
+					if (!newAppointment.date || !newAppointment.appType) {
+						return "Choose all parameters to view available doctors"
+					}
 					var button = '<button id="'+data.id+'" class="btn btn-info table-button" name="'+data.name+'">View doctors</button>';
 				  	return button;
 				}
@@ -170,7 +177,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		doctorsClinicTable = $('#doctorsClinicTable').DataTable({
 			responsive: true,
 			ajax: {
-				url: "../../theGoodShepherd/clinics/getDoctors/"+clinicId/*+"/"+newAppointment.appType*/,
+				url: "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appType+"/"+clinicId,
 				dataSrc: ''
 			},
 			columns: [
@@ -208,7 +215,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		$('#doctorTableDiv').show()
 	} else {
 		// jeste inicijalizovana
-		doctorsClinicTable.ajax.url("../../theGoodShepherd/clinics/getDoctors/"+clinicId)
+		doctorsClinicTable.ajax.url("../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appType+"/"+clinicId)
 		doctorsClinicTable.ajax.reload()
 		$('#doctorTableDiv').show()
 	}
@@ -228,7 +235,8 @@ function logInPatient(email, password) {
 		async: false,
 		url : "theGoodShepherd/patient/logIn//" + email + "//" + password ,
 		dataType: "json",
-		success : function(response)  {
+		success : function(output)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
 			window.location.href = "html/home-pages/patient_hp.html"
 		},
 		error : function(response) {

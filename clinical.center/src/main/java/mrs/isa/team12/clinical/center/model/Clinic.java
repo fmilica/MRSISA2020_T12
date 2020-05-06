@@ -41,47 +41,59 @@ public class Clinic {
 	@Column(name="description", unique=false, nullable=false)
 	private String description;
 
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "report_id")
+	@JsonBackReference
 	private Report report;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "diagnose_perscription_id")
+	@JsonBackReference
 	private DiagnosePerscription diagnosePerscription;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<Doctor> doctors;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<Nurse> nurses;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@JsonBackReference
 	private Set<Patient> patients;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	//@JsonBackReference
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<Appointment> appointments;
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="clinic")
+	@JsonBackReference
 	private Set<ClinicAdmin> admins;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<Ordination> ordinations;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<AppointmentRequest> appointmentRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@JsonBackReference
 	private Set<LeaveRequest> leaveRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
+	@JsonBackReference
 	private Set<Rating> ratings;
 	
 	public void add(ClinicAdmin clinicAdmin) {

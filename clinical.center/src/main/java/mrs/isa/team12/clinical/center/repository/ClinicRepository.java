@@ -23,4 +23,26 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 	// jer je ta veza ManyToMany
 	@Query("SELECT c FROM Clinic c LEFT JOIN AppointmentType a ON c.id = a.clinic WHERE a.name = ?1")
 	List<Clinic> findAllByAppointmentTypeName(String appTypeName);
+	
+	/*@Query("SELECT c "
+			+ "FROM Clinic c "
+			+ "LEFT JOIN "
+			+ "SELECT AppointmentType a LEFT JOIN AppointmentTypeDoctor ad ON a.id = ad.appointmentTypeId "
+			+ "WHERE a.name = ?1 "
+			+ "ON c.id = a.clinic")
+	sqlText = 
+    "select entityA 
+     from EntityA entityA, EntityB entityB 
+     where entityA.fieldA=entityB.fieldA 
+     and entityA.fieldC=(select sum(entityB.fieldB) 
+                         from EntityB entityB 
+                         where entityB.fieldA=entityA.fieldA)
+    @Query("SELECT c "
+    		+ "FROM Clinic c "
+    		+ "WHERE c.id = a.clinic "
+    		+ "AND  ")*/
+	/*@Query("SELECT d "
+			+ "FROM Doctor d, AppointmentTypeDoctor ad, AppointmentType a "
+			+ "WHERE d.id = ad.doctorId AND ad.appointmentTypeId = a.id AND a.name = ?1")
+	List<Clinic> findAllBySertifiedDoctor(String appTypeName);*/
 }

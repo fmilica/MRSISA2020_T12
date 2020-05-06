@@ -19,10 +19,7 @@
 	<link href="../../css/theme/responsive.css" rel="stylesheet" type="text/css" />
 	<link href="../../css/theme/theme-color.css" rel="stylesheet" type="text/css" />
 
-    <!-- radio lik javascript padajuci meni top -->
-    <script src="../../js/library/app.js" ></script>
-    <script src="../../js/library/layout.js" ></script>
-    <!-- jedan tag da fak jebse -->
+	<!-- jedan tag -->
 	<link href="../../css/theme/material_style.css" rel="stylesheet" type="text/css" />
 	<link href="../../css/theme/material.indigo-pink.min.css" rel="stylesheet" type="text/css" />
 
@@ -82,7 +79,7 @@
  						<li class="dropdown dropdown-user">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <img alt="PA" src="../../img/dp.jpg" style=" border-radius: 90%; border:10px;"/>
-                                <span class="username username-hide-on-mobile">Clinic Admin A</span>
+                                <span id="shownNameSurname" class="username username-hide-on-mobile"></span>
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
@@ -133,7 +130,7 @@
 	                                    <img src="../../img/dp.jpg" class="img-circle user-img-circle" alt="User Image" />
 	                                </div>
 	                                <div class="pull-left info">
-	                                    <p style="font-size: 16px;">Clinic Admin A</p>
+	                                    <p id="bigNameSurname" style="font-size: 16px;"></p>
 	                                </div>
 	                            </div>
 	                        </li>
@@ -150,7 +147,7 @@
 									<span class="title">Clinic Profile</span>
 									<span class="arrow"></span>
                                 </a>
-                                <ul class="sub-menu">
+                                <ul id="sub" class="sub-menu">
 	                                <li class="nav-item">
 	                                    <a id="clinicInformation" class="nav-link">
 	                                        <span class="title">Clinic Information</span>
@@ -458,16 +455,16 @@
 											<thead>
 												<tr>
 													<th>Name</th>
-													<th>Broj sale traze u specifikaciji?</th>
-													<th>First available time</th>
+													<th>Number</th>
+													<th>Available times</th>
 													<th>Schedule</th>
 												</tr>
 											</thead>
 											<tfoot>
 												<tr>
 													<th>Name</th>
-													<th>Broj sale traze u specifikaciji?</th>
-													<th>First available time</th>
+													<th>Number</th>
+													<th>Available times</th>
 													<th>Schedule</th>
 												</tr>
 											</tfoot>

@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,8 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 @RestController
@@ -25,13 +31,18 @@ import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 public class DoctorController {
 
 	private DoctorService doctorService;
+	private AppointmentTypeService appointmentTypeService;
+	private ClinicService clinicService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public DoctorController(DoctorService doctorService) {
+	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService,
+			ClinicService clinicService) {
 		this.doctorService = doctorService;
+		this.appointmentTypeService = appointmentTypeService;
+		this.clinicService = clinicService;
 	}
 	
 	/*
@@ -78,13 +89,70 @@ public class DoctorController {
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/certified/clinic/{appTypeName}/{clinicId}
+	 HTTP request for getting all doctors with appointment type given by name
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/certified/clinic/{appTypeName}/{clinicId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Doctor>> getDoctorsByAppTypeName(@PathVariable("appTypeName") String appTypeName,
+																@PathVariable("clinicId") Long clinicId) {
+		
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view certified doctors.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		Clinic clinic = clinicService.findOneById(clinicId);
+		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
+		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicAndAppointmentTypesIn(clinic, types);
+		
+		System.out.println(certifiedClinicDoctors);
+		
+		return new ResponseEntity<>(certifiedClinicDoctors, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/certified/free/clinic/{appTypeName}/{date}/{clinicId}
+	 HTTP request for getting all doctors with appointment type given by name
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/certified/clinic/{appTypeName}/{date}/{clinicId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Doctor>> getDoctorsByAppTypeName(@PathVariable("appTypeName") String appTypeName,
+																@PathVariable("date") String date,
+																@PathVariable("clinicId") Long clinicId) {
+		
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view certified doctors.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		Clinic clinic = clinicService.findOneById(clinicId);
+		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
+		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicAndAppointmentTypesIn(clinic, types);
+		
+		System.out.println(certifiedClinicDoctors.get(0).getAppointments());
+		
+		return new ResponseEntity<>(certifiedClinicDoctors, HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/doctor/findOne/{id}
 	 HTTP request for getting doctor from database with given id
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "/findOne/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Doctor getDoctorById(@PathVariable("id") Long id){
+	public Doctor getDoctorById(@PathVariable("id") Long id) {
 		// ko koristi ovo od korisnika, ko ima prava?
 		return doctorService.getDoctorById(id);
 	}

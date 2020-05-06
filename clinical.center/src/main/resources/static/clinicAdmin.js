@@ -1,6 +1,6 @@
 var ordinationTable;
 var appTypeTable;
-var doctorsTable;
+var doctorTable;
 var examReqTable;
 var examRoomTable;
 
@@ -11,7 +11,8 @@ function logInClinicAdmin(email, password){
 		async: false,
 		url : "theGoodShepherd/clinicAdmin/logIn//" + email + "//" + password ,
 		dataType: "json",
-		success : function(response)  {
+		success : function(output)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
 			window.location.href = "html/home-pages/clinic_admin_hp.html"
 		},
 		error : function(response) {
@@ -27,7 +28,7 @@ $(document).ready(function() {
 		event.preventDefault()
 		// inicijalizujemo je ako vec nismo
 		if (!$.fn.DataTable.isDataTable('#ordinationTable')) {
-			var ordinationTable = $('#ordinationTable').DataTable({
+			ordinationTable = $('#ordinationTable').DataTable({
 				ajax: {
 					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
 					dataSrc: ''
@@ -53,6 +54,11 @@ $(document).ready(function() {
 			return
 		}
 
+		if (isNaN(numberV)) {
+			alert("Ordination number must be a number!")
+			return
+		}
+
 		var ordination = {
 			name: nameV,
 			ordinationNumber: numberV,
@@ -69,9 +75,13 @@ $(document).ready(function() {
 			success : function()  {
 				alert("Successfully added new ordination!")
 				$('.content').hide()
-        		$('.clinic-ordinations').show()
-				var table = $('#ordinationTable').DataTable();
-				table.ajax.reload();
+				$('.clinic-ordinations').show()
+				// ciscenje forme za novo dodavanje
+				clearOrdinationForm()
+				ordinationTable.ajax.reload();
+				// scroll to top of page
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -82,11 +92,12 @@ $(document).ready(function() {
 	/*Cancel add ordination*/
 	$("#cancel-ordination").on('click', function(event){
 		event.preventDefault()
-		$("#ordination_name").val('')
-		$("#ordination_number").val('')
+		clearOrdinationForm()
 		$('.clinic-addOrdination').hide()
 		$('.clinic-ordinations').show()
-		
+		// scroll to top of page
+		document.body.scrollTop = 0
+  		document.documentElement.scrollTop = 0
 	})
 
 	/*Check if ordination number is number*/
@@ -145,6 +156,16 @@ $(document).ready(function() {
 			return
 		}
 
+		if (isNaN(durationV)) {
+			alert("Duration must be a number!")
+			return
+		}
+
+		if (isNaN(priceV)) {
+			alert("Price must be a number!")
+			return
+		}
+
 		var appType = {
 			name: nameV,
 			duration: durationV,
@@ -161,8 +182,13 @@ $(document).ready(function() {
 			success : function()  {
 				alert("Successfully added new appointment type!")
 				$('.content').hide()
-        		$('.clinic-appTypes').show()
-				appTypeTable.ajax.reload();
+				$('.clinic-appTypes').show()
+				// ciscenje forme za novo dodavanje
+				clearAppTypeForm()
+				appTypeTable.ajax.reload()
+				// scroll to top of page
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -173,11 +199,12 @@ $(document).ready(function() {
 	/*Cancel add appointment*/
 	$("#cancel-appointment-type").on('click', function(event){
 		event.preventDefault()
-		$("#appointment_name").val('')
-		$("#appointment_duration").val('')
-		$("#appointment_price").val('')
+		clearAppTypeForm()
 		$('.clinic-addAppType').hide()
 		$('.clinic-appTypes').show()
+		// scroll to top of page
+		document.body.scrollTop = 0
+  		document.documentElement.scrollTop = 0
 	})
 
 	/*Check if appointment type duration and price are numbers*/
@@ -207,7 +234,7 @@ $(document).ready(function() {
 		event.preventDefault()
 		// inicijalizujemo je ako vec nismo
 		if (!$.fn.DataTable.isDataTable('#ordinationTable')) {
-			var doctorsTable = $('#doctorTable').DataTable({
+			doctorTable = $('#doctorTable').DataTable({
 			ajax: {
 				url: "../../theGoodShepherd/clinicAdmin/getDoctors",
 				dataSrc: ''
@@ -254,10 +281,12 @@ $(document).ready(function() {
 		}
 		
 		if(passwordV != confirmPasswordV){
+			alert("Passwords do not match!")
 			return;
 		}
 		
 		if(isNaN(securityNumV)){
+			alert("Security number must be a number!")
 			return;
 		}
 		
@@ -284,10 +313,15 @@ $(document).ready(function() {
 			data : JSON.stringify(newDoctor),
 			success : function(response){
 				// vrati ga na pregled svih doktora
-				$('.content').hide()
-        		$('.clinic-doctors').show()
 				alert("New doctor saved!")
-				doctorTable.ajax.reload();
+				$('.content').hide()
+				$('.clinic-doctors').show()
+				// ciscenje forme za novo dodavanje
+				clearDoctorForm()
+				doctorTable.ajax.reload()
+				// scroll to top of page
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -333,18 +367,12 @@ $(document).ready(function() {
 	
 	$("#cancel_doctor").on('click', function(event){
 		event.preventDefault()
-		$("#doctorEmail").val('')
-		$("#firstNameDoctor").val('')
-		$("#lastNameDoctor").val('')
-		$("#passwordDoctor").val('')
-		$("#confirm-passwordDoctor").val('')
-		$("#securityNumberDoctor").val('')
-		$("#phoneNumberDoctor").val('')
-		$("#addressDoctor").val('')
-		$("#cityDoctor").val('')
-		$("#countryDoctor").val('')
+		clearDoctorForm()
 		$('.clinic-addDoctor').hide()
 		$('.clinic-doctors').show()
+		// scroll to top of page
+		document.body.scrollTop = 0
+  		document.documentElement.scrollTop = 0
 	})
 	
 	/*Check if securityNumber is number*/
@@ -354,7 +382,6 @@ $(document).ready(function() {
 			showValidate($("#securityNumberDoctor"))
 		}
 	})
-	
 	$("#securityNumberDoctor").on('click', function(e){
 		hideValidate($("#securityNumberDoctor"))
 	})
@@ -399,7 +426,7 @@ $(document).ready(function() {
 						time: ""
 					}
 					*/
-					url: "../../theGoodShepherd/ordination/getClinicsOrdinations",
+					url: "../../theGoodShepherd/appointmentRequest",
 					dataSrc: ''
 				},
 				columns: [
@@ -427,7 +454,13 @@ $(document).ready(function() {
 				columns: [
 					{ data: 'name'},
 					{ data: 'number'},
-					{ data: 'firstFreeTime'},
+					//{ data: 'firstFreeTime'},
+					{
+						data: null,
+						render: function () {
+							return "NOW RUN"
+						}
+					},
 					{
 						data: null,
 						render: function (data) {
@@ -438,18 +471,40 @@ $(document).ready(function() {
 			})
 		}
 	})
-	
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
-    }
-
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).removeClass('alert-validate');
-    }
-    
-
 })
+
+/*Validation and forms*/
+function showValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).addClass('alert-validate');
+}
+function hideValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).removeClass('alert-validate');
+}
+
+function clearOrdinationForm() {
+	$("#ordination_name").val('')
+	$("#ordination_number").val('')
+}
+
+function clearAppTypeForm() {
+	$("#appointment_name").val('')
+	$("#appointment_duration").val('')
+	$("#appointment_price").val('')
+}
+
+function clearDoctorForm() {
+	$("#doctorEmail").val('')
+	$("#firstNameDoctor").val('')
+	$("#lastNameDoctor").val('')
+	$("#passwordDoctor").val('')
+	$("#confirm-passwordDoctor").val('')
+	$("#securityNumberDoctor").val('')
+	$("#phoneNumberDoctor").val('')
+	$("#addressDoctor").val('')
+	$("#cityDoctor").val('')
+	$("#countryDoctor").val('')
+}

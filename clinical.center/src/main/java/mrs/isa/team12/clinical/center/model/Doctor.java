@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,15 +24,14 @@ public class Doctor extends MedicalPersonnel {
 	@Column(name = "specialization", unique = false, nullable = false)
 	private Specialization specialization;
 	
-	/*nullable = false*/
-	@Column(name = "start_work", nullable = true, unique = false)
-	private String startWork;
+	// u rasponu od 0 do 24
+	@Column(name = "start_work", unique = false, nullable = false)
+	private Integer startWork;
 	
-	/*nullable = false*/
-	@Column(name = "end_work", nullable = true, unique = false)
-	private String endWork;
+	@Column(name = "end_work", unique = false, nullable = false)
+	private Integer endWork;
 	
-	@Column(name = "rating", nullable = true, unique = false)
+	@Column(name = "rating", unique = false, nullable = true)
 	private Double rating;
 	
 	@ManyToOne
@@ -39,7 +39,8 @@ public class Doctor extends MedicalPersonnel {
 	@JsonBackReference
 	private Clinic clinic;
 	
-	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	//@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@ManyToMany(mappedBy = "doctors")
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
@@ -52,7 +53,7 @@ public class Doctor extends MedicalPersonnel {
 	public Doctor() {}
 
 
-	public Doctor(String startWork, String endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
+	public Doctor(Integer startWork, Integer endWork, Double rating, Clinic clinic, Set<AppointmentType> appointmentTypes,
 			Set<Appointment> appointments, Set<Rating> ratings) {
 		super();
 		this.startWork = startWork;
@@ -65,81 +66,51 @@ public class Doctor extends MedicalPersonnel {
 	}
 
 
-	public String getStartWork() {
+	public Integer getStartWork() {
 		return startWork;
 	}
-
-
-	public void setStartWork(String startWork) {
+	public void setStartWork(Integer startWork) {
 		this.startWork = startWork;
 	}
-
-
-	public String getEndWork() {
+	public Integer getEndWork() {
 		return endWork;
 	}
-
-
-	public void setEndWork(String endWork) {
+	public void setEndWork(Integer endWork) {
 		this.endWork = endWork;
 	}
-
-
 	public Double getRating() {
 		return rating;
 	}
-
-
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
-
 	public Set<AppointmentType> getAppointmentTypes() {
 		return appointmentTypes;
 	}
-
-
 	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
 		this.appointmentTypes = appointmentTypes;
 	}
-
-
 	public Set<Appointment> getAppointments() {
 		return null;
 	}
-
-
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}
-
-
 	public Set<Rating> getRatings() {
 		return ratings;
 	}
-
-
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
 	}
-
-	
 	public Specialization getSpecialization() {
 		return specialization;
 	}
-
-
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
 	}
@@ -155,7 +126,5 @@ public class Doctor extends MedicalPersonnel {
 				+ ", rating=" + rating + ", clinic=" + clinic + ", appointmentTypes=" + appointmentTypes
 				+ ", appointments=" + appointments + ", ratings=" + ratings + "]";
 	}
-	
-	
-	
+
 }

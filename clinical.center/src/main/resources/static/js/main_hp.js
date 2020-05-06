@@ -67,16 +67,24 @@ $(document).ready( function () {
     		}
     	})
     })
-
+    
+    // Home Page always active on login
+    $('#homePage').addClass('active-nav-item')
     /* sidebar navigation */
     $('.nav-item').click(function(e) {
         $('.nav-item').removeClass('active-nav-item')
+        // removes from home page
+        $('#homePage').removeClass('active-nav-item')
         $(this).addClass('active-nav-item')
     })
     // Home Page
     $('#homePage').click(function() {
         $('.content').hide()
         $('.home-page').show()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     
     /* Clinical center administrator */
@@ -84,88 +92,136 @@ $(document).ready( function () {
     $('#clinics').click(function() {
         $('.content').hide()
         $('.clinics').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic admins
     $('#clinicAdmins').click(function() {
         $('.content').hide()
         $('.clinic-admins').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Center admins
     $('#centerAdmins').click(function() {
         $('.content').hide()
         $('.center-admins').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Registration requests
     $('#registrationReq').click(function() {
         $('.content').hide()
         $('.registration-req').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Prescription book
     $('#prescriptionBook').click(function() {
         $('.content').hide()
         $('.prescription-book').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Add new clinic administrator
     $('#addClinicAdmin').click(function() {
         $('.content').hide()
         $('.addClinicAdmin').show()
     })
-    // Add new clinic
+	// Add new clinic
     $('#addClinic').click(function() {
         $('.content').hide()
         $('.addNewClinic').show()
     })
 
     /* Clinic administrator */
+    // Clinic profile
+    $('#clinicProfile').click(function() {
+        if ($(this).hasClass('active-sub')) {
+            $(this).removeClass('active-sub')
+            $('#sub').hide("slow")
+        } else {
+            $(this).addClass('active-sub')
+            $('#sub').show("slow")
+        }
+    })
     // Clinic information
     $('#clinicInformation').click(function() {
         $('.content').hide()
         $('.clinic-information').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic appointments
     $('#clinicAppointments').click(function() {
         $('.content').hide()
         $('.clinic-appointments').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic doctors
     $('#clinicDoctors').click(function() {
         $('.content').hide()
         $('.clinic-doctors').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic ordinations
     $('#clinicOrdinations').click(function() {
         $('.content').hide()
         $('.clinic-ordinations').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic appointment types
     $('#clinicAppTypes').click(function() {
         $('.content').hide()
         $('.clinic-appTypes').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic pricelist
     $('#clinicPricelist').click(function() {
         $('.content').hide()
         $('.clinic-pricelist').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
-    // Create appointment type
+    // Create appointment
     $('#createClinicApp').click(function() {
         $('.content').hide()
         $('.clinic-createClinicApp').show()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic reports
     $('#clinicReports').click(function() {
         $('.content').hide()
         $('.clinic-reports').show()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic examination requests
     $('#clinicExamReq').click(function() {
         $('.content').hide()
         $('.clinic-clinicExamReq').show()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic vacation/paid leave
     $('#clinicVacation').click(function() {
         $('.content').hide()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
         $('.clinic-vacation').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Clinic add doctor
     $('#addDoctor').click(function() {
@@ -188,11 +244,15 @@ $(document).ready( function () {
     $('#medicalCalendar').click(function() {
         $('.content').hide()
         $('.medical-calendar').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Medical personnel vacation
     $('#medicalVacation').click(function() {
         $('.content').hide()
         $('.medical-vacation').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
 
     /* Doctor */
@@ -200,6 +260,8 @@ $(document).ready( function () {
     $('#doctorPatients').click(function() {
         $('.content').hide()
         $('.doctor-patients').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
 
     /* Nurse */
@@ -207,24 +269,34 @@ $(document).ready( function () {
     $('#nurseVerifyPrescription').click(function() {
         $('.content').hide()
         $('.nurse-verifyPrescription').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     // Nurse patients
     $('#nursePatients').click(function() {
         $('.content').hide()
         $('.nurse-patients').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
 
     /* Patient */
     $('#patientClinics').click(function() {
         $('.content').hide()
         $('.patient-clinics').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     $('#patientApps').click(function() {
         $('.content').hide()
         $('.patient-apps').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
     $('#patientMedicalRecord').click(function() {
         $('.content').hide()
         $('.patient-medicalRecord').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
 })

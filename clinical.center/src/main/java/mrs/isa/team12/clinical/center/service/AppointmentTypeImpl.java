@@ -23,6 +23,11 @@ public class AppointmentTypeImpl implements AppointmentTypeService {
 	public AppointmentType findOneByName(String name) {
 		return appointmentTypeRep.findOneByName(name);
 	}
+	
+	@Override
+	public List<AppointmentType> findAllByName(String name) {
+		return appointmentTypeRep.findAllByName(name);
+	}
 
 	@Override
 	public AppointmentType save(AppointmentType at) {

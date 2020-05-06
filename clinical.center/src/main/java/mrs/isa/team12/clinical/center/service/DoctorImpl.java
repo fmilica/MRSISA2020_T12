@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.repository.DoctorRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
@@ -42,6 +44,21 @@ public class DoctorImpl implements DoctorService {
 	@Override
 	public Doctor getDoctorById(Long id) {
 		return doctorRep.findOneById(id);
+	}
+
+	@Override
+	public List<Doctor> findAllByAppointmentTypes(AppointmentType a) {
+		return doctorRep.findAllByAppointmentTypes(a);
+	}
+
+	@Override
+	public List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types) {
+		return doctorRep.findAllByAppointmentTypesIn(types);
+	}
+
+	@Override
+	public List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types) {
+		return doctorRep.findAllByClinicAndAppointmentTypesIn(clinic, types);
 	}
 
 }

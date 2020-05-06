@@ -152,8 +152,8 @@ public class PatientController {
 			for (ClinicAdmin admin : clinicAdminService.findAllByClinicId(clinic.getId())) {
 				patientService.sendNotificaitionAsync(admin, currentPatient);
 			}
-			AppointmentType appointmentType = appointmentTypeService.findOneByName(appointment.getType().getName());
-			appointmentRequest.getAppointment().setType(appointmentType);
+			AppointmentType appointmentType = appointmentTypeService.findOneByName(appointment.getAppType().getName());
+			appointmentRequest.getAppointment().setAppType(appointmentType);
 			//appointmentType.addAppointment(appointmentRequest.getAppointment());
 			//ali samo jednom dodati appointmentRequest u bazu
 			//clinic.addAppointmentRequest(appointmentRequest);

@@ -327,6 +327,9 @@ body {
 .discount {
     display: none;
 }
+.date-filter {
+    padding: 6px 6px !important;
+}
 /*
 * jQuery dynamic
 */

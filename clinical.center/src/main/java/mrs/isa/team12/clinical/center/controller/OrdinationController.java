@@ -85,7 +85,7 @@ public class OrdinationController {
 			return new ResponseEntity<>(ordination, HttpStatus.CREATED);
 		}
 		
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name already exists!");
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name and number combination already exists!");
 		
 	}
 	

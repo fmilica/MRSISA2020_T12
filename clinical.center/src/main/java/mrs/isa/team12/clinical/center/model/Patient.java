@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Patient extends RegisteredUser {
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
+	@JsonBackReference
 	private Set<Appointment> appointments;
 	
 	@OneToOne(fetch = LAZY)

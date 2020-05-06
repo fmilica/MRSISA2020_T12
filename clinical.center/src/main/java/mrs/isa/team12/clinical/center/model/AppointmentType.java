@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,11 +42,18 @@ public class AppointmentType {
 	@JsonBackReference
 	private Clinic clinic;
 
-	@ManyToOne
-	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
-	private Doctor doctor;
+	/*@ManyToOne
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)*/
+	@ManyToMany(cascade = {ALL})
+    @JoinTable(
+        name = "appointment_type_doctor", 
+        joinColumns = { @JoinColumn(name = "appointment_type_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "doctor_id") }
+    )
+	@JsonBackReference
+	private Set<Doctor> doctors;
 	
-	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "type")
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "appType")
 	private Set<Appointment> appointments;
 
 	/*many to many veza jer eto znamo i sami*/
@@ -65,21 +74,21 @@ public class AppointmentType {
 		this.price = price;
 	}
 
-	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments, Doctor doctor) {
+	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments, Set<Doctor> doctors) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
 		this.appointments = appointments;
-		this.doctor = doctor;
+		this.doctors = doctors;
 	}
 
-	public AppointmentType(Long id, String name, Set<Appointment> appointments, Doctor doctor) {
+	public AppointmentType(Long id, String name, Set<Appointment> appointments, Set<Doctor> doctors) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.appointments = appointments;
-		this.doctor = doctor;
+		this.doctors = doctors;
 	}
 
 	public Long getId() {
@@ -106,19 +115,17 @@ public class AppointmentType {
 		this.appointments = appointments;
 	}
 
-	public Doctor getDoctor() {
-		return doctor;
+	public Set<Doctor> getDoctors() {
+		return doctors;
 	}
 
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
+	public void setDoctors(Set<Doctor> doctors) {
+		this.doctors = doctors;
 	}
-
 
 	public Integer getDuration() {
 		return duration;
 	}
-
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;

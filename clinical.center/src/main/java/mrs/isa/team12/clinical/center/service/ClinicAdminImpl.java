@@ -63,11 +63,11 @@ public class ClinicAdminImpl implements ClinicAdminService {
 		if(acceptance == true) {
 			mail.setSubject("Appointment request accepted!");
 			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your appointment request!\n" + 
-					appointment.getType().getName() + " appointment scheduled for " + 
+					appointment.getAppType().getName() + " appointment scheduled for " + 
 					sdf1.format(appointment.getDate()) + " at " + sdf2.format(appointment.getTime()) +
 					" in clinic " + appointment.getClinic().getName() + ", ordination " + appointment.getOrdination().getName() +
 					", by doctor "+ appointment.getDoctor().getName() + " " + appointment.getDoctor().getSurname() + ".\n" +
-					"Your appointment costs " + appointment.getType().getPrice() + " with " + disc + "% of discount." +
+					"Your appointment costs " + appointment.getAppType().getPrice() + " with " + disc + "% of discount." +
 					"\nBest wishes,\nClinical center The Good Shepherd");
 		}else {
 			mail.setSubject("Appointment request rejected!");

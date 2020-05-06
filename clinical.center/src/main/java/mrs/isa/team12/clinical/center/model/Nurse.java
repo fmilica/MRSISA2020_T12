@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Nurse extends MedicalPersonnel{
 	
 	/*nullable = false*/
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
+	@JsonBackReference
 	private Clinic clinic;
 
 	public Nurse() {}

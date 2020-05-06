@@ -5,7 +5,8 @@ function logInDoctor(email, password){
 		async: false,
 		url : "theGoodShepherd/doctor/logIn//" + email + "//" + password ,
 		dataType: "json",
-		success : function(response)  {
+		success : function(output)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
 			window.location.href = "html/home-pages/doctor_hp.html"
 		},
 		error : function(response) {

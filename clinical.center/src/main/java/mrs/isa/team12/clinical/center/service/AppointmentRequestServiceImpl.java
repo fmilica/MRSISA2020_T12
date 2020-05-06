@@ -1,9 +1,12 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.repository.AppointmentRequestRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 
@@ -31,5 +34,9 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 	public AppointmentRequest findOneById(Long id) {
 		return appointmentRequestRep.findOneById(id);
 	}
-	
+
+	@Override
+	public List<AppointmentRequest> findAllByClinic(Clinic clinic) {
+		return appointmentRequestRep.findAllByClinic(clinic);
+	}
 }
