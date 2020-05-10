@@ -41,6 +41,10 @@
 	<script src='../../js/library/fullcalendar/timegrid/main.js'></script>
 	<script src='../../js/library/fullcalendar/list/main.js'></script>
 
+	<!-- for tables -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
 
@@ -180,7 +184,60 @@
 
 				<!-- Doctor patients content -->
 				<div class="content doctor-patients">
-					doctor patients
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Patients</header>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="patientName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Surname:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="patientSurname" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Security Number:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="patientSecurityNumber" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterPatients" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
+										<table id="patientsTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Security Number</th>
+													<th>View profile</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Security Number</th>
+													<th>View profile</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Medical personnel calendar content -->
@@ -207,5 +264,6 @@
 		</div>
     <!-- end footer -->
 	</div>
+	<script src="../../doctor.js"></script>
 </body>
 </html>

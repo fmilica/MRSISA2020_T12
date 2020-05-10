@@ -24,13 +24,13 @@ public class ClinicAdmin extends RegisteredUser {
 
 	public ClinicAdmin(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city, String country, 
-			String phoneNumber, Integer securityNumber) {
+			String phoneNumber, String securityNumber) {
 		super(email, password, name, surname, gender, dateOfBirth, address, city, country, phoneNumber, securityNumber);
 	}
 	
 	public ClinicAdmin(String email, String password, String name, String surname, String gender,
 			String dateOfBirth, String address, String city, String country, 
-			String phoneNumber, Integer securityNumber, Clinic clinic) {
+			String phoneNumber, String securityNumber, Clinic clinic) {
 		super(email, password, name, surname, gender, dateOfBirth, address, city, country, phoneNumber, securityNumber);
 		this.clinic = clinic;
 	}

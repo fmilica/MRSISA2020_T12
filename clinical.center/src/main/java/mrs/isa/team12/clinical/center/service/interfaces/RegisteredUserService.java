@@ -6,5 +6,5 @@ public interface RegisteredUserService {
 
 	RegisteredUser findOneByEmail(String email);
 	
-	RegisteredUser findOneBySecurityNumber(Integer number);
+	RegisteredUser findOneBySecurityNumber(String number);
 }

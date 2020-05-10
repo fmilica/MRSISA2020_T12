@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -49,5 +51,15 @@ public class PatientImpl implements PatientService {
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 		
+	}
+
+	@Override
+	public List<Patient> findAll() {
+		return patientRep.findAll();
+	}
+
+	@Override
+	public List<Patient> filter(String name, String surname, String secNum) {
+		return patientRep.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndSecurityNumberContainingIgnoreCase(name, surname, secNum);
 	}
 }

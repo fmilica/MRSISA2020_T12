@@ -8,6 +8,6 @@ public interface RegisteredUserRepository extends JpaRepository<RegisteredUser, 
 	
 	RegisteredUser findOneByEmail(String email);
 	
-	RegisteredUser findOneBySecurityNumber(Integer number);
+	RegisteredUser findOneBySecurityNumber(String number);
 
 }

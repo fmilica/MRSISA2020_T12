@@ -51,14 +51,14 @@ public class RegisteredUser {
 	private String phoneNumber;
 	
 	@Column(name="security_number", unique=false, nullable=false)
-	private Integer securityNumber;
+	private String securityNumber;
 	
 	
 	public RegisteredUser() {}
 	
 	public RegisteredUser(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city, String country, 
-			String phoneNumber, Integer securityNumber) {
+			String phoneNumber, String securityNumber) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -133,10 +133,10 @@ public class RegisteredUser {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Integer getSecurityNumber() {
+	public String getSecurityNumber() {
 		return securityNumber;
 	}
-	public void setSecurityNumber(Integer securityNumber) {
+	public void setSecurityNumber(String securityNumber) {
 		this.securityNumber = securityNumber;
 	}
 	

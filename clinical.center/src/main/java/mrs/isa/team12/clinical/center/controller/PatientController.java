@@ -2,7 +2,9 @@ package mrs.isa.team12.clinical.center.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
@@ -63,6 +68,64 @@ public class PatientController {
 		this.appointmentTypeService = appointmentTypeService;
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
+	}
+	
+
+	/*
+	 url: GET localhost:8081/theGoodShepherd/patient
+	 HTTP request for viewing registered patients
+	 returns ResponseEntity object
+	 */
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ViewPatientsDto>> getAllPatients() {
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view registered patients");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Patient> patients = patientService.findAll();
+		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
+		for(Patient p : patients) {
+			dto.add(new ViewPatientsDto(p));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/patient/filterPatients
+	 HTTP request for filtering registered patients
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/filterPatients", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ViewPatientsDto>> filterPatients(@RequestParam String name, @RequestParam String surname, @RequestParam String securityNumber) {
+
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view registered patients");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		System.out.println("Dosao");
+		List<Patient> patients = patientService.filter(name, surname, securityNumber);
+		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
+		for(Patient p : patients) {
+			dto.add(new ViewPatientsDto(p));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*

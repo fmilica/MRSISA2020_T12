@@ -24,7 +24,7 @@ public class RegisteredUserImpl implements RegisteredUserService {
 	}
 
 	@Override
-	public RegisteredUser findOneBySecurityNumber(Integer number) {
+	public RegisteredUser findOneBySecurityNumber(String number) {
 		return rep.findOneBySecurityNumber(number);
 	}
 
