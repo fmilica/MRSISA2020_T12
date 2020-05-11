@@ -62,8 +62,10 @@ $(document).ready(function() {
 			contentType : "application/json",
 			dataType : "json",
 			data : JSON.stringify(newPatient),
-			success : function(response){
-				window.location.href = "../../html/home-pages/patient_hp.html"
+			success : function(response) {
+				alert("Your registration request has been sent. You will get an email notification when it's procesed.")
+				window.location.href = "../../loginP.html"
+				//window.location.href = "../../html/home-pages/patient_hp.html"
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
