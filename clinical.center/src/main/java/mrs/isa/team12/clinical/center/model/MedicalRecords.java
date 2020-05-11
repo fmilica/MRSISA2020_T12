@@ -1,9 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
-
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -41,14 +37,14 @@ public class MedicalRecords {
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
-	
+/*	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, orphanRemoval = true)
 	@JoinColumn(name = "medical_record_id")
 	private Set<Appointment> appointments;
-	
+*/	
 	public MedicalRecords() {}
 
-	public MedicalRecords(Integer height, Integer weight, String bloodPressure, String bloodType, String allergies, Patient patient, Set<Appointment> appointments) {
+	public MedicalRecords(Integer height, Integer weight, String bloodPressure, String bloodType, String allergies, Patient patient/*, Set<Appointment> appointments*/) {
 		super();
 		this.height = height;
 		this.weight = weight;
@@ -56,7 +52,7 @@ public class MedicalRecords {
 		this.bloodType = bloodType;
 		this.allergies = allergies;
 		this.patient = patient;
-		this.appointments = appointments;
+		//this.appointments = appointments;
 	}
 
 	public Integer getHeight() {
@@ -106,7 +102,7 @@ public class MedicalRecords {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
+/*
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
@@ -114,4 +110,5 @@ public class MedicalRecords {
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}
+*/
 }

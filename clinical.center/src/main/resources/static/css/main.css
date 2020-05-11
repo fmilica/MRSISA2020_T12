@@ -298,7 +298,12 @@ body {
     padding: 5px;
     border-radius: 10px;
 }
-
+.medical-record {
+    padding: 0 15px;
+}
+.card-topline-theme {
+    border-top: 3px solid rgb(58, 201, 214, 0.3);
+}
 /*
 * Schedule appointment (patient)
 */

@@ -80,7 +80,7 @@ function filterPatients(){
 	}
 }
 
-function viewPatientProfile(secNum){
+function viewPatientProfile(secNum) {
 	$.ajax({
 		type : "POST",
 		async: false,
@@ -88,7 +88,6 @@ function viewPatientProfile(secNum){
 		dataType: "json",
 		success : function(data)  {
 			viewMedicalReports(data)
-	        }
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -112,8 +111,8 @@ function viewMedicalReports(data){
         $("#generalReport").text("You dont have access to patients medical record.")
     }else{
     	$('#medicalReport').show()
-    	$('h5').show()
-    	$("#generalReport").text("General Report")
+		$('h5').show()
+		$("#generalReport").text("")
     	$("#height").text(data.medicalRecords.height)
     	$("#weight").text(data.medicalRecords.weight)
     	$("#bloodPressure").text(data.medicalRecords.bloodPressure)
@@ -121,11 +120,24 @@ function viewMedicalReports(data){
     	$("#allergies").text(data.medicalRecords.allergies)
     	if (!$.fn.DataTable.isDataTable('#medicalReports')) {
     		medicalReportTable = $('#medicalReports').DataTable({
+				data: data.medicalRecords.medicalReports,
     			columns: [
-    				{ data: 'name'},
-    				{ data: 'surname'},
-    				{ data: 'securityNumber'}
-    				]
+    				{ data: 'description'},
+					{ data: 'diagnosisName'},
+					{
+						data: null,
+						render: function (data) {
+							var allMedicine = ""
+							for (var i = 0; i < data.prescriptionMedicines.length; i++) {
+								allMedicine += data.prescriptionMedicines[i]
+								if (i != data.prescriptionMedicines.length - 1) {
+									allMedicine += ", "
+								}
+							}
+							return allMedicine
+						}
+					}]
     		})
     	}
+	}
 }

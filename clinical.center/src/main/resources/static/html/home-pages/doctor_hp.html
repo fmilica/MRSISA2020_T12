@@ -254,13 +254,12 @@
 				<div class="content patient-profile">
 					<!-- basic patient information card -->
 					<div class="col-md-5 col-xs-12">
-						<div class="cardbox">
-							<div class="header">
-								<h4 class="font-bold">ABOUT PATIENT</h4>
+						<div class="card card-box">
+							<div class="card-head">
+								<header>About the patient</header>
 							</div>
-							<div class="body">
+							<div class="card-body">
 								<div class="user-btm-box">
-									<!-- .row -->
 									<div class="row text-center m-t-10">
 										<div class="col-lg-6 col-md-12 col-sm-6 col-xs-12 b-r"><strong>Full name</strong>
 											<p id="fullName"></p>
@@ -269,9 +268,7 @@
 											<p id="email"></p>
 										</div>
 									</div>
-									<!-- /.row -->
 									<hr>
-									<!-- .row -->
 									<div class="row text-center m-t-10">
 										<div class="col-lg-6 col-md-12 col-sm-6 col-xs-12 b-r"><strong>Gender</strong>
 											<p id="gender"></p>
@@ -280,9 +277,7 @@
 											<p id = "dateOfBirth"></p>
 										</div>
 									</div>
-									<!-- /.row -->
 									<hr>
-									<!-- .row -->
 									<div class="row text-center m-t-10">
 										<div class="col-lg-6 col-md-12 col-sm-6 col-xs-12 b-r"><strong>Phone number</strong>
 											<p id="phoneNumber"></p>
@@ -291,63 +286,59 @@
 											<p id = "securityNumber"></p>
 										</div>
 									</div>
-									<!-- /.row -->
 									<hr>
-									<!-- .row -->
 									<div class="row text-center m-t-10">
 										<div class="col-md-12"><strong>Address</strong>
 											<p id="address"></p>
 										</div>
 									</div>
-									<!-- /.row -->
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- Medical record -->
 					<div class="col-md-7 col-xs-12">
-						<div class="cardbox">
-							<div" class="body"> 
-								<div class="mypost-list">
-									<div class="post-box">
-										<h4 id="generalReport" class="font-bold">General Report</h4>                                        
-										<hr>
-										<h5>Height<span id = "height" class="pull-right"></span></h5>
-										<h5>Weight<span id = "weight" class="pull-right"></span></h5>
-										<h5>Blood pressure<span id = "bloodPressure" class="pull-right"></span></h5>
-										<h5>Blood type<span id = "bloodType" class="pull-right"></span></h5>
-										<h5>Allergies<span id = "allergies" class="pull-right"></span></h5>
-									</div>
+						<div class="card card-box">
+							<div class="card-head">
+								<header>Medical record</header>
+							</div>
+							<div class="card-body">
+								<div class="medical-record">
+									<h4 id="generalReport"></h5>
+									<h5>Height<span id = "height" class="pull-right"></span></h5>
+									<h5>Weight<span id = "weight" class="pull-right"></span></h5>
+									<h5>Blood pressure<span id = "bloodPressure" class="pull-right"></span></h5>
+									<h5>Blood type<span id = "bloodType" class="pull-right"></span></h5>
+									<h5>Allergies<span id = "allergies" class="pull-right"></span></h5>
 								</div>
 								<!-- Medical reports -->
 								<hr>
 								<!--table-->
 								<div id="medicalReport" class="row">
                         			<div class="col-md-12">
-                            			<div class="card card-topline-red">
+                            			<div class="card card-topline-theme">
 											<div class="card-head">
 												<header>Medical reports</header>
 											</div>
-											<div class="card-body ">
-												<div class="row">
+											<div class="card-body">
+												<table id = "medicalReports" class="table table-striped table-bordered table-hover table-checkable order-column" style="width: 100%" id="example4">
+													<thead>
+														<tr>
+															<th>Description</th>
+															<th>Diagnosis</th>
+															<th>Medicine</th>
+														</tr>
+													</thead>
+												</table>
 											</div>
-											<table id = "medicalReports" class="table table-striped table-bordered table-hover table-checkable order-column" style="width: 100%" id="example4">
-												<thead>
-													<tr>
-														<th> Description </th>
-														<th> Diagnosis </th>
-														<th> Medicine </th>
-													</tr>
-												</thead>
-                                    		</table>
                                 		</div>
                             		</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			<!-- end page content -->
 		</div>
         <!-- end page container -->

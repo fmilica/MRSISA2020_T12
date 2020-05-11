@@ -4011,7 +4011,7 @@ body[ng-controller] .modal {
 .card {
     position: relative;
     margin-bottom: 24px;
-    margin-top: 10px;
+    margin-top: 20px;
     background-color: #ffffff;
     border-radius: 3px;
     -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);

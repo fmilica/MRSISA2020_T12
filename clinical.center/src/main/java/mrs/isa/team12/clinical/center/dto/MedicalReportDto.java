@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import mrs.isa.team12.clinical.center.model.MedicalReport;
@@ -33,10 +34,16 @@ public class MedicalReportDto {
 	}
 	public void setPrescriptionMedicines(Set<Prescription> prescriptions) {
 		for(Prescription p : prescriptions) {
+			if (this.prescriptionMedicines == null) {
+				this.prescriptionMedicines = new HashSet<String>();
+			}
 			this.prescriptionMedicines.add(p.getMedicine());
 		}
 	}
 	
-	
-
+	@Override
+	public String toString() {
+		return "MedicalReportDto [description=" + description + ", diagnosisName=" + diagnosisName
+				+ ", prescriptionMedicines=" + prescriptionMedicines + "]";
+	}
 }

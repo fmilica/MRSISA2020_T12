@@ -27,6 +27,9 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
+	@Column(name = "app_finished", unique = false, nullable = false)
+	private Boolean finished;
+	
 	@Column(name = "app_date", unique = false, nullable = false )
 	@Temporal(TemporalType.DATE)
 	private Date date;
@@ -56,7 +59,11 @@ public class Appointment {
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "medical_report_id")
 	private MedicalReport medicalReport;
-	
+/*
+	@ManyToOne
+	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
+	private MedicalRecords medicalRecords;
+*/
 	@ManyToOne
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
 	private Ordination ordination;
@@ -71,41 +78,12 @@ public class Appointment {
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
 	private Doctor doctor;
 	
-	@ManyToOne
-	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
-	private MedicalRecords medicalRecords;
-	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
 	@JsonBackReference("appType-apps")
 	private AppointmentType appType;
-	/*
-	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "appointment_id")
-	@JsonBackReference("appReq-app")
-	private AppointmentRequest request;
-*/
+
 	public Appointment() {}
-	/*
-	public Appointment(Long id, Date date, Date startTime, Double discount, Boolean confirmed, Patient patient,
-			MedicalReport medicalReport, Ordination ordination, Clinic clinic, Doctor doctor,
-			MedicalRecords medicalRecords, AppointmentType appType, AppointmentRequest request) {
-		super();
-		this.id = id;
-		this.date = date;
-		this.startTime = startTime;
-		this.endTime = new Date(startTime.getTime() + appType.getDuration()*3600*1000);
-		this.discount = discount;
-		this.confirmed = confirmed;
-		this.patient = patient;
-		this.medicalReport = medicalReport;
-		this.ordination = ordination;
-		this.clinic = clinic;
-		this.doctor = doctor;
-		this.medicalRecords = medicalRecords;
-		this.appType = appType;
-		this.request = request;
-	}*/
 
 	public Appointment(Date date, Date startTime, AppointmentType type, Double discount,
 			Boolean confirmed, Patient patient, MedicalReport medicalReport, Ordination ordination, Doctor doctor) {
@@ -120,6 +98,14 @@ public class Appointment {
 		this.medicalReport = medicalReport;
 		this.ordination = ordination;
 		this.doctor = doctor;
+	}
+	
+	public Boolean getFinished() {
+		return finished;
+	}
+
+	public void setFinished(Boolean finished) {
+		this.finished = finished;
 	}
 
 	public Date getDate() {
@@ -217,7 +203,7 @@ public class Appointment {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+/*
 	public MedicalRecords getMedicalRecords() {
 		return medicalRecords;
 	}
@@ -225,16 +211,7 @@ public class Appointment {
 	public void setMedicalRecords(MedicalRecords medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
-/*
-	public AppointmentRequest getRequest() {
-		return request;
-	}
-
-	public void setRequest(AppointmentRequest request) {
-		this.request = request;
-	}
 */
-
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", patient=" + patient + ", doctor=" + doctor + "]";

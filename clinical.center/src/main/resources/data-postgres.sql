@@ -56,7 +56,7 @@ insert into nurse (id, email, password, name, surname, gender, date_of_birth, ad
 values ('15', 'zika', 'zika', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City', 'Country', '44', '66' );
 
 /* Pacijenti i njihovi zdravstveni kartoni*/
-insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies )
+insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies)
 values ('30' ,'180', '60', '120/60', 'A','No allergies');
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, medical_record_id) 
 values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '77', '1', '30');
@@ -68,23 +68,23 @@ insert into patient (id, email, password, name, surname, gender, date_of_birth, 
 values ('29', 'milka', 'milka', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '111', '1');
 
 /*Jedan pregled potvrdjen*/
-insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('21', '2020-5-6', '15:00:00', '19:00:00', 'true', '16', '17', '11', '19');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('21', 'true', '2020-5-6', '15:00:00', '19:00:00', 'true', '16', '17', '11', '19');
 /*Jedan pregled NEpotvrdjen*/
-insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('23', '2020-5-5', '15:00:00', '19:00:00', 'false', '16', '17', '11', '19');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('23', 'false', '2020-5-5', '15:00:00', '19:00:00', 'false', '16', '17', '11', '19');
 
 /*Jedan zahtev za nepotvrdjen pregled*/
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
 values ('24', '23', '2020-5-5', 'false', '17');
 
 /*Zahtevi u prvoj klinici*/
-insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('25', '2020-6-5', '09:00:00', '10:00:00', 'false', '29', '6', '9', '12');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('25', 'false', '2020-6-5', '09:00:00', '10:00:00', 'false', '29', '6', '9', '12');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
 values ('26', '25', '2020-5-5', 'false', '6');
-insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('27', '2020-5-5', '08:00:00', '11:00:00', 'false', '29', '6', '10', '14');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('27', 'false', '2020-5-5', '08:00:00', '11:00:00', 'false', '29', '6', '10', '14');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
 values ('28', '27', '2020-5-6', 'false', '6');
 
@@ -97,9 +97,13 @@ values ('31', 'Vitiligo', '33');
 /*Lek*/
 insert into prescription (id, medicine)
 values ('32', 'Krema za vitiligo');
+insert into prescription (id, medicine)
+values ('35', 'Tablete za vitiligo');
 /*Povezivanje dijagnoze i lekova za nju*/
-insert into diagnosis_perscription (perscription_id, diagnosis_id)
+insert into diagnosis_perscription (diagnosis_id, perscription_id)
 values ('31', '32');
+insert into diagnosis_perscription (diagnosis_id, perscription_id)
+values ('31', '35');
 
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id)
@@ -107,3 +111,9 @@ values ('34', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na 
 /*Lekovi prepisani ovim izvestajem gore*/
 insert into medical_report_perscription(medical_report_id, prescription_id)
 values ('34', '32');
+insert into medical_report_perscription(medical_report_id, prescription_id)
+values ('34', '35');
+/*Dodavanje izvestaja u appointment*/
+update appointment
+set medical_report_id = '34'
+where id = '21';

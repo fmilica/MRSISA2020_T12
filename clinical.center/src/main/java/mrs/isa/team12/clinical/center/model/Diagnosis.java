@@ -31,8 +31,8 @@ public class Diagnosis {
 
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "diagnosis_perscription", 
-				joinColumns = @JoinColumn(name = "perscription_id"),
-				inverseJoinColumns = @JoinColumn(name = "diagnosis_id"))
+				joinColumns = @JoinColumn(name = "diagnosis_id"),
+				inverseJoinColumns = @JoinColumn(name = "perscription_id"))
 	private Set<Prescription> prescriptions;
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="diagnosis")

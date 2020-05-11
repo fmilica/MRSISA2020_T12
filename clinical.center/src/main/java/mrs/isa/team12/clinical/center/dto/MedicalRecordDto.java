@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
@@ -60,9 +61,20 @@ public class MedicalRecordDto {
 
 	public void setMedicalReports(Set<Appointment> appointments) {
 		for(Appointment a : appointments) {
-			MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
-			medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
-			this.medicalReports.add(medicalReport);
+			if (a.getFinished()) {
+				MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
+				medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
+				if (this.medicalReports == null) {
+					this.medicalReports = new HashSet<MedicalReportDto>();
+				}
+				this.medicalReports.add(medicalReport);
+			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "MedicalRecordDto [height=" + height + ", weight=" + weight + ", bloodPressure=" + bloodPressure
+				+ ", bloodType=" + bloodType + ", allergies=" + allergies + ", medicalReports=" + medicalReports + "]";
 	}
 }

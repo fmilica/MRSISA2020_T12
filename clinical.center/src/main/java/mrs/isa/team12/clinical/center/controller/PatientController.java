@@ -151,14 +151,13 @@ public class PatientController {
 		Patient patient = patientService.findOneBySecurityNumber(secNum);
 		List<Appointment> appointments = appointmentService.findAllByPatientIdAndDoctorId(patient.getId(), currentUser.getId());
 		if(appointments.size() == 0) {
-			System.out.println("Nema pregleda");
 			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 		}
-		System.out.println("Ima pregleda");
 		MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
-		medicalRecords.setMedicalReports(patient.getMedicalRecords().getAppointments());
+		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
+		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
+		medicalRecords.setMedicalReports(patient.getAppointments());
 		return new ResponseEntity<>(new PatientProfileDto(patient, medicalRecords), HttpStatus.OK);
-		
 	}
 	
 	
