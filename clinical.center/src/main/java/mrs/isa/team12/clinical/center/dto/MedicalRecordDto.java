@@ -1,5 +1,8 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.Set;
+
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.MedicalRecords;
 
 public class MedicalRecordDto {
@@ -8,6 +11,8 @@ public class MedicalRecordDto {
 	private String bloodPressure;
 	private String bloodType;
 	private String allergies;
+	
+	private Set<MedicalReportDto> medicalReports;
 	
 	public MedicalRecordDto(MedicalRecords medicalRecords) {
 		super();
@@ -48,5 +53,16 @@ public class MedicalRecordDto {
 	public void setAllergies(String allergies) {
 		this.allergies = allergies;
 	}
-	
+
+	public Set<MedicalReportDto> getMedicalReports() {
+		return medicalReports;
+	}
+
+	public void setMedicalReports(Set<Appointment> appointments) {
+		for(Appointment a : appointments) {
+			MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
+			medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
+			this.medicalReports.add(medicalReport);
+		}
+	}
 }

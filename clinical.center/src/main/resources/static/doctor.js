@@ -1,4 +1,5 @@
 var patientsTable;
+var medicalReportTable;
 
 function logInDoctor(email, password){
 		
@@ -86,32 +87,45 @@ function viewPatientProfile(secNum){
 		url : "../../theGoodShepherd/patient/viewProfile/" + secNum,
 		dataType: "json",
 		success : function(data)  {
-			$('.content').hide()
-	        $('.patient-profile').show()
-	        $("#fullName").text(data.name + " " + data.surname)
-	        $("#email").text(data.email)
-	        $("#gender").text(data.gender)
-	        $("#dateOfBirth").text(data.dateOfBirth)
-	        $("#phoneNumber").text(data.phoneNumber)
-	        $("#securityNumber").text(data.securityNumber)
-	        $("#address").text(data.address + ", " + data.city + ", " + data.country)
-	        if(data.medicalRecords == null){
-		        $('#medicalReport').hide()
-		        $('h5').hide()
-		        $("#generalReport").text("You dont have access to patients medical record.")
-	        }else{
-	        	$('#medicalReport').show()
-	        	$('h5').show()
-	        	$("#generalReport").text("General Report")
-	        	$("#height").text(data.medicalRecords.height)
-	        	$("#weight").text(data.medicalRecords.weight)
-	        	$("#bloodPressure").text(data.medicalRecords.bloodPressure)
-	        	$("#bloodType").text(data.medicalRecords.bloodType)
-	        	$("#allergies").text(data.medicalRecords.allergies)
+			viewMedicalReports(data)
 	        }
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+function viewMedicalReports(data){
+	$('.content').hide()
+    $('.patient-profile').show()
+    $("#fullName").text(data.name + " " + data.surname)
+    $("#email").text(data.email)
+    $("#gender").text(data.gender)
+    $("#dateOfBirth").text(data.dateOfBirth)
+    $("#phoneNumber").text(data.phoneNumber)
+    $("#securityNumber").text(data.securityNumber)
+    $("#address").text(data.address + ", " + data.city + ", " + data.country)
+    if(data.medicalRecords == null){
+        $('#medicalReport').hide()
+        $('h5').hide()
+        $("#generalReport").text("You dont have access to patients medical record.")
+    }else{
+    	$('#medicalReport').show()
+    	$('h5').show()
+    	$("#generalReport").text("General Report")
+    	$("#height").text(data.medicalRecords.height)
+    	$("#weight").text(data.medicalRecords.weight)
+    	$("#bloodPressure").text(data.medicalRecords.bloodPressure)
+    	$("#bloodType").text(data.medicalRecords.bloodType)
+    	$("#allergies").text(data.medicalRecords.allergies)
+    	if (!$.fn.DataTable.isDataTable('#medicalReports')) {
+    		medicalReportTable = $('#medicalReports').DataTable({
+    			columns: [
+    				{ data: 'name'},
+    				{ data: 'surname'},
+    				{ data: 'securityNumber'}
+    				]
+    		})
+    	}
 }

@@ -87,3 +87,23 @@ insert into appointment (id, app_date, app_start_time, app_end_time, confirmed, 
 values ('27', '2020-5-5', '08:00:00', '11:00:00', 'false', '29', '6', '10', '14');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
 values ('28', '27', '2020-5-6', 'false', '6');
+
+/*Sifarnik*/
+insert into diagnose_perscription (id)
+values ('33');
+/*Dijagnoza*/
+insert into diagnosis (id, name, sifarnik_id)
+values ('31', 'Vitiligo', '33');
+/*Lek*/
+insert into prescription (id, medicine)
+values ('32', 'Krema za vitiligo');
+/*Povezivanje dijagnoze i lekova za nju*/
+insert into diagnosis_perscription (perscription_id, diagnosis_id)
+values ('31', '32');
+
+/*Medical report (izvestaj doktora)*/
+insert into medical_report (id, description, diagnosis_id, appointment_id)
+values ('34', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '21');
+/*Lekovi prepisani ovim izvestajem gore*/
+insert into medical_report_perscription(medical_report_id, prescription_id)
+values ('34', '32');

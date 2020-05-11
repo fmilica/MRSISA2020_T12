@@ -33,11 +33,13 @@ public class MedicalReport {
 	private Appointment appointment;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "medicalReport_perscription", 
+	@JoinTable(name = "medical_report_perscription", 
 				joinColumns = @JoinColumn(name = "medical_report_id"),
 				inverseJoinColumns = @JoinColumn(name = "prescription_id"))
 	private Set<Prescription> prescriptions;
 	
+	// trebalo bi manyToMany, jer moze dati vise dijagnoza jednom pacijentu
+	// (moze oboljevati od n stvari, ali neka, imacemo zdrave pacijente)
 	@ManyToOne
 	@JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
 	private Diagnosis diagnosis;

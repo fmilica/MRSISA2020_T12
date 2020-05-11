@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -36,6 +37,10 @@ public class Diagnosis {
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="diagnosis")
 	private Set<MedicalReport> medicalReports;
+	
+	@ManyToOne
+	@JoinColumn(name = "sifarnik_id", referencedColumnName = "id", nullable = false)
+	private DiagnosePerscription diagnosePerscription;
 
 	public Diagnosis() {}
 
