@@ -55,9 +55,15 @@ insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('19
 insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number) 
 values ('15', 'zika', 'zika', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City', 'Country', '44', '66' );
 
-/* Pacijenti */
-insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
-values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '77', '1');
+/* Pacijenti i njihovi zdravstveni kartoni*/
+insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies )
+values ('30' ,'180', '60', '120/60', 'A','No allergies');
+insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, medical_record_id) 
+values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '77', '1', '30');
+update medical_records
+set patient_id = '16'
+where id = '30';
+
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
 values ('29', 'milka', 'milka', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '111', '1');
 

@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,16 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Override
 	public Appointment save(Appointment a) {
 		return appointmentRepository.save(a);
+	}
+
+	@Override
+	public List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId) {
+		return appointmentRepository.findAllByPatientIdAndDoctorId(patientId, doctorId);
+	}
+
+	@Override
+	public List<Appointment> findAll() {
+		return appointmentRepository.findAll();
 	}
 
 }

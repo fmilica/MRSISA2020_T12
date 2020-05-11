@@ -62,4 +62,9 @@ public class PatientImpl implements PatientService {
 	public List<Patient> filter(String name, String surname, String secNum) {
 		return patientRep.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndSecurityNumberContainingIgnoreCase(name, surname, secNum);
 	}
+
+	@Override
+	public Patient findOneBySecurityNumber(String securityNumber) {
+		return patientRep.findOneBySecurityNumber(securityNumber);
+	}
 }

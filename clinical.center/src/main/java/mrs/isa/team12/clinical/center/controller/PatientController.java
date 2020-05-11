@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.MedicalRecordDto;
+import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
@@ -118,7 +120,6 @@ public class PatientController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-		System.out.println("Dosao");
 		List<Patient> patients = patientService.filter(name, surname, securityNumber);
 		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
 		for(Patient p : patients) {
@@ -127,6 +128,36 @@ public class PatientController {
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/viewProfile/{secNum}
+	 HTTP request for viewing choosen patient profile
+	 receives String securityNumber
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/viewProfile/{secNum}")
+	public ResponseEntity<PatientProfileDto> logIn(@PathVariable String secNum){
+		
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view registered patients");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient patient = patientService.findOneBySecurityNumber(secNum);
+		List<Appointment> appointments = appointmentService.findAllByPatientIdAndDoctorId(patient.getId(), currentUser.getId());
+		if(appointments.size() == 0) {
+			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(new PatientProfileDto(patient, new MedicalRecordDto(patient.getMedicalRecords())), HttpStatus.OK);
+		
+	}
+	
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/patient/logIn/{email}/{password}

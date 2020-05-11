@@ -234,11 +234,10 @@ public class Appointment {
 		this.request = request;
 	}
 */
+
 	@Override
 	public String toString() {
-		return "Appointment [id=" + id + ", date=" + date + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", discount=" + discount + ", confirmed=" + confirmed + ", patient=" + patient + ", medicalReport="
-				+ medicalReport + ", ordination=" + ordination + ", clinic=" + clinic + ", doctor=" + doctor
-				+ ", medicalRecords=" + medicalRecords + ", appType=" + appType + "]";
+		return "Appointment [id=" + id + ", patient=" + patient + ", doctor=" + doctor + "]";
 	}
+	
 }

@@ -16,4 +16,6 @@ public interface PatientService {
 	public List<Patient> findAll();
 	
 	public List<Patient> filter(String name, String surname, String secNum);
+	
+	Patient findOneBySecurityNumber(String securityNumber);
 }

@@ -30,16 +30,13 @@ public class MedicalRecords {
 	private Integer weight;
 	
 	@Column(name = "blood_pressure", unique = false, nullable = false)
-	private Integer bloodPressure;
+	private String bloodPressure;
 	
 	@Column(name = "blood_type", unique = false, nullable = false)
 	private String bloodType;
 	
 	@Column(name = "allergies", unique = false, nullable = false)
 	private String allergies;
-	
-	@Column(name = "medical_history", unique = false, nullable = false)
-	private String medicalHistory;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "patient_id")
@@ -51,15 +48,13 @@ public class MedicalRecords {
 	
 	public MedicalRecords() {}
 
-	public MedicalRecords(Integer height, Integer weight, Integer bloodPressure, String bloodType, String allergies,
-			String medicalHistory, Patient patient, Set<Appointment> appointments) {
+	public MedicalRecords(Integer height, Integer weight, String bloodPressure, String bloodType, String allergies, Patient patient, Set<Appointment> appointments) {
 		super();
 		this.height = height;
 		this.weight = weight;
 		this.bloodPressure = bloodPressure;
 		this.bloodType = bloodType;
 		this.allergies = allergies;
-		this.medicalHistory = medicalHistory;
 		this.patient = patient;
 		this.appointments = appointments;
 	}
@@ -80,11 +75,11 @@ public class MedicalRecords {
 		this.weight = weight;
 	}
 
-	public Integer getBloodPressure() {
+	public String getBloodPressure() {
 		return bloodPressure;
 	}
 
-	public void setBloodPressure(Integer bloodPressure) {
+	public void setBloodPressure(String bloodPressure) {
 		this.bloodPressure = bloodPressure;
 	}
 
@@ -103,15 +98,7 @@ public class MedicalRecords {
 	public void setAllergies(String allergies) {
 		this.allergies = allergies;
 	}
-
-	public String getMedicalHistory() {
-		return medicalHistory;
-	}
-
-	public void setMedicalHistory(String medicalHistory) {
-		this.medicalHistory = medicalHistory;
-	}
-
+	
 	public Patient getPatient() {
 		return patient;
 	}
