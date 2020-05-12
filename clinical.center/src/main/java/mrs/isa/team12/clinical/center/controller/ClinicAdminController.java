@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.dto.ViewDoctorDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -178,7 +179,7 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "getDoctors" ,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Doctor>> getDoctors() {
+	public ResponseEntity<List<ViewDoctorDto>> getDoctors() {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -193,8 +194,13 @@ public class ClinicAdminController {
 		}
 		
 		List<Doctor> doctors = doctorService.findAllByClinicId(currentUser.getClinic().getId());
+		List<ViewDoctorDto> dto = new ArrayList<ViewDoctorDto>();
 		
-		return new ResponseEntity<>(doctors, HttpStatus.OK);
+		for(Doctor d : doctors) {
+			dto.add(new ViewDoctorDto(d));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*

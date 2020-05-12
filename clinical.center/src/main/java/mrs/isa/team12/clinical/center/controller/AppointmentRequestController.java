@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentRequestDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
@@ -37,7 +39,7 @@ public class AppointmentRequestController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<AppointmentRequest>> getAllClinicAppReqs() {
+	public ResponseEntity<List<AppointmentRequestDto>> getAllClinicAppReqs() {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -49,8 +51,10 @@ public class AppointmentRequestController {
 		}
 		
 		List<AppointmentRequest> reqs = appointmentRequestService.findAllByClinicAndApproved(currentUser.getClinic(), false);
-		//System.out.println(reqs);
-		//System.out.println(reqs.get(0).getAppointment().getAppType().getName());
-		return new ResponseEntity<>(reqs, HttpStatus.OK);
+		List<AppointmentRequestDto> dto = new ArrayList<AppointmentRequestDto>();
+		for(AppointmentRequest ar : reqs) {
+			dto.add(new AppointmentRequestDto(ar));
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 }

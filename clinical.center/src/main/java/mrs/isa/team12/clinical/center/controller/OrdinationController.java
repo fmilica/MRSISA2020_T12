@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
+import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 
 @RestController
@@ -26,6 +31,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 public class OrdinationController {
 
 	private OrdinationService ordinationService;
+	private AppointmentRequestService appointmentRequestService;
 	
 	@Autowired
 	private HttpSession session;
@@ -184,4 +190,41 @@ public class OrdinationController {
 		
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/ordination/getAvailableOrdinations/{appointReqId}
+	 HTTP request for adding new ordination
+	 receives Ordination object
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/getAvailableOrdinations/{appointReqId}", 
+				 produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Ordination> getAvailableOrdinations(@PathVariable("appointReqId") String id) {
+		
+		ClinicAdmin admin;
+		try {
+			admin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view available ordinations.");
+		}
+		if (admin == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		//uzimamo appointment request da bismo dosli do njegovog datuma
+		AppointmentRequest appReq = appointmentRequestService.findOneById(Long.parseLong(id));
+		
+		Date date = appReq.getAppointment().getDate();
+		
+		//treba da prolazimo kroz sve ostale odobrene appointment requests za taj dan i za tu kliniku I DATUM
+		List<AppointmentRequest> appointmentsForDate = appointmentRequestService.findAllByClinicAndApproved(admin.getClinic(), true);
+		
+		//sve ordinacije te klinike
+		List<Ordination> ordinations = ordinationService.findAllByClinicId(admin.getClinic().getId());
+		//prolazimo kroz ordinacije te klinike i kroz appointmentsForDate da bismo odredili slobodna vremena ordinacija
+		
+		
+		
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name and number combination already exists!");
+		
+	}
 }

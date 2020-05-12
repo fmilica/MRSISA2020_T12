@@ -79,17 +79,17 @@ values ('23', 'false', '2020-05-05', '16', '20', 'false', '16', '17', '11', '19'
 
 /*Jedan zahtev za nepotvrdjen pregled*/
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('24', '23', '2020-05-05', 'false', '17');
+values ('24', '23', '2020-05-12', 'false', '17');
 
 /*Zahtevi u prvoj klinici*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
 values ('25', 'false', '2020-06-05', '09', '10', 'false', '29', '6', '9', '12');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('26', '25', '2020-05-05', 'false', '6');
+values ('26', '25', '2020-05-12', 'false', '6');
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
 values ('27', 'false', '2020-05-05', '08', '11', 'false', '29', '6', '10', '14');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('28', '27', '2020-05-06', 'false', '6');
+values ('28', '27', '2020-05-12', 'false', '6');
 
 /*Sifarnik*/
 insert into diagnose_perscription (id)

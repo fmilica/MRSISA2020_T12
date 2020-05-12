@@ -432,6 +432,7 @@ $(document).ready(function() {
 	})
 
 	/**********/
+	/*Appointment requests*/
 
 	// pretplata svih elemenata sa klasom na klik
 	$('body').on('click', 'button.table-button', function() {
@@ -440,6 +441,7 @@ $(document).ready(function() {
 		// podesi parametre koji je aktivan
 		var examReqId = $(this).attr('id')
 		examReq.reqId = examReqId
+		//da se popuni tabela slobodnim klinikama za taj dan
 		examRoomTable.ajax.reload()
 	});
 	$('body').on('click', 'button.table-button-schedule', function() {
@@ -456,36 +458,15 @@ $(document).ready(function() {
 		if (!$.fn.DataTable.isDataTable('#examReqTable')) {
 			examReqTable = $('#examReqTable').DataTable({
 				ajax: {
-					// napraviti transportni objekat koji moze da se salje dovde
-					// ne znam kako drugacije bi mogao da dobavlja ove informacije
-					// mislim da bi pucalo sve
-					// a samo nam trebaju stringovi realno
-					// neki mali transportni objekat, da se ne vidi, negde sakriven...
-					// mada i on bi pucao jer bi se getovale vrednosti iz onog
-					// ne bi trebalo da puca ako se kreira u okviru servisa, tada je, mislim, konekcija i dalje otvorena
-					// objekat recimo ovakav
-					/*
-					var appointmentReq = {
-						id: "",
-						date: "",
-						appType: "",
-						doctorId: "",
-						time: ""
-					}
-					*/
 					url: "../../theGoodShepherd/appointmentRequest",
 					dataSrc: ''
 				},
 				columns: [
-					{
-						data: null,
-						render: function (data) {
-							return data.appointment.doctor.name + " " + data.appointment.doctor.surname
-						}
-					},
-					{ data: 'appointment.date'},
-					{ data: 'appointment.startTime'},
-					{ data: 'appointment.endTime'},
+					{ data: 'doctorFullName'},
+					{ data: 'patientFullName'},
+					{ data: 'date'},
+					{ data: 'startTime' + ':00'},
+					{ data: 'endTime' + ':00'},
 					{
 						data: null,
 						render: function (data) {
@@ -496,37 +477,6 @@ $(document).ready(function() {
 			})
 		}
 
-		//$('#clinicExamReq').click(function(event) {
-		// tabela sa sobama za pregled
-		if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
-			examRoomTable = $('#examRoomTable').DataTable({
-				ajax: {
-					url: "../../theGoodShepherd/ordination/getClinicsExamination",
-					dataSrc: ''
-				},
-				columns: [
-					{ data: 'name'},
-					{ data: 'ordinationNumber'},
-					{
-						data: null,
-						render: function (data) {
-						return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
-									'<option selected="selected" value="12:00">12:00</option>' + 
-									'<option value="14:00">14:00</option>' +
-							'</select>'
-						}
-					},
-					{
-						data: null,
-						render: function (data) {
-							if (!examReq.reqId) {
-								return "Specify examination request to schedule"
-							}
-							return '<button id="'+data.id+'" class="btn btn-info table-button-schedule">Schedule ordination</button>';
-						}
-					}]
-			})
-		}
 	})
 
 	// filtriranje soba za preglede
@@ -565,6 +515,39 @@ $(document).ready(function() {
 	}
 
 })
+
+function viewExaminationRoomsForAppointmentRequests(){
+	// tabela sa sobama za pregled
+	if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
+		examRoomTable = $('#examRoomTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/ordination/getClinicsExamination",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{ data: 'ordinationNumber'},
+				{
+					data: null,
+					render: function (data) {
+					return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
+								'<option selected="selected" value="12:00">12:00</option>' + 
+								'<option value="14:00">14:00</option>' +
+						'</select>'
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						if (!examReq.reqId) {
+							return "Specify examination request to schedule"
+						}
+						return '<button id="'+data.id+'" class="btn btn-info table-button-schedule">Schedule ordination</button>';
+					}
+				}]
+		})
+	}
+}
 
 /*Validation and forms*/
 function showValidate(input) {
