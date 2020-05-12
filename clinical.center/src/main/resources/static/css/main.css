@@ -304,6 +304,9 @@ body {
 .card-topline-theme {
     border-top: 3px solid rgb(58, 201, 214, 0.3);
 }
+.card-body.confirm {
+    padding: 0 70px;
+}
 /*
 * Schedule appointment (patient)
 */

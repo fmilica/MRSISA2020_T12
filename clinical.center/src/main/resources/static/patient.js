@@ -213,6 +213,14 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 function createAppointment(doctorId, time) {
 	newAppointment.doctorId = doctorId;
 	newAppointment.time = time
+	// prikaz svih podataka
+	$('#date').text(newAppointment.date)
+	$('#time').text(newAppointment.time)
+	$('#appType').text(newAppointment.appType)
+	$('#doctor').text(newAppointment.doctorId)
+	$('#clinic').text(newAppointment.clinicId)
+	$('.content').hide()
+	$('.patient-confirm-app').show()
 	//alert("redirekt na stranicu sa svim podacima")
 	alert(JSON.stringify(newAppointment))
 	alert("U narednom sprintu, veza sa slanjem emaila!")
