@@ -248,43 +248,6 @@ public class ClinicAdminController {
 		}
 	}
 	
-	public void videcemo() {
-		/*
-		boolean ind = false;
-		for (Ordination ordination : ordinationService.findAll()) {
-			if(ind == false) {
-				if(ordination.getAppointments().size() > 0) {
-					for (Appointment appointment : ordination.getAppointments()) {
-						if(equalDates(appointment.getDate(), appointment.getTime(), appointmentReq.getAppointment().getDate(), 
-								appointmentReq.getAppointment().getTime(), appointment.getType().getDuration(), 
-									appointmentReq.getAppointment().getType().getDuration())) {
-							break;
-						}
-						else {
-							ind = true;
-							ordination.addAppointment(appointmentReq.getAppointment());
-							appointmentReq.getAppointment().setOrdination(ordination);
-							ordinationService.save(ordination);
-						}
-					}
-				}
-				else {
-					ind = true;
-					ordination.addAppointment(appointmentReq.getAppointment());
-					appointmentReq.getAppointment().setOrdination(ordination);
-					ordinationService.save(ordination);
-				}
-			}
-		}
-		if(ind == false) {
-			//naci prvi seledeci slobodni termin za neku ordinaciju i navedenog doktora
-			//iterativno prolaziti kroz datume??
-			//promeniti u appointment datum i vreme
-		}
-		*/
-	}
-	
-	
 	/*
 	 * url: POST localhost:8081/theGoodShepherd/clinicAdmin/declineAppointmentRequest
 	 * HTTP request for sending a rejection email to patient
@@ -295,7 +258,7 @@ public class ClinicAdminController {
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> declineAppointmentRequest(@RequestBody AppointmentRequest appointmentRequest){
-		if (session.getAttribute("currentUser") != null) {
+		if (session.getAttribute("currentUser") == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current user doesn't exist!");
 		}
 		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
@@ -313,29 +276,4 @@ public class ClinicAdminController {
 		}
 	}
 	
-	
-	/*
-	 * existing - Date - format -> dd.MM.yyyy.
-	 * existingH - Date - format -> HH:mm
-	 * request - Date - format -> dd.MM.yyyy.
-	 * requestH - Date - format -> HH:mm
-	 * durationE - int 
-	 * durationR - int
-	 * */
-	@SuppressWarnings("deprecation")
-	private boolean equalDates(Date existing, Date existingH, Date request, Date requestH, int durationE, int durationR) {
-		//proveravamo da li su istog datuma
-		if(existing.equals(request)) {
-			//proveravamo da li su istog sata
-			if(existingH.equals(requestH)) {
-				return true;
-			}
-			//proveravamo da se ne ukrstaju ukoliko se requested prihvati
-			else if((((existingH.getHours() + durationE)*60+existingH.getMinutes()) <= (requestH.getHours()*60+requestH.getMinutes())) ||
-					(((requestH.getHours() + durationR)*60+requestH.getMinutes()) <= (existingH.getHours()*60+existingH.getMinutes()))) {
-				return false;
-			}
-		}
-		return false;
-	}
 }

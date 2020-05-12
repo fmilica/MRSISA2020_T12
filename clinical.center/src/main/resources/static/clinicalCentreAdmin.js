@@ -1,5 +1,7 @@
 var clinicAdminsTable;
 var clinicsTable;
+var requestsTable;
+var choosenRequest;
 
 $(document).ready(function() {
 	
@@ -279,6 +281,7 @@ $(document).ready(function() {
         $('.clinics').show()
     })
 	
+    /*Add new clinical centre admin*/ 
     $('#add_centreAdmin').click(function(e){
         e.preventDefault()
         
@@ -342,6 +345,42 @@ $(document).ready(function() {
         $('#gender').val('')
         $('#dateBirth').val('')
     })
+    
+    /*View all registration requests*/
+    $('#registrationReq').click(function(event) {
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#registrationReqTable')) {
+			requestsTable = $('#registrationReqTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/registrationReq",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'user.email'},
+					{ data: 'user.password'},
+					{ data: 'user.name'},
+					{ data: 'user.surname'},
+					{ data: 'user.gender'},
+					{ data: 'user.dateOfBirth'},
+					/*{ data: 'user.address'},
+					{ data: 'user.city'},
+					{ data: 'user.country'},
+					{ data: 'user.phoneNumber'},
+					{ data: 'user.securityNumber'},*/
+					{ data: null,
+						render: function(data){
+							return '<button name="acceptRequest" class="btn btn-info add-button" onclick="acceptReq('+ data.id +')">Accept</button>' +
+							'<button name="declineRequest" class="btn btn-info add-button" onclick="declineReq('+ data.id +')">Deline</button>'
+						}
+					}
+				]
+			})
+		}
+	})
+	
+	
+	
 })
 
 function logInClinicalCentreAdmin(email, password){
@@ -371,4 +410,48 @@ function hideValidate(input) {
     var thisAlert = $(input).parent();
 
     $(thisAlert).removeClass('alert-validate');
+}
+
+function acceptReq(id){
+	
+	$.ajax({
+        type : "POST",
+        url : "/theGoodShepherd/clinicalCenterAdmin/acceptRegistrationRequest",
+        contentType : "application/json",
+        //dataType: "json",
+        data : JSON.stringify({
+            "id" : id
+        }),
+        success : function()  {
+        	requestsTable.ajax.reload();
+        	$('.content').hide()
+    		$('.registration-req').show()
+            alert("Registration request accepted!")
+        },
+        error : function(response) {
+        	alert(response.responseJSON.message)
+        }
+    })
+}
+
+function declineReq(id){
+	
+	$.ajax({
+        type : "POST",
+        url : "/theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest",
+        contentType : "application/json",
+        //dataType: "json",
+        data : JSON.stringify({
+            "id" : id
+        }),
+        success : function()  {
+        	requestsTable.ajax.reload();
+        	$('.content').hide()
+    		$('.registration-req').show()
+            alert("Registration request rejected!")
+        },
+        error : function(response) {
+        	alert(response.responseJSON.message)
+        }
+    })
 }

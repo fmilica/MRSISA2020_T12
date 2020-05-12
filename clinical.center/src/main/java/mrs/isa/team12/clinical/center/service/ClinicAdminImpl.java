@@ -52,15 +52,14 @@ public class ClinicAdminImpl implements ClinicAdminService {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(patient.getEmail());
 		mail.setFrom(admin.getEmail());
-		
 		String disc = "";
-		if(appointment.getDiscount() == null) {
-			disc = "0";
-		}
-		else {
-			disc = appointment.getDiscount()*100 + "";
-		}
 		if(acceptance == true) {
+			if(appointment.getDiscount() == null) {
+				disc = "0";
+			}
+			else {
+				disc = appointment.getDiscount()*100 + "";
+			}
 			mail.setSubject("Appointment request accepted!");
 			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your appointment request!\n" + 
 					appointment.getAppType().getName() + " appointment scheduled for " + 

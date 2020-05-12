@@ -18,4 +18,6 @@ public interface PatientService {
 	public List<Patient> filter(String name, String surname, String secNum);
 	
 	Patient findOneBySecurityNumber(String securityNumber);
+	
+	void deleteById(Long id);
 }

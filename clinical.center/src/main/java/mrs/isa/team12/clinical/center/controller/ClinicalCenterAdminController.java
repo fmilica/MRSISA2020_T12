@@ -19,8 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
+import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
 
 @RestController
 @RequestMapping("theGoodShepherd/clinicalCenterAdmin")
@@ -28,14 +31,19 @@ public class ClinicalCenterAdminController {
 
 	private ClinicalCenterAdminService clinicalCenterAdminService;
 	private ClinicalCenterService centreService;
+	private RegistrationRequestService registrationService;
+	private PatientService patientService;
 
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService, ClinicalCenterService centreService) {
+	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService, ClinicalCenterService centreService, 
+			RegistrationRequestService registrationService, PatientService patientService) {
 		this.clinicalCenterAdminService = clinicalCenterAdminService;
 		this.centreService = centreService;
+		this.registrationService = registrationService;
+		this.patientService = patientService;
 	}
 	
 	/*
@@ -133,5 +141,64 @@ public class ClinicalCenterAdminController {
 		centreService.save(clinicalCentre);
 		
 		return new ResponseEntity<>(clinicalCentreAdmin, HttpStatus.CREATED);
+	}
+	
+
+	@PostMapping(value = "/acceptRegistrationRequest",
+			 consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void acceptRegistrationRequest(@RequestBody RegistrationRequest regReq) {
+		
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can accept new registration requests.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		RegistrationRequest registrationRequest = registrationService.findOneById(regReq.getId());
+		
+		if(registrationRequest == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
+		}
+		registrationRequest.setApproved(true);
+		registrationService.save(registrationRequest);
+		try {
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(),registrationRequest.getDescription(), true);
+		}catch( Exception e ){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+	
+	@PostMapping(value = "/declineRegistrationRequest",
+			 consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void declineRegistrationRequest(@RequestBody RegistrationRequest regReq) {
+		
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can accept new registration requests.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		RegistrationRequest registrationRequest = registrationService.findOneById(regReq.getId());
+		
+		if(registrationRequest == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
+		}
+		registrationService.deleteById(registrationRequest.getId());
+		patientService.deleteById(registrationRequest.getUser().getId());
+		try {
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(),registrationRequest.getDescription(), false);
+		}catch( Exception e ){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 }

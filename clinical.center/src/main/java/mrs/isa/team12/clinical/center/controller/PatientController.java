@@ -34,6 +34,7 @@ import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
+import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
@@ -42,6 +43,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
 
 @RestController
 @RequestMapping("theGoodShepherd/patient")
@@ -55,6 +57,7 @@ public class PatientController {
 	private AppointmentTypeService appointmentTypeService;
 	private ClinicAdminService clinicAdminService;
 	private RegisteredUserService userService;
+	private RegistrationRequestService registrationService;
 	
 	@Autowired
 	private HttpSession session;
@@ -63,7 +66,7 @@ public class PatientController {
 	public PatientController(PatientService patientService, AppointmentRequestService appointmentRequestService,
 			ClinicService clinicService, DoctorService doctorService, AppointmentService appointmentService,
 			AppointmentTypeService appointmentTypeService, ClinicAdminService clinicAdminService,
-			RegisteredUserService userService) {
+			RegisteredUserService userService, RegistrationRequestService registrationService) {
 		this.patientService = patientService;
 		this.appointmentRequestService = appointmentRequestService;
 		this.clinicService = clinicService;
@@ -72,6 +75,7 @@ public class PatientController {
 		this.appointmentTypeService = appointmentTypeService;
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
+		this.registrationService = registrationService;
 	}
 	
 
@@ -219,6 +223,8 @@ public class PatientController {
 		// ne postoji u bazi
 		// sacuvamo ga
 		Patient saved = patientService.save(patient);
+		RegistrationRequest regReq = new RegistrationRequest(patient, false, "");
+		registrationService.save(regReq);
 		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
 

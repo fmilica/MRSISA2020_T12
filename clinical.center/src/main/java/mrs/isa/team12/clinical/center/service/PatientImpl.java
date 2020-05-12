@@ -67,4 +67,9 @@ public class PatientImpl implements PatientService {
 	public Patient findOneBySecurityNumber(String securityNumber) {
 		return patientRep.findOneBySecurityNumber(securityNumber);
 	}
+
+	@Override
+	public void deleteById(Long id) {
+		patientRep.deleteById(id);
+	}
 }
