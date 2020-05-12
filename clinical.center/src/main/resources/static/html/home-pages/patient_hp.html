@@ -241,6 +241,23 @@
 										<header>Clinics</header>
 									</div>
 									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="clinicName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Address:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="clinicAddress" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterClinicsByAtributes" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
 										<table id="clinicsTable" class="display">
 											<thead>
 												<tr>
@@ -248,8 +265,8 @@
 													<th>Address</th>
 													<th>Rating</th>
 													<th>Price</th>
-													<th>Appointmen type</th>
-													<!--<th class="discount">Discount</th>-->
+													<th>Appointment type</th>
+													<th>Duration</th>
 													<th>View doctors</th>
 												</tr>
 											</thead>
@@ -259,8 +276,8 @@
 													<th>Address</th>
 													<th>Rating</th>
 													<th>Price</th>
-													<th>Appointmen type</th>
-													<!--<th class="discount">Discount</th>-->
+													<th>Appointment type</th>
+													<th>Duration</th>
 													<th>View doctors</th>
 												</tr>
 											</tfoot>
@@ -280,31 +297,29 @@
 										<header id="doctorsClinic"></header>
 									</div>
 									<div class="card-body">
-										<!-- Filter doctors form 
 										<div class="form-group row">
 											<label class="control-label col-md-1">
 												Name:
 											</label>
 											<div class="col-md-2">
-												<input type="text" id="doctorFilterName" data-required="1"  class="form-control doctor-input-height" />
+												<input type="text" id="doctorName" data-required="1"  class="form-control doctor-input-height" />
 											</div>
 											<label class="control-label col-md-1">
 												Surname:
 											</label>
 											<div class="col-md-2">
-												<input type="text" id="doctorFilterSurname" data-required="1"  class="form-control doctor-input-height" />
+												<input type="text" id="doctorSurname" data-required="1"  class="form-control doctor-input-height" />
 											</div>
 											<label class="control-label col-md-1">
 												Rating:
 											</label>
 											<div class="col-md-2">
-												<input type="text" id="doctorFilterRating" data-required="1"  class="form-control doctor-input-height" />
+												<input type="text" id="doctorRating" data-required="1"  class="form-control doctor-input-height" />
 											</div>
 											<div class="col-md-2">
-												<button id="filterDoctors" type="submit" class="btn btn-info doctor-filter-btn">Filter doctors</button>
+												<button id="filterDoctorsByAtributes" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
 											</div>
 										</div>
-										-->
 										<table id="doctorsClinicTable" class="display">
 											<thead>
 												<tr>
@@ -346,6 +361,7 @@
 										<div class="confirm-app">
 											<h4>Date<span id="date" class="pull-right"></span></h4>
 											<h4>Time<span id="time" class="pull-right"></span></h4>
+											<h4>Duration<span id="duration" class="pull-right"></span></h4>
 											<h4>Appointment type<span id="appType" class="pull-right"></span></h4>
 											<h4>Doctor<span id="doctor" class="pull-right"></span></h4>
 											<h4>Clinic<span id="clinic" class="pull-right"></span></h4>

@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
@@ -243,5 +245,33 @@ public class DoctorController {
 		
 		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/filterDoctors
+	 HTTP request for filtering clinic doctors
+	 returns ResponseEntity object
+	 */
+	/*@GetMapping(value = "/filterPatients", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ViewPatientsDto>> filterPatients(@RequestParam String name, @RequestParam String surname, @RequestParam String securityNumber) {
+
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view registered patients");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		List<Patient> patients = patientService.filter(name, surname, securityNumber);
+		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
+		for(Patient p : patients) {
+			dto.add(new ViewPatientsDto(p));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}*/
 	
 }

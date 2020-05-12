@@ -17,4 +17,5 @@ public interface ClinicService {
 	public Clinic findOneByName(String name);
 
 	public Clinic save(Clinic c);
+	
 }
