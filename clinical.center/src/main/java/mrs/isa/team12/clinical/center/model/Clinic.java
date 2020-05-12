@@ -39,7 +39,7 @@ public class Clinic {
 	@Column(name="country", unique=false, nullable=false)
 	private String country;
 	
-	@Column(name="description", unique=false, nullable=false)
+	@Column(name="description", unique=false, nullable=true)
 	private String description;
 	
 	@Column(name="rating", unique=false, nullable=true)

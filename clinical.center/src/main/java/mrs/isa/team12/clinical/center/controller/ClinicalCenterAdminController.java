@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
@@ -69,7 +70,7 @@ public class ClinicalCenterAdminController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "logIn/{email}/{password}")
-	public ResponseEntity<ClinicalCentreAdmin> logIn(@PathVariable String email, @PathVariable String password){
+	public ResponseEntity<RegisteredUserDto> logIn(@PathVariable String email, @PathVariable String password){
 		
 		if (session.getAttribute("currentUser") != null) {
 			// postoji ulogovani korisnik
@@ -88,7 +89,7 @@ public class ClinicalCenterAdminController {
 		
 		session.setAttribute("currentUser", clinicalCentreAdmin);
 		
-		return new ResponseEntity<>(clinicalCentreAdmin, HttpStatus.OK);
+		return new ResponseEntity<>(new RegisteredUserDto(clinicalCentreAdmin), HttpStatus.OK);
 	}
 	
 	/*

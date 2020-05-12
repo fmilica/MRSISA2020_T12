@@ -61,4 +61,9 @@ public class DoctorImpl implements DoctorService {
 		return doctorRep.findAllByClinicAndAppointmentTypesIn(clinic, types);
 	}
 
+	@Override
+	public List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type) {
+		return doctorRep.findAllByClinicIdAndAppointmentTypes(clinicId, type);
+	}
+
 }

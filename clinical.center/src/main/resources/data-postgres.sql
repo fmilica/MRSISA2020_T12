@@ -69,24 +69,27 @@ values ('29', 'milka', 'milka', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa',
 
 /*Jedan pregled potvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('21', 'true', '2020-5-6', '15:00:00', '19:00:00', 'true', '16', '17', '11', '19');
+values ('21', 'true', '2020-05-06', '16', '20', 'true', '16', '17', '11', '19');
+/*Treba mi ovo samo za probu*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
+values ('36', 'false', '2020-05-12', '16', '20', 'true', '29', '17', '11', '19');
 /*Jedan pregled NEpotvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('23', 'false', '2020-5-5', '15:00:00', '19:00:00', 'false', '16', '17', '11', '19');
+values ('23', 'false', '2020-05-05', '16', '20', 'false', '16', '17', '11', '19');
 
 /*Jedan zahtev za nepotvrdjen pregled*/
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('24', '23', '2020-5-5', 'false', '17');
+values ('24', '23', '2020-05-05', 'false', '17');
 
 /*Zahtevi u prvoj klinici*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('25', 'false', '2020-6-5', '09:00:00', '10:00:00', 'false', '29', '6', '9', '12');
+values ('25', 'false', '2020-06-05', '09', '10', 'false', '29', '6', '9', '12');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('26', '25', '2020-5-5', 'false', '6');
+values ('26', '25', '2020-05-05', 'false', '6');
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('27', 'false', '2020-5-5', '08:00:00', '11:00:00', 'false', '29', '6', '10', '14');
+values ('27', 'false', '2020-05-05', '08', '11', 'false', '29', '6', '10', '14');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
-values ('28', '27', '2020-5-6', 'false', '6');
+values ('28', '27', '2020-05-06', 'false', '6');
 
 /*Sifarnik*/
 insert into diagnose_perscription (id)

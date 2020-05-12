@@ -23,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.MedicalRecordDto;
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
+import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.dto.ViewClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
@@ -136,7 +138,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/viewProfile/{secNum}")
-	public ResponseEntity<PatientProfileDto> logIn(@PathVariable String secNum){
+	public ResponseEntity<PatientProfileDto> viewProfile(@PathVariable String secNum){
 		
 		Doctor currentUser;
 		try {
@@ -168,7 +170,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/logIn/{email}/{password}")
-	public ResponseEntity<Patient> logIn(@PathVariable String email, @PathVariable String password){
+	public ResponseEntity<RegisteredUserDto> logIn(@PathVariable String email, @PathVariable String password){
 		
 		if (session.getAttribute("currentUser") != null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already loged in!");
@@ -186,7 +188,7 @@ public class PatientController {
 		
 		session.setAttribute("currentUser", patient);
 		
-		return new ResponseEntity<>(patient, HttpStatus.OK);
+		return new ResponseEntity<>(new RegisteredUserDto(patient), HttpStatus.OK);
 	}
 	
 	/*
@@ -235,8 +237,8 @@ public class PatientController {
 		//ovo ce se zanemariti jer ne znam da saljem datum preko postmana
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-		appointment.setDate(sdf1.parse("12.6.2020."));
-		appointment.setStartTime(sdf2.parse("12:00"));
+		//appointment.setDate(sdf1.parse("12.6.2020."));
+		//appointment.setStartTime(sdf2.parse("12:00"));
 		//ovo je izdvojeno odeljenje i brise se cim posaljemo datum preko ajaxa
 		
 		if (session.getAttribute("currentUser") == null) {
@@ -269,5 +271,33 @@ public class PatientController {
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/patient/clinics
+	 HTTP request for viewing all existing clinics
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/clinics", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ViewClinicPatientDto>> getAllClinics() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view  all clinics.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Clinic> clinics = clinicService.findAll();
+		List<ViewClinicPatientDto> clinicsDto = new ArrayList<ViewClinicPatientDto>();
+		
+		for(Clinic c : clinics) {
+			ViewClinicPatientDto clinic = new ViewClinicPatientDto(c);
+			clinic.setAppointmentTypes(c.getAppointmentTypes());
+			clinicsDto.add(clinic);
+		}
+		return new ResponseEntity<>(clinicsDto, HttpStatus.OK);
 	}
 }

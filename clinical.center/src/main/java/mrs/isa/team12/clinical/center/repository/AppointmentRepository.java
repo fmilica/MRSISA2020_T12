@@ -9,5 +9,4 @@ import mrs.isa.team12.clinical.center.model.Appointment;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
 	
 	List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId);
-
 }

@@ -35,12 +35,10 @@ public class Appointment {
 	private Date date;
 	
 	@Column(name = "app_start_time", unique = false, nullable = true )
-	@Temporal(TemporalType.TIME)
-	private Date startTime;
+	private Integer startTime;
 	
 	@Column(name = "app_end_time", unique = false, nullable = true)
-	@Temporal(TemporalType.TIME)
-	private Date endTime;
+	private Integer endTime;
 	
 	//type
 	
@@ -85,12 +83,12 @@ public class Appointment {
 
 	public Appointment() {}
 
-	public Appointment(Date date, Date startTime, AppointmentType type, Double discount,
+	public Appointment(Date date, Integer startTime, AppointmentType type, Double discount,
 			Boolean confirmed, Patient patient, MedicalReport medicalReport, Ordination ordination, Doctor doctor) {
 		super();
 		this.date = date;
 		this.startTime = startTime;
-		this.endTime = new Date(startTime.getTime() + appType.getDuration()*3600*1000);
+		this.endTime = startTime + type.getDuration();
 		this.appType = type;
 		this.discount = discount;
 		this.confirmed = confirmed;
@@ -116,19 +114,19 @@ public class Appointment {
 		this.date = date;
 	}
 
-	public Date getStartTime() {
+	public Integer getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Integer startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public Integer getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Integer endTime) {
 		this.endTime = endTime;
 	}
 

@@ -1,7 +1,11 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ViewClinicDto;
+import mrs.isa.team12.clinical.center.dto.ViewClinicPatientDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
-import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -55,11 +61,26 @@ public class ClinicController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Clinic>> getAllClinics() {
-		// ko ima pravo?
-		List<Clinic> clinics = clinicService.findAll();
+	public ResponseEntity<List<ViewClinicDto>> getAllClinics() {
 		
-		return new ResponseEntity<>(clinics, HttpStatus.OK);
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinics.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Clinic> clinics = clinicService.findAll();
+		List<ViewClinicDto> clinicsDto = new ArrayList<ViewClinicDto>();
+		
+		for(Clinic c : clinics) {
+			clinicsDto.add(new ViewClinicDto(c));
+		}
+		
+		return new ResponseEntity<>(clinicsDto, HttpStatus.OK);
 	}
 	
 	/*
@@ -100,7 +121,7 @@ public class ClinicController {
 	 */
 	@GetMapping(value = "/filterClinics/{appTypeName}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Clinic>> getClinicsByAppTypeName(@PathVariable("appTypeName") String appTypeName) {
+	public ResponseEntity<List<ViewClinicPatientDto>> getClinicsByAppTypeName(@PathVariable("appTypeName") String appTypeName) {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -111,25 +132,113 @@ public class ClinicController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		// mislim da mora da se radi join klinike sa appType da bismo dobili sve klinike sa tim imenom appType-a
-		List<Clinic> clinicsByAppTypeName = clinicService.findAllByAppointmentTypeName(appTypeName);
-		
 		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
 		
+		// svi doktori iz svih klinika koji mogu da odrade pregled
 		List<Doctor> sertifiedDoctors = doctorService.findAllByAppointmentTypesIn(types);
-		
-		List<Clinic> clinicsWithSertifiedDoctors = new ArrayList<Clinic>();
+
+		List<ViewClinicPatientDto> clinicsWithSertifiedDoctors = new ArrayList<ViewClinicPatientDto>();
 		for(Doctor d : sertifiedDoctors) {
-			if (!clinicsWithSertifiedDoctors.contains(d.getClinic())) {
-				clinicsWithSertifiedDoctors.add(d.getClinic());
+			ViewClinicPatientDto clinic = new ViewClinicPatientDto(d.getClinic());
+			clinic.setAppointmentTypes(d.getClinic().getAppointmentTypes());
+			if (!clinicsWithSertifiedDoctors.contains(clinic)) {
+				clinicsWithSertifiedDoctors.add(clinic);
 			}
+		}
+
+		return new ResponseEntity<>(clinicsWithSertifiedDoctors, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/clinics/filterClinics/{appTypeName}/{date}
+	 HTTP request for viewing clinics that have appointmentType specified by name
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/filterClinics/{appTypeName}/{appDate}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ViewClinicPatientDto>> getClinicsByAppTypeNameAndDate(@PathVariable("appTypeName") String appTypeName,
+																					@PathVariable("appDate") String appDate) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patients can filter clinics by appointment type.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+
+		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
+		
+		// svi doktori iz svih klinika koji mogu da odrade pregled
+		List<Doctor> sertifiedDoctors = doctorService.findAllByAppointmentTypesIn(types);
+		// svi doktori koji imaju slobodnog vremena za pregled
+		List<Doctor> freeSertifiedDoctors = new ArrayList<>();
+		
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = dt.parse(appDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 		
 		
-		//System.out.println(sertifiedDoctors);
-		//System.out.println(clinicsWithSertifiedDoctors.get(0).getAppointmentTypes());
+		for (Doctor d : sertifiedDoctors) {
+			// slobodna vremena za taj dan i tog doktora
+			List<Integer> times = new ArrayList<Integer>();
+			for (int i = d.getStartWork(); i < d.getEndWork(); i++) {
+				times.add(i);
+			}
+			if (d.getAppointments() != null) {
+				for (Appointment a : d.getAppointments()) {
+					if (a.getDate().equals(date)) {
+						Integer start = a.getStartTime();
+						for (int i = 0; i < a.getAppType().getDuration(); i++) {
+							times.remove(new Integer(start+i));
+						}
+					}
+				}
+			}
+			// pronalazimo tip pregleda koji je trazen da bismo dobili njegovu duzinu
+			AppointmentType doctorType = null;
+			Set<AppointmentType> doctorTypes = d.getAppointmentTypes();
+			for (AppointmentType at : types) {
+				for (AppointmentType t : doctorTypes) {
+					if (at.equals(t)) {
+						doctorType = t;
+						break;
+					}
+				}
+			}
+			// imamo listu slobodnih vremena
+			// provera da li imamo dovoljno uzastopnih sati za pregled
+			List<Integer> freeTimes = new ArrayList<Integer>();
+			for(Integer i : times) {
+				boolean hasConsecutive = true;
+				for(int j = 1; j < doctorType.getDuration(); j++) {
+					if (!times.contains(i+j)) {
+						hasConsecutive = false;
+					}
+				}
+				if (hasConsecutive) {
+					freeTimes.add(i);
+				}
+			}
+			// da li ima slobodnog taj doktor
+			if (!freeTimes.isEmpty()) {
+				freeSertifiedDoctors.add(d);
+			}
+		}
 		
-		//System.out.println(doctorsByAppTypeName);
+		List<ViewClinicPatientDto> clinicsWithSertifiedDoctors = new ArrayList<ViewClinicPatientDto>();
+		for(Doctor d : freeSertifiedDoctors) {
+			ViewClinicPatientDto clinic = new ViewClinicPatientDto(d.getClinic());
+			clinic.setAppointmentTypes(d.getClinic().getAppointmentTypes());
+			if (!clinicsWithSertifiedDoctors.contains(clinic)) {
+				clinicsWithSertifiedDoctors.add(clinic);
+			}
+		}
 
 		return new ResponseEntity<>(clinicsWithSertifiedDoctors, HttpStatus.OK);
 	}

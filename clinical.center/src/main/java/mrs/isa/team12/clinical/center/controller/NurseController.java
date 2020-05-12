@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.service.NurseImpl;
 
@@ -35,7 +36,7 @@ public class NurseController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "logIn/{email}/{password}")
-	public ResponseEntity<Nurse> logIn(@PathVariable String email, @PathVariable String password){
+	public ResponseEntity<RegisteredUserDto> logIn(@PathVariable String email, @PathVariable String password){
 		
 		if (session.getAttribute("currentUser") != null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already loged in!");
@@ -53,7 +54,7 @@ public class NurseController {
 		
 		session.setAttribute("currentUser", nurse);
 		
-		return new ResponseEntity<>(nurse, HttpStatus.OK);
+		return new ResponseEntity<>(new RegisteredUserDto(nurse), HttpStatus.OK);
 	}
 	
 }

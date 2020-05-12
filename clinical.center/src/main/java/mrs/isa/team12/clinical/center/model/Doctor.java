@@ -25,10 +25,10 @@ public class Doctor extends MedicalPersonnel {
 	private Specialization specialization;
 	
 	// u rasponu od 0 do 24
-	@Column(name = "start_work", unique = false, nullable = true)
+	@Column(name = "start_work", unique = false, nullable = false)
 	private Integer startWork;
 	
-	@Column(name = "end_work", unique = false, nullable = true)
+	@Column(name = "end_work", unique = false, nullable = false)
 	private Integer endWork;
 	
 	@Column(name = "rating", unique = false, nullable = true)
@@ -103,7 +103,7 @@ public class Doctor extends MedicalPersonnel {
 		this.appointmentTypes = appointmentTypes;
 	}
 	public Set<Appointment> getAppointments() {
-		return null;
+		return appointments;
 	}
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;

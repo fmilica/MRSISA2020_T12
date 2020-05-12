@@ -23,4 +23,6 @@ public interface DoctorService {
 	List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types);
 	
 	List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types);
+	
+	List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type);
 }

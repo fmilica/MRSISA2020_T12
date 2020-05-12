@@ -27,4 +27,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long>{
 	List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types);
 	
 	List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types);
+	
+	List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type);
 }
