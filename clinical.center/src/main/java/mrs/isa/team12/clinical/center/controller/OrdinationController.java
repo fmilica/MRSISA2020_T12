@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ExamRoomDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -196,35 +197,58 @@ public class OrdinationController {
 	 receives Ordination object
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "/getAvailableOrdinations/{appointReqId}", 
+	@PostMapping(value = "/getAvailableExaminationRooms/{appReqId}", 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Ordination> getAvailableOrdinations(@PathVariable("appointReqId") String id) {
+	public ResponseEntity<List<ExamRoomDto>> getAvailableExaminationRooms(@PathVariable("appReqId") Long id) {
 		
 		ClinicAdmin admin;
 		try {
 			admin = (ClinicAdmin) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view available ordinations.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view available examination rooms.");
 		}
 		if (admin == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
 		//uzimamo appointment request da bismo dosli do njegovog datuma
-		AppointmentRequest appReq = appointmentRequestService.findOneById(Long.parseLong(id));
+		AppointmentRequest appReq = appointmentRequestService.findOneById(id);
 		
-		Date date = appReq.getAppointment().getDate();
+		Date examDate = appReq.getAppointment().getDate();
+		Integer examStartTime = appReq.getAppointment().getStartTime();
+		Integer examEndTime = appReq.getAppointment().getEndTime();
 		
-		//treba da prolazimo kroz sve ostale odobrene appointment requests za taj dan i za tu kliniku I DATUM
-		List<AppointmentRequest> appointmentsForDate = appointmentRequestService.findAllByClinicAndApproved(admin.getClinic(), true);
+		List<Integer> availableTimes = new ArrayList<Integer>();
+		availableTimes.add(examStartTime);	
 		
 		//sve ordinacije te klinike
-		List<Ordination> ordinations = ordinationService.findAllByClinicId(admin.getClinic().getId());
-		//prolazimo kroz ordinacije te klinike i kroz appointmentsForDate da bismo odredili slobodna vremena ordinacija
+		List<Ordination> examRooms = ordinationService.findAllByClinicIdAndType(admin.getClinic().getId(), OrdinationType.ConsultingRoom);
 		
+		// lista prihvatljivih ordinacija
+		List<ExamRoomDto> satisfyingOrdinations = new ArrayList<ExamRoomDto>();
 		
-		
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name and number combination already exists!");
-		
+		//prolazimo kroz ordinacije te klinike
+		for (Ordination o : examRooms) {
+			// uzimamo u obzir trenutnu ordinaciju
+			boolean satisfying = true;
+			// prolazimo kroz zakazane preglede u toj ordinaciji
+			for (Appointment a : o.getAppointments()) {
+				// proveravamo da li ima za taj datum zakazan pregled
+				if (a.getDate().equals(examDate)) {
+					// proveravamo od kada do kada traje zakazani pregled
+					if ((examStartTime >= a.getStartTime() && examStartTime <= a.getEndTime())
+							|| (examEndTime >= a.getStartTime() && examEndTime <= a.getEndTime())
+							|| (examStartTime < a.getStartTime() && examEndTime > a.getEndTime())) {
+						satisfying = false;
+						break;
+					}
+				}
+			}
+			if(satisfying) {
+				satisfyingOrdinations.add(new ExamRoomDto(o, examDate, availableTimes));
+			}
+		}
+		// vracamo sve sobe
+		return new ResponseEntity<>(satisfyingOrdinations, HttpStatus.OK);
 	}
 }

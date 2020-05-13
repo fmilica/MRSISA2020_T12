@@ -439,10 +439,11 @@ $(document).ready(function() {
 		// odabrao je da zakaze neki pregled, sada je to zapamceno
 		alert("Examination request chosen for scheduling!")
 		// podesi parametre koji je aktivan
+		//TODO DA SKOCI NA POCETAK TABELE SA EXAMINATION ROOMS
 		var examReqId = $(this).attr('id')
 		examReq.reqId = examReqId
 		//da se popuni tabela slobodnim klinikama za taj dan
-		examRoomTable.ajax.reload()
+		viewExaminationRoomsForAppointmentRequests()
 	});
 	$('body').on('click', 'button.table-button-schedule', function() {
 		// prikupljanje podataka i kreiranje pregleda
@@ -465,8 +466,18 @@ $(document).ready(function() {
 					{ data: 'doctorFullName'},
 					{ data: 'patientFullName'},
 					{ data: 'date'},
-					{ data: 'startTime' + ':00'},
-					{ data: 'endTime' + ':00'},
+					{ 
+						data: null,
+						render: function(data) {
+							return data.startTime + ":00"
+						}
+					},
+					{ 
+						data: null,
+						render: function(data) {
+							return data.endTime + ":00"
+						}
+					},
 					{
 						data: null,
 						render: function (data) {
@@ -476,7 +487,12 @@ $(document).ready(function() {
 					}]
 			})
 		}
-
+	})
+	
+	/*Front filter for clinics*/
+	$("#filterExamRoom").on('click', function(e){
+		e.preventDefault()
+		filterExaminationRooms()
 	})
 
 	// filtriranje soba za preglede
@@ -516,12 +532,29 @@ $(document).ready(function() {
 
 })
 
+function filterExaminationRooms(){
+	
+	var nameV = $('#examRoomName').val()
+	var roomNumberV = $('#examRoomNumber').val()
+	
+	
+	examRoomTable
+    .column(0)
+    .search(nameV)
+    .draw();
+	
+	examRoomTable
+    .column(1)
+    .search(roomNumberV)
+    .draw();
+}
+
 function viewExaminationRoomsForAppointmentRequests(){
 	// tabela sa sobama za pregled
 	if (!$.fn.DataTable.isDataTable('#examRoomTable')) {
 		examRoomTable = $('#examRoomTable').DataTable({
 			ajax: {
-				url: "../../theGoodShepherd/ordination/getClinicsExamination",
+				url: "../../theGoodShepherd/ordination/getAvailableExaminationRooms/" + examReq.reqId,
 				dataSrc: ''
 			},
 			columns: [
@@ -546,6 +579,8 @@ function viewExaminationRoomsForAppointmentRequests(){
 					}
 				}]
 		})
+	} else {
+		examRoomTable.ajax.reload("../../theGoodShepherd/ordination/getClinicsExamination")
 	}
 }
 

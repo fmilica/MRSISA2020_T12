@@ -69,13 +69,13 @@ values ('29', 'milka', 'milka', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa',
 
 /*Jedan pregled potvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('21', 'true', '2020-05-06', '16', '20', 'true', '16', '17', '11', '19');
+values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19');
 /*Treba mi ovo samo za probu*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('36', 'false', '2020-05-12', '16', '20', 'true', '29', '17', '11', '19');
+values ('36', 'false', '2020-05-13', '16', '20', 'true', '29', '17', '11', '19');
 /*Jedan pregled NEpotvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
-values ('23', 'false', '2020-05-05', '16', '20', 'false', '16', '17', '11', '19');
+values ('23', 'false', '2020-05-13', '16', '20', 'false', '16', '17', '11', '19');
 
 /*Jedan zahtev za nepotvrdjen pregled*/
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
