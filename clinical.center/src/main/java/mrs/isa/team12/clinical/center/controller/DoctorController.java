@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
-import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
-import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -161,35 +158,7 @@ public class DoctorController {
 		List<DoctorFreeTimesDto> freeCertifiedClinicDoctors = new ArrayList<DoctorFreeTimesDto>();
 		
 		for (Doctor d : certifiedClinicDoctors) {
-			// slobodna vremena za taj dan i tog doktora
-			List<Integer> times = new ArrayList<Integer>();
-			for (int i = d.getStartWork(); i < d.getEndWork(); i++) {
-				times.add(i);
-			}
-			if (d.getAppointments() != null) {
-				for (Appointment a : d.getAppointments()) {
-					if (a.getDate().equals(date)) {
-						Integer start = a.getStartTime();
-						for (int i = 0; i < a.getAppType().getDuration(); i++) {
-							times.remove(new Integer(start+i));
-						}
-					}
-				}
-			}
-			// imamo listu slobodnih vremena
-			// provera da li imamo dovoljno uzastopnih sati za pregled
-			List<Integer> freeTimes = new ArrayList<Integer>();
-			for(Integer i : times) {
-				boolean hasConsecutive = true;
-				for(int j = 1; j < type.getDuration(); j++) {
-					if (!times.contains(i+j)) {
-						hasConsecutive = false;
-					}
-				}
-				if (hasConsecutive) {
-					freeTimes.add(i);
-				}
-			}
+			List<Integer> freeTimes = d.getAvailableTimesForDateAndType(date, type);
 			// da li ima slobodnog taj doktor
 			if (!freeTimes.isEmpty()) {
 				freeCertifiedClinicDoctors.add(new DoctorFreeTimesDto(d, freeTimes));

@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +23,9 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.ExamRoomDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
+import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
@@ -38,8 +42,10 @@ public class OrdinationController {
 	private HttpSession session;
 	
 	@Autowired
-	public OrdinationController(OrdinationService ordinationService) {
+	public OrdinationController(OrdinationService ordinationService, 
+			AppointmentRequestService appointmentRequestService) {
 		this.ordinationService = ordinationService;
+		this.appointmentRequestService = appointmentRequestService;
 	}
 	
 	/*
@@ -192,14 +198,14 @@ public class OrdinationController {
 	}
 	
 	/*
-	 url: POST localhost:8081/theGoodShepherd/ordination/getAvailableOrdinations/{appointReqId}
+	 url: GET localhost:8081/theGoodShepherd/ordination/getAvailableExaminationRooms/{appointReqId}
 	 HTTP request for adding new ordination
 	 receives Ordination object
 	 returns ResponseEntity object
 	 */
-	@PostMapping(value = "/getAvailableExaminationRooms/{appReqId}", 
+	@GetMapping(value = "/getAvailableExaminationRooms/{appReqId}", 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ExamRoomDto>> getAvailableExaminationRooms(@PathVariable("appReqId") Long id) {
+	public ResponseEntity<List<ExamRoomDto>> getAvailableExaminationRooms(@PathVariable("appReqId") Long id) throws ParseException {
 		
 		ClinicAdmin admin;
 		try {
@@ -214,12 +220,15 @@ public class OrdinationController {
 		//uzimamo appointment request da bismo dosli do njegovog datuma
 		AppointmentRequest appReq = appointmentRequestService.findOneById(id);
 		
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		
 		Date examDate = appReq.getAppointment().getDate();
+		AppointmentType examType = appReq.getAppointment().getAppType();
+		Doctor examDoctor = appReq.getAppointment().getDoctor();
 		Integer examStartTime = appReq.getAppointment().getStartTime();
 		Integer examEndTime = appReq.getAppointment().getEndTime();
 		
 		List<Integer> availableTimes = new ArrayList<Integer>();
-		availableTimes.add(examStartTime);	
 		
 		//sve ordinacije te klinike
 		List<Ordination> examRooms = ordinationService.findAllByClinicIdAndType(admin.getClinic().getId(), OrdinationType.ConsultingRoom);
@@ -227,28 +236,67 @@ public class OrdinationController {
 		// lista prihvatljivih ordinacija
 		List<ExamRoomDto> satisfyingOrdinations = new ArrayList<ExamRoomDto>();
 		
+		// lista prihvatljivih ordinacija ZA DRUGI DATUM ili VREME
+		List<ExamRoomDto> substituteOrdinations = new ArrayList<ExamRoomDto>();
+		
 		//prolazimo kroz ordinacije te klinike
 		for (Ordination o : examRooms) {
 			// uzimamo u obzir trenutnu ordinaciju
 			boolean satisfying = true;
 			// prolazimo kroz zakazane preglede u toj ordinaciji
-			for (Appointment a : o.getAppointments()) {
-				// proveravamo da li ima za taj datum zakazan pregled
-				if (a.getDate().equals(examDate)) {
-					// proveravamo od kada do kada traje zakazani pregled
-					if ((examStartTime >= a.getStartTime() && examStartTime <= a.getEndTime())
-							|| (examEndTime >= a.getStartTime() && examEndTime <= a.getEndTime())
-							|| (examStartTime < a.getStartTime() && examEndTime > a.getEndTime())) {
-						satisfying = false;
-						break;
+			if (o.getAppointments() != null) {
+				for (Appointment a : o.getAppointments()) {
+					// proveravamo da li ima za taj datum zakazan pregled
+					if (a.getDate().equals(examDate)) {
+						// proveravamo od kada do kada traje zakazani pregled
+						if (!(examEndTime <= a.getStartTime() || examStartTime >= a.getEndTime())) {
+							satisfying = false;
+							break;
+						}
+						
 					}
 				}
 			}
 			if(satisfying) {
-				satisfyingOrdinations.add(new ExamRoomDto(o, examDate, availableTimes));
+				// dodajemo samo jedno vreme, ono za koji je zakazan
+				// brisemo vremena prethodne
+				availableTimes.clear();
+				availableTimes.add(examStartTime);
+				satisfyingOrdinations.add(new ExamRoomDto(o, dt.format(examDate), availableTimes));
+			} else {
+				// ne zadovoljava za trazeni datum i vreme
+				// trazimo prvo slobodno vreme za koje ima slobodnu ordinaciju i da je doktor slobodan
+				List<Integer> examRoomFree;
+				Date newExamDate = examDate;
+				while(true) {
+					// idemo kroz datume dok ne nadjemo prvi za koji zadovoljavaju
+					// kada je doktor slobodan
+					List<Integer> doctorFree = examDoctor.getAvailableTimesForDateAndType(newExamDate, examType);
+					examRoomFree = o.getAvailableTimesForDateAndType(newExamDate, examType);
+
+					// presek slobodnih vremena
+					examRoomFree.retainAll(doctorFree);
+					
+					if(!examRoomFree.isEmpty()) {
+						// postoje slobodni i za doktora i za ordinaciju
+						break;
+					}
+					// ne postoje slobodni za doktora i ordinaciju
+					// uvecavamo dan za jedan
+					newExamDate = new Date(examDate.getTime() + (1000 * 60 * 60 * 24));
+				}
+				substituteOrdinations.add(new ExamRoomDto(o, dt.format(newExamDate), examRoomFree));
 			}
 		}
-		// vracamo sve sobe
+		
+		if(satisfyingOrdinations.isEmpty()) {
+			// nema slobodnih soba za pregled
+			// za svaku sobu vracamo datum za koji ima prvi slobodan termin
+			// i listu termina
+			return new ResponseEntity<>(substituteOrdinations, HttpStatus.OK);
+		}
+		
+		// vracamo sve sobe za pregled
 		return new ResponseEntity<>(satisfyingOrdinations, HttpStatus.OK);
 	}
 }

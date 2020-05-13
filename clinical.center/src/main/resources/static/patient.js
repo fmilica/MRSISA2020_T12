@@ -257,11 +257,12 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 				{
 					data: null,
 					render: function (data) {
+						var availableTimes = data.availableTimes == null ? [] : (data.availableTimes instanceof Array ? data.availableTimes : [data.availableTimes])
 						var options = ""
-						for (var i = 0; i < data.availableTimes.length; i++) {
-							options += '<option value="'+data.availableTimes[i]+'">'+data.availableTimes[i]+':00</option>'
+						for (var i = 0; i < availableTimes.length; i++) {
+							options += '<option value="'+availableTimes[i]+'">'+availableTimes[i]+':00</option>'
 						}
-					return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
+						return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
 								options + '</select>'
 					}
 				},

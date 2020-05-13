@@ -53,7 +53,9 @@ public class AppointmentRequestController {
 		List<AppointmentRequest> reqs = appointmentRequestService.findAllByClinicAndApproved(currentUser.getClinic(), false);
 		List<AppointmentRequestDto> dto = new ArrayList<AppointmentRequestDto>();
 		for(AppointmentRequest ar : reqs) {
-			dto.add(new AppointmentRequestDto(ar));
+			if (!ar.getApproved()) {
+				dto.add(new AppointmentRequestDto(ar));
+			}
 		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}

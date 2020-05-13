@@ -3,6 +3,9 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -101,5 +104,42 @@ public class Ordination {
 	public String toString() {
 		return "Ordination [id=" + id + ", type=" + type + ", name=" + name + ", clinic=" + clinic + ", appointments="
 				+ appointments + "]";
+	}
+	
+	// dobavljanje slobodnih termina ordinacije za odredjeni datum
+	public List<Integer> getAvailableTimesForDateAndType(Date date, AppointmentType type) {
+		// slobodna vremena za taj dan i tu ordinaciju
+		List<Integer> times = new ArrayList<Integer>();
+		for (int i = 0; i < 24; i++) {
+			times.add(i);
+		}
+		if (this.getAppointments() != null) {
+			for (Appointment a : this.getAppointments()) {
+				// samo gledamo potvrdjene preglede
+				if (a.getConfirmed()) {
+					if (a.getDate().equals(date)) {
+						Integer start = a.getStartTime();
+						for (int i = 0; i < a.getAppType().getDuration(); i++) {
+							times.remove(new Integer(start+i));
+						}
+					}
+				}
+			}
+		}
+		// imamo listu slobodnih vremena
+		// provera da li imamo dovoljno uzastopnih sati za pregled
+		List<Integer> freeTimes = new ArrayList<Integer>();
+		for(Integer i : times) {
+			boolean hasConsecutive = true;
+			for(int j = 1; j < type.getDuration(); j++) {
+				if (!times.contains(i+j)) {
+					hasConsecutive = false;
+				}
+			}
+			if (hasConsecutive) {
+				freeTimes.add(i);
+			}
+		}
+		return times;
 	}
 }

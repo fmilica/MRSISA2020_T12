@@ -1,6 +1,5 @@
 package mrs.isa.team12.clinical.center.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import mrs.isa.team12.clinical.center.model.Ordination;
@@ -10,10 +9,10 @@ public class ExamRoomDto {
 	private Long id;
 	private String name;
 	private Integer ordinationNumber;
-	private Date date;
+	private String date;
 	private List<Integer> availableTimes;
 	
-	public ExamRoomDto(Ordination ordination, Date date, List<Integer> availableTimes) {
+	public ExamRoomDto(Ordination ordination, String date, List<Integer> availableTimes) {
 		this.id = ordination.getId();
 		this.name = ordination.getName();
 		this.ordinationNumber = ordination.getOrdinationNumber();
@@ -39,10 +38,10 @@ public class ExamRoomDto {
 	public void setOrdinationNumber(Integer ordinationNumber) {
 		this.ordinationNumber = ordinationNumber;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public List<Integer> getAvailableTimes() {
