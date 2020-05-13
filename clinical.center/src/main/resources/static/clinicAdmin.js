@@ -452,8 +452,9 @@ $(document).ready(function() {
 	$('body').on('click', 'button.table-button-schedule', function() {
 		// prikupljanje podataka i kreiranje pregleda
 		var ordinationId = $(this).attr('id')
+		var currentDate = $(this).attr('name')
 		var time = $('#time'+ordinationId).val()
-		scheduleOrdination(ordinationId, time)
+		scheduleOrdination(ordinationId, currentDate, time)
 	});
 
 	$('#clinicExamReq').click(function(event) {
@@ -528,10 +529,13 @@ $(document).ready(function() {
 		}
 	})*/
 	
-	function scheduleOrdination(ordinationId, time) {
+	function scheduleOrdination(ordinationId, currentDate, time) {
 		examReq.ordId = ordinationId
-		//examReq.time = time
+		examReq.date = currentDate
+		examReq.time = time
 		alert("You scheduled an examination room for an appointment!")
+		alert(JSON.stringify(examReq))
+		alert("Milice, send mejl pacijentu da potvrdi ili odbije")
 	}
 
 })
@@ -597,7 +601,7 @@ function viewExaminationRoomsForAppointmentRequests(){
 						if (!examReq.reqId) {
 							return "Specify examination request to schedule"
 						}
-						return '<button id="'+data.id+'" class="btn btn-info table-button-schedule">Schedule ordination</button>';
+						return '<button id="'+data.id+'" name="'+data.date+'" class="btn btn-info table-button-schedule">Schedule ordination</button>';
 					}
 				}]
 		})
