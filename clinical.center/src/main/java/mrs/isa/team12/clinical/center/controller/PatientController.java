@@ -264,45 +264,18 @@ public class PatientController {
 	 * returns: ReponseEntity instance
 	 * */
 	@PostMapping(value = "/sendAppointment",
-				consumes = MediaType.APPLICATION_JSON_VALUE,
-				produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentRequestDto> sendAppointment(@RequestBody Appointment appointment) throws ParseException{
-		//slanje emaila
-		System.out.println(appointment.getClinic());
-		//ovo ce se zanemariti jer ne znam da saljem datum preko postmana
-		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-		//appointment.setDate(sdf1.parse("12.6.2020."));
-		//appointment.setStartTime(sdf2.parse("12:00"));
-		//ovo je izdvojeno odeljenje i brise se cim posaljemo datum preko ajaxa
+				consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void sendAppointment(@RequestBody Appointment appointment) throws ParseException{
 		
 		if (session.getAttribute("currentUser") == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current user doesn't exist!");
 		}
 		Patient currentPatient = (Patient) session.getAttribute("currentUser");
 		try {
-			Doctor doctor = doctorService.findOneById(appointment.getDoctor().getId());
-			Clinic clinic = clinicService.findOneById(appointment.getClinic().getId());
-			
-			AppointmentRequest appointmentRequest = new AppointmentRequest(appointment, new java.sql.Date(new java.util.Date().getTime()), false, clinic);
-			appointmentRequest.getAppointment().setClinic(clinic);
-			appointmentRequest.getAppointment().setDoctor(doctor);
-			appointmentRequest.getAppointment().setPatient(currentPatient);
-			
 			//moramo svakom adminu klinike poslati mejl
-			for (ClinicAdmin admin : clinicAdminService.findAllByClinicId(clinic.getId())) {
+			for (ClinicAdmin admin : clinicAdminService.findAllByClinicId(appointment.getClinic().getId())) {
 				patientService.sendNotificaitionAsync(admin, currentPatient);
 			}
-			AppointmentType appointmentType = appointmentTypeService.findOneByName(appointment.getAppType().getName());
-			appointmentRequest.getAppointment().setAppType(appointmentType);
-			//appointmentType.addAppointment(appointmentRequest.getAppointment());
-			//ali samo jednom dodati appointmentRequest u bazu
-			//clinic.addAppointmentRequest(appointmentRequest);
-			appointmentService.save(appointmentRequest.getAppointment());
-			appointmentRequestService.save(appointmentRequest);
-			clinicService.save(clinic);
-			appointmentTypeService.save(appointmentType);
-			return new ResponseEntity<>(new AppointmentRequestDto(appointmentRequest), HttpStatus.OK);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

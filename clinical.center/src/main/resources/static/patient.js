@@ -55,9 +55,30 @@ $(document).ready(function() {
 		createAppointment(doctorId, time)
 	});
 	
-	$('#confirm-app').click(function(e) {
+	$('#confirmApp').click(function(e) {
 		e.preventDefault()
-		alert("Milica ovde treba da uveze slanje mejla clinic adminima za tu kliniku!")
+		//alert("Milica ovde treba da uveze slanje mejla clinic adminima za tu kliniku!")
+		
+		var app = {
+			clinic: {
+				id: newAppointment.clinicId
+			}
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/patient/sendAppointment",
+			contentType: "application/json",
+			data: JSON.stringify(app),
+			success : function() {
+				alert("Appointment sent successfully!")
+				$('.content').hide()
+				$('.patient-clinics').show()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
 	})
 
 	$('#cancelApp').on('click', function(e){
