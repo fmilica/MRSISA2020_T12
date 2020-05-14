@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import mrs.isa.team12.clinical.center.model.enums.LeaveType;
 
@@ -22,11 +20,11 @@ public class Leave {
 	private Long id;
 	
 	@Column(name = "start_date", nullable = false, unique = false)
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
 	@Column(name = "end_date", nullable = false, unique = false)
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
 	@Column(name = "leave_type", nullable = false, unique = false)

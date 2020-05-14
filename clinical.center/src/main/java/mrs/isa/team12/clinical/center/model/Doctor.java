@@ -3,8 +3,8 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,8 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import mrs.isa.team12.clinical.center.model.enums.Specialization;
 
@@ -39,14 +37,10 @@ public class Doctor extends MedicalPersonnel {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	//@JsonBackReference
-	@JsonBackReference("clinic-doctors")
 	private Clinic clinic;
 	
 	//@OneToMany(cascade = {ALL}, fetch = LAZY)
 	@ManyToMany(mappedBy = "doctors")
-	//@JsonManagedReference("doctor-appTypes")
-	@JsonBackReference("doctor-appTypes")
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
@@ -150,7 +144,7 @@ public class Doctor extends MedicalPersonnel {
 					if (a.getDate().equals(date)) {
 						Integer start = a.getStartTime();
 						for (int i = 0; i < a.getAppType().getDuration(); i++) {
-							times.remove(new Integer(start+i));
+							times.remove(Integer.valueOf(start+i));
 						}
 					}
 				}

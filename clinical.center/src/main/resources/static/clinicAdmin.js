@@ -135,7 +135,8 @@ $(document).ready(function() {
 			success : function(data) {
 				$('#certifiedDoctors').empty();
 				$.each(data, function(index, doctor) {
-					$("#certifiedDoctors").append(new Option(doctor.name + " " + doctor.surname, doctor.id));
+					$('#certifiedDoctors').append('<option value="'+doctor.id+'">'+doctor.name+' '+doctor.surname+'</option>')
+					//$("#certifiedDoctors").append(new Option(doctor.name + " " + doctor.surname, doctor.id));
 				})
 			},
 			error : function(response) {
@@ -164,7 +165,6 @@ $(document).ready(function() {
 						return data.price + " &euro;";
 					}
 				}]
-				//{ data: 'price'}]
 			})
 		}
 	})
@@ -286,7 +286,19 @@ $(document).ready(function() {
 				{ data: 'country'},
 				{ data: 'phoneNumber'},
 				{ data: 'securityNumber'},
-				{ data: 'specialization'}]
+				{ data: 'specialization'},
+				{ 
+					data: null,
+						render: function(data) {
+							return data.startWork + ":00"
+						}
+				},
+				{ 
+					data: null,
+						render: function(data) {
+							return data.endWork + ":00"
+						}
+				},]
 			})
 		}
 	})
@@ -304,15 +316,16 @@ $(document).ready(function() {
 		var dateOfBirthV = $("#dateOfBirthDoctor").val()
 		var specializationV = $("#specializationDoctor").val()
 		var securityNumV = $("#securityNumberDoctor").val()
+		var startWorkV = $("#startWorkDoctor").val()
+		var endWorkV = $("#endWorkDoctor").val()
 		var phoneNumberV = $("#phoneNumberDoctor").val()
 		var addressV = $("#addressDoctor").val()
 		var cityV = $("#cityDoctor").val()
 		var countryV = $("#countryDoctor").val()
 		
 		if(!emailV || !nameV || !surnameV || !passwordV || !confirmPasswordV || !genderV ||
-				!dateOfBirthV || !specializationV || !securityNumV || !phoneNumberV ||
-				!addressV || !cityV || !countryV){
-			alert("Not all required fields are filled !")
+				!dateOfBirthV || !specializationV || !securityNumV || !startWorkV || !endWorkV){
+			alert("Not all required fields are filled!")
 			return;
 		}
 		
@@ -324,6 +337,31 @@ $(document).ready(function() {
 		if(isNaN(securityNumV)){
 			alert("Security number must be a number!")
 			return;
+		}
+
+		if(isNaN(startWorkV)){
+			alert("Start work time must be a number!")
+			return;
+		} else {
+			if (parseInt(startWorkV) <0 || parseInt(startWorkV) > 24) {
+				alert("Start work time must be a number greater than 0 and less than 24!")
+				return;
+			}
+		}
+		if(isNaN(endWorkV)){
+			alert("End work time must be a number!")
+			return;
+		} else {
+			if (parseInt(endWorkV) <0 || parseInt(endWorkV) > 24) {
+				alert("End work time must be a number greater than 0 and less than 24!")
+				return;
+			}
+		}
+		if (!isNaN(startWorkV) && !isNaN(endWorkV)) {
+			if(parseInt(startWorkV) >= parseInt(endWorkV)) {
+				alert("Start work time must be before end work time!")
+				return;
+			}
 		}
 		
 		var dateObject = new Date(dateOfBirthV);
@@ -342,6 +380,8 @@ $(document).ready(function() {
 			gender: genderV,
 			dateOfBirth: dateOfBirthV,
 			securityNumber: securityNumV,
+			startWork: startWorkV,
+			endWork: endWorkV,
 			phoneNumber: phoneNumberV,
 			address: addressV,
 			city: cityV,
@@ -432,7 +472,26 @@ $(document).ready(function() {
 	$("#securityNumberDoctor").on('click', function(e){
 		hideValidate($("#securityNumberDoctor"))
 	})
-
+	/*Check if start work is number*/
+	$("#startWorkDoctor").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#startWorkDoctor").val())){
+			showValidate($("#startWorkDoctor"))
+		}
+	})
+	$("#startWorkDoctor").on('click', function(e){
+		hideValidate($("#startWorkDoctor"))
+	})
+	/*Check if end work is number*/
+	$("#endWorkDoctor").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#endWorkDoctor").val())){
+			showValidate($("#endWorkDoctor"))
+		}
+	})
+	$("#endWorkDoctor").on('click', function(e){
+		hideValidate($("#endWorkDoctor"))
+	})
 	/**********/
 	/*Appointment requests*/
 
@@ -645,6 +704,8 @@ function clearDoctorForm() {
 	$("#passwordDoctor").val('')
 	$("#confirm-passwordDoctor").val('')
 	$("#securityNumberDoctor").val('')
+	$("#startWorkDoctor").val('')
+	$("#endWorkDoctor").val('')
 	$("#phoneNumberDoctor").val('')
 	$("#addressDoctor").val('')
 	$("#cityDoctor").val('')

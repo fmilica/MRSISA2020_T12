@@ -47,13 +47,23 @@ public class ClinicalCenterAdminController {
 	}
 	
 	/*
-	 url: GET localhost:8081/theGoodShepherd/clinicalCentreAdmin
-	 HTTP request for viewing clinical centre administrators
+	 url: GET localhost:8081/theGoodShepherd/clinicalCenterAdmin
+	 HTTP request for viewing clinical center administrators
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ClinicalCentreAdmin>> getAllClinicalCentreAdmins() {
-		
+		/*
+		 * HELO
+		 * KO
+		 * OVO
+		 * KORISTI
+		 * NEMA
+		 * NIGDE
+		 * NA
+		 * FRONTU
+		 * ?
+		 */
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
 		ClinicalCentreAdmin currentUser;
@@ -101,7 +111,7 @@ public class ClinicalCenterAdminController {
 	}
 	
 	/*
-	 url: POST localhost:8081/theGoodShepherd/clinicalCentreAdmin/addNewClinicalCentreAdmin
+	 url: POST localhost:8081/theGoodShepherd/clinicalCenterAdmin/addNewClinicalCentreAdmin
 	 HTTP request for adding new clinic administrator
 	 receives ClinicAdmin object
 	 returns ResponseEntity object
@@ -122,13 +132,18 @@ public class ClinicalCenterAdminController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
+
+		/*
+		 * DA
+		 * LI
+		 * SE
+		 * RADI
+		 * PROVERA
+		 * JEDINSTVENOSTI
+		 * EMAIL-A
+		 * ?
+		 */
 		
-		// posto sada imamo ternutno ulogovanog, ovo ne mora ovako da se radi
-		// to jest, ne mora da se ovom novom administratoru na frontu setuje ime klinickog centra
-		// vec se na osnovu trenutno ulogovanog ta infomracija moze dobaviti
-		
-		// treba dodati proveru da li email vec postoji
-		// i sta je vec jedinstveno...... (tuga, sve, malte ne)
 		ClinicalCentre clinicalCentre = centreService.findOneByName(clinicalCentreAdmin.getClinicalCentre().getName());
 		if(clinicalCentre == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinical centre with given name does not exist.");

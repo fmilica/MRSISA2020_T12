@@ -44,9 +44,7 @@ public class MedicalReport {
 	@JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
 	private Diagnosis diagnosis;
 	
-
 	public MedicalReport() {}
-
 
 	public MedicalReport(Long id, String description, Set<Prescription> prescriptions, 
 			Diagnosis diagnosis, Appointment appointment) {

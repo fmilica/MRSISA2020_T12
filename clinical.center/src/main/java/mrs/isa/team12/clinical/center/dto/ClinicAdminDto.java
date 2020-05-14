@@ -1,10 +1,9 @@
 package mrs.isa.team12.clinical.center.dto;
 
-import mrs.isa.team12.clinical.center.model.Doctor;
-import mrs.isa.team12.clinical.center.model.enums.Specialization;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 
-public class ViewDoctorDto {
-	
+public class ClinicAdminDto {
+
 	private String email;
 	private String name;
 	private String surname;
@@ -15,22 +14,22 @@ public class ViewDoctorDto {
 	private String country;
 	private String phoneNumber;
 	private String securityNumber;
-	private Specialization specialization;
+	private String clinicName;
 	
-	public ViewDoctorDto(Doctor doctor) {
-		this.email = doctor.getEmail();
-		this.name = doctor.getName();
-		this.surname = doctor.getSurname();
-		this.gender = doctor.getGender();
-		this.dateOfBirth = doctor.getDateOfBirth();
-		this.address = doctor.getAddress();
-		this.city = doctor.getCity();
-		this.country = doctor.getCountry();
-		this.phoneNumber = doctor.getPhoneNumber();
-		this.securityNumber = doctor.getSecurityNumber();
-		this.specialization = doctor.getSpecialization();
+	public ClinicAdminDto(ClinicAdmin clinicAdmin, String clinicName) {
+		this.email = clinicAdmin.getEmail();
+		this.name = clinicAdmin.getName();
+		this.surname = clinicAdmin.getSurname();
+		this.gender = clinicAdmin.getGender();
+		this.dateOfBirth = clinicAdmin.getDateOfBirth();
+		this.address = clinicAdmin.getAddress();
+		this.city = clinicAdmin.getCity();
+		this.country = clinicAdmin.getCountry();
+		this.phoneNumber = clinicAdmin.getPhoneNumber();
+		this.securityNumber = clinicAdmin.getSecurityNumber();
+		this.clinicName = clinicName;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -48,6 +47,12 @@ public class ViewDoctorDto {
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	public String getDateOfBirth() {
 		return dateOfBirth;
@@ -85,16 +90,10 @@ public class ViewDoctorDto {
 	public void setSecurityNumber(String securityNumber) {
 		this.securityNumber = securityNumber;
 	}
-	public Specialization getSpecialization() {
-		return specialization;
+	public String getClinicName() {
+		return clinicName;
 	}
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setClinicName(String clinicName) {
+		this.clinicName = clinicName;
 	}
 }

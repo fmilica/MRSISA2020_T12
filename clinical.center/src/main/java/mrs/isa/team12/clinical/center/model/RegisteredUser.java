@@ -38,16 +38,16 @@ public class RegisteredUser {
 	@Column(name="date_of_birth", unique=false, nullable=false)
 	private String dateOfBirth;
 	
-	@Column(name="address", unique=false, nullable=false)
+	@Column(name="address", unique=false, nullable=true)
 	private String address;
 	
-	@Column(name="city", unique=false, nullable=false)
+	@Column(name="city", unique=false, nullable=true)
 	private String city;
 	
-	@Column(name="country", unique=false, nullable=false)
+	@Column(name="country", unique=false, nullable=true)
 	private String country;
 	
-	@Column(name="phone_number", unique=false, nullable=false)
+	@Column(name="phone_number", unique=false, nullable=true)
 	private String phoneNumber;
 	
 	@Column(name="security_number", unique=false, nullable=false)

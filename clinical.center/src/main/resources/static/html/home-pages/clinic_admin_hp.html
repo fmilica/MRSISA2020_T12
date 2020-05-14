@@ -273,6 +273,8 @@
 													<th>Phone Number</th>
 													<th>Security Number</th>
 													<th>Specialization</th>
+													<th>Start work</th>
+													<th>End work</th>
 												</tr>
 											</thead>
 											<tfoot>
@@ -290,6 +292,8 @@
 													<th>Phone Number</th>
 													<th>Security Number</th>
 													<th>Specialization</th>
+													<th>Start work</th>
+													<th>End work</th>
 												</tr>
 											</tfoot>
 										</table>
@@ -518,7 +522,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="lastNameDoctor" data-required="1"  class="form-control input-height" />
+														<input type="text" id="lastNameDoctor" data-required="1"  class="form-control input-height"/>
 													</div>
 												</div>
 												<div class="form-group row"  >
@@ -527,7 +531,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
-														<input type="text" id="passwordDoctor" data-required="1"  class="form-control input-height" />
+														<input type="text" id="passwordDoctor" data-required="1"  class="form-control input-height"/>
 													</div>
 												</div>
 												<div class="form-group row">
@@ -536,7 +540,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
-														<input type="text" id="confirm-passwordDoctor" data-required="1"  class="form-control input-height" />
+														<input type="text" id="confirm-passwordDoctor" data-required="1"  class="form-control input-height"/>
 													</div>
 												</div>
 												<div class="form-group row">
@@ -566,7 +570,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<select class="form-control input-height" id="specializationDoctor">
+														<select id="specializationDoctor" class="form-control input-height">
 															<option selected="selected" value="Pediatrics">Pediatrics</option>
 															<option value="Dermatology">Dermatology</option>
 															<option value="Rheumatology">Rheumatology</option>
@@ -582,32 +586,47 @@
 														Security Number
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7 validate-input"  data-validate="Must be a number!">
-														<input id="securityNumberDoctor" type="text" id="securityNumber" data-required="1"  class="form-control input-height" />
+													<div class="col-md-7 validate-input" data-validate="Must be a number!">
+														<input id="securityNumberDoctor" type="text" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Start work time
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input" data-validate="Must be a number!">
+														<input id="startWorkDoctor" type="text" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														End work time
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input" data-validate="Must be a number!">
+														<input id="endWorkDoctor" type="text" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Phone Number
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input id="phoneNumberDoctor" type="text" id="phoneNumber" data-required="1"  class="form-control input-height" />
+														<input id="phoneNumberDoctor" type="text" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Address
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input id="addressDoctor" type="text" id="address" data-required="1"  class="form-control input-height" />
+														<input id="addressDoctor" type="text" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														City
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input id="cityDoctor" type="text" id="city" data-required="1"  class="form-control input-height" />
@@ -616,7 +635,6 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Country
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input id="countryDoctor" type="text" id="country" data-required="1"  class="form-control input-height" />
@@ -741,7 +759,6 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Certified Doctors
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7 validate-input"  data-validate="Price must be a number!">
 														<select class="form-control input-height" multiple="multiple" id="certifiedDoctors">

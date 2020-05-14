@@ -1,6 +1,6 @@
 package mrs.isa.team12.clinical.center.dto;
 
-import java.util.Date;
+import java.sql.Date;
 
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 

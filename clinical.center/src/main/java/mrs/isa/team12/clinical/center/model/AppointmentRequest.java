@@ -2,7 +2,7 @@ package mrs.isa.team12.clinical.center.model;
 
 import static javax.persistence.FetchType.EAGER;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "appointment_request")
@@ -31,7 +27,7 @@ public class AppointmentRequest {
 	private Appointment appointment;
 	
 	@Column(name = "request_date", unique = false, nullable = false)
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date requestDate;
 	
 	@Column(name = "approved", unique = false, nullable = false)
@@ -39,8 +35,6 @@ public class AppointmentRequest {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	//@JsonBackReference
-	@JsonBackReference("clinic-appReqs")
 	private Clinic clinic;
 
 	public AppointmentRequest() {}

@@ -302,7 +302,7 @@ body {
     padding: 0 15px;
 }
 .card-topline-theme {
-    border-top: 3px solid rgb(58, 201, 214, 0.3);
+    border-top: 3px solid rgb(58, 201, 214, 0.7);
 }
 .card-body.confirm {
     padding: 0 70px;
@@ -417,6 +417,9 @@ body {
 .doctor-patients {
     display: none;
 }
+.doctor-patient-profile {
+    display: none;
+}
 
 /* Nurse */
 .nurse-verifyPrescription {
@@ -434,5 +437,11 @@ body {
     display: none;
 }
 .patient-medicalRecord {
+    display: none;
+}
+.patient-confirm-app {
+    display: none;
+}
+.patient-profile {
     display: none;
 }

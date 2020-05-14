@@ -1,9 +1,9 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
-import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -90,37 +90,23 @@ public class DoctorController {
 	 */
 	@GetMapping(value = "/getAll",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Doctor>> getAllDoctors() {
-		
+	public ResponseEntity<List<DoctorDto>> getAllDoctors() {
+		/*
+		 * da
+		 * li
+		 * ce
+		 * ovo
+		 * ikome
+		 * ikada
+		 * trebati
+		 * ?
+		 */
 		List<Doctor> doctors = doctorService.findAll();
-		
-		return new ResponseEntity<>(doctors, HttpStatus.OK);
-	}
-	
-	/*
-	 url: GET localhost:8081/theGoodShepherd/doctor/certified/clinic/{appTypeName}/{clinicId}
-	 HTTP request for getting all doctors with appointment type given by name
-	 returns ResponseEntity object
-	 */
-	@GetMapping(value = "/certified/clinic/{appTypeName}/{clinicId}",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Doctor>> getDoctorsByAppTypeName(@PathVariable("appTypeName") String appTypeName,
-																@PathVariable("clinicId") Long clinicId) {
-		
-		Patient currentUser;
-		try {
-			currentUser = (Patient) session.getAttribute("currentUser");
-		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view certified doctors.");
+		List<DoctorDto> doctorsDto = new ArrayList<DoctorDto>();
+		for(Doctor d : doctors) {
+			doctorsDto.add(new DoctorDto(d));
 		}
-		if (currentUser == null) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
-		}
-		Clinic clinic = clinicService.findOneById(clinicId);
-		List<AppointmentType> types = appointmentTypeService.findAllByName(appTypeName);
-		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicAndAppointmentTypesIn(clinic, types);
-		
-		return new ResponseEntity<>(certifiedClinicDoctors, HttpStatus.OK);
+		return new ResponseEntity<>(doctorsDto, HttpStatus.OK);
 	}
 	
 	/*
@@ -147,7 +133,7 @@ public class DoctorController {
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
 		try {
-			date = dt.parse(appDate);
+			date = new Date(dt.parse(appDate).getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -175,9 +161,19 @@ public class DoctorController {
 	 */
 	@GetMapping(value = "/findOne/{id}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Doctor getDoctorById(@PathVariable("id") Long id) {
+	public DoctorDto getDoctorById(@PathVariable("id") Long id) {
+		/*
+		 * da
+		 * li
+		 * ce
+		 * nekome
+		 * nekad
+		 * ovo
+		 * trebati
+		 * ?
+		 */
 		// ko koristi ovo od korisnika, ko ima prava?
-		return doctorService.findOneById(id);
+		return new DoctorDto(doctorService.findOneById(id));
 	}
 	
 	/*
@@ -187,7 +183,7 @@ public class DoctorController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/addNewDoctor")
-	public ResponseEntity<Doctor> addNewDoctor(@RequestBody Doctor doctor){
+	public ResponseEntity<DoctorDto> addNewDoctor(@RequestBody Doctor doctor){
 		
 		ClinicAdmin admin;
 		try {
@@ -212,9 +208,11 @@ public class DoctorController {
 		doctor.setClinic(admin.getClinic());
 		Doctor saved = doctorService.save(doctor);
 		
-		return new ResponseEntity<>(saved, HttpStatus.CREATED);
+		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
 	}
 	
+	// FILTRIRANJE DOKTORA NA BEKU
+	// MOZDA ZATREBA
 	/*
 	 url: GET localhost:8081/theGoodShepherd/doctor/filterDoctors
 	 HTTP request for filtering clinic doctors

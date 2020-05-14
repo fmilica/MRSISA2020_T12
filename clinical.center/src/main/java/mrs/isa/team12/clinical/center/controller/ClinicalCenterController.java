@@ -36,6 +36,15 @@ public class ClinicalCenterController {
 		this.clinicalCenterAdminService = clinicalCenterAdminService;
 		this.clinicalCentreService = ccs;
 	}
+	/*
+	 * da
+	 * li
+	 * ovo
+	 * neko
+	 * koristi
+	 * negde
+	 * ?
+	 */
 	
 	/*
 	 url: GET localhost:8081/theGoodSheperd/clinicalCentres
@@ -52,7 +61,7 @@ public class ClinicalCenterController {
 	
 	/*
 	 url: POST localhost:8081/theGoodSheperd/clinicalCentres/addNewClinicalCentre
-	 HTTP request for adding new clinic
+	 HTTP request for adding new clinicalCenter
 	 receives Clinic object
 	 returns ResponseEntity object
 	 */

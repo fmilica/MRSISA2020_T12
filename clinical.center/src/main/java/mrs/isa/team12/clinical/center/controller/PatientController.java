@@ -3,7 +3,6 @@ package mrs.isa.team12.clinical.center.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -21,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentRequestDto;
+import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.MedicalRecordDto;
+import mrs.isa.team12.clinical.center.dto.PatientDto;
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
+import mrs.isa.team12.clinical.center.dto.PatientsDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
-import mrs.isa.team12.clinical.center.dto.ViewClinicPatientDto;
-import mrs.isa.team12.clinical.center.dto.ViewPatientsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
@@ -85,7 +86,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ViewPatientsDto>> getAllPatients() {
+	public ResponseEntity<List<PatientsDto>> getAllPatients() {
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
 		Doctor currentUser;
@@ -99,9 +100,9 @@ public class PatientController {
 		}
 		
 		List<Patient> patients = patientService.findAll();
-		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
+		List<PatientsDto> dto = new ArrayList<PatientsDto>();
 		for(Patient p : patients) {
-			dto.add(new ViewPatientsDto(p));
+			dto.add(new PatientsDto(p));
 		}
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -113,7 +114,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "/filterPatients", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ViewPatientsDto>> filterPatients(@RequestParam String name, @RequestParam String surname, @RequestParam String securityNumber) {
+	public ResponseEntity<List<PatientsDto>> filterPatients(@RequestParam String name, @RequestParam String surname, @RequestParam String securityNumber) {
 
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -127,17 +128,45 @@ public class PatientController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		List<Patient> patients = patientService.filter(name, surname, securityNumber);
-		List<ViewPatientsDto> dto = new ArrayList<ViewPatientsDto>();
+		List<PatientsDto> dto = new ArrayList<PatientsDto>();
 		for(Patient p : patients) {
-			dto.add(new ViewPatientsDto(p));
+			dto.add(new PatientsDto(p));
 		}
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/patient/viewProfile
+	 HTTP request for viewing logged in patient profile
+	 receives String securityNumber
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/viewProfile")
+	public ResponseEntity<PatientProfileDto> viewProfile(){
+		
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can view it's profile.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		currentUser = patientService.findOneByEmail(currentUser.getEmail());
+		
+		MedicalRecordDto medicalRecords = new MedicalRecordDto(currentUser.getMedicalRecords());
+		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
+		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
+		medicalRecords.setMedicalReports(currentUser.getAppointments());
+		return new ResponseEntity<>(new PatientProfileDto(currentUser, medicalRecords), HttpStatus.OK);
+	}
+	
+	/*
 	 url: POST localhost:8081/theGoodShepherd/patient/viewProfile/{secNum}
-	 HTTP request for viewing choosen patient profile
+	 HTTP request for viewing chosen patient profile
 	 receives String securityNumber
 	 returns ResponseEntity object
 	 */
@@ -205,7 +234,7 @@ public class PatientController {
 	@PostMapping(value = "/register",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Patient> registerPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDto> registerPatient(@RequestBody Patient patient) {
 		// vec postoji ulogovani korisnik, ne moze se registrovati
 		if (session.getAttribute("currentUser") != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already loged in!");
@@ -225,7 +254,7 @@ public class PatientController {
 		Patient saved = patientService.save(patient);
 		RegistrationRequest regReq = new RegistrationRequest(patient, false, "");
 		registrationService.save(regReq);
-		return new ResponseEntity<>(saved, HttpStatus.CREATED);
+		return new ResponseEntity<>(new PatientDto(saved), HttpStatus.CREATED);
 	}
 
 	/*
@@ -237,7 +266,7 @@ public class PatientController {
 	@PostMapping(value = "/sendAppointment",
 				consumes = MediaType.APPLICATION_JSON_VALUE,
 				produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentRequest> sendAppointment(@RequestBody Appointment appointment) throws ParseException{
+	public ResponseEntity<AppointmentRequestDto> sendAppointment(@RequestBody Appointment appointment) throws ParseException{
 		//slanje emaila
 		System.out.println(appointment.getClinic());
 		//ovo ce se zanemariti jer ne znam da saljem datum preko postmana
@@ -255,7 +284,7 @@ public class PatientController {
 			Doctor doctor = doctorService.findOneById(appointment.getDoctor().getId());
 			Clinic clinic = clinicService.findOneById(appointment.getClinic().getId());
 			
-			AppointmentRequest appointmentRequest = new AppointmentRequest(appointment, new Date(), false, clinic);
+			AppointmentRequest appointmentRequest = new AppointmentRequest(appointment, new java.sql.Date(new java.util.Date().getTime()), false, clinic);
 			appointmentRequest.getAppointment().setClinic(clinic);
 			appointmentRequest.getAppointment().setDoctor(doctor);
 			appointmentRequest.getAppointment().setPatient(currentPatient);
@@ -273,7 +302,7 @@ public class PatientController {
 			appointmentRequestService.save(appointmentRequest);
 			clinicService.save(clinic);
 			appointmentTypeService.save(appointmentType);
-			return new ResponseEntity<>(appointmentRequest, HttpStatus.OK);
+			return new ResponseEntity<>(new AppointmentRequestDto(appointmentRequest), HttpStatus.OK);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -285,7 +314,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "/clinics", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ViewClinicPatientDto>> getAllClinics() {
+	public ResponseEntity<List<ClinicPatientDto>> getAllClinics() {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -297,10 +326,10 @@ public class PatientController {
 		}
 		
 		List<Clinic> clinics = clinicService.findAll();
-		List<ViewClinicPatientDto> clinicsDto = new ArrayList<ViewClinicPatientDto>();
+		List<ClinicPatientDto> clinicsDto = new ArrayList<ClinicPatientDto>();
 		
 		for(Clinic c : clinics) {
-			ViewClinicPatientDto clinic = new ViewClinicPatientDto(c);
+			ClinicPatientDto clinic = new ClinicPatientDto(c);
 			clinic.setAppointmentTypes(c.getAppointmentTypes());
 			clinicsDto.add(clinic);
 		}

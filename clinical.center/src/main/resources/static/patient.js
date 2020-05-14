@@ -14,8 +14,24 @@ var newAppointment = {
 
 var clinicsTable;
 var doctorsClinicTable;
+var medicalReportTable;
 
 $(document).ready(function() {
+
+	// pregled profila
+	$('.profile').click(function() {
+		$.ajax({
+			type : "GET",
+			url : "../../theGoodShepherd/patient/viewProfile",
+			dataType: "json",
+			success : function(data)  {
+				fillProfile(data)
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
 	
 	// postavljanje minimalne vrednosti koju pacijent moze da odabere za datum
 	// (danas)
@@ -39,6 +55,11 @@ $(document).ready(function() {
 		createAppointment(doctorId, time)
 	});
 	
+	$('#confirm-app').click(function(e) {
+		e.preventDefault()
+		alert("Milica ovde treba da uveze slanje mejla clinic adminima za tu kliniku!")
+	})
+
 	$('#cancelApp').on('click', function(e){
 		e.preventDefault()
 		$('.patient-confirm-app').hide()
@@ -55,8 +76,8 @@ $(document).ready(function() {
 			url : "../../theGoodShepherd/appointmentType/getAllTypesNames",
 			success : function(data) {
 				$('#filterAppType').find('option').remove()
-				$.each(data, function(index, appType) {
-					$("#filterAppType").append(new Option(appType.name, appType.name));
+				$.each(data, function(index, appTypeName) {
+					$("#filterAppType").append(new Option(appTypeName, appTypeName));
 				})
 			},
 			error : function(response) {
@@ -302,7 +323,51 @@ function createAppointment(doctorId, time) {
 	$('.patient-confirm-app').show()
 	document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
-	alert("Milica ovde treba da uveze slanje mejla clinic adminima za tu kliniku!")
+}
+
+function fillProfile(data){
+	// basic information
+	$('.content').hide()
+    $('.patient-profile').show()
+	$(".fullName").text(data.name + " " + data.surname)
+    $("#email").text(data.email)
+    $("#gender").text(data.gender)
+    $("#dateOfBirth").text(data.dateOfBirth)
+    $("#phoneNumber").text(data.phoneNumber)
+    $("#securityNumber").text(data.securityNumber)
+    $("#address").text(data.address + ", " + data.city + ", " + data.country)
+	// medical reports
+	$('#medicalReport').show()
+	$('h5').show()
+	$("#generalReport").text("")
+	$("#height").text(data.medicalRecords.height)
+	$("#weight").text(data.medicalRecords.weight)
+	$("#bloodPressure").text(data.medicalRecords.bloodPressure)
+	$("#bloodType").text(data.medicalRecords.bloodType)
+	$("#allergies").text(data.medicalRecords.allergies)
+	if (!$.fn.DataTable.isDataTable('#medicalReports')) {
+		medicalReportTable = $('#medicalReports').DataTable({
+			data: data.medicalRecords.medicalReports,
+			columns: [
+				{ data: 'description'},
+				{ data: 'diagnosisName'},
+				{
+					data: null,
+					render: function (data) {
+						var allMedicine = ""
+						for (var i = 0; i < data.prescriptionMedicines.length; i++) {
+							allMedicine += data.prescriptionMedicines[i]
+							if (i != data.prescriptionMedicines.length - 1) {
+								allMedicine += ", "
+							}
+						}
+						return allMedicine
+					}
+				}]
+		})
+	} else {
+		medicalReportTable.clear().rows.add(data).draw();
+	}
 }
 
 function logInPatient(email, password) {

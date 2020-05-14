@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "clinical_centre")
 public class ClinicalCentre {
@@ -27,19 +25,15 @@ public class ClinicalCentre {
 	private String name;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinicalCentre")
-	@JsonManagedReference("clinicalcentre-clinics")
 	private Set<Clinic> clinics;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinicalCentre")
-	//@JsonBackReference
-	@JsonManagedReference("clinicalcentre-admins")
 	private Set<ClinicalCentreAdmin> admins;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
 	private Set<RegistrationRequest> registrationRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinicalCentre")
-	//@JsonBackReference
 	private Set<Patient> patients;
 	
 	public ClinicalCentre() {}

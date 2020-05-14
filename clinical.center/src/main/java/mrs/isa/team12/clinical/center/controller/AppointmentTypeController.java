@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
@@ -47,7 +49,7 @@ public class AppointmentTypeController {
 	 */
 	@GetMapping(value = "/getAllTypesNames",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Set<AppointmentType>> getAllTypesNames() {
+	public ResponseEntity<Set<String>> getAllTypesNames() {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -63,11 +65,11 @@ public class AppointmentTypeController {
 		for (AppointmentType appType : appTypes) {
 			appTypeNames.add(appType.getName());
 		}*/
-		Set<AppointmentType> appTypesUnique = new HashSet<AppointmentType>();
+		Set<String> appTypesUniqueNames = new HashSet<String>();
 		for (AppointmentType appType : appTypes) {
-			appTypesUnique.add(appType);
+			appTypesUniqueNames.add(appType.getName());
 		}
-		return new ResponseEntity<>(appTypesUnique, HttpStatus.OK);
+		return new ResponseEntity<>(appTypesUniqueNames, HttpStatus.OK);
 	}
 	
 	/*
@@ -77,7 +79,7 @@ public class AppointmentTypeController {
 	 */
 	@GetMapping(value = "/getClinicsTypes",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<AppointmentType>> getClinicsTypes() {
+	public ResponseEntity<List<AppointmentTypeDto>> getClinicsTypes() {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -89,7 +91,11 @@ public class AppointmentTypeController {
 		}
 		
 		List<AppointmentType> clinicsTypes = appointmentTypeService.findAllByClinicId(currentUser.getClinic().getId());
-		return new ResponseEntity<>(clinicsTypes, HttpStatus.OK);
+		List<AppointmentTypeDto> clinicsTypesDtos = new ArrayList<AppointmentTypeDto>();
+		for(AppointmentType a : clinicsTypes) {
+			clinicsTypesDtos.add(new AppointmentTypeDto(a));
+		}
+		return new ResponseEntity<>(clinicsTypesDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -101,7 +107,7 @@ public class AppointmentTypeController {
 	@PostMapping(value = "/addNewAppointmentType",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentType> createOrdination(@RequestBody AppointmentType appType) {
+	public ResponseEntity<AppointmentTypeDto> createOrdination(@RequestBody AppointmentType appType) {
 		
 		ClinicAdmin currentUser;
 		try {
@@ -131,7 +137,7 @@ public class AppointmentTypeController {
 			
 			AppointmentType saved = appointmentTypeService.save(appType);
 			
-			return new ResponseEntity<>(saved, HttpStatus.CREATED);
+			return new ResponseEntity<>(new AppointmentTypeDto(saved), HttpStatus.CREATED);
 		}
 		
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment type with given name already exists!");

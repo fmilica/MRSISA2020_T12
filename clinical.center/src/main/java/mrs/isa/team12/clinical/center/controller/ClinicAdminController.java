@@ -1,7 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -18,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ClinicAdminDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
-import mrs.isa.team12.clinical.center.dto.ViewDoctorDto;
+import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -27,7 +27,6 @@ import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
-import mrs.isa.team12.clinical.center.model.wrapper.ClinicAdminWrapper;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
@@ -71,7 +70,7 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ClinicAdminWrapper>> getAllClinicAdmins() {
+	public ResponseEntity<List<ClinicAdminDto>> getAllClinicAdmins() {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -86,17 +85,17 @@ public class ClinicAdminController {
 		}
 		
 		List<ClinicAdmin> clinicAdmins = adminService.findAll();
-		List<ClinicAdminWrapper> clinicAdminWrapper = new ArrayList<ClinicAdminWrapper>();
+		List<ClinicAdminDto> clinicAdminWrapper = new ArrayList<ClinicAdminDto>();
 		
 		for(ClinicAdmin ca : clinicAdmins) {
-			clinicAdminWrapper.add(new ClinicAdminWrapper(ca, ca.getClinic().getName()));
+			clinicAdminWrapper.add(new ClinicAdminDto(ca, ca.getClinic().getName()));
 		}
 		
 		return new ResponseEntity<>(clinicAdminWrapper, HttpStatus.OK);
 	}
 
 	/*
-	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/addNewClinicAdmin/{clinicName}
+	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/addNewClinicAdmin/{clinicId}
 	 HTTP request for adding new clinic administrator
 	 receives ClinicAdmin object
 	 returns ResponseEntity object
@@ -104,7 +103,7 @@ public class ClinicAdminController {
 	@PostMapping(value = "/addNewClinicAdmin/{clinicId}",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ClinicAdmin> createClinicAdmin(@RequestBody ClinicAdmin clinicAdmin, @PathVariable String clinicId) {
+	public ResponseEntity<ClinicAdminDto> createClinicAdmin(@RequestBody ClinicAdmin clinicAdmin, @PathVariable String clinicId) {
 		
 		ClinicalCentreAdmin currentUser;
 		try {
@@ -118,26 +117,25 @@ public class ClinicAdminController {
 		
 		System.out.println(clinicAdmin.getEmail());
 		RegisteredUser user = userService.findOneByEmail(clinicAdmin.getEmail());
-		if( user != null) {
+		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
 		}
 		
 		user = userService.findOneBySecurityNumber(clinicAdmin.getSecurityNumber());
-		if( user != null) {
-			System.out.println("Hallo");
+		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given security number already exists!");
 		}
 		
 		Clinic clinic = clinicService.findOneById(Long.parseLong(clinicId));
 		
-		if(clinic == null) {
+		if (clinic == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic with given name does not exist.");
 		}
 		
 		clinic.add(clinicAdmin);
 		clinicService.save(clinic);
 		
-		return new ResponseEntity<>(clinicAdmin, HttpStatus.CREATED);
+		return new ResponseEntity<>(new ClinicAdminDto(clinicAdmin, clinic.getName()), HttpStatus.CREATED);
 	}
 	
 	/*
@@ -179,7 +177,7 @@ public class ClinicAdminController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "getDoctors" ,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ViewDoctorDto>> getDoctors() {
+	public ResponseEntity<List<DoctorDto>> getDoctors() {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -194,10 +192,10 @@ public class ClinicAdminController {
 		}
 		
 		List<Doctor> doctors = doctorService.findAllByClinicId(currentUser.getClinic().getId());
-		List<ViewDoctorDto> dto = new ArrayList<ViewDoctorDto>();
+		List<DoctorDto> dto = new ArrayList<DoctorDto>();
 		
 		for(Doctor d : doctors) {
-			dto.add(new ViewDoctorDto(d));
+			dto.add(new DoctorDto(d));
 		}
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);

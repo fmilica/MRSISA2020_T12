@@ -2,7 +2,7 @@ package mrs.isa.team12.clinical.center.model;
 
 import static javax.persistence.FetchType.LAZY;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -31,7 +27,7 @@ public class Appointment {
 	private Boolean finished;
 	
 	@Column(name = "app_date", unique = false, nullable = false )
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	private Date date;
 	
 	@Column(name = "app_start_time", unique = false, nullable = true )
@@ -50,8 +46,6 @@ public class Appointment {
 
 	@ManyToOne
 	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
-	//@JsonBackReference
-	@JsonBackReference("patient-apps")
 	private Patient patient;
 	
 	@OneToOne(fetch = LAZY)
@@ -68,8 +62,6 @@ public class Appointment {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	//@JsonBackReference
-	@JsonBackReference("clinic-apps")
 	private Clinic clinic;
 	
 	@ManyToOne
@@ -78,7 +70,6 @@ public class Appointment {
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
-	@JsonBackReference("appType-apps")
 	private AppointmentType appType;
 
 	public Appointment() {}

@@ -15,8 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "report")
 public class Report {
@@ -36,8 +34,6 @@ public class Report {
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
-	//@JsonBackReference
-	@JsonBackReference("clinic-report")
 	private Clinic clinic;
 	
 	@ManyToMany(cascade = {ALL}, fetch = LAZY)

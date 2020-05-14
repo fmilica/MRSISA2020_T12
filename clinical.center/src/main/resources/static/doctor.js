@@ -97,7 +97,7 @@ function viewPatientProfile(secNum) {
 
 function viewMedicalReports(data){
 	$('.content').hide()
-    $('.patient-profile').show()
+    $('.doctor-patient-profile').show()
     $("#fullName").text(data.name + " " + data.surname)
     $("#email").text(data.email)
     $("#gender").text(data.gender)
@@ -138,6 +138,8 @@ function viewMedicalReports(data){
 						}
 					}]
     		})
-    	}
+    	} else {
+			medicalReportTable.clear().rows.add(data).draw();
+		}
 	}
 }

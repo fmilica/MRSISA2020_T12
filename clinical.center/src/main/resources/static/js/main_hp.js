@@ -46,9 +46,6 @@ $(document).ready( function () {
 
     /* dropdown links */
     // My Profile
-    $('#dropdownProfile').click(function() {
-    	alert("Hello")
-    })
     // Change password
     $('#dropdownChangePass').click(function() {
         alert("hello")
@@ -296,6 +293,12 @@ $(document).ready( function () {
     $('#patientMedicalRecord').click(function() {
         $('.content').hide()
         $('.patient-medicalRecord').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    $('.profile').click(function() {
+        $('.content').hide()
+        $('.patient-profile').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

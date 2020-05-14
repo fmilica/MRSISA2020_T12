@@ -2,7 +2,7 @@ package mrs.isa.team12.clinical.center.dto;
 
 import mrs.isa.team12.clinical.center.model.Clinic;
 
-public class ViewClinicDto {
+public class ClinicDto {
 	
 	private String name;
 	private String address;
@@ -10,7 +10,7 @@ public class ViewClinicDto {
 	private String country;
 	private String description;
 	
-	public ViewClinicDto(Clinic clinic) {
+	public ClinicDto(Clinic clinic) {
 		this.name = clinic.getName();
 		this.address = clinic.getAddress();
 		this.city = clinic.getCity();

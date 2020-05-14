@@ -60,14 +60,16 @@ public class MedicalRecordDto {
 	}
 
 	public void setMedicalReports(Set<Appointment> appointments) {
-		for(Appointment a : appointments) {
-			if (a.getFinished()) {
-				MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
-				medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
-				if (this.medicalReports == null) {
-					this.medicalReports = new HashSet<MedicalReportDto>();
+		if (appointments != null) {
+			for(Appointment a : appointments) {
+				if (a.getFinished()) {
+					MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
+					medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
+					if (this.medicalReports == null) {
+						this.medicalReports = new HashSet<MedicalReportDto>();
+					}
+					this.medicalReports.add(medicalReport);
 				}
-				this.medicalReports.add(medicalReport);
 			}
 		}
 	}

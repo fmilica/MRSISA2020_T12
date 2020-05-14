@@ -6,7 +6,7 @@ import java.util.Set;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 
-public class ViewClinicPatientDto {
+public class ClinicPatientDto {
 	
 	private Long id;
 	private String name;
@@ -14,7 +14,7 @@ public class ViewClinicPatientDto {
 	private Double rating;
 	private Set<AppointmentTypeDto> appointmentTypes;
 	
-	public ViewClinicPatientDto(Clinic clinic) {
+	public ClinicPatientDto(Clinic clinic) {
 		this.id = clinic.getId();
 		this.name = clinic.getName();
 		this.address = clinic.getAddress();

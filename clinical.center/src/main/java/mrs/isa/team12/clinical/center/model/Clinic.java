@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "clinic")
@@ -47,75 +46,48 @@ public class Clinic {
 
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
-	//@JsonBackReference
-	//@JsonManagedReference("clinicalcentre-clinics")
-	@JsonBackReference("clinicalcentre-clinics")
 	private ClinicalCentre clinicalCentre;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "report_id")
-	//@JsonBackReference
-	// OVDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 	@JsonBackReference("clinic-report")
 	private Report report;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "diagnose_perscription_id")
-	//@JsonBackReference
-	//@JsonManagedReference("clinic-diagnosePerscription")
 	// NEMA U KONTRA SMERU
 	private DiagnosePerscription diagnosePerscription;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-doctors")
 	private Set<Doctor> doctors;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-nurses")
 	private Set<Nurse> nurses;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
-	//@JsonBackReference
-	//@JsonManagedReference("clinic-patients")
 	// NEMA VEZU U KONTRA SMERU
 	private Set<Patient> patients;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-appTypes")
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-apps")
 	private Set<Appointment> appointments;
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-admins")
 	private Set<ClinicAdmin> admins;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-ordinations")
 	private Set<Ordination> ordinations;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-appReqs")
 	private Set<AppointmentRequest> appointmentRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
-	//@JsonBackReference
-	//@JsonManagedReference("clinic-leaveReq")
 	// NEMA VEZU OD STRANE LEAVE REQUSEST KA OVAMO
 	private Set<LeaveRequest> leaveRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
-	//@JsonBackReference
-	@JsonManagedReference("clinic-ratings")
 	private Set<Rating> ratings;
 	
 	public void add(ClinicAdmin clinicAdmin) {

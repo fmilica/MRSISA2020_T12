@@ -2,13 +2,13 @@ package mrs.isa.team12.clinical.center.dto;
 
 import mrs.isa.team12.clinical.center.model.Patient;
 
-public class ViewPatientsDto{
+public class PatientsDto{
 	
 	private String name;
 	private String surname;
 	private String securityNumber;
 	
-	public ViewPatientsDto(Patient patient) {
+	public PatientsDto(Patient patient) {
 		this.name = patient.getName();
 		this.surname = patient.getSurname();
 		this.securityNumber = patient.getSecurityNumber();

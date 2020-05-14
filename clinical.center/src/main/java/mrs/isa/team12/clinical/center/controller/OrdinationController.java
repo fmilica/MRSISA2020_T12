@@ -3,7 +3,7 @@ package mrs.isa.team12.clinical.center.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.ExamRoomDto;
+import mrs.isa.team12.clinical.center.dto.OrdinationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
@@ -56,7 +57,7 @@ public class OrdinationController {
 	 */
 	@GetMapping(value = "/getClinicsOrdinations",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Ordination>> getClinicsOrdinations() {
+	public ResponseEntity<List<OrdinationDto>> getClinicsOrdinations() {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -68,7 +69,11 @@ public class OrdinationController {
 		}
 		
 		List<Ordination> clinicsOrdins = ordinationService.findAllByClinicId(currentUser.getClinic().getId());
-		return new ResponseEntity<>(clinicsOrdins, HttpStatus.OK);
+		List<OrdinationDto> clinicsOrdinsDtos = new ArrayList<OrdinationDto>();
+		for(Ordination o : clinicsOrdins) {
+			clinicsOrdinsDtos.add(new OrdinationDto(o));
+		}
+		return new ResponseEntity<>(clinicsOrdinsDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -79,7 +84,7 @@ public class OrdinationController {
 	 */
 	@GetMapping(value = "/getClinicsExamination",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Ordination>> getClinicsExamination() {
+	public ResponseEntity<List<OrdinationDto>> getClinicsExamination() {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -91,7 +96,11 @@ public class OrdinationController {
 		}
 		
 		List<Ordination> clinicsExamRooms = ordinationService.findAllByClinicIdAndType(currentUser.getClinic().getId(), OrdinationType.ConsultingRoom);
-		return new ResponseEntity<>(clinicsExamRooms, HttpStatus.OK);
+		List<OrdinationDto> clinicsExamRoomsDtos = new ArrayList<OrdinationDto>();
+		for(Ordination o : clinicsExamRooms) {
+			clinicsExamRoomsDtos.add(new OrdinationDto(o));
+		}
+		return new ResponseEntity<>(clinicsExamRoomsDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -102,7 +111,7 @@ public class OrdinationController {
 	 */
 	@GetMapping(value = "/getClinicsExaminationName/{name}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Ordination>> getClinicsOrdinationsFilter(@PathVariable("name") String name) {
+	public ResponseEntity<List<OrdinationDto>> getClinicsOrdinationsFilter(@PathVariable("name") String name) {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -114,7 +123,11 @@ public class OrdinationController {
 		}
 		
 		List<Ordination> clinicsOrdins = ordinationService.findAllByClinicIdAndNameContainingIgnoreCaseAndType(currentUser.getClinic().getId(), name, OrdinationType.ConsultingRoom);
-		return new ResponseEntity<>(clinicsOrdins, HttpStatus.OK);
+		List<OrdinationDto> clinicsOrdinsDtos = new ArrayList<OrdinationDto>();
+		for(Ordination o : clinicsOrdins) {
+			clinicsOrdinsDtos.add(new OrdinationDto(o));
+		}
+		return new ResponseEntity<>(clinicsOrdinsDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -125,7 +138,7 @@ public class OrdinationController {
 	 */
 	@GetMapping(value = "/getClinicsExaminationNumber/{number}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Ordination>> getClinicsOrdinationsFilter(@PathVariable("number") Integer number) {
+	public ResponseEntity<List<OrdinationDto>> getClinicsOrdinationsFilter(@PathVariable("number") Integer number) {
 		ClinicAdmin currentUser;
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
@@ -137,7 +150,11 @@ public class OrdinationController {
 		}
 		
 		List<Ordination> clinicsOrdins = ordinationService.findAllByClinicIdAndOrdinationNumberAndType(currentUser.getClinic().getId(), number, OrdinationType.ConsultingRoom);
-		return new ResponseEntity<>(clinicsOrdins, HttpStatus.OK);
+		List<OrdinationDto> clinicsOrdinsDtos = new ArrayList<OrdinationDto>();
+		for(Ordination o : clinicsOrdins) {
+			clinicsOrdinsDtos.add(new OrdinationDto(o));
+		}
+		return new ResponseEntity<>(clinicsOrdinsDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -148,7 +165,7 @@ public class OrdinationController {
 	 */
 	@GetMapping(value = "/getClinicsExamination/{name}/{number}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Ordination>> getClinicsOrdinationsFilter(@PathVariable("name") String name,
+	public ResponseEntity<List<OrdinationDto>> getClinicsOrdinationsFilter(@PathVariable("name") String name,
 																		@PathVariable("number") Integer number) {
 		ClinicAdmin currentUser;
 		try {
@@ -161,7 +178,11 @@ public class OrdinationController {
 		}
 		
 		List<Ordination> clinicsOrdins = ordinationService.findAllByClinicIdAndNameContainingIgnoreCaseAndOrdinationNumberAndType(currentUser.getClinic().getId(), name, number, OrdinationType.ConsultingRoom);
-		return new ResponseEntity<>(clinicsOrdins, HttpStatus.OK);
+		List<OrdinationDto> clinicsOrdinsDtos = new ArrayList<OrdinationDto>();
+		for(Ordination o : clinicsOrdins) {
+			clinicsOrdinsDtos.add(new OrdinationDto(o));
+		}
+		return new ResponseEntity<>(clinicsOrdinsDtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -173,7 +194,7 @@ public class OrdinationController {
 	@PostMapping(value = "/addNewOrdination",
 				 consumes = MediaType.APPLICATION_JSON_VALUE, 
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Ordination> createOrdination(@RequestBody Ordination ordination) {
+	public ResponseEntity<OrdinationDto> createOrdination(@RequestBody Ordination ordination) {
 		
 		ClinicAdmin admin;
 		try {
@@ -190,7 +211,7 @@ public class OrdinationController {
 		if(o == null) {
 			ordination.setClinic(admin.getClinic());
 			ordinationService.save(ordination);
-			return new ResponseEntity<>(ordination, HttpStatus.CREATED);
+			return new ResponseEntity<>(new OrdinationDto(ordination), HttpStatus.CREATED);
 		}
 		
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name and number combination already exists!");
@@ -199,7 +220,7 @@ public class OrdinationController {
 	
 	/*
 	 url: GET localhost:8081/theGoodShepherd/ordination/getAvailableExaminationRooms/{appointReqId}
-	 HTTP request for adding new ordination
+	 HTTP request for getting all available examination rooms for given appointment request
 	 receives Ordination object
 	 returns ResponseEntity object
 	 */

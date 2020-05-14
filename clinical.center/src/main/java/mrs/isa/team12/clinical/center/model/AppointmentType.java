@@ -17,9 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "appointment_type")
 public class AppointmentType {
@@ -40,8 +37,6 @@ public class AppointmentType {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	//@JsonBackReference
-	@JsonBackReference("clinic-appTypes")
 	private Clinic clinic;
 
 	/*@ManyToOne
@@ -52,12 +47,9 @@ public class AppointmentType {
         joinColumns = { @JoinColumn(name = "appointment_type_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "doctor_id") }
     )
-	//@JsonBackReference
-	@JsonBackReference("doctor-appTypes")
 	private Set<Doctor> doctors;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "appType")
-	@JsonManagedReference("appType-apps")
 	private Set<Appointment> appointments;
 
 	/*many to many veza jer eto znamo i sami*/
