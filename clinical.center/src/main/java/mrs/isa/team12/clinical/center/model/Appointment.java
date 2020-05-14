@@ -203,7 +203,7 @@ public class Appointment {
 */
 	@Override
 	public String toString() {
-		return "Appointment [id=" + id + ", patient=" + patient + ", doctor=" + doctor + "]";
+		return "Appointment [id=" + id + "]";
 	}
 	
 }

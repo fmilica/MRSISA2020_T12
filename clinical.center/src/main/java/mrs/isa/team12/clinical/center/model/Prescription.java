@@ -31,6 +31,14 @@ public class Prescription {
 		this.medicine = medicine;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getMedicine() {
 		return medicine;
 	}

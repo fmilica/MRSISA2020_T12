@@ -63,4 +63,9 @@ public class OrdinationImpl implements OrdinationService {
 		return ordinationRep.save(o);
 	}
 
+	@Override
+	public Ordination findOneById(Long id) {
+		return ordinationRep.findOneById(id);
+	}
+
 }

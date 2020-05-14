@@ -1,5 +1,10 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Patient;
 
 public class PatientProfileDto {
@@ -15,6 +20,7 @@ public class PatientProfileDto {
 	private String city;
 	private String country;
 	private MedicalRecordDto medicalRecords;
+	private AppointmentDto appointment;
 	
 	
 	public PatientProfileDto(Patient patient) {
@@ -29,8 +35,14 @@ public class PatientProfileDto {
 		this.city = patient.getCity();
 		this.country = patient.getCountry();
 		this.medicalRecords = null;
+		for (Appointment a : patient.getAppointments()) {
+			if(currentApp(a)) {
+				this.appointment = new AppointmentDto(a);
+				break;
+			}
+		}
 	}
-	
+
 	public PatientProfileDto(Patient patient, MedicalRecordDto medicalRecords) {
 		this.name = patient.getName();
 		this.surname = patient.getSurname();
@@ -43,6 +55,20 @@ public class PatientProfileDto {
 		this.city = patient.getCity();
 		this.country = patient.getCountry();
 		this.medicalRecords = medicalRecords;
+		for (Appointment a : patient.getAppointments()) {
+			if(currentApp(a)) {
+				this.appointment = new AppointmentDto(a);
+				break;
+			}
+		}
+	}
+	
+	private boolean currentApp(Appointment a) {
+		Date current = new Date();
+		if(current.getDate() == a.getDate().getDate() && (current.getHours()+1 >= a.getStartTime() ) && (current.getHours()+1 <= a.getEndTime())) {
+			return true;
+		}
+		return false;
 	}
 	
 	public String getName() {
@@ -108,12 +134,19 @@ public class PatientProfileDto {
 	public MedicalRecordDto getMedicalRecords() {
 		return medicalRecords;
 	}
+	
 
+	public AppointmentDto getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(AppointmentDto appointment) {
+		this.appointment = appointment;
+	}
 
 	public void setMedicalRecords(MedicalRecordDto medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
-
 
 	@Override
 	public String toString() {

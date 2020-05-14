@@ -55,6 +55,14 @@ public class MedicalRecords {
 		//this.appointments = appointments;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Integer getHeight() {
 		return height;
 	}

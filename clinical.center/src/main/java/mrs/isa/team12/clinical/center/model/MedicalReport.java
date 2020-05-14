@@ -28,7 +28,7 @@ public class MedicalReport {
 	@Column(name = "description", unique = false, nullable = false)
 	private String description;
 	
-	@OneToOne(fetch = LAZY)
+	@OneToOne(cascade = {CascadeType.ALL}, fetch = LAZY)
 	@JoinColumn(name = "appointment_id")
 	private Appointment appointment;
 	
@@ -40,7 +40,7 @@ public class MedicalReport {
 	
 	// trebalo bi manyToMany, jer moze dati vise dijagnoza jednom pacijentu
 	// (moze oboljevati od n stvari, ali neka, imacemo zdrave pacijente)
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
 	private Diagnosis diagnosis;
 	

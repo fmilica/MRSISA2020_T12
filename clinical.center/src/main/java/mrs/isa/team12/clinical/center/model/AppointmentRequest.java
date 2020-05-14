@@ -88,6 +88,6 @@ public class AppointmentRequest {
 	@Override
 	public String toString() {
 		return "AppointmentRequest [id=" + id + ", appointment=" + appointment + ", requestDate=" + requestDate
-				+ ", approved=" + approved + ", clinic=" + clinic + "]";
+				+ ", approved=" + approved + "]";
 	}
 }

@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentReqDto;
 import mrs.isa.team12.clinical.center.dto.ClinicAdminDto;
-import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
+import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -208,9 +209,9 @@ public class ClinicAdminController {
 	 * returns: String instance
 	 * */
 	@PostMapping(value = "/acceptAppointmentRequest" ,
-			consumes = MediaType.APPLICATION_JSON_VALUE, //-> {"id" : 2, "appointment" :{ "ordination" :{ "name" : "Ordination1" }}} npr
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> acceptAppointmentRequest(@RequestBody AppointmentRequest appointmentRequest){
+			consumes = MediaType.APPLICATION_JSON_VALUE //-> {"id" : 2, "appointment" :{ "ordination" :{ "name" : "Ordination1" }}} npr
+			)
+	public void acceptAppointmentRequest(@RequestBody AppointmentReqDto appointmentRequest){
 		//proveriti da li je termin slobodan
 			//ako jeste posalji mejl korisniku da je odobreno
 			//ako nije, pronadji prvi slobodni termin i posalji koristiku te detalje
@@ -218,14 +219,16 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
-		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getId());
-		System.out.println("dodjes li ovde majke ti");
+		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getReqId());
+		System.out.println(appointmentRequest);
 		if(appointmentReq == null) { //mozda bi ovde trebalo proveriti da li je to neki koji je pre prihvacen/odbijen? mozda kasnije..
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
 		}
 		//postavi confirmed na true kod AppointmentRequest i Appointment
 		appointmentReq.setApproved(true);
-		appointmentReq.getAppointment().setConfirmed(true);
+		appointmentReq.getAppointment().setDate(appointmentRequest.getDate());
+		appointmentReq.getAppointment().setStartTime(appointmentRequest.getTime());
+		appointmentReq.getAppointment().setEndTime(appointmentRequest.getTime() + appointmentReq.getAppointment().getAppType().getDuration());
 		//dodati appointment doktoru, pacijentu i svima kojima treba
 		Doctor doctor = doctorService.findOneByEmail(appointmentReq.getAppointment().getDoctor().getEmail());
 		doctor.addAppointment(appointmentReq.getAppointment());
@@ -233,7 +236,7 @@ public class ClinicAdminController {
 		clinic.addAppointment(appointmentReq.getAppointment());
 		
 		//
-		Ordination ord = ordinationService.findOneByName(appointmentRequest.getAppointment().getOrdination().getName());
+		Ordination ord = ordinationService.findOneById(appointmentRequest.getOrdId());
 		ord.addAppointment(appointmentReq.getAppointment());
 		appointmentReq.getAppointment().setOrdination(ord);
 		ordinationService.save(ord);
@@ -246,7 +249,6 @@ public class ClinicAdminController {
 		try {
 			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
 					appointmentReq.getAppointment(), true);
-			return new ResponseEntity<>("Request accepted!", HttpStatus.OK);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

@@ -513,6 +513,7 @@ $(document).ready(function() {
 		var ordinationId = $(this).attr('id')
 		var currentDate = $(this).attr('name')
 		var time = $('#time'+ordinationId).val()
+		console.log("time "+time)
 		scheduleOrdination(ordinationId, currentDate, time)
 	});
 
@@ -594,7 +595,25 @@ $(document).ready(function() {
 		examReq.time = time
 		alert("You scheduled an examination room for an appointment!")
 		alert(JSON.stringify(examReq))
-		alert("Milice, send mejl pacijentu da potvrdi ili odbije")
+		//alert("Milice, send mejl pacijentu da potvrdi ili odbije")
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/clinicAdmin/acceptAppointmentRequest",
+			contentType : "application/json",
+			data : JSON.stringify(examReq),
+			success : function(){
+				alert("Appointment accepted!")
+				$('.content').hide()
+				$('.clinic-clinicExamReq').show()
+				examReqTable.ajax.reload()
+				// scroll to top of page
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
 	}
 
 })

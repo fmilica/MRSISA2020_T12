@@ -34,4 +34,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepository.findAll();
 	}
 
+	@Override
+	public Appointment findById(Long id) {
+		return appointmentRepository.findOneById(id);
+	}
+
 }

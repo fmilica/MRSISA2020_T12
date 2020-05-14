@@ -11,4 +11,6 @@ public interface AppointmentService {
 	List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId);
 	
 	List<Appointment> findAll();
+	
+	Appointment findById(Long id);
 }

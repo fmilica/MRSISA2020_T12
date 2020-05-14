@@ -7,6 +7,7 @@ import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.MedicalRecords;
 
 public class MedicalRecordDto {
+	private Long id;
 	private Integer height;
 	private Integer weight;
 	private String bloodPressure;
@@ -17,6 +18,7 @@ public class MedicalRecordDto {
 	
 	public MedicalRecordDto(MedicalRecords medicalRecords) {
 		super();
+		this.id = medicalRecords.getId();
 		this.height = medicalRecords.getHeight();
 		this.weight = medicalRecords.getWeight();
 		this.bloodPressure = medicalRecords.getBloodPressure();
@@ -24,6 +26,14 @@ public class MedicalRecordDto {
 		this.allergies = medicalRecords.getAllergies();
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Integer getHeight() {
 		return height;
 	}
