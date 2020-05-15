@@ -13,4 +13,6 @@ public interface AppointmentService {
 	List<Appointment> findAll();
 	
 	Appointment findById(Long id);
+	
+	List<Appointment> findAllByClinicIdAndConfirmedAndFinished(Long id, Boolean confirmed, Boolean finished);
 }

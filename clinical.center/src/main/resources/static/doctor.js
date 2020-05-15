@@ -4,24 +4,29 @@ var appointment_id;
 var medicalRecord_id;
 var current_secNum;
 
-function logInDoctor(email, password){
-		
-	$.ajax({
-		type : "POST",
-		async: false,
-		url : "theGoodShepherd/doctor/logIn//" + email + "//" + password ,
-		dataType: "json",
-		success : function(output)  {
-			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
-			window.location.href = "html/home-pages/doctor_hp.html"
-		},
-		error : function(response) {
-			alert(response.responseJSON.message)
-		}
-	})
-}
 
 $(document).ready( function () {
+	
+	/*View personal information*/
+	$('.d-profile').on('click', function(e){
+		e.preventDefault()
+		viewPersonalInformation()
+	})
+	
+	/*Edit personal information*/
+	$('#editDoctorProfile').click(function(e) {
+		e.preventDefault();
+		$('.content').hide()
+        $('.doctor-edit-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+        editPersonalInformation()
+	})
+	
+	$("#confirmEdit").click(function(e) {
+		e.preventDefault()
+		saveUpdatedDoctor()
+	})
 	
 	/*View all patients*/
 	$('#doctorPatients').click(function(event) {
@@ -258,6 +263,111 @@ function viewAllPatients(){
 	}
 }
 
+function viewPersonalInformation(){
+	$.ajax({
+		type : "GET",
+		async: false,
+		url : "../../theGoodShepherd/doctor/personalInformation" ,
+		dataType: "json",
+		success : function(output)  {
+			$("#fullNameBig").text(output.name + " " + output.surname)
+			$("#specializationBig").text(output.specialization)
+			$("#fullName").text(output.name + " " + output.surname)
+			$("#email").text(output.email)
+			$("#gender").text(output.gender)
+			$("#dateOfBirth").text(output.dateOfBirth)
+			$("#phoneNumber").text(output.phoneNumber)
+			$("#securityNumber").text(output.securityNumber)
+			$("#address").text(output.address + ", " + output.city + ", " + output.country)
+			$("#specialization").text(output.specialization)
+			$("#qualifications").empty()
+			for (i = 0; i < output.appTypes.length; i++) {
+				$("#qualifications").append('<li>' + output.appTypes[i] + '</li>');
+			}
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+function editPersonalInformation(){
+	$('#doctorQualifications').select2();
+	$.ajax({
+		type : "GET",
+		async: false,
+		url : "../../theGoodShepherd/doctor/personalInformation" ,
+		dataType: "json",
+		success : function(output)  {
+			$("#emailEdit").val(output.email)
+			$("#nameEdit").val(output.name)
+			$("#surnameEdit").val(output.surname)
+			$("#genderEdit").val(output.gender);
+			$("#dateOfBirthEdit").val(output.dateOfBirth)
+			$("#phoneNumberEdit").val(output.phoneNumber)
+			$("#securityNumberEdit").val(output.securityNumber)
+			$("#addressEdit").val(output.address)
+			$("#cityEdit").val(output.city)
+			$("#countryEdit").val(output.country)
+			$("#specializationDoctorEdit").val(output.specialization)
+			$("#doctorQualifications").empty()
+			$.each(output.allAppTypes, function( key, value ) {
+				var newOption = new Option(value, value, false, false);
+				$("#doctorQualifications").append(newOption);
+			})
+			$("#doctorQualifications").val(output.appTypes)
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+	
+	
+}
+
+function saveUpdatedDoctor(){
+	var emailV = $("#emailEdit").val()
+	var nameV = $("#nameEdit").val()
+	var surnameV = $("#surnameEdit").val()
+	var genderV = $("#genderEdit").val();
+	var dateOfBirthV = $("#dateOfBirthEdit").val()
+	var phoneNumberV = $("#phoneNumberEdit").val()
+	var securityNumberV = $("#securityNumberEdit").val()
+	var addressV = $("#addressEdit").val()
+	var cityV = $("#cityEdit").val()
+	var countryV = $("#countryEdit").val()
+	var specializationV = $("#specializationDoctorEdit").val()
+	var appTypesV = $("#doctorQualifications").val()
+	
+	var newDoctor = {
+		name: nameV,
+		surname: surnameV,
+		email: emailV,
+		gender: genderV,
+		dateOfBirth: dateOfBirthV,
+		phoneNumber: phoneNumberV,
+		securityNumber: securityNumberV,
+		address: addressV,
+		city: cityV,
+		country: countryV,
+		appTypes: appTypesV
+	}
+	
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/doctor/editPersonalInformation" ,
+		contentType : "application/json",
+		dataType : "json",
+		data : JSON.stringify(newDoctor),
+		success : function(data)  {
+			alert("Succesfully edited personal information.")
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
 function filterPatients(){
 	var nameV = $('#patientName').val()
 	var surnameV = $('#patientSurname').val()
@@ -337,4 +447,22 @@ function viewMedicalReports(data){
 			medicalReportTable.clear().rows.add(data).draw();
 		}
 	}
+}
+
+
+function logInDoctor(email, password){
+		
+	$.ajax({
+		type : "POST",
+		async: false,
+		url : "theGoodShepherd/doctor/logIn//" + email + "//" + password ,
+		dataType: "json",
+		success : function(output)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
+			window.location.href = "html/home-pages/doctor_hp.html"
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
 }

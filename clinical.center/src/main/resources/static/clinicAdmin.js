@@ -3,6 +3,7 @@ var appTypeTable;
 var doctorTable;
 var examReqTable;
 var examRoomTable;
+var appointmentTable;
 
 var changedExamTime = false;
 
@@ -13,24 +14,13 @@ var examReq = {
 	time: ""
 }
 
-function logInClinicAdmin(email, password){
-	
-    $.ajax({
-		type : "POST",
-		async: false,
-		url : "theGoodShepherd/clinicAdmin/logIn//" + email + "//" + password ,
-		dataType: "json",
-		success : function(output)  {
-			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
-			window.location.href = "html/home-pages/clinic_admin_hp.html"
-		},
-		error : function(response) {
-			alert(response.responseJSON.message)
-		}
-	})
-}
-
 $(document).ready(function() {
+	
+	/*View clinic appointments*/
+	$("#clinicAppointments").on('click', function(e){
+		e.preventDefault()
+		viewAppointments()
+	})
 	
 	/*View all ordinations*/
 	$("#clinicOrdinations").on('click', function(event){
@@ -588,35 +578,77 @@ $(document).ready(function() {
 			examRoomTable.ajax.reload()
 		}
 	})*/
-	
-	function scheduleOrdination(ordinationId, currentDate, time) {
-		examReq.ordId = ordinationId
-		examReq.date = currentDate
-		examReq.time = time
-		alert("You scheduled an examination room for an appointment!")
-		alert(JSON.stringify(examReq))
-		//alert("Milice, send mejl pacijentu da potvrdi ili odbije")
-		$.ajax({
-			type : "POST",
-			url : "../../theGoodShepherd/clinicAdmin/acceptAppointmentRequest",
-			contentType : "application/json",
-			data : JSON.stringify(examReq),
-			success : function(){
-				alert("Appointment accepted!")
-				$('.content').hide()
-				$('.clinic-clinicExamReq').show()
-				examReqTable.ajax.reload()
-				// scroll to top of page
-				document.body.scrollTop = 0
-				document.documentElement.scrollTop = 0
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
-	}
-
 })
+
+function viewAppointments(){
+	//nije inicijalizovana tabela
+	if (!$.fn.DataTable.isDataTable('#appointmentTable')) {
+		appointmentTable = $('#appointmentTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointment",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appType'},
+				{ data: 'doctor'},
+				{ 
+					data: null,
+					render: function(data) {
+						if(data.patient == null){
+							return "Free appointment"
+						}else{
+							return data.patient
+						}
+					}
+				},
+				{ data : 'ordination'},
+				{ data: 'date'},
+				{ data: null,
+					render: function(data) {
+						return data.startTime + ":00"
+					}
+				},
+				{ data: null,
+					render: function(data) {
+						return data.endTime + ":00"
+					}
+				}
+				]
+		})
+	}else {
+		// jeste inicijalizovana
+		appointmentTable.ajax.url( "../../theGoodShepherd/appointment")
+		appointmentTable.ajax.reload()
+	}
+}
+
+function scheduleOrdination(ordinationId, currentDate, time) {
+	examReq.ordId = ordinationId
+	examReq.date = currentDate
+	examReq.time = time
+	alert("You scheduled an examination room for an appointment!")
+	alert(JSON.stringify(examReq))
+	//alert("Milice, send mejl pacijentu da potvrdi ili odbije")
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/clinicAdmin/acceptAppointmentRequest",
+		contentType : "application/json",
+		data : JSON.stringify(examReq),
+		success : function(){
+			alert("Appointment accepted!")
+			$('.content').hide()
+			$('.clinic-clinicExamReq').show()
+			examReqTable.ajax.reload()
+			// scroll to top of page
+			document.body.scrollTop = 0
+			document.documentElement.scrollTop = 0
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
 
 function filterExaminationRooms(){
 	
@@ -729,4 +761,22 @@ function clearDoctorForm() {
 	$("#addressDoctor").val('')
 	$("#cityDoctor").val('')
 	$("#countryDoctor").val('')
+}
+
+
+function logInClinicAdmin(email, password){
+	
+    $.ajax({
+		type : "POST",
+		async: false,
+		url : "theGoodShepherd/clinicAdmin/logIn//" + email + "//" + password ,
+		dataType: "json",
+		success : function(output)  {
+			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
+			window.location.href = "html/home-pages/clinic_admin_hp.html"
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
 }

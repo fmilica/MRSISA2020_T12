@@ -39,4 +39,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepository.findOneById(id);
 	}
 
+	@Override
+	public List<Appointment> findAllByClinicIdAndConfirmedAndFinished(Long id, Boolean confirmed, Boolean finished) {
+		return appointmentRepository.findAllByClinicIdAndConfirmedAndFinished(id, confirmed, finished);
+	}
+
 }

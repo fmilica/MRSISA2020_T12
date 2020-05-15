@@ -77,6 +77,10 @@ insert into appointment (id, app_finished, app_date, app_start_time, app_end_tim
 values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19');
 /*DA LI CEMO CUVATI APP_REQ I POSLE PROLASKA APP-A? MOZDA SAMO ZAUZIMAMO MESTO?*/
 
+/*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id)
+values ('44', 'false', '2020-05-16', '06', '07', 'true', '29', '6', '9', '12', '19');
+
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type)
 values ('36', 'false', '2020-05-13', '06', '07', 'false', '29', '6', '9', '12');

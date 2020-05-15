@@ -53,8 +53,8 @@
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
 	
 	<!-- Select2 -->
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+	<link href="../../js/library/select2/css/select2.min.css" rel="stylesheet" />
+	<script src="../../js/library/select2/js/select2.min.js"></script>
 </head>
 
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-cyan">
@@ -243,7 +243,44 @@
 
 				<!-- Clinic appointments content -->
 				<div class="content clinic-appointments">
-					clinic appointments
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Appointments</header>
+									</div>
+									<div class="card-body">
+										<button id="addNewAppointment" class="btn btn-info add-button">Add appointment</button>
+										<table id="appointmentTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type</th>
+													<th>Doctor</th>
+													<th>Patient</th>
+													<th>Ordination</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment type</th>
+													<th>Doctor</th>
+													<th>Patient</th>
+													<th>Ordination</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Clinic doctors content -->

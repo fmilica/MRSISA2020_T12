@@ -145,6 +145,18 @@ body {
     background-color: #fffffc;
 }
 
+.biography {
+    text-align: left;
+}
+
+.edit-profile {
+    align-items: center;
+}
+.edit {
+    margin: 0 !important;
+    margin-bottom: 10px !important;
+}
+
 /*------------------------------------------------------------------
 [ Alert validate ]*/
 
@@ -414,10 +426,23 @@ body {
 }
 
 /* Doctor */
+.doctor-profile {
+    display: none;
+}
+.doctor-edit-profile {
+    margin: 0 100px 0 100px;
+    /*display: none;*/
+}
 .doctor-patients {
     display: none;
 }
 .doctor-patient-profile {
+    display: none;
+}
+.writeMedicalReport {
+    display: none;
+}
+.modify-medical-record {
     display: none;
 }
 

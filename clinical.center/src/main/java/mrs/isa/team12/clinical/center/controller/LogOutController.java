@@ -29,6 +29,5 @@ public class LogOutController {
 		}
 		
 		session.invalidate();
-
 	}
 }

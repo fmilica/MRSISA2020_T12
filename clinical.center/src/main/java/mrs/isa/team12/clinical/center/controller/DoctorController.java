@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
+import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -84,6 +85,62 @@ public class DoctorController {
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/personalInformation
+	 HTTP request for doctors personal information
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/personalInformation",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DoctorPersonalInformationDto> viewPersonalInformation() {
+		
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Doctor doctor = doctorService.findOneById(currentUser.getId());
+
+		DoctorPersonalInformationDto dto = new DoctorPersonalInformationDto(doctor);
+		dto.setAppTypes(doctor.getAppointmentTypes());
+		dto.setAllAppTypes(doctor.getClinic().getAppointmentTypes());
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/doctor/editPersonalInformation
+	 HTTP request for editing doctors personal information
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/personalInformation",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DoctorPersonalInformationDto> editPersonalInformation(@RequestBody DoctorPersonalInformationDto editedDoctor) {
+		
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can edit his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Doctor doctor = doctorService.findOneById(currentUser.getId());
+
+		DoctorPersonalInformationDto dto = new DoctorPersonalInformationDto(doctor);
+		dto.setAppTypes(doctor.getAppointmentTypes());
+		dto.setAllAppTypes(doctor.getClinic().getAppointmentTypes());
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/doctor/getAll
 	 HTTP request for viewing all doctors
 	 returns ResponseEntity object
@@ -101,6 +158,7 @@ public class DoctorController {
 		 * trebati
 		 * ?
 		 */
+		//mozda i nece
 		List<Doctor> doctors = doctorService.findAll();
 		List<DoctorDto> doctorsDto = new ArrayList<DoctorDto>();
 		for(Doctor d : doctors) {

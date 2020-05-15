@@ -253,6 +253,13 @@ $(document).ready( function () {
     })
 
     /* Doctor */
+    // Doctor profile
+    $('.d-profile').click(function() {
+        $('.content').hide()
+        $('.doctor-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
     // Doctor patients
     $('#doctorPatients').click(function() {
         $('.content').hide()
