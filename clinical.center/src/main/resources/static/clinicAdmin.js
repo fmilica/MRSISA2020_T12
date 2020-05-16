@@ -16,6 +16,44 @@ var examReq = {
 
 $(document).ready(function() {
 	
+	/*Create new appointment*/
+	$('#chooseDate').click(function(e) {
+		e.preventDefault()
+		/*TODO - VEZA SA BEKOM*/
+		/* ZA SADA PUNIMO STATICKO CISTO DA POKAZEM KAKO BI IZGLEDALO */
+		var row = "<tr>" +
+					"<td>Banov tata, dr</td>" +
+					"<td>" +
+						'<select class="form-control input-height available-times">' + 
+							"<option>Tut fikser</option>" + 
+							"<option>Umnjak rimuver</option>" + 
+							"<option>Adrenalin indzekter</option>" + 
+						"</select>" +
+					"</td>" +
+					"<td>Odabrani datum</td>" +
+					"<td>" +
+						'<select class="form-control input-height available-times">' + 
+							"<option>12:00</option>" + 
+							"<option>14:00</option>" + 
+							"<option>16:00</option>" + 
+						"</select>" +
+					"</td>" +
+					"<td>(StartTime+AppTypeDuration):00</td>" +
+					"<td>" +
+						'<select class="form-control input-height available-times">' + 
+							"<option>Jungle room 1</option>" + 
+							"<option>Jungle operation 1</option>" + 
+							"<option>Jungle bloody battlefield</option>" + 
+						"</select>" +
+					"</td>" +
+					"<td>" +
+						'<button class="btn btn-info table-button">Create appointment</button>' +
+					"</td>" +
+				  "</tr>";
+		$('#newAppDoctors tbody').append(row)
+		$('.clinic-appDoctors').show()
+	})
+
 	/*View clinic appointments*/
 	$("#clinicAppointments").on('click', function(e){
 		e.preventDefault()

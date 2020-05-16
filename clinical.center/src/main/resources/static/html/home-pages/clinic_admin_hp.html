@@ -416,7 +416,76 @@
 
 				<!-- Clinic create an appointment content -->
 				<div class="content clinic-createClinicApp">
-					clinic create an appointment
+					<!-- Choose date of appointment -->
+					<div class="create-appointment">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Create appointment</header>
+									</div>
+									<div class="card-body">
+										<div class="form-body">
+											<div class="form-group row">
+												<label class="control-label col-md-4">
+													Date:
+												</label>
+												<div class="col-md-5">
+													<input id="filterAppDate" type="date" class="form-control date-filter">
+												</div>
+											</div>
+											<hr>
+											<div class="offset-md-3 col-md-12">
+												<div class="centered">
+													<button id="chooseDate" class="btn btn-info filter-btn center">Choose date</button>
+													<button id="clearDate" class="btn btn-info filter-btn center">Clear date</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Table for viewing available doctors -->
+					<div class="table-view clinic-appDoctors">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Create appointment - doctors and appointment types</header>
+									</div>
+									<div class="card-body">
+										<table id="newAppDoctors" class="display">
+											<thead>
+												<tr>
+													<th>Full name</th>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Create appointment</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Full name</th>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Create appointment</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Clinic reports content -->

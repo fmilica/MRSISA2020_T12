@@ -351,8 +351,30 @@ body {
     padding: 6px 6px !important;
 }
 /*
+* Create appointmet (clinic admin)
+*/
+.create-appointment {
+    margin: 0 200px;
+}
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.center {
+    display: inline-block;
+}
+.filter-doctor-btn {
+    display: inline-block;
+}
+/*
 * jQuery dynamic
 */
+/* Change password */
+.change-password {
+    margin: 0 100px 0 100px;
+    /*display: none;*/
+}
 /* Clinical center admin */
 .clinics {
     display: none;
@@ -416,6 +438,12 @@ body {
 .clinic-addAppType {
     display: none;
 }
+.clinic-createClinicApp {
+    display: none;
+}
+.clinic-appDoctors {
+    display: none;
+}
 
 /* Medical personnel */
 .medical-calendar {
@@ -431,7 +459,7 @@ body {
 }
 .doctor-edit-profile {
     margin: 0 100px 0 100px;
-    /*display: none;*/
+    display: none;
 }
 .doctor-patients {
     display: none;
