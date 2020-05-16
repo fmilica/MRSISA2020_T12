@@ -349,9 +349,10 @@ function saveUpdatedDoctor(){
 		securityNumber: securityNumberV,
 		address: addressV,
 		city: cityV,
-		country: countryV,
-		appTypes: appTypesV
+		country: countryV
 	}
+	
+	console.log(JSON.stringify(newDoctor))
 	
 	$.ajax({
 		type : "POST",
@@ -359,8 +360,10 @@ function saveUpdatedDoctor(){
 		contentType : "application/json",
 		dataType : "json",
 		data : JSON.stringify(newDoctor),
-		success : function(data)  {
+		success : function(response)  {
+			$(".d-profile").click()
 			alert("Succesfully edited personal information.")
+			
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

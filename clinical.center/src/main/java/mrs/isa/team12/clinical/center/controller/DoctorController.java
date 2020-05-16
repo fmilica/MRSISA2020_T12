@@ -117,10 +117,9 @@ public class DoctorController {
 	 HTTP request for editing doctors personal information
 	 returns ResponseEntity object
 	 */
-	@GetMapping(value = "/personalInformation",
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/editPersonalInformation")
 	public ResponseEntity<DoctorPersonalInformationDto> editPersonalInformation(@RequestBody DoctorPersonalInformationDto editedDoctor) {
-		
+		System.out.println("Dosao");
 		Doctor currentUser;
 		try {
 			currentUser = (Doctor) session.getAttribute("currentUser");
@@ -131,13 +130,11 @@ public class DoctorController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Doctor doctor = doctorService.findOneById(currentUser.getId());
-
-		DoctorPersonalInformationDto dto = new DoctorPersonalInformationDto(doctor);
-		dto.setAppTypes(doctor.getAppointmentTypes());
-		dto.setAllAppTypes(doctor.getClinic().getAppointmentTypes());
+		editedDoctor.setId(currentUser.getId());
 		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		Doctor doctor = doctorService.update(editedDoctor);
+		
+		return new ResponseEntity<>(new DoctorPersonalInformationDto(doctor), HttpStatus.OK);
 	}
 	
 	/*

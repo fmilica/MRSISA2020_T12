@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Doctor;
@@ -64,6 +65,24 @@ public class DoctorImpl implements DoctorService {
 	@Override
 	public List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type) {
 		return doctorRep.findAllByClinicIdAndAppointmentTypes(clinicId, type);
+	}
+
+	@Override
+	public Doctor update(DoctorPersonalInformationDto editedDoctor) {
+		Doctor doctorToUpdate = doctorRep.findOneById(editedDoctor.getId());
+		doctorToUpdate.setName(editedDoctor.getName());
+		doctorToUpdate.setSurname(editedDoctor.getSurname());
+		doctorToUpdate.setGender(editedDoctor.getGender());
+		doctorToUpdate.setDateOfBirth(editedDoctor.getDateOfBirth());
+		doctorToUpdate.setPhoneNumber(editedDoctor.getPhoneNumber());
+		doctorToUpdate.setAddress(editedDoctor.getAddress());
+		doctorToUpdate.setCity(editedDoctor.getCity());
+		doctorToUpdate.setCountry(editedDoctor.getCountry());
+		doctorToUpdate.setSpecialization(editedDoctor.getSpecialization());
+		//kako app types ?
+		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
+		doctorRep.save(doctorToUpdate);
+		return doctorToUpdate;
 	}
 
 }
