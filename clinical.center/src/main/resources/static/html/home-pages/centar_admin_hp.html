@@ -169,9 +169,9 @@
 								</a>
                             </li>
                             <li class="nav-item">
-	                            <a id="prescriptionBook" class="nav-link nav-toggle">
+	                            <a id="codeBooks" class="nav-link nav-toggle">
 									<img class="icon" src="../../img/icons/medical_record.png">
-									<span class="title">Prescription Book</span>
+									<span class="title">Code Books</span>
 									<span class="arrow"></span>
 								</a>
 							</li>
@@ -486,8 +486,152 @@
 				</div>
 				
 				<!-- Prescription book content -->
-				<div class="content prescription-book">
-					prescription-book
+				<div class="content code-books">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Diagnosis Code Book</header>
+									</div>
+									<div class="card-body">
+										<button id="addDiagnose" class="btn btn-info add-button">Add new diagnosis</button>
+										<table id="diagnosisTable" class="display">
+											<thead>
+												<tr>
+													<th>Code</th>
+													<th>Name</th>
+													<th>Code Book</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Code</th>
+													<th>Name</th>
+													<th>Code Book</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Medicine Code Book</header>
+									</div>
+									<div class="card-body">
+										<button id="addMedicine" class="btn btn-info add-button">Add new medicine</button>
+										<table id="medicineTable" class="display">
+											<thead>
+												<tr>
+													<th>Code</th>
+													<th>Name</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Code</th>
+													<th>Name</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Add new diagnose -->
+				<div class="content add-diagnose">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new diagnose - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nameDiagnose" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Code Book
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<select class="form-control input-height" id="codeBookId">
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_diagnose" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_diagnose" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Add new medicine -->
+				<div class="content add-medicine">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new medicine - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nameMedicine" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_medicine" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_medicine" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				
 				<!-- Add new clinic administrator -->

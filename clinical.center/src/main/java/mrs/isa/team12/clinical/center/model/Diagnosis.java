@@ -83,5 +83,17 @@ public class Diagnosis {
 	public void setMedicalReports(Set<MedicalReport> medicalReports) {
 		this.medicalReports = medicalReports;
 	}
-	
+
+	public DiagnosePerscription getDiagnosePerscription() {
+		return diagnosePerscription;
+	}
+
+	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
+		this.diagnosePerscription = diagnosePerscription;
+	}
+
+	@Override
+	public String toString() {
+		return "Diagnosis [id=" + id + ", name=" + name + ", diagnosePerscription=" + diagnosePerscription + "]";
+	}
 }

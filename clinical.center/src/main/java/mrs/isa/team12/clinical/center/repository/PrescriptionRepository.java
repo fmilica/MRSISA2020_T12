@@ -9,4 +9,6 @@ import mrs.isa.team12.clinical.center.model.Prescription;
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long>{
 
 	List<Prescription> findAll();
+	
+	Prescription save(Prescription p);
 }

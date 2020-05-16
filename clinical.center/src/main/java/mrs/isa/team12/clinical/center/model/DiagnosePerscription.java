@@ -40,4 +40,9 @@ public class DiagnosePerscription {
 	public void setDiagnosis(Set<Diagnosis> diagnosis) {
 		this.diagnosis = diagnosis;
 	}
+
+	@Override
+	public String toString() {
+		return "[id=" + id + "]";
+	}
 }

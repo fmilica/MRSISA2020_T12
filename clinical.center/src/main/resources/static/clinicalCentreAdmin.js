@@ -1,6 +1,8 @@
 var clinicAdminsTable;
 var clinicsTable;
 var requestsTable;
+var diagnosisTable;
+var medicineTable;
 var choosenRequest;
 
 $(document).ready(function() {
@@ -379,8 +381,140 @@ $(document).ready(function() {
 		}
 	})
 	
+	/*View all code books*/
+    $('#codeBooks').click(function(event) {
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#diagnosisTable')) {
+			diagnosisTable = $('#diagnosisTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/diagnosis",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'id'},
+					{ data: 'name'},
+					{ 
+						data: null,
+						render: function (data) {
+							return data.dpDto.id;}
+					}]
+			})
+		}
+		if (!$.fn.DataTable.isDataTable('#medicineTable')) {
+			medicineTable = $('#medicineTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/prescription",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'id'},
+					{ data: 'name'}]
+			})
+		}
+	})
 	
+	//Fill in the form for adding new diagnose
+	$('#addDiagnose').click(function() {
+		$.ajax({
+            type : "GET",
+            url : "/theGoodShepherd/diagnosePrescription",
+            dataType: "json",
+            success: function(data){
+            	$("#codeBookId").empty()
+            	$.each(data, function(index, dp) {
+					$("#codeBookId").append(new Option(dp.id, dp.id));
+				})
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+	})
 	
+	//Add new diagnose
+	$('#add_diagnose').click(function(e){
+		e.preventDefault()
+		
+		var name = $('#nameDiagnose').val()
+		var codeBook = $("#codeBookId").val()
+		
+		if(!name){
+			alert("All required fields must be filled!")
+        	return;
+		}
+		
+		$.ajax({
+            type : "POST",
+            url : "/theGoodShepherd/diagnosis/addNewDiagnose",
+            contentType : "application/json",
+            dataType: "json",
+            data : JSON.stringify({
+                "name" : name,
+                "diagnosePerscription" : {
+                	"id" : codeBook
+                }
+            }),
+            success: function(data){
+            	alert("Successfully added new diagnose!")
+            	$('#nameDiagnose').val('')
+            	$('.content').hide()
+        		$('.code-books').show()
+            	diagnosisTable.ajax.reload(); 
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+	})
+	
+	//Cancel adding new diagnose
+	$('#cancel_diagnose').click(function(e){
+		e.preventDefault()
+		$('#name').val('')
+    	$('.content').hide()
+		$('.code-books').show()
+	})
+	
+	//Add new medicine
+	$('#add_medicine').click(function(e){
+		e.preventDefault()
+		
+		var name = $('#nameMedicine').val()
+		
+		if(!name){
+			alert("All required fields must be filled!")
+        	return;
+		}
+		
+		$.ajax({
+            type : "POST",
+            url : "/theGoodShepherd/prescription/addNewPrescription",
+            contentType : "application/json",
+            dataType: "json",
+            data : JSON.stringify({
+                "medicine" : name
+            }),
+            success: function(data){
+            	alert("Successfully added new medicine!")
+            	$('#nameMedicine').val('')
+            	$('.content').hide()
+        		$('.code-books').show()
+            	medicineTable.ajax.reload(); 
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+	})
+	
+	//Cancel adding new medicine
+	$('#cancel_medicine').click(function(e){
+		e.preventDefault()
+		$('#name').val('')
+    	$('.content').hide()
+		$('.code-books').show()
+	})
 })
 
 function logInClinicalCentreAdmin(email, password){

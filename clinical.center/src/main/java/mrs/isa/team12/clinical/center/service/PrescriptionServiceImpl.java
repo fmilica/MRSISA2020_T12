@@ -23,4 +23,9 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 	public List<Prescription> findAll() {
 		return prescriptionRepository.findAll();
 	}
+
+	@Override
+	public Prescription save(Prescription p) {
+		return prescriptionRepository.save(p);
+	}
 }

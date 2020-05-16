@@ -5,12 +5,14 @@ import mrs.isa.team12.clinical.center.model.Diagnosis;
 public class DiagnosisDto {
 	private Long id;
 	private String name;
+	private DiagnosisPrescriptionDto dpDto;
 	
 	public DiagnosisDto() {}
 	
 	public DiagnosisDto(Diagnosis d) {
 		this.id = d.getId();
 		this.name = d.getName();
+		this.dpDto = new DiagnosisPrescriptionDto(d.getDiagnosePerscription());
 	}
 
 	public Long getId() {
@@ -27,6 +29,14 @@ public class DiagnosisDto {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public DiagnosisPrescriptionDto getDpDto() {
+		return dpDto;
+	}
+
+	public void setDpDto(DiagnosisPrescriptionDto dpDto) {
+		this.dpDto = dpDto;
 	}
 	
 }

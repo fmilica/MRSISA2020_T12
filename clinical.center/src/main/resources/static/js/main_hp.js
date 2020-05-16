@@ -113,10 +113,24 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
-    // Prescription book
-    $('#prescriptionBook').click(function() {
+    // Code books
+    $('#codeBooks').click(function() {
         $('.content').hide()
-        $('.prescription-book').show()
+        $('.code-books').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    // Add new diagnose
+    $('#addDiagnose').click(function(){
+    	$('.content').hide()
+        $('.add-diagnose').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    //Add new medicine
+    $('#addMedicine').click(function(){
+    	$('.content').hide()
+        $('.add-medicine').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
