@@ -25,6 +25,8 @@ public class DoctorPersonalInformationDto {
 	private List<String> appTypes;
 	private List<String> allAppTypes;
 	
+	public DoctorPersonalInformationDto() {}
+	
 	public DoctorPersonalInformationDto(Doctor doctor) {
 		this.name = doctor.getName();
 		this.surname = doctor.getSurname();
@@ -112,7 +114,7 @@ public class DoctorPersonalInformationDto {
 	public void setAppTypes(List<String> appTypes) {
 		this.appTypes = appTypes;
 	}
-	public void setAppTypes(Set<AppointmentType> appTypes) {
+	public void setAppTypesSet(Set<AppointmentType> appTypes) {
 		this.appTypes = new ArrayList<String>();
 		for(AppointmentType at : appTypes) {
 			this.appTypes.add(at.getName());
@@ -127,7 +129,7 @@ public class DoctorPersonalInformationDto {
 	public List<String> getAllAppTypes() {
 		return allAppTypes;
 	}
-	public void setAllAppTypes(Set<AppointmentType> allAppTypes) {
+	public void setAllAppTypesSet(Set<AppointmentType> allAppTypes) {
 		this.allAppTypes = new ArrayList<String>();
 		for(AppointmentType at : allAppTypes) {
 			this.allAppTypes.add(at.getName());

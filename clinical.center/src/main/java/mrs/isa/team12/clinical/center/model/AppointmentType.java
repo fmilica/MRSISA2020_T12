@@ -160,6 +160,18 @@ public class AppointmentType {
 	    return this.name.equals(appType.getName());
 	}
 	
+	public void addDoctor(Doctor d) {
+		if(!this.doctors.contains(d)) {
+			this.doctors.add(d);
+		}
+	}
+	
+	public void removeDoctor(Doctor d) {
+		if(this.doctors.contains(d)) {
+			this.doctors.remove(d);
+		}
+	}
+	
 	public void addAppointment(Appointment a) {
 		if(!this.appointments.contains(a)) {
 			this.appointments.add(a);

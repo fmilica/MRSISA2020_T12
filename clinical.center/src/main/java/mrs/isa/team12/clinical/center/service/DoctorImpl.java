@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
-	public Doctor update(DoctorPersonalInformationDto editedDoctor) {
+	public Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes) {
 		Doctor doctorToUpdate = doctorRep.findOneById(editedDoctor.getId());
 		doctorToUpdate.setName(editedDoctor.getName());
 		doctorToUpdate.setSurname(editedDoctor.getSurname());
@@ -79,10 +80,10 @@ public class DoctorImpl implements DoctorService {
 		doctorToUpdate.setCity(editedDoctor.getCity());
 		doctorToUpdate.setCountry(editedDoctor.getCountry());
 		doctorToUpdate.setSpecialization(editedDoctor.getSpecialization());
-		//kako app types ?
+		doctorToUpdate.setAppointmentTypes(appTypes);
 		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
-		doctorRep.save(doctorToUpdate);
-		return doctorToUpdate;
+		Doctor updated = doctorRep.save(doctorToUpdate);
+		return updated;
 	}
 
 }

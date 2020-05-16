@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
+import java.util.Set;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
@@ -13,7 +14,7 @@ public interface DoctorService {
 	
 	Doctor save(Doctor d);
 	
-	Doctor update(DoctorPersonalInformationDto editedDoctor);
+	Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes);
 	
 	List<Doctor> findAll();
 	

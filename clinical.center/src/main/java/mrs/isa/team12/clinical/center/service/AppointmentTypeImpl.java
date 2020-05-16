@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,4 +50,9 @@ public class AppointmentTypeImpl implements AppointmentTypeService {
 		return appointmentTypeRep.findOneByNameAndClinicId(name, id);
 	}
 
+	@Override
+	public Set<AppointmentType> findAllByClinicIdAndNameIn(Long clinicId, List<String> appTypeNames) {
+		return appointmentTypeRep.findAllByClinicIdAndNameIn(clinicId, appTypeNames);
+	}
+	
 }

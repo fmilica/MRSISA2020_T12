@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,4 +16,6 @@ public interface AppointmentTypeRepository extends JpaRepository<AppointmentType
 	List<AppointmentType> findAllByClinicId(Long clinicId);
 	
 	AppointmentType findOneByNameAndClinicId(String name, Long id);
+	
+	Set<AppointmentType> findAllByClinicIdAndNameIn(Long clinicId, List<String> appTypeNames);
 }

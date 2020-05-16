@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -106,8 +107,8 @@ public class DoctorController {
 		Doctor doctor = doctorService.findOneById(currentUser.getId());
 
 		DoctorPersonalInformationDto dto = new DoctorPersonalInformationDto(doctor);
-		dto.setAppTypes(doctor.getAppointmentTypes());
-		dto.setAllAppTypes(doctor.getClinic().getAppointmentTypes());
+		dto.setAppTypesSet(doctor.getAppointmentTypes());
+		dto.setAllAppTypesSet(doctor.getClinic().getAppointmentTypes());
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -119,7 +120,7 @@ public class DoctorController {
 	 */
 	@PostMapping(value = "/editPersonalInformation")
 	public ResponseEntity<DoctorPersonalInformationDto> editPersonalInformation(@RequestBody DoctorPersonalInformationDto editedDoctor) {
-		System.out.println("Dosao");
+
 		Doctor currentUser;
 		try {
 			currentUser = (Doctor) session.getAttribute("currentUser");
@@ -129,10 +130,15 @@ public class DoctorController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
+		if (!currentUser.getEmail().equals(editedDoctor.getEmail())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email can't be changed!");
+		}
 		
 		editedDoctor.setId(currentUser.getId());
 		
-		Doctor doctor = doctorService.update(editedDoctor);
+		Set<AppointmentType> appTypes = appointmentTypeService.findAllByClinicIdAndNameIn(currentUser.getClinic().getId(), editedDoctor.getAppTypes());
+		
+		Doctor doctor = doctorService.update(editedDoctor, appTypes);
 		
 		return new ResponseEntity<>(new DoctorPersonalInformationDto(doctor), HttpStatus.OK);
 	}

@@ -349,7 +349,9 @@ function saveUpdatedDoctor(){
 		securityNumber: securityNumberV,
 		address: addressV,
 		city: cityV,
-		country: countryV
+		country: countryV,
+		specialization: specializationV,
+		appTypes: appTypesV
 	}
 	
 	console.log(JSON.stringify(newDoctor))

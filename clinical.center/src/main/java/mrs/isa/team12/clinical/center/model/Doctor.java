@@ -97,7 +97,15 @@ public class Doctor extends MedicalPersonnel {
 		return appointmentTypes;
 	}
 	public void setAppointmentTypes(Set<AppointmentType> appointmentTypes) {
+		// uklanjamo doktora iz svih tipova pregleda koje vise NEMA
+		for(AppointmentType at : this.appointmentTypes) {
+			at.removeDoctor(this);
+		}
 		this.appointmentTypes = appointmentTypes;
+		// setuje i tipovima njega za doktora
+		for(AppointmentType at : appointmentTypes) {
+			at.addDoctor(this);
+		}
 	}
 	public Set<Appointment> getAppointments() {
 		return appointments;
