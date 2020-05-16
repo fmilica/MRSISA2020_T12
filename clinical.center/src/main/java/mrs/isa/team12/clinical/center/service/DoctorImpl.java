@@ -67,6 +67,14 @@ public class DoctorImpl implements DoctorService {
 	public List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type) {
 		return doctorRep.findAllByClinicIdAndAppointmentTypes(clinicId, type);
 	}
+	
+	@Override
+	public Doctor updatePassword(Long doctorId, String newPassword) {
+		Doctor doctorToUpdate = doctorRep.findOneById(doctorId);
+		doctorToUpdate.setPassword(newPassword);
+		Doctor updated = doctorRep.save(doctorToUpdate);
+		return updated; 
+	}
 
 	@Override
 	public Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes) {
@@ -75,6 +83,8 @@ public class DoctorImpl implements DoctorService {
 		doctorToUpdate.setSurname(editedDoctor.getSurname());
 		doctorToUpdate.setGender(editedDoctor.getGender());
 		doctorToUpdate.setDateOfBirth(editedDoctor.getDateOfBirth());
+		doctorToUpdate.setStartWork(editedDoctor.getStartWork());
+		doctorToUpdate.setEndWork(editedDoctor.getEndWork());
 		doctorToUpdate.setPhoneNumber(editedDoctor.getPhoneNumber());
 		doctorToUpdate.setAddress(editedDoctor.getAddress());
 		doctorToUpdate.setCity(editedDoctor.getCity());

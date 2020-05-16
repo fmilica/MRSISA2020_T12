@@ -215,6 +215,7 @@
 									<div class="row">
 										<div class="offset-md-3 col-md-12 form-buttons">
 											<button id="changePasswordBtn" type="submit" class="btn btn-info">Save changes</button>
+											<button id="cancelChangePasswordBtn" type="submit" class="btn btn-info">Cancel</button>
 										</div>
 									</div>
 								</div>
@@ -288,13 +289,18 @@
 							</div>
 							<div class="card-body no-padding height-9">
 								<div class="biography">
+									<h4 class="font-bold">Working hours</h4>
+									<ul>
+										<li id="workingHours"></li>
+									</ul>
+									<hr>
 									<h4 class="font-bold">Specialization</h4>
 									<ul>
-										<li id="specialization" class="specialization"></li>
+										<li id="specialization"></li>
 									</ul>
 									<hr>
 									<h4 class="font-bold">Qualifications</h4>
-									<ul id = "qualifications">
+									<ul id="qualifications">
 									</ul>
 								</div>
 							</div>
@@ -371,9 +377,27 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-7 validate-input"  data-validate="Must be a number!">
-                                            <input disabled type="text" id="securityNumberEdit" data-required="1"  class="form-control input-height" />
+                                            <input disabled type="text" id="securityNumberEdit" data-required="1"  class="form-control input-height"/>
                                         </div>
 									</div>
+									<div class="form-group row">
+                                        <label class="control-label col-md-3">
+											Start work
+											<span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7 validate-input" data-validate="Must be a number!">
+                                            <input type="text" id="startWorkEdit" data-required="1"  class="form-control input-height"/>
+                                        </div>
+									</div>
+									<div class="form-group row">
+                                        <label class="control-label col-md-3">
+											End work
+											<span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7 validate-input" data-validate="Must be a number!">
+                                            <input type="text" id="endWorkEdit" data-required="1"  class="form-control input-height"/>
+                                        </div>
+                                    </div>
 									<div class="form-group row">
 										<label class="control-label col-md-3">
 											Specialization

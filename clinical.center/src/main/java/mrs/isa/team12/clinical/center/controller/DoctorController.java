@@ -31,7 +31,6 @@ import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
-import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
@@ -41,18 +40,16 @@ public class DoctorController {
 
 	private DoctorService doctorService;
 	private AppointmentTypeService appointmentTypeService;
-	private ClinicService clinicService;
 	private RegisteredUserService userService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService,
-			ClinicService clinicService, RegisteredUserService userService) {
+	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService, 
+			RegisteredUserService userService) {
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
-		this.clinicService = clinicService;
 		this.userService = userService;
 	}
 	
@@ -83,6 +80,32 @@ public class DoctorController {
 		session.setAttribute("currentUser", doctor);
 		
 		return new ResponseEntity<>(new RegisteredUserDto(doctor), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/doctor/changePassword/{password}
+	 HTTP request for changing password
+	 receives String password
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "changePassword/{password}")
+	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password){
+		
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can change his password.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Doctor updated = doctorService.updatePassword(currentUser.getId(), password);
+		
+		session.setAttribute("currentUser", updated);
+		
+		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);
 	}
 	
 	/*
@@ -139,6 +162,9 @@ public class DoctorController {
 		Set<AppointmentType> appTypes = appointmentTypeService.findAllByClinicIdAndNameIn(currentUser.getClinic().getId(), editedDoctor.getAppTypes());
 		
 		Doctor doctor = doctorService.update(editedDoctor, appTypes);
+		
+		// postavljanje novog, izmenjenog doktora na sesiju
+		session.setAttribute("currentUser", doctor);
 		
 		return new ResponseEntity<>(new DoctorPersonalInformationDto(doctor), HttpStatus.OK);
 	}

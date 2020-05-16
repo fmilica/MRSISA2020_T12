@@ -48,7 +48,14 @@ $(document).ready( function () {
     // My Profile
     // Change password
     $('#dropdownChangePass').click(function() {
-        alert("hello")
+        $('.content').hide()
+        $('.change-password').show()
+    })
+    // Return to Home page after password changed
+    $('#changePasswordBtn').click(function(e) {
+        e.preventDefault()
+        $('.change-password').hide()
+        $('.home-page').show()
     })
     // Logout
     $('#dropdownLogout').click(function() {

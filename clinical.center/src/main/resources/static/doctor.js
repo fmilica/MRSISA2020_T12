@@ -4,9 +4,11 @@ var appointment_id;
 var medicalRecord_id;
 var current_secNum;
 
+// ako su personalni podaci editovani, ponovo saljemo upit serveru
+var edited = false;
 
 $(document).ready( function () {
-	
+
 	/*View personal information*/
 	$('.d-profile').on('click', function(e){
 		e.preventDefault()
@@ -23,11 +25,47 @@ $(document).ready( function () {
         editPersonalInformation()
 	})
 	
-	$("#confirmEdit").click(function(e) {
+	$('#confirmEdit').click(function(e) {
 		e.preventDefault()
 		saveUpdatedDoctor()
 	})
+
+	$('#cancelEdit').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.doctor-profile').show()
+	})
 	
+	/*Change password*/
+	$('#changePasswordBtn').click(function(e) {
+		e.preventDefault()
+		var passwordV = $("#password").val()
+		var confirmPasswordV = $("#passwordConfirm").val()
+
+		if(passwordV != confirmPasswordV){
+			alert("Passwords do not match!")
+			return;
+		}
+
+		$.ajax({
+			type : "POST",
+			async: false,
+			url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
+			success : function(data)  {
+				alert("Succesfully changed password.")
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+
+	$("#cancelChangePasswordBtn").click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.home-page').show()
+	})
+
 	/*View all patients*/
 	$('#doctorPatients').click(function(event) {
 		event.preventDefault()
@@ -236,6 +274,63 @@ $(document).ready( function () {
 		$('.content').hide()
 		$('.doctor-patient-profile').show()
 	})
+
+	/*Changing password check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+
+	/*Check if start work is number*/
+	$("#startWorkEdit").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#startWorkEdit").val())){
+			showValidate($("#startWorkEdit"))
+		}
+	})
+	$("#startWorkEdit").on('click', function(e){
+		hideValidate($("#startWorkEdit"))
+	})
+	/*Check if end work is number*/
+	$("#endWorkEdit").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#endWorkEdit").val())){
+			showValidate($("#endWorkEdit"))
+		}
+	})
+	$("#endWorkEdit").on('click', function(e){
+		hideValidate($("#endWorkEdit"))
+	})
 })
 
 
@@ -264,31 +359,35 @@ function viewAllPatients(){
 }
 
 function viewPersonalInformation(){
-	$.ajax({
-		type : "GET",
-		async: false,
-		url : "../../theGoodShepherd/doctor/personalInformation" ,
-		dataType: "json",
-		success : function(output)  {
-			$("#fullNameBig").text(output.name + " " + output.surname)
-			$("#specializationBig").text(output.specialization)
-			$("#fullName").text(output.name + " " + output.surname)
-			$("#email").text(output.email)
-			$("#gender").text(output.gender)
-			$("#dateOfBirth").text(output.dateOfBirth)
-			$("#phoneNumber").text(output.phoneNumber)
-			$("#securityNumber").text(output.securityNumber)
-			$("#address").text(output.address + ", " + output.city + ", " + output.country)
-			$("#specialization").text(output.specialization)
-			$("#qualifications").empty()
-			for (i = 0; i < output.appTypes.length; i++) {
-				$("#qualifications").append('<li>' + output.appTypes[i] + '</li>');
+	// obracamo se serveru samo prvi put
+	if ($("#fullNameBig").text() == "" || edited == true) {
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/doctor/personalInformation" ,
+			dataType: "json",
+			success : function(output)  {
+				$("#fullNameBig").text(output.name + " " + output.surname)
+				$("#specializationBig").text(output.specialization)
+				$("#fullName").text(output.name + " " + output.surname)
+				$("#email").text(output.email)
+				$("#gender").text(output.gender)
+				$("#dateOfBirth").text(output.dateOfBirth)
+				$("#phoneNumber").text(output.phoneNumber)
+				$("#securityNumber").text(output.securityNumber)
+				$("#address").text(output.address + ", " + output.city + ", " + output.country)
+				$("#workingHours").text(output.startWork + ":00 - " + output.endWork + ":00")
+				$("#specialization").text(output.specialization)
+				$("#qualifications").empty()
+				for (i = 0; i < output.appTypes.length; i++) {
+					$("#qualifications").append('<li>' + output.appTypes[i] + '</li>');
+				}
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
 			}
-		},
-		error : function(response) {
-			alert(response.responseJSON.message)
-		}
-	})
+		})
+	}
 }
 
 function editPersonalInformation(){
@@ -309,6 +408,8 @@ function editPersonalInformation(){
 			$("#addressEdit").val(output.address)
 			$("#cityEdit").val(output.city)
 			$("#countryEdit").val(output.country)
+			$("#startWorkEdit").val(output.startWork)
+			$("#endWorkEdit").val(output.endWork)
 			$("#specializationDoctorEdit").val(output.specialization)
 			$("#doctorQualifications").empty()
 			$.each(output.allAppTypes, function( key, value ) {
@@ -338,7 +439,48 @@ function saveUpdatedDoctor(){
 	var countryV = $("#countryEdit").val()
 	var specializationV = $("#specializationDoctorEdit").val()
 	var appTypesV = $("#doctorQualifications").val()
+	var startWorkV = $("#startWorkEdit").val()
+	var endWorkV = $("#endWorkEdit").val()
 	
+	if(!nameV || !surnameV || !genderV || !dateOfBirthV || !specializationV || 
+		!startWorkV || !endWorkV){
+		alert("Not all required fields are filled!")
+		return;
+	}
+
+	if(isNaN(startWorkV)){
+		alert("Start work time must be a number!")
+		return;
+	} else {
+		if (parseInt(startWorkV) <0 || parseInt(startWorkV) > 24) {
+			alert("Start work time must be a number greater than 0 and less than 24!")
+			return;
+		}
+	}
+	if(isNaN(endWorkV)){
+		alert("End work time must be a number!")
+		return;
+	} else {
+		if (parseInt(endWorkV) <0 || parseInt(endWorkV) > 24) {
+			alert("End work time must be a number greater than 0 and less than 24!")
+			return;
+		}
+	}
+	if (!isNaN(startWorkV) && !isNaN(endWorkV)) {
+		if(parseInt(startWorkV) >= parseInt(endWorkV)) {
+			alert("Start work time must be before end work time!")
+			return;
+		}
+	}
+
+	var dateObject = new Date(dateOfBirthV);
+	var currentDate = new Date();
+
+	if(currentDate < dateObject){
+		alert("Wrong date of birth!")
+		return;
+	}
+
 	var newDoctor = {
 		name: nameV,
 		surname: surnameV,
@@ -351,7 +493,9 @@ function saveUpdatedDoctor(){
 		city: cityV,
 		country: countryV,
 		specialization: specializationV,
-		appTypes: appTypesV
+		appTypes: appTypesV,
+		startWork: startWorkV,
+		endWork: endWorkV
 	}
 	
 	console.log(JSON.stringify(newDoctor))
@@ -363,9 +507,9 @@ function saveUpdatedDoctor(){
 		dataType : "json",
 		data : JSON.stringify(newDoctor),
 		success : function(response)  {
+			edited = true
 			$(".d-profile").click()
 			alert("Succesfully edited personal information.")
-			
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -470,4 +614,16 @@ function logInDoctor(email, password){
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+/*Validation and forms*/
+function showValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).addClass('alert-validate');
+}
+function hideValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).removeClass('alert-validate');
 }

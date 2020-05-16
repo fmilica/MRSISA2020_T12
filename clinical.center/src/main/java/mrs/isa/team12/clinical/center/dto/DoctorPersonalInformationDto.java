@@ -18,6 +18,8 @@ public class DoctorPersonalInformationDto {
 	private String dateOfBirth;
 	private String phoneNumber;
 	private String securityNumber;
+	private Integer startWork;
+	private Integer endWork;
 	private String address;
 	private String city;
 	private String country;
@@ -33,6 +35,8 @@ public class DoctorPersonalInformationDto {
 		this.email = doctor.getEmail();
 		this.gender = doctor.getGender();
 		this.dateOfBirth = doctor.getDateOfBirth();
+		this.startWork = doctor.getStartWork();
+		this.endWork = doctor.getEndWork();
 		this.phoneNumber = doctor.getPhoneNumber();
 		this.securityNumber = doctor.getSecurityNumber();
 		this.specialization = doctor.getSpecialization();
@@ -84,6 +88,7 @@ public class DoctorPersonalInformationDto {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
 	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -107,6 +112,18 @@ public class DoctorPersonalInformationDto {
 	}
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
+	}
+	public Integer getStartWork() {
+		return startWork;
+	}
+	public void setStartWork(Integer startWork) {
+		this.startWork = startWork;
+	}
+	public Integer getEndWork() {
+		return endWork;
+	}
+	public void setEndWork(Integer endWork) {
+		this.endWork = endWork;
 	}
 	public List<String> getAppTypes() {
 		return appTypes;
