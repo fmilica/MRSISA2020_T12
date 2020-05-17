@@ -118,8 +118,8 @@ $(document).ready( function () {
 			url : "../../theGoodShepherd/prescription",
 			dataType : "json",
 			success : function(data)  {
+				$('#prescriptionMR').empty();
 				$.each(data, function(index, medicine){
-					$('#prescriptionMR').empty();
 					$('#prescriptionMR').append(new Option(medicine.name));
 				})
 			},
@@ -176,12 +176,17 @@ $(document).ready( function () {
 				alert("Successfully finished appointment!")
 				$('.content').hide()
 				$('.doctor-patient-profile').show()
-				patientsTable.ajax.reload()
+				viewPatientProfile(current_secNum)
+				//patientsTable.ajax.reload()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
 		})
+
+		$("#descriptionMR").val('')
+		$("#diagnosisMR").val('')
+		$('#prescriptionMR').val(null).trigger('change')
 	})
 	
 	/*Canceling appointment report?*/
@@ -194,17 +199,18 @@ $(document).ready( function () {
 		$('#prescriptionMR').val(null).trigger('change')
 	})
 	
-	/*Show form form modifying medical record and fill it in*/
+	/*Show form for modifying medical record and fill it in*/
 	$('#changeRecord').click(function(e){
 		e.preventDefault()
-		$('.doctor-patient-profile').hide()
-		$('.modify-medical-record').show()
 		
 		if(appointment_id == null){
 			alert("You can only change patient's medical record during an appointment!")
 			return
 		}
 		
+		$('.doctor-patient-profile').hide()
+		$('.modify-medical-record').show()
+
 		$.ajax({
 			type : "POST",
 			async: false,
@@ -260,12 +266,15 @@ $(document).ready( function () {
 				$('.content').hide()
 				$('.doctor-patient-profile').show()
 				viewPatientProfile(current_secNum)
-				patientsTable.ajax.reload()
+				//patientsTable.ajax.reload()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
 		})
+
+		document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
 	})
 	
 	//cancel modifying medical record
@@ -273,6 +282,8 @@ $(document).ready( function () {
 		e.preventDefault()
 		$('.content').hide()
 		$('.doctor-patient-profile').show()
+		document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
 	})
 
 	/*Changing password check if passwords match*/
@@ -422,8 +433,6 @@ function editPersonalInformation(){
 			alert(response.responseJSON.message)
 		}
 	})
-	
-	
 }
 
 function saveUpdatedDoctor(){
@@ -538,10 +547,13 @@ function viewPatientProfile(secNum) {
 		url : "../../theGoodShepherd/patient/viewProfile/" + secNum,
 		dataType: "json",
 		success : function(data)  {
-			console.log(data)
-			//medicalRecord_id = data.medicalRecords.id
+			if (data.medicalRecords != null) {
+				medicalRecord_id = data.medicalRecords.id
+			}
+			if (data.appointment != null) {
+				appointment_id = data.appointment.id
+			}
 			viewMedicalReports(data)
-			//appointment_id = data.appointment.id
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -552,13 +564,13 @@ function viewPatientProfile(secNum) {
 function viewMedicalReports(data){
 	$('.content').hide()
     $('.doctor-patient-profile').show()
-    $("#fullName").text(data.name + " " + data.surname)
-    $("#email").text(data.email)
-    $("#gender").text(data.gender)
-    $("#dateOfBirth").text(data.dateOfBirth)
-    $("#phoneNumber").text(data.phoneNumber)
-    $("#securityNumber").text(data.securityNumber)
-    $("#address").text(data.address + ", " + data.city + ", " + data.country)
+    $("#fullNamePatient").text(data.name + " " + data.surname)
+    $("#emailPatient").text(data.email)
+    $("#genderPatient").text(data.gender)
+    $("#dateOfBirthPatient").text(data.dateOfBirth)
+    $("#phoneNumberPatient").text(data.phoneNumber)
+    $("#securityNumberPatient").text(data.securityNumber)
+    $("#addressPatient").text(data.address + ", " + data.city + ", " + data.country)
     if(data.medicalRecords == null){
         $('#medicalReport').hide()
         $('h5').hide()
@@ -582,10 +594,12 @@ function viewMedicalReports(data){
 						data: null,
 						render: function (data) {
 							var allMedicine = ""
-							for (var i = 0; i < data.prescriptionMedicines.length; i++) {
-								allMedicine += data.prescriptionMedicines[i]
-								if (i != data.prescriptionMedicines.length - 1) {
-									allMedicine += ", "
+							if (data.prescriptionMedicines != null) {
+								for (var i = 0; i < data.prescriptionMedicines.length; i++) {
+									allMedicine += data.prescriptionMedicines[i]
+									if (i != data.prescriptionMedicines.length - 1) {
+										allMedicine += ", "
+									}
 								}
 							}
 							return allMedicine
@@ -593,7 +607,7 @@ function viewMedicalReports(data){
 					}]
     		})
     	} else {
-			medicalReportTable.clear().rows.add(data).draw();
+			medicalReportTable.clear().rows.add(data.medicalRecords.medicalReports).draw();
 		}
 	}
 }

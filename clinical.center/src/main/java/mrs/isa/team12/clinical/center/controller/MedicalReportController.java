@@ -65,9 +65,11 @@ public class MedicalReportController {
 		medicalReport.setDiagnosis(d);
 		medicalReport.setAppointment(appointment);
 		appointment.setMedicalReport(medicalReport);
+		// zavrsava pregled
+		appointment.setFinished(true);
 		//diagnosisService.save(medicalReport.getDiagnosis());
-		//appointmentService.save(appointment);
 		medicalReportService.save(medicalReport);
+		appointmentService.save(appointment);
 		
 		MedicalReportDto medicalReportDto = new MedicalReportDto(medicalReport);
 		

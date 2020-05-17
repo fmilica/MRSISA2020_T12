@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.DiagnosisDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Diagnosis;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
 
 @RestController
@@ -44,13 +45,18 @@ public class DiagnosisController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DiagnosisDto>> getAllDisagnosis() {
 		
-		ClinicalCentreAdmin currentUser;
+		ClinicalCentreAdmin currentUser = null;
+		Doctor currentDoctor = null;
 		try {
 			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
-		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all diagnosis.");
+		} catch (ClassCastException e1) {
+			try {
+				currentDoctor = (Doctor) session.getAttribute("currentUser");
+			} catch (ClassCastException e2) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators and doctors can view  all diagnosis.");
+			}
 		}
-		if (currentUser == null) {
+		if (currentUser == null && currentDoctor == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		

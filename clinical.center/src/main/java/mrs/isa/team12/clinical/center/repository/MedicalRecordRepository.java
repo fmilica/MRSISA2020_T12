@@ -9,5 +9,4 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecords, L
 	MedicalRecords save(MedicalRecords mr);
 	
 	MedicalRecords findOneById(Long id);
-
 }

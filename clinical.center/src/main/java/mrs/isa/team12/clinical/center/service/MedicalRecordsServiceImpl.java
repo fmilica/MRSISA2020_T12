@@ -26,5 +26,4 @@ public class MedicalRecordsServiceImpl implements MedicalRecordsService{
 	public MedicalRecords findOneById(Long id) {
 		return medicalRecordsRepository.findOneById(id);
 	}
-	
 }

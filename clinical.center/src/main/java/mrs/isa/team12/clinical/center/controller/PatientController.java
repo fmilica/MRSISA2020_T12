@@ -1,7 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import mrs.isa.team12.clinical.center.dto.AppointmentRequestDto;
 import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.MedicalRecordDto;
 import mrs.isa.team12.clinical.center.dto.PatientDto;
@@ -28,8 +26,6 @@ import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.dto.PatientsDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
-import mrs.isa.team12.clinical.center.model.AppointmentRequest;
-import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
@@ -188,6 +184,7 @@ public class PatientController {
 		if(appointments.size() == 0) {
 			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 		}
+		
 		MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
 		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
 		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
