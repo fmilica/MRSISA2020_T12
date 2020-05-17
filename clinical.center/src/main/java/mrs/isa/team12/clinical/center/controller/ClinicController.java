@@ -84,6 +84,32 @@ public class ClinicController {
 	}
 	
 	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/{clinicId}
+	 HTTP request for viewing data of clinic specified by clinicId
+	 receives Long clinicId
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/{clinicId}")
+	public ResponseEntity<ClinicDto> getClinic(@PathVariable("clinicId") Long clinicId) {
+		
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can view clinic data.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Clinic clinic = clinicService.findOneById(clinicId);
+		
+		ClinicDto clinicDto = new ClinicDto(clinic);
+		
+		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/clinics/filterClinics/{appTypeName}
 	 HTTP request for viewing clinics that have appointmentType specified by name
 	 returns ResponseEntity object

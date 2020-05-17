@@ -74,6 +74,12 @@ public class Patient extends RegisteredUser {
 		this.ratings = ratings;
 	}
 
+	public void addAppointment(Appointment app) {
+		if (!appointments.contains(app)) {
+			appointments.add(app);
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return super.toString() + "Patient [appointments=" + appointments + ", medicalRecords=" + medicalRecords + ", clinicalCentre="

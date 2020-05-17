@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.repository.AppointmentRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 
@@ -44,4 +45,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepository.findAllByClinicIdAndConfirmedAndFinished(id, confirmed, finished);
 	}
 
+	@Override
+	public List<Appointment> findAllByClinicIdAndPatient(Long clinicId, Patient patient) {
+		return appointmentRepository.findAllByClinicIdAndPatient(clinicId, patient);
+	}
+	
 }

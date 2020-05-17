@@ -306,9 +306,27 @@ $(document).ready( function () {
     })
 
     /* Patient */
+    /* Clinics submenu */
     $('#patientClinics').click(function() {
+        if ($(this).hasClass('active-sub')) {
+            $(this).removeClass('active-sub')
+            $('#sub').hide("slow")
+        } else {
+            $(this).addClass('active-sub')
+            $('#sub').show("slow")
+        }
+    })
+    /* View all clinics */
+    $('#viewAllClinics').click(function() {
         $('.content').hide()
-        $('.patient-clinics').show()
+        $('.patient-viewAllClinics').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    /* Create new appointment */
+    $('#scheduleNewAppointment').click(function() {
+        $('.content').hide()
+        $('.patient-createNewApp').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

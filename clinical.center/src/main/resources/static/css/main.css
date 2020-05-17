@@ -156,7 +156,6 @@ body {
     margin: 0 !important;
     margin-bottom: 10px !important;
 }
-
 /*------------------------------------------------------------------
 [ Alert validate ]*/
 
@@ -260,6 +259,18 @@ body {
 }
 .doctor-input-height {
     height: 30px !important;
+}
+.predefined-app-btn {
+    margin: -3px 15px 5px 62px !important;
+}
+.back-btn {
+    float: right;
+    margin-right: 50px;
+    margin-top: 10px;
+    /*
+    background-color: #006e97 !important;
+    border: 1px solid #006e97 !important;
+    color: #ffff !important;*/
 }
 /*
 * Sidebar
@@ -483,7 +494,16 @@ body {
 }
 
 /* Patient */
-.patient-clinics {
+.patient-viewAllClinics {
+    display: none;
+}
+.view-clinic {
+    display: none;
+}
+.view-predefined {
+    display: none;
+}
+.patient-createNewApp {
     display: none;
 }
 .patient-apps {

@@ -26,6 +26,11 @@ public class PatientImpl implements PatientService {
 	public PatientImpl(PatientRepository patientRep) {
 		this.patientRep = patientRep;
 	}
+	
+	@Override
+	public Patient findOneById(Long id) {
+		return patientRep.findOneById(id);
+	}
 
 	@Override
 	public Patient findOneByEmail(String email) {

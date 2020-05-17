@@ -7,6 +7,8 @@ import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface PatientService {
 
+	Patient findOneById(Long id);
+	
 	Patient findOneByEmail(String email);
 	
 	Patient save(Patient p);

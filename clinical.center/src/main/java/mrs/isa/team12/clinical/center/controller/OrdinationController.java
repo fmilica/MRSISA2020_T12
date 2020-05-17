@@ -206,7 +206,7 @@ public class OrdinationController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Ordination o = ordinationService.findOneByNameAndOrdinationNumber(ordination.getName(), ordination.getOrdinationNumber());
+		Ordination o = ordinationService.findOneByClinicIdAndNameAndOrdinationNumber(admin.getClinic().getId(), ordination.getName(), ordination.getOrdinationNumber());
 		
 		if(o == null) {
 			ordination.setClinic(admin.getClinic());

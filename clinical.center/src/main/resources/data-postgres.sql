@@ -11,12 +11,18 @@ insert into clinic (id, name, address, city, country, description, rating, clini
 values ('18', 'Shephered United Clinic', 'Puskinova 3', 'Beograd', 'Srbija', 'Our united front for health', '4.3', '1');
 
 /*Odinacije*/
+/*Prva klinika*/
 insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
 values('19', '0', 'The Great Room', '1', '6');
 insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
 values('20', '1', 'Regular Exam', '2', '6');
 insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
 values('37', '1', 'Regular Exam', '3', '6');
+/*Druga klinika*/
+insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
+values('50', '1', 'The Gray Room', '1', '17');
+insert into ordination(id, ordination_type, name, ordination_number, clinic_id)
+values('51', '1', 'The Good Exam', '2', '17');
 
 /*Admin klinickog centra*/
 insert into clinical_centre_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id) 
@@ -29,28 +35,32 @@ values ('8', 'felisimadolanovski@gmail.com', 'felidola1', 'Felisima', 'Dolanovsk
 insert into clinic_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number,clinic_id) 
 values ('22', 'perapera2359@gmail.com', 'perapera2', 'Petar', 'Isailovic', 'male', '1989-07-20', 'Kralja Petra I 42', 'Nis', 'Srbija', '55', '98', '6');
 
-/*Doktori nase jedine klinike*/
+/*Doktori nase prve klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
 values ('9', 'jova', 'jova', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '14');
-
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
 values ('10', 'zova', 'zova', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16');
-/*Doktor nase druge klinike*/
+/*Doktori nase druge klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
 values ('11', 'gova', 'gova', 'Gova', 'Govic', 'male', '1972-10-19', 'Hajdova 5', 'Zrenjanin', 'Srbija', '55', '55', '4.8', '17', '5', '12', '20');
+insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
+values ('48', 'mova', 'mova', 'Mova', 'Movic', 'female', '1978-7-18', 'Ivanjicka 17', 'Ivanjica', 'Srbija', '55', '88', '3.9', '17', '3', '08', '14');
 
 /*Tri tipa pregleda*/
 insert into appointment_type (id, name, duration, price, /*doctor_id,*/ clinic_id) values ('12', 'Gynecological', '1', '30', /*'9',*/ '6');
 insert into appointment_type (id, name, duration, price, /*doctor_id,*/ clinic_id) values ('13', 'Dermatological', '2', '40', /*'10',*/ '6');
 insert into appointment_type (id, name, duration, price, /*doctor_id,*/ clinic_id) values ('14', 'Dentist', '3', '60', /*'11',*/ '6');
-/*Jedan tip pregleda ce imati i klinika2*/
+/*Dva tipa pregleda ce imati i klinika2*/
 insert into appointment_type (id, name, duration, price, clinic_id) values ('19', 'Dentist', '4', '90', '17');
+insert into appointment_type (id, name, duration, price, clinic_id) values ('49', 'Orthopeadic', '2', '150', '17');
 
 /*Tabela doktori i tipovi pregleda*/
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('12', '9');
 /*insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('13', '10');klinika ima tip ali nema doktora*/
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('14', '10');
+/*Druga klinika*/
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('19', '11');
+insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('49', '48');
 
 /* Medicinske sestre */
 insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number) 
@@ -108,6 +118,15 @@ values ('23', 'false', '2020-05-15', '16', '20', 'false', '16', '17', '11', '19'
 /*Jedan zahtev za nepotvrdjen pregled*/
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id)
 values ('24', '23', '2020-05-15', 'false', '17');
+
+/*Predefinisani pregledi*/
+/*Predefinisani druga klinika*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id)
+values ('45', 'false', '2020-05-17', '16', '20', 'false', '17', '11', '19', '50');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id)
+values ('46', 'false', '2020-05-17', '12', '16', 'false', '17', '11', '19', '51');
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id)
+values ('47', 'false', '2020-05-17', '08', '10', 'false', '17', '48', '49', '50');
 
 /*Zahtevi u prvoj klinici*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id)

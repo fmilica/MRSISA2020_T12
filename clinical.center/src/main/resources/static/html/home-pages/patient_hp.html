@@ -80,7 +80,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a id="dropdownProfile" class="p-profile">
+                                    <a id="dropdownProfile" class="profile">
 										<img class="icon" src="../../img/icons/profile.png">
 										My Profile
 									</a>
@@ -121,7 +121,7 @@
 	                            </div>
 	                        </li>
 	                        <li class="sidebar-user-panel">
-	                            <div class="user-panel p-profile">
+	                            <div class="user-panel profile">
 	                                <div class="pull-left image">
 	                                    <img src="../../img/icons/user.png" class="img-circle user-img-circle" alt="User Image" />
 	                                </div>
@@ -142,12 +142,24 @@
 									<img class="icon" src="../../img/icons/clinics.png">
 									<span class="title">Clinics</span>
 									<span class="arrow"></span>
-	                            </a>
+								</a>
+								<ul id="sub" class="sub-menu">
+	                                <li class="nav-item">
+	                                    <a id="viewAllClinics" class="nav-link">
+	                                        <span class="title">View all clinics</span>
+	                                    </a>
+									</li>
+	                                <li class="nav-item">
+	                                    <a id="scheduleNewAppointment" class="nav-link">
+	                                        <span class="title">Schedule new appointment</span>
+	                                    </a>
+									</li>
+								</ul>
 							</li>
 	                        <li class="nav-item">
 	                            <a id="patientApps" class="nav-link nav-toggle">
 									<img class="icon" src="../../img/icons/appointment.png">
-									<span class="title">Appointments</span>
+									<span class="title">My appointments</span>
 									<span class="arrow"></span>
 	                            </a>
 							</li>
@@ -248,7 +260,7 @@
 								</div>
 								<div class="card-body">
 									<div class="medical-record">
-										<h4 id="generalReport"></h5>
+										<h4 id="generalReport"></h4>
 										<h5>Height<span id = "height" class="pull-right"></span></h5>
 										<h5>Weight<span id = "weight" class="pull-right"></span></h5>
 										<h5>Blood pressure<span id = "bloodPressure" class="pull-right"></span></h5>
@@ -285,7 +297,175 @@
 				</div>
 
 				<!-- Patient clinics content -->
-				<div id="patientClinics" class="content patient-clinics">
+
+				<!-- Patient view clinics -->
+				<div class="content patient-viewAllClinics">
+					<!-- All clinics table -->
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>The Good Shepherd's clinics</header>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="allClinicsName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Address:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="allClinicsAddress" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Minimum rating:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="allClinicsMinRating" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterAllClinicsByAtributes" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
+										<table id="allClinicsTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Address</th>
+													<th>Rating</th>
+													<th>Visit clinic</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Address</th>
+													<th>Rating</th>
+													<th>Visit clinic</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- View clinic -->
+				<div class="content view-clinic">
+					<div class="row">
+						<div class="col-md-5">
+							<div class="card card-topline-theme">
+								<div class="card-body no-padding height-9">
+									<div class="row">
+										<div class="profile-userpic">
+											<img src="../../img/icons/index/clinic_admin.png" class="img-responsive" alt="">
+										</div>
+									</div>
+									<div class="profile-usertitle">
+										<div class="profile-usertitle-name clinicName"></div>
+									</div>
+									<hr>
+									<button id="viewPredefined" type="submit" class="btn btn-info predefined-app-btn">View predefined appointments</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="card">
+								<div class="card-head card-topline-theme">
+									<header>About</header>
+									<button id="clinicBack" type="button" class="btn back-btn">Back</button>
+								</div>
+								<div class="card-body">
+									<div class="medical-record">
+										<h5>Name<span class="pull-right clinicName"></span></h5>
+										<h5>Rating<span id="clinicRating" class="pull-right"></span></h5>
+										<h5>Address<span id="clinicAddress" class="pull-right"></span></h5>
+										<h5>City<span id="clinicCity" class="pull-right"></span></h5>
+										<h5>Country<span id="clinicCountry" class="pull-right"></span></h5>
+										<h5>Description<span id="clinicDescription" class="pull-right"></span></h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Clinic's predefined appointments -->
+				<div class="content view-predefined">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header id="clinicPredefined"></header>
+										<button id="predefinedBack" type="button" class="btn back-btn">Back</button>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Date:
+											</label>
+											<div class="col-md-2">
+												<input id="filterPredefinedDate" type="date" class="form-control date-filter">
+											</div>
+											<label class="control-label col-md-2">
+												Appointment type:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="filterPredefinedType" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Doctor:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="filterPredefinedDoctor" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterPredefined" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
+										<table id="predefinedApps" class="display">
+											<thead>
+												<tr>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Type</th>
+													<th>Doctor</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Schedule</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Type</th>
+													<th>Doctor</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Schedule</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Patient create new appointment -->
+				<div class="content patient-createNewApp">
 					<!-- Schedule appointment filter -->
 					<div class="schedule-appointment">
 						<div class="row">

@@ -3,6 +3,8 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -177,7 +179,6 @@ public class Clinic {
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-
 	public ClinicalCentre getClinicalCentre() {
 		return clinicalCentre;
 	}
@@ -288,6 +289,16 @@ public class Clinic {
 		return null;
 	}
 
+	public List<Appointment> getAvailableAppointments() {
+		List<Appointment> available = new ArrayList<Appointment>();
+		for(Appointment a: appointments) {
+			if (a.getPatient() == null) {
+				available.add(a);
+			}
+		}
+		return available;
+	}
+	
 	@Override
 	public String toString() {
 		return "Clinic [id=" + id + ", name=" + name + ", address=" + address + ", city=" + city + "]";

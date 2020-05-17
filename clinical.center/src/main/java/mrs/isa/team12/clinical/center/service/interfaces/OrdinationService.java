@@ -11,6 +11,8 @@ public interface OrdinationService {
 	
 	Ordination findOneByNameAndOrdinationNumber(String name, Integer ordinationNumber);
 	
+	Ordination findOneByClinicIdAndNameAndOrdinationNumber(Long clinicId, String name, Integer ordinationNumber);
+	
 	Ordination findOneById(Long id);
 	
 	List<Ordination> findAllByClinicId(Long clinicId);
