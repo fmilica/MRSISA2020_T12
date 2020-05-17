@@ -127,12 +127,15 @@ $(document).ready(function() {
 			}
 		}
 		
+		//kursor ceka
+		$("body").css("cursor", "progress")
 		$.ajax({
 			type : "POST",
 			url : "../../theGoodShepherd/patient/sendAppointment",
 			contentType: "application/json",
 			data: JSON.stringify(app),
 			success : function() {
+	    		$("body").css("cursor", "default");
 				alert("Appointment sent successfully!")
 				$('.content').hide()
 				$('.patient-createNewApp').show()

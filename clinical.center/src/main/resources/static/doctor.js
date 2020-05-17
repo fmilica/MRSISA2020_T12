@@ -539,9 +539,9 @@ function viewPatientProfile(secNum) {
 		dataType: "json",
 		success : function(data)  {
 			console.log(data)
-			medicalRecord_id = data.medicalRecords.id
+			//medicalRecord_id = data.medicalRecords.id
 			viewMedicalReports(data)
-			appointment_id = data.appointment.id
+			//appointment_id = data.appointment.id
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

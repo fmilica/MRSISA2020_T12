@@ -339,7 +339,6 @@ $(document).ready(function() {
 		var nameV = $("#firstNameDoctor").val()
 		var surnameV = $("#lastNameDoctor").val()
 		var passwordV = $("#passwordDoctor").val()
-		var confirmPasswordV = $("#confirm-passwordDoctor").val()
 		var genderV = $("#genderDoctor").val()
 		var dateOfBirthV = $("#dateOfBirthDoctor").val()
 		var specializationV = $("#specializationDoctor").val()
@@ -354,11 +353,6 @@ $(document).ready(function() {
 		if(!emailV || !nameV || !surnameV || !passwordV || !confirmPasswordV || !genderV ||
 				!dateOfBirthV || !specializationV || !securityNumV || !startWorkV || !endWorkV){
 			alert("Not all required fields are filled!")
-			return;
-		}
-		
-		if(passwordV != confirmPasswordV){
-			alert("Passwords do not match!")
 			return;
 		}
 		
@@ -440,43 +434,7 @@ $(document).ready(function() {
 			}
 		})
 	})
-	
-	/*Adding new doctor check if passwords match*/
-	$("#passwordDoctor").on('blur', function(event){
-		event.preventDefault()
-		var pass = $("#passwordDoctor").val()
-		var rep = $("#confirm-passwordDoctor").val()
-		if(pass != rep){
-			showValidate($("#passwordDoctor"))
-			showValidate($("#confirm-passwordDoctor"))
-		}else{
-			hideValidate($("#passwordDoctor"))
-			hideValidate($("#confirm-passwordDoctor"))
-		}
-	})
-	$("#confirm-passwordDoctor").on('blur', function(event){
-		event.preventDefault()
-		var pass = $("#passwordDoctor").val()
-		var rep = $("#confirm-passwordDoctor").val()
-		if(pass != rep){
-			showValidate($("#passwordDoctor"))
-			showValidate($("#confirm-passwordDoctor"))
-		}else{
-			hideValidate($("#passwordDoctor"))
-			hideValidate($("#confirm-passwordDoctor"))
-		}
-	})
-	$("#passwordDoctor").on('focus', function(event){
-		event.preventDefault()
-		hideValidate($("#passwordDoctor"))
-		hideValidate($("#confirm-passwordDoctor"))
-	})
-	$("#confirm-passwordDoctor").on('focus', function(event){
-		event.preventDefault()
-		hideValidate($("#passwordDoctor"))
-		hideValidate($("#confirm-passwordDoctor"))
-	})
-	
+
 	$("#cancel_doctor").on('click', function(event){
 		event.preventDefault()
 		clearDoctorForm()
