@@ -1,4 +1,5 @@
 var clinicAdminsTable;
+var clinicalCenterAdminsTable;
 var clinicsTable;
 var requestsTable;
 var diagnosisTable;
@@ -36,16 +37,16 @@ $(document).ready(function() {
 					dataSrc: ''
 				},
 				columns: [
-					{ data: 'clinicAdmin.email'},
-					{ data: 'clinicAdmin.name'},
-					{ data: 'clinicAdmin.surname'},
-					{ data: 'clinicAdmin.gender'},
-					{ data: 'clinicAdmin.dateOfBirth'},
-					{ data: 'clinicAdmin.address'},
-					{ data: 'clinicAdmin.city'},
-					{ data: 'clinicAdmin.country'},
-					{ data: 'clinicAdmin.phoneNumber'},
-					{ data: 'clinicAdmin.securityNumber'},
+					{ data: 'email'},
+					{ data: 'name'},
+					{ data: 'surname'},
+					{ data: 'gender'},
+					{ data: 'dateOfBirth'},
+					{ data: 'address'},
+					{ data: 'city'},
+					{ data: 'country'},
+					{ data: 'phoneNumber'},
+					{ data: 'securityNumber'},
 					{
 						data: null,
 						render: function (data) {
@@ -53,6 +54,8 @@ $(document).ready(function() {
 						}
 					}]
 				})
+		} else {
+			clinicAdminsTable.ajax.reload()
 		}
 	})
 	/*Add new clinic admin*/
@@ -68,18 +71,13 @@ $(document).ready(function() {
         var security = $('#securityC').val()
         var username = $('#emailC').val()
         var password = $('#passwordC').val()
-        var repeatPassword = $("#passwordRepeatC").val()
         var clinicId = $('#availableClinics').val()
         var gender = $('#genderC').val()
         var birth = $('#dateBirthC').val()
         
-        if(!name || !surname || !country || !city || !address || !phone || !security || !username ||
+        if(!name || !surname || !security || !username ||
         		!password || !repeatPassword || !clinicId || !gender || !birth){
         	alert("All required fields must be filled!")
-        	return;
-        }
-        
-        if(password != repeatPassword){
         	return;
         }
         
@@ -128,7 +126,8 @@ $(document).ready(function() {
 		        $('#clinicName').val('')
 		        $('#genderC').val('')
 		        $('#dateBirthC').val('')
-		        
+		        document.body.scrollTop = 0
+		        document.documentElement.scrollTop = 0
             	$('.content').hide()
         		$('.clinic-admins').show()
             	clinicAdminsTable.ajax.reload();
@@ -138,42 +137,6 @@ $(document).ready(function() {
             }
         })
     })
-    
-    /*Check if passwords match*/
-    $("#passwordC").on('blur', function(event){
-		event.preventDefault()
-		var pass = $("#passwordC").val()
-		var rep = $("#passwordRepeatC").val()
-		if(pass != rep){
-			showValidate($("#passwordC"))
-			showValidate($("#passwordRepeatC"))
-		}else{
-			hideValidate($("#passwordC"))
-			hideValidate($("#passwordRepeatC"))
-		}
-	})
-	$("#passwordRepeatC").on('blur', function(event){
-		event.preventDefault()
-		var pass = $("#passwordC").val()
-		var rep = $("#passwordRepeatC").val()
-		if(pass != rep){
-			showValidate($("#passwordC"))
-			showValidate($("#passwordRepeatC"))
-		}else{
-			hideValidate($("#passwordC"))
-			hideValidate($("#passwordRepeatC"))
-		}
-	})
-	$("#passwordC").on('focus', function(event){
-		event.preventDefault()
-		hideValidate($("#passwordC"))
-		hideValidate($("#passwordRepeatC"))
-	})
-	$("#passwordRepeatC").on('focus', function(event){
-		event.preventDefault()
-		hideValidate($("#passwordC"))
-		hideValidate($("#passwordRepeatC"))
-	})
 	
 	/*Check if securityNumber is number*/
 	$("#securityC").on('blur', function(e){
@@ -189,8 +152,6 @@ $(document).ready(function() {
     $('#cancel_clinicAdmin').click(function(e){
 		e.preventDefault()
 		hideValidate($("#securityC"))
-    	hideValidate($("#passwordC"))
-		hideValidate($("#passwordRepeatC"))
     	$('#emailC').val('')
     	$('#passwordC').val('')
     	$("#passwordRepeatC").val('')
@@ -206,6 +167,8 @@ $(document).ready(function() {
         $('#dateBirthC').val('')
         $('.addClinicAdmin').hide()
 		$('.clinic-admins').show()
+	    document.body.scrollTop = 0
+	    document.documentElement.scrollTop = 0
     })
 	
     
@@ -224,8 +187,19 @@ $(document).ready(function() {
 					{ data: 'address'},
 					{ data: 'city'},
 					{ data: 'country'},
-					{ data: 'description'}]
+					{ data: null,
+						render: function (data) {
+							if(data.description == ''){
+								return '/'
+							}else{
+								return data.description
+							}
+						}
+					}
+				]
 			})
+		} else {
+			clinicsTable.ajax.reload()
 		}
 	})
 	
@@ -238,7 +212,7 @@ $(document).ready(function() {
         var address = $('#address').val()
         var description = $('#description').val()
         
-        if( !name || !country || !city || !address || !description){
+        if( !name || !country || !city || !address){
         	alert("All required fields must be filled!")
         	return;
         }
@@ -283,7 +257,39 @@ $(document).ready(function() {
         $('.clinics').show()
     })
 	
-    /*Add new clinical centre admin*/ 
+    /*View all clinical center admins*/
+     $('#centerAdmins').click(function(event) {
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#clinicalCenterAdmins')) {
+			clinicalCenterAdmins = $('#clinicalCenterAdmins').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/clinicalCenterAdmin",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'email'},
+					{ data: 'name'},
+					{ data: 'surname'},
+					{ data: 'gender'},
+					{ data: 'dateOfBirth'},
+					{ data: 'address'},
+					{ data: 'city'},
+					{ data: 'country'},
+					{ data: 'phoneNumber'},
+					{ data: 'securityNumber'}]
+			})
+		} else {
+			clinicalCenterAdmins.ajax.reload()
+		}
+	})
+    /*Add new clinical center admin*/
+    $('#addClinicalCenterAdmin').click(function(e) {
+    	e.preventDefault()
+    	$('.content').hide()
+    	$('.addClinicalCenterAdmin').show()
+    })
+    
     $('#add_centreAdmin').click(function(e){
         e.preventDefault()
         
@@ -298,7 +304,26 @@ $(document).ready(function() {
         var password = $('#passwordCA').val()
         var clinicalCentre = $('#clinicalCentre').val()
         var gender = $('#genderCA').val()
-        var birth = new Date($('#dateBirthCA').val())
+        var birth = $('#dateBirthCA').val()
+        
+        if( !name || !surname || !security || !username || !password ||
+        		!gender || !birth){
+        	alert("All required fields must be filled!")
+        	return;
+        }
+
+        var currentDate = new Date();
+        var birthDate = new Date(birth);
+        if(currentDate < birthDate){
+            alert("Wrong date of birth!")
+            return;
+        }
+        
+        if(isNaN(security)){
+			alert("Security number must be a number!")
+			return;
+		}
+        
         
         $.ajax({
             type : "POST",
@@ -316,15 +341,14 @@ $(document).ready(function() {
                 "city": city,
                 "country" : country,
                 "phoneNumber" : phone,
-                "securityNumber" : security,
-                "clinicalCentre" : {
-                	"name" : clinicalCentre
-                }
+                "securityNumber" : security
             }),
             success : function(response)  {
             	$('.content').hide()
         		$('.center-admins').show()
                 alert("New clinical center admin added!")
+                clearAddClinicalCenterAdmin()
+                clinicalCenterAdmins.ajax.reload()
             },
             error : function(response) {
             	alert(response.responseJSON.message)
@@ -334,19 +358,19 @@ $(document).ready(function() {
     
     $('#cancel_centreAdmin').click(function(e){
     	e.preventDefault()
-    	$('#email').val('')
-    	$('#password').val('')
-    	$('#name').val('')
-    	$('#surname').val('')
-        $('#country').val('')
-        $('#city').val('')
-        $('#address').val('')
-        $('#phone').val('')
-        $('#security').val('')
-        $('#clinicalCentre').val('')
-        $('#gender').val('')
-        $('#dateBirth').val('')
+    	clearAddClinicalCenterAdmin()
     })
+    
+    /*Check if securityNumber is number*/
+	$("#securityCA").on('blur', function(e){
+		e.preventDefault()
+		if(isNaN($("#securityCA").val())){
+			showValidate($("#securityCA"))
+		}
+	})
+	$("#securityCA").on('click', function(e){
+		hideValidate($("#securityCA"))
+	})
     
     /*View all registration requests*/
     $('#registrationReq').click(function(event) {
@@ -365,11 +389,6 @@ $(document).ready(function() {
 					{ data: 'user.surname'},
 					{ data: 'user.gender'},
 					{ data: 'user.dateOfBirth'},
-					/*{ data: 'user.address'},
-					{ data: 'user.city'},
-					{ data: 'user.country'},
-					{ data: 'user.phoneNumber'},
-					{ data: 'user.securityNumber'},*/
 					{ data: null,
 						render: function(data){
 							return '<button name="acceptRequest" class="btn btn-info add-button" onclick="acceptReq('+ data.id +')">Accept</button>' +
@@ -378,6 +397,8 @@ $(document).ready(function() {
 					}
 				]
 			})
+		} else {
+			requestsTable.ajax.reload()
 		}
 	})
 	
@@ -400,6 +421,8 @@ $(document).ready(function() {
 							return data.dpDto.id;}
 					}]
 			})
+		} else {
+			diagnosisTable.ajax.reload()
 		}
 		if (!$.fn.DataTable.isDataTable('#medicineTable')) {
 			medicineTable = $('#medicineTable').DataTable({
@@ -411,6 +434,8 @@ $(document).ready(function() {
 					{ data: 'id'},
 					{ data: 'name'}]
 			})
+		} else {
+			medicineTable.ajax.reload()
 		}
 	})
 	
@@ -546,8 +571,30 @@ function hideValidate(input) {
     $(thisAlert).removeClass('alert-validate');
 }
 
+function clearAddClinicalCenterAdmin() {
+	$('#emailCA').val('')
+	$('#passwordCA').val('')
+	$('#nameCA').val('')
+	$('#surnameCA').val('')
+    $('#countryCA').val('')
+    $('#cityCA').val('')
+    $('#addressCA').val('')
+    $('#phoneCA').val('')
+    $('#securityCA').val('')
+    $('#clinicalCentreCA').val('')
+    $('#genderCA').val('')
+    $('#dateBirthCA').val('')
+    hideValidate($("#securityCA"))
+    $('.content').hide()
+    $('.center-admins').show()
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+}
+
 function acceptReq(id){
 	
+	//kursor ceka
+	$("body").css("cursor", "progress")
 	$.ajax({
         type : "POST",
         url : "/theGoodShepherd/clinicalCenterAdmin/acceptRegistrationRequest",
@@ -560,6 +607,7 @@ function acceptReq(id){
         	requestsTable.ajax.reload();
         	$('.content').hide()
     		$('.registration-req').show()
+    		$("body").css("cursor", "default");
             alert("Registration request accepted!")
         },
         error : function(response) {
@@ -569,7 +617,8 @@ function acceptReq(id){
 }
 
 function declineReq(id){
-	
+	//kursor ceka 
+	$("body").css("cursor", "progress")
 	$.ajax({
         type : "POST",
         url : "/theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest",
@@ -582,6 +631,7 @@ function declineReq(id){
         	requestsTable.ajax.reload();
         	$('.content').hide()
     		$('.registration-req').show()
+    		$("body").css("cursor", "default")
             alert("Registration request rejected!")
         },
         error : function(response) {

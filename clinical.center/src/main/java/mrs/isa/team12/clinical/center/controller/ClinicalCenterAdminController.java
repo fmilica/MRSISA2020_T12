@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
+import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
 
 @RestController
@@ -33,17 +37,19 @@ public class ClinicalCenterAdminController {
 	private ClinicalCenterService centreService;
 	private RegistrationRequestService registrationService;
 	private PatientService patientService;
+	private RegisteredUserService userService;
 
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService, ClinicalCenterService centreService, 
-			RegistrationRequestService registrationService, PatientService patientService) {
+			RegistrationRequestService registrationService, PatientService patientService, RegisteredUserService userService) {
 		this.clinicalCenterAdminService = clinicalCenterAdminService;
 		this.centreService = centreService;
 		this.registrationService = registrationService;
 		this.patientService = patientService;
+		this.userService = userService;
 	}
 	
 	/*
@@ -52,33 +58,26 @@ public class ClinicalCenterAdminController {
 	 returns ResponseEntity object
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ClinicalCentreAdmin>> getAllClinicalCentreAdmins() {
-		/*
-		 * HELO
-		 * KO
-		 * OVO
-		 * KORISTI
-		 * NEMA
-		 * NIGDE
-		 * NA
-		 * FRONTU
-		 * ?
-		 */
-		// da li je neko ulogovan
-		// da li je odgovarajuceg tipa
+	public ResponseEntity<List<ClinicalCentreAdminDto>> getAllClinicalCentreAdmins() {
+
 		ClinicalCentreAdmin currentUser;
 		try {
 			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinic administrators.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinical center administrators.");
 		}
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		List<ClinicalCentreAdmin> clinicalCenreAdmins = clinicalCenterAdminService.findAll();
+		List<ClinicalCentreAdminDto> dtos = new ArrayList<ClinicalCentreAdminDto>();
 		
-		return new ResponseEntity<>(clinicalCenreAdmins, HttpStatus.OK);
+		List<ClinicalCentreAdmin> clinicalCenreAdmins = clinicalCenterAdminService.findAll();
+		for(ClinicalCentreAdmin cca: clinicalCenreAdmins) {
+			dtos.add(new ClinicalCentreAdminDto(cca));
+		}
+		
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	/*
@@ -119,7 +118,7 @@ public class ClinicalCenterAdminController {
 	@PostMapping(value = "/addNewClinicalCentreAdmin",
 			 consumes = MediaType.APPLICATION_JSON_VALUE, 
 			 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ClinicalCentreAdmin> createClinicalCentreAdmin(@RequestBody ClinicalCentreAdmin clinicalCentreAdmin) {
+	public ResponseEntity<ClinicalCentreAdminDto> createClinicalCentreAdmin(@RequestBody ClinicalCentreAdmin clinicalCentreAdmin) {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -133,18 +132,17 @@ public class ClinicalCenterAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 
-		/*
-		 * DA
-		 * LI
-		 * SE
-		 * RADI
-		 * PROVERA
-		 * JEDINSTVENOSTI
-		 * EMAIL-A
-		 * ?
-		 */
+		RegisteredUser user = userService.findOneByEmail(clinicalCentreAdmin.getEmail());
+		if (user != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
+		}
 		
-		ClinicalCentre clinicalCentre = centreService.findOneByName(clinicalCentreAdmin.getClinicalCentre().getName());
+		user = userService.findOneBySecurityNumber(clinicalCentreAdmin.getSecurityNumber());
+		if (user != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given security number already exists!");
+		}
+		
+		ClinicalCentre clinicalCentre = centreService.findOneByName(currentUser.getClinicalCentre().getName());
 		if(clinicalCentre == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinical centre with given name does not exist.");
 		}
@@ -153,9 +151,10 @@ public class ClinicalCenterAdminController {
 		
 		clinicalCentreAdmin.setClinicalCentre(clinicalCentre);
 		clinicalCenterAdminService.save(clinicalCentreAdmin);
-		centreService.save(clinicalCentre);
+		ClinicalCentreAdminDto dto = new ClinicalCentreAdminDto(clinicalCentreAdmin);
+		//centreService.save(clinicalCentre);
 		
-		return new ResponseEntity<>(clinicalCentreAdmin, HttpStatus.CREATED);
+		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 	
 
@@ -197,7 +196,7 @@ public class ClinicalCenterAdminController {
 		try {
 			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can accept new registration requests.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can decline new registration requests.");
 		}
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");

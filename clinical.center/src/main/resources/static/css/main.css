@@ -408,6 +408,15 @@ body {
 .addNewClinic {
     display: none;
 }
+.add-diagnose {
+	display: none;
+}
+.add-medicine {
+	display: none;
+}
+.addClinicalCenterAdmin {
+	display: none;
+}
 
 /* Clinic admin */
 .clinic-information {

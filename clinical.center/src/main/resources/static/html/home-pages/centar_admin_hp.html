@@ -291,144 +291,50 @@
 
 				<!-- Center admins content -->
 				<div class="content center-admins">
-					clinical center administrators
-					<!--<div class="add">
+					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Add new clinical center's administrator - Basic information</header>
+										<header>Clinical Center Administrators</header>
 									</div>
-									<div class="card-body" id="bar-parent">
-										<form class="form-horizontal">
-											<div class="form-body">
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Email
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="emailCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Password
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="passwordCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="nameCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Surname
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="surnameCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Gender
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<select class="form-control input-height" id="genderCA">
-															<option selected="selected" value="male">Male</option>
-															<option value="female">Female</option>
-														</select>
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Date of Birth
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="dateBirthCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Address
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="addressCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														City
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="cityCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Country
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="countryCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Phone number
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="phoneCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Security number
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="securityCA" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Clinical Center Name
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7">
-														<input type="text" id="clinicalCentre" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-											</div>
-											<div class="form-actions">
-												<div class="row">
-													<div class="offset-md-3 col-md-12 form-buttons">
-														<button id="add_centreAdmin" type="submit" class="btn btn-info">Create</button>
-														<button id="cancel_centreAdmin type="button" class="btn btn-default">Cancel</button>
-													</div>
-												</div>
-											</div>
-										</form>
+									<div class="card-body">
+										<button id="addClinicalCenterAdmin" class="btn btn-info add-button">Add new clinical center administrator</button>
+										<table id="clinicalCenterAdmins" class="display">
+											<thead>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
+													<th>Date of Birth</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Phone Number</th>
+													<th>Security Number</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
+													<th>Date of Birth</th>
+													<th>Address</th>
+													<th>City</th>
+													<th>Country</th>
+													<th>Phone Number</th>
+													<th>Security Number</th>
+												</tr>
+											</tfoot>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div> -->
-					<!-- end add form -->
+					</div>
 				</div>
 
 				<!-- Registration requests content -->
@@ -450,11 +356,6 @@
 													<th>Surname</th>
 													<th>Gender</th>
 													<th>Date of Birth</th>
-													<!--<th>Address</th>
-													<th>City</th>
-													<th>Country</th>
-													<th>Phone number</th>
-													<th>Security number</th> -->
 													<th>Command</th>
 												</tr>
 											</thead>
@@ -468,11 +369,6 @@
 													<th>Surname</th>
 													<th>Gender</th>
 													<th>Date of Birth</th>
-													<!-- <th>Address</th>
-													<th>City</th>
-													<th>Country</th>
-													<th>Phone number</th>
-													<th>Security number</th> -->
 													<th>Command</th>
 												</tr>
 											</tfoot>
@@ -634,6 +530,142 @@
 					</div>
 				</div>
 				
+				<!-- Add new clinical center administrator -->
+				<div class="content addClinicalCenterAdmin">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new clinical center's administrator - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Email
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="emailCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Password
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="passwordCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nameCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Surname
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="surnameCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Gender
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<select class="form-control input-height" id="genderCA">
+															<option selected="selected" value="male">Male</option>
+															<option value="female">Female</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Date of Birth
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="date" id="dateBirthCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Security number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input" data-validate="Security number must be a number!">
+														<input type="text" id="securityCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Clinical Center Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" disabled id="clinicalCentre" value="The Good Shepherd" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="addressCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="cityCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="countryCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Phone number
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="phoneCA" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="add_centreAdmin" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_centreAdmin" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<!-- Add new clinic administrator -->
 				<div class="content addClinicAdmin">
 					<div class="add">
@@ -660,17 +692,8 @@
 														Password
 														<span class="required"> * </span>
 													</label>
-													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+													<div class="col-md-7">
 														<input type="text" id="passwordC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Repeat password
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
-														<input type="text" id="passwordRepeatC" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
@@ -714,6 +737,15 @@
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
+														Security number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input"  data-validate="Must be a number!">
+														<input type="text" id="securityC" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
 														Clinic Name
 														<span class="required"> * </span>
 													</label>
@@ -725,7 +757,6 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Address
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input type="text" id="addressC" data-required="1"  class="form-control input-height" />
@@ -734,7 +765,6 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														City
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input type="text" id="cityC" data-required="1"  class="form-control input-height" />
@@ -743,7 +773,6 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Country
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input type="text" id="countryC" data-required="1"  class="form-control input-height" />
@@ -752,19 +781,9 @@
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Phone number
-														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
 														<input type="text" id="phoneC" data-required="1"  class="form-control input-height" />
-													</div>
-												</div>
-												<div class="form-group row">
-													<label class="control-label col-md-3">
-														Security number
-														<span class="required"> * </span>
-													</label>
-													<div class="col-md-7 validate-input"  data-validate="Must be a number!">
-														<input type="text" id="securityC" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 											</div>

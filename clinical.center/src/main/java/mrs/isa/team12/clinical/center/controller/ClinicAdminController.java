@@ -86,13 +86,13 @@ public class ClinicAdminController {
 		}
 		
 		List<ClinicAdmin> clinicAdmins = adminService.findAll();
-		List<ClinicAdminDto> clinicAdminWrapper = new ArrayList<ClinicAdminDto>();
+		List<ClinicAdminDto> dto = new ArrayList<ClinicAdminDto>();
 		
 		for(ClinicAdmin ca : clinicAdmins) {
-			clinicAdminWrapper.add(new ClinicAdminDto(ca, ca.getClinic().getName()));
+			dto.add(new ClinicAdminDto(ca, ca.getClinic().getName()));
 		}
 		
-		return new ResponseEntity<>(clinicAdminWrapper, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/*
@@ -116,7 +116,6 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		System.out.println(clinicAdmin.getEmail());
 		RegisteredUser user = userService.findOneByEmail(clinicAdmin.getEmail());
 		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");

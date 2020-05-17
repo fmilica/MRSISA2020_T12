@@ -44,8 +44,8 @@
             }
         }
     	
-        var email = $("#email").val()
-        var password = $("#password").val()
+        var email = $("#emailLogIn").val()
+        var password = $("#passwordLogIn").val()
         
         var user_type = sessionStorage.getItem('user_type')
         
