@@ -8,6 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -40,6 +41,11 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	@Override
 	public ClinicAdmin findOneByEmail(String email) {
 		return clinicAdminRep.findOneByEmail(email);
+	}
+	
+	@Override
+	public ClinicAdmin findOneById(Long id) {
+		return clinicAdminRep.findOneById(id);
 	}
 
 	@Override
@@ -80,6 +86,29 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	@Override
 	public List<ClinicAdmin> findAllByClinicId(Long clinicId) {
 		return clinicAdminRep.findAllByClinicId(clinicId);
+	}
+
+	@Override
+	public ClinicAdmin updatePassword(Long id, String newPassword) {
+		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(id);
+		clinicAdminToUpdate.setPassword(newPassword);
+
+		return clinicAdminRep.save(clinicAdminToUpdate);
+	}
+
+	@Override
+	public ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile) {
+		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(editedProfile.getId());
+		clinicAdminToUpdate.setName(editedProfile.getName());
+		clinicAdminToUpdate.setSurname(editedProfile.getSurname());
+		clinicAdminToUpdate.setGender(editedProfile.getGender());
+		clinicAdminToUpdate.setDateOfBirth(editedProfile.getDateOfBirth());
+		clinicAdminToUpdate.setPhoneNumber(editedProfile.getPhoneNumber());
+		clinicAdminToUpdate.setAddress(editedProfile.getAddress());
+		clinicAdminToUpdate.setCity(editedProfile.getCity());
+		clinicAdminToUpdate.setCountry(editedProfile.getCountry());
+		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
+		return clinicAdminRep.save(clinicAdminToUpdate);
 	}
 
 	

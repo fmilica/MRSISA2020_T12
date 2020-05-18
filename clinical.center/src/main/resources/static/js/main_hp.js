@@ -92,6 +92,12 @@ $(document).ready( function () {
     })
     
     /* Clinical center administrator */
+     $('.cca-profile').click(function() {
+        $('.content').hide()
+        $('.clinical-centre-admin-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
     // Clinics
     $('#clinics').click(function() {
         $('.content').hide()
@@ -155,9 +161,9 @@ $(document).ready( function () {
     /* Clinic administrator */
     
     //Clinical centre admin profile
-     $('.cca-profile').click(function() {
+     $('.ca-profile').click(function() {
         $('.content').hide()
-        $('.clinical-centre-admin-profile').show()
+        $('.clinic-admin-profile').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

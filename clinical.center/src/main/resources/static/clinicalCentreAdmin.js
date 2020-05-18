@@ -38,6 +38,41 @@ $(document).ready(function() {
 		$('.clinical-centre-admin-profile').show()
 	})
 	
+	/*Change password*/
+	$('#changePasswordBtn').click(function(e) {
+		e.preventDefault()
+		var passwordV = $("#password").val()
+		var confirmPasswordV = $("#passwordConfirm").val()
+
+		if(passwordV != confirmPasswordV){
+			alert("Passwords do not match!")
+			return;
+		}
+		
+		if(!passwordV || !confirmPasswordV){
+			alert("All fields must be filled!")
+			return;
+		}
+
+		$.ajax({
+			type : "POST",
+			async: false,
+			url : "../../theGoodShepherd/clinicalCenterAdmin/changePassword/"+passwordV,
+			success : function(data)  {
+				alert("Succesfully changed password.")
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+
+	$("#cancelChangePasswordBtn").click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.home-page').show()
+	})
+	
 	/*------------------------------------------------------------------*/
 	/*Clinic options when adding clinic admin*/
 	$('#addClinicAdmin').click(function() {

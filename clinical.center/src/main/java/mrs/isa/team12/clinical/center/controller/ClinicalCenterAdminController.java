@@ -110,6 +110,31 @@ public class ClinicalCenterAdminController {
 		return new ResponseEntity<>(new RegisteredUserDto(clinicalCentreAdmin), HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicalCenterAdmin/changePassword/{password}
+	 HTTP request for changing password
+	 receives String password
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "changePassword/{password}")
+	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password){
+		
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical centre admin can change his password.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		ClinicalCentreAdmin updated = clinicalCenterAdminService.updatePassword(currentUser.getId(), password);
+		
+		session.setAttribute("currentUser", updated);
+		
+		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);
+	}
 	
 	/*
 	 url: GET localhost:8081/theGoodShepherd/clinicalCenterAdmin/personalInformation

@@ -1,8 +1,5 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.AppointmentReqDto;
 import mrs.isa.team12.clinical.center.dto.ClinicAdminDto;
+import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
-import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
-import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
@@ -68,6 +64,87 @@ public class ClinicAdminController {
 		this.appointmentService = appointmentService;
 		this.ordinationService = ordinationService;
 		this.userService = userService;
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/changePassword/{password}
+	 HTTP request for changing password
+	 receives String password
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "changePassword/{password}")
+	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password){
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admin can change his password.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		ClinicAdmin updated = adminService.updatePassword(currentUser.getId(), password);
+		
+		session.setAttribute("currentUser", updated);
+		
+		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/clinicAdmin/personalInformation
+	 HTTP request for clinic admins personal information
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/personalInformation",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ClinicAdminPersonalInformationDto> viewPersonalInformation() {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admin can view his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		ClinicAdmin clinicAdmin = adminService.findOneById(currentUser.getId());
+
+		return new ResponseEntity<>(new ClinicAdminPersonalInformationDto(clinicAdmin) , HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicAdmin/editPersonalInformation
+	 HTTP request for editing doctors personal information
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/editPersonalInformation")
+	public ResponseEntity<ClinicAdminPersonalInformationDto> editPersonalInformation(@RequestBody ClinicAdminPersonalInformationDto editedProfile) {
+
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admin can edit his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		if (!currentUser.getEmail().equals(editedProfile.getEmail())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email can't be changed!");
+		}
+		
+		editedProfile.setId(currentUser.getId());
+		
+		ClinicAdmin clinicAdmin = adminService.update(editedProfile);
+		
+		// postavljanje novog, izmenjenog doktora na sesiju
+		session.setAttribute("currentUser", clinicAdmin);
+		
+		return new ResponseEntity<>(new ClinicAdminPersonalInformationDto(clinicAdmin), HttpStatus.OK);
 	}
 
 	/*

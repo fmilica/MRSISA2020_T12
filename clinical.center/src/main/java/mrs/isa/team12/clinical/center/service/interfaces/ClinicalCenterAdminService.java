@@ -15,6 +15,8 @@ public interface ClinicalCenterAdminService {
 
 	ClinicalCentreAdmin findOneByEmail(String email);
 	
+	ClinicalCentreAdmin updatePassword(Long id, String newPassword);
+	
 	ClinicalCentreAdmin update(ClinicalCentreAdminPersonalInformationDto editedProfile);
 	
 	List<ClinicalCentreAdmin> findAll();

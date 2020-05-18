@@ -85,4 +85,12 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 		return clinicCentreAdminRep.save(clinicalCentreAdminToUpdate);
 	}
 
+	@Override
+	public ClinicalCentreAdmin updatePassword(Long id, String newPassword) {
+		ClinicalCentreAdmin clinicalCentreAdminToUpdate = clinicCentreAdminRep.findOneById(id);
+		clinicalCentreAdminToUpdate.setPassword(newPassword);
+		
+		return clinicCentreAdminRep.save(clinicalCentreAdminToUpdate);
+	}
+
 }

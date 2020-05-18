@@ -46,6 +46,11 @@ $(document).ready( function () {
 			alert("Passwords do not match!")
 			return;
 		}
+		
+		if(!passwordV || !confirmPasswordV){
+			alert("All fields must be filled!")
+			return;
+		}
 
 		$.ajax({
 			type : "POST",
