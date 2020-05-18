@@ -183,6 +183,7 @@ public class PatientController {
 		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
 		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
 		medicalRecords.setMedicalReports(currentUser.getAppointments());
+		
 		return new ResponseEntity<>(new PatientProfileDto(currentUser, medicalRecords), HttpStatus.OK);
 	}
 	
@@ -211,10 +212,15 @@ public class PatientController {
 				
 		Patient patient = patientService.update(editedProfile);
 		
-		// postavljanje novog, izmenjenog doktora na sesiju
+		// postavljanje novog, izmenjenog pacijenta na sesiju
 		session.setAttribute("currentUser", patient);
-			
-		return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
+		
+		MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
+		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
+		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
+		medicalRecords.setMedicalReports(patient.getAppointments());
+		
+		return new ResponseEntity<>(new PatientProfileDto(patient, medicalRecords), HttpStatus.OK);
 	}
 	
 	/*

@@ -154,7 +154,6 @@ public class PatientProfileDto {
 	public MedicalRecordDto getMedicalRecords() {
 		return medicalRecords;
 	}
-	
 
 	public AppointmentDto getAppointment() {
 		return appointment;
@@ -167,7 +166,7 @@ public class PatientProfileDto {
 	public void setMedicalRecords(MedicalRecordDto medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "PatientProfileDto [name=" + name + ", surname=" + surname + ", email=" + email + ", gender=" + gender

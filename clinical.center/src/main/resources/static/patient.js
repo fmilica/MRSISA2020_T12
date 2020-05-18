@@ -356,7 +356,7 @@ function saveUpdatedProfile(){
 		data : JSON.stringify(newPatient),
 		success : function(response)  {
 			edited = true
-			$(".profile").click()
+			fillProfile(response)
 			alert("Succesfully edited personal information.")
 		},
 		error : function(response) {
@@ -741,7 +741,7 @@ function fillProfile(data){
 				}]
 		})
 	} else {
-		medicalReportTable.clear().rows.add(data).draw();
+		medicalReportTable.clear().rows.add(data.medicalRecords.medicalReports).draw();
 	}
 }
 
