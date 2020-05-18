@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "diagnosis")
@@ -25,6 +26,9 @@ public class Diagnosis {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;

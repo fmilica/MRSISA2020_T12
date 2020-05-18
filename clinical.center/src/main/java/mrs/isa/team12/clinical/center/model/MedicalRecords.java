@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "medical_records")
@@ -18,6 +19,9 @@ public class MedicalRecords {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	@Column(name = "height", unique = false, nullable = false)
 	private Integer height;

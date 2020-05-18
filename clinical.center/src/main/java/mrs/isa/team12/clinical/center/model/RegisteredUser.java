@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 // Registered user class
 @Entity
@@ -19,6 +20,9 @@ public class RegisteredUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	@Column(name="email", unique= true, nullable=false)
 	private String email;

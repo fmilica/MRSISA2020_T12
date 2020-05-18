@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
@@ -27,6 +28,9 @@ public class Ordination {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	@Column(name = "ordination_type", unique = false, nullable = false)
 	private OrdinationType type;

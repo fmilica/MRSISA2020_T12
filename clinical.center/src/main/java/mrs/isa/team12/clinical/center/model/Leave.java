@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import mrs.isa.team12.clinical.center.model.enums.LeaveType;
 
@@ -18,6 +19,9 @@ public class Leave {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	@Column(name = "start_date", nullable = false, unique = false)
 	//@Temporal(TemporalType.DATE)

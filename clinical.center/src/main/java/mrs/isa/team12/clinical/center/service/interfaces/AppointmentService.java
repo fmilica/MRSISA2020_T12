@@ -9,6 +9,8 @@ public interface AppointmentService {
 	
 	Appointment save(Appointment a);
 	
+	Appointment update(Patient patient, Long appId) throws Exception;
+	
 	List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId);
 	
 	List<Appointment> findAll();

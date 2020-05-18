@@ -2,8 +2,13 @@ package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -11,8 +16,11 @@ import mrs.isa.team12.clinical.center.repository.AppointmentRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 
 @Service
+@Transactional(readOnly = true)
 public class AppointmentServiceImpl implements AppointmentService{
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private AppointmentRepository appointmentRepository;
 	
 	@Autowired
@@ -23,6 +31,21 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Override
 	public Appointment save(Appointment a) {
 		return appointmentRepository.save(a);
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Appointment update(Patient patient, Long appId) throws ResponseStatusException {
+		logger.info("> update id:{}", appId);
+		// pronalenje pregleda
+		Appointment app = this.findById(appId);
+		// postavljanje unakrsne veze sa pacijentom
+		app.setPatient(patient);
+		patient.addAppointment(app);
+		// snimanje u bazu
+		appointmentRepository.save(app);
+		logger.info("< update id:{}", app.getId());
+		return app;
 	}
 
 	@Override

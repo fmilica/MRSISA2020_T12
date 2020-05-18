@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
 
@@ -169,7 +170,7 @@ public class AppointmentController {
 	 */
 	@PostMapping(value = "schedule/{appId}",
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentDto> schedulePredefinedApp(@PathVariable("appId") Long appId) {
+	public ResponseEntity<AppointmentDto> schedulePredefinedApp(@PathVariable("appId") Long appId) throws Exception {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -181,10 +182,12 @@ public class AppointmentController {
 		}
 		
 		Patient patient = patientService.findOneById(currentUser.getId());
-		Appointment app = appointmentService.findById(appId);
-		app.setPatient(currentUser);
-		patient.addAppointment(app);
-		app = appointmentService.save(app);
+		Appointment app;
+		try {
+			app = appointmentService.update(patient, appId);
+		} catch (NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
+		}
 		return new ResponseEntity<>(new AppointmentDto(app), HttpStatus.OK);
 	}
 }

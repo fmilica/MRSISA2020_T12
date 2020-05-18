@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "appointment_type")
@@ -24,6 +25,9 @@ public class AppointmentType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@Version
+	private Long version;
 	
 	// ime ne mora biti jedinstveno jer razlicite klinike mogu imati isti naziv za tip pregleda
 	@Column(name = "name", unique = false, nullable = false)
