@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.repository.ClinicalCentreAdminRepository;
@@ -61,6 +62,27 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 		}
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
+	}
+
+	@Override
+	public ClinicalCentreAdmin findOneById(Long id) {
+		return clinicCentreAdminRep.findOneById(id);
+	}
+
+	@Override
+	public ClinicalCentreAdmin update(ClinicalCentreAdminPersonalInformationDto editedProfile) {
+		ClinicalCentreAdmin clinicalCentreAdminToUpdate = clinicCentreAdminRep.findOneById(editedProfile.getId());
+		
+		clinicalCentreAdminToUpdate.setName(editedProfile.getName());
+		clinicalCentreAdminToUpdate.setSurname(editedProfile.getSurname());
+		clinicalCentreAdminToUpdate.setGender(editedProfile.getGender());
+		clinicalCentreAdminToUpdate.setDateOfBirth(editedProfile.getDateOfBirth());
+		clinicalCentreAdminToUpdate.setPhoneNumber(editedProfile.getPhoneNumber());
+		clinicalCentreAdminToUpdate.setAddress(editedProfile.getAddress());
+		clinicalCentreAdminToUpdate.setCity(editedProfile.getCity());
+		clinicalCentreAdminToUpdate.setCountry(editedProfile.getCountry());
+		
+		return clinicCentreAdminRep.save(clinicalCentreAdminToUpdate);
 	}
 
 }

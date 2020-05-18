@@ -153,6 +153,15 @@ $(document).ready( function () {
     })
 
     /* Clinic administrator */
+    
+    //Clinical centre admin profile
+     $('.cca-profile').click(function() {
+        $('.content').hide()
+        $('.clinical-centre-admin-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    
     // Clinic profile
     $('#clinicProfile').click(function() {
         if ($(this).hasClass('active-sub')) {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminDto;
+import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
@@ -107,6 +108,62 @@ public class ClinicalCenterAdminController {
 		session.setAttribute("currentUser", clinicalCentreAdmin);
 		
 		return new ResponseEntity<>(new RegisteredUserDto(clinicalCentreAdmin), HttpStatus.OK);
+	}
+	
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/clinicalCenterAdmin/personalInformation
+	 HTTP request for clinical centre admin personal information
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/personalInformation",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ClinicalCentreAdminPersonalInformationDto> viewPersonalInformation() {
+		
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical centre admin can view his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		ClinicalCentreAdmin clinicalCentreAdmin = clinicalCenterAdminService.findOneById(currentUser.getId());
+
+		return new ResponseEntity<>(new ClinicalCentreAdminPersonalInformationDto(clinicalCentreAdmin), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicalCenterAdmin/editPersonalInformation
+	 HTTP request for editing clinical centre admin personal information
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/editPersonalInformation")
+	public ResponseEntity<ClinicalCentreAdminPersonalInformationDto> editPersonalInformation(@RequestBody ClinicalCentreAdminPersonalInformationDto editedProfile) {
+
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical centre admin can edit his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		if (!currentUser.getEmail().equals(editedProfile.getEmail())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email can't be changed!");
+		}
+		
+		editedProfile.setId(currentUser.getId());
+			
+		ClinicalCentreAdmin clinicalCentreAdmin = clinicalCenterAdminService.update(editedProfile);
+		
+		// postavljanje novog, izmenjenog doktora na sesiju
+		session.setAttribute("currentUser", clinicalCentreAdmin);
+		
+		return new ResponseEntity<>(new ClinicalCentreAdminPersonalInformationDto(clinicalCentreAdmin), HttpStatus.OK);
 	}
 	
 	/*

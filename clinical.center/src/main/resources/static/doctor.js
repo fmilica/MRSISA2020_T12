@@ -507,8 +507,6 @@ function saveUpdatedDoctor(){
 		endWork: endWorkV
 	}
 	
-	console.log(JSON.stringify(newDoctor))
-	
 	$.ajax({
 		type : "POST",
 		url : "../../theGoodShepherd/doctor/editPersonalInformation" ,
