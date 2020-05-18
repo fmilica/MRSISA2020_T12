@@ -355,9 +355,6 @@ body {
 .display {
     width: 100% !important;
 }
-.discount {
-    display: none;
-}
 .date-filter {
     padding: 6px 6px !important;
 }
@@ -365,7 +362,7 @@ body {
 * Create appointmet (clinic admin)
 */
 .create-appointment {
-    margin: 0 200px;
+    margin: 0 100px;
 }
 .centered {
     display: flex;
@@ -462,6 +459,9 @@ body {
     display: none;
 }
 .clinic-appDoctors {
+    display: none;
+}
+.clinic-exam-rooms {
     display: none;
 }
 

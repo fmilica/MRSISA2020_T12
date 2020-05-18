@@ -1,5 +1,8 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.AppointmentReqDto;
 import mrs.isa.team12.clinical.center.dto.ClinicAdminDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
+import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
+import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;

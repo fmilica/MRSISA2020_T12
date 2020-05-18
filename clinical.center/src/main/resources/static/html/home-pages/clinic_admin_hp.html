@@ -426,18 +426,25 @@
 									<div class="card-body">
 										<div class="form-body">
 											<div class="form-group row">
-												<label class="control-label col-md-4">
+												<label class="control-label col-md-2">
 													Date:
 												</label>
-												<div class="col-md-5">
+												<div class="col-md-3">
 													<input id="filterAppDate" type="date" class="form-control date-filter">
+												</div>
+												<label class="control-label col-md-3">
+													Appointment type:
+												</label>
+												<div class="col-md-3">
+													<select class="form-control date-filter" id="filterAppType">
+													</select>
 												</div>
 											</div>
 											<hr>
 											<div class="offset-md-3 col-md-12">
 												<div class="centered">
-													<button id="chooseDate" class="btn btn-info filter-btn center">Choose date</button>
-													<button id="clearDate" class="btn btn-info filter-btn center">Clear date</button>
+													<button id="chooseParams" class="btn btn-info filter-btn center">Choose</button>
+													<button id="clearParams" class="btn btn-info filter-btn center">Clear</button>
 												</div>
 											</div>
 										</div>
@@ -452,17 +459,19 @@
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Create appointment - doctors and appointment types</header>
+										<header>Create appointment - doctors and ordinations</header>
 									</div>
 									<div class="card-body">
-										<table id="newAppDoctors" class="display">
+										<table id="createAppTable" class="display">
 											<thead>
 												<tr>
 													<th>Full name</th>
 													<th>Appointment type</th>
 													<th>Date</th>
+													<th>Price</th>
+													<th>Dicsount (%)</th>
 													<th>Start time</th>
-													<th>End time</th>
+													<th>Duration</th>
 													<th>Ordination</th>
 													<th>Create appointment</th>
 												</tr>
@@ -473,8 +482,10 @@
 													<th>Full name</th>
 													<th>Appointment type</th>
 													<th>Date</th>
+													<th>Price</th>
+													<th>Dicsount (%)</th>
 													<th>Start time</th>
-													<th>End time</th>
+													<th>Duration</th>
 													<th>Ordination</th>
 													<th>Create appointment</th>
 												</tr>
@@ -532,7 +543,7 @@
 					</div>
 					
 					<!-- Examination rooms -->
-					<div class="table-view">
+					<div class="table-view clinic-exam-rooms">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">

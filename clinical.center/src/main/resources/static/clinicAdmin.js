@@ -4,8 +4,20 @@ var doctorTable;
 var examReqTable;
 var examRoomTable;
 var appointmentTable;
+var createAppTable;
 
 var changedExamTime = false;
+
+var availableOrdinations;
+
+var newAppointment = {
+	date: "",
+	appTypeName: "",
+	doctorId: "",
+	time: "",
+	discount: "",
+	ordinationId: ""
+}
 
 var examReq = {
 	reqId: "",
@@ -16,43 +28,103 @@ var examReq = {
 
 $(document).ready(function() {
 	
-	/*Create new appointment*/
-	$('#chooseDate').click(function(e) {
-		e.preventDefault()
-		/*TODO - VEZA SA BEKOM*/
-		/* ZA SADA PUNIMO STATICKO CISTO DA POKAZEM KAKO BI IZGLEDALO */
-		var row = "<tr>" +
-					"<td>Banov tata, dr</td>" +
-					"<td>" +
-						'<select class="form-control input-height available-times">' + 
-							"<option>Tut fikser</option>" + 
-							"<option>Umnjak rimuver</option>" + 
-							"<option>Adrenalin indzekter</option>" + 
-						"</select>" +
-					"</td>" +
-					"<td>Odabrani datum</td>" +
-					"<td>" +
-						'<select class="form-control input-height available-times">' + 
-							"<option>12:00</option>" + 
-							"<option>14:00</option>" + 
-							"<option>16:00</option>" + 
-						"</select>" +
-					"</td>" +
-					"<td>(StartTime+AppTypeDuration):00</td>" +
-					"<td>" +
-						'<select class="form-control input-height available-times">' + 
-							"<option>Jungle room 1</option>" + 
-							"<option>Jungle operation 1</option>" + 
-							"<option>Jungle bloody battlefield</option>" + 
-						"</select>" +
-					"</td>" +
-					"<td>" +
-						'<button class="btn btn-info table-button">Create appointment</button>' +
-					"</td>" +
-				  "</tr>";
-		$('#newAppDoctors tbody').append(row)
-		$('.clinic-appDoctors').show()
+	/* Kreiranje novog predefinisanog pregleda - administrator klinike */
+	// postavljanje minimalne vrednosti koju pacijent moze da odabere za datum
+	// (danas)
+	document.getElementById("filterAppDate").min = new Date().toISOString().split("T")[0];
+	// dobavljanje svih tipova pregleda za odredjenu kliniku
+	$('#createClinicApp').click(function() {
+		$.ajax({
+			type : "GET",
+			url : "../../theGoodShepherd/appointmentType/getClinicsTypes",
+			success : function(data) {
+				$('#filterAppType').find('option').remove()
+				$.each(data, function(index, app) {
+					$("#filterAppType").append(new Option(app.name, app.name));
+				})
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
 	})
+	/*Create new appointment*/
+	$('#chooseParams').click(function(e) {
+		e.preventDefault()
+		// postavljanje parametara pregleda
+		var appDate = $('#filterAppDate').val()
+		newAppointment.date = appDate
+		var appTypeName = $('#filterAppType').val()
+		newAppointment.appTypeName = appTypeName
+		// poziv na bek
+		if (appDate) {
+			availableDoctorsOrdinations(appDate, appTypeName)
+		} else {
+			alert("Date must be selected!")
+		}
+	})
+	/*Ponisti parametre pregleda*/
+	$('#clearParams').click(function(e) {
+		e.preventDefault()
+		//TODO
+	})
+	// kada se promeni vrednost selekta vremena u redu, abdejtuju se ordinacije
+	$('#createAppTable tbody').on('change', 'select.available-times', function() {
+		var row = $(this).parents('tr')
+		//var rowData = createAppTable.row($(this).parents('tr')).data();
+		var ordinationCell = row.find("td:eq(7)")
+		var time = $(this).val()
+		newAppointment.time = time
+		// dodavanje select-a za odabir ordinacije
+		ordinationCell.empty()
+		var ordinationSelect = $('<select class="form-control input-height ordination">')
+		// provera koje ordinacije zadovoljavaju odabrano vreme i dodavanje ih
+		var timeInt = parseInt(time.substring(0, 2))
+		$.each(availableOrdinations, function(index, ordination) {
+			if (ordination.availableTimes.indexOf(timeInt) != -1) {
+				ordinationSelect.append('<option value="'+ordination.id+'">'+ordination.name+" "+ordination.ordinationNumber+'</option>')
+			}
+		})
+		ordinationCell.append(ordinationSelect)
+		// dodavanje dugmeta za kreiranje pregleda
+		var scheduleCell = row.find("td:eq(8)")
+		scheduleCell.empty()
+		var scheduleBtn = $('<button class="btn btn-info schedule-btn">Create</button>')
+		scheduleCell.append(scheduleBtn)
+	});
+	// kada se promeni vrednost selekta ordinacije u redu, prikazuje se dugme za zakazivanje
+	$('#createAppTable tbody').on('input', 'input.discount', function() {
+		var discount = $(this).val()
+		newAppointment.discount = discount
+	});
+	$('#createAppTable tbody').on('click', 'button.schedule-btn', function() {
+		// pokupe se svi podaci iz reda na koji je kliknuto
+		var row = $(this).parents('tr')
+		var doctorId = row.find("select.available-times").attr("id")
+		newAppointment.doctorId = doctorId
+		var time = row.find("select.available-times").val()
+		newAppointment.time = parseInt(time.substring(0, 2))
+		var discount = row.find("input.discount").val()
+		newAppointment.discount = discount
+		var ordinationId = row.find("select.ordination").val()
+		newAppointment.ordinationId = ordinationId
+		// kreiranje predefinisanog pregleda na beku
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/appointment/createPredefined",
+			contentType: "application/json",
+			data: JSON.stringify(newAppointment),
+			success : function() {
+				alert("Succesfully created new predefined appointment!")
+				// osvezavanje podataka u tabeli!
+				availableDoctorsOrdinations(newAppointment.date, newAppointment.appTypeName)
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	/********************************************/
 
 	/*View clinic appointments*/
 	$("#clinicAppointments").on('click', function(e){
@@ -486,6 +558,7 @@ $(document).ready(function() {
 		// odabrao je da zakaze neki pregled, sada je to zapamceno
 		// podesi parametre koji je aktivan
 		//TODO DA SKOCI NA POCETAK TABELE SA EXAMINATION ROOMS
+		$('.clinic-exam-rooms').show()
 		var examReqId = $(this).attr('id')
 		examReq.reqId = examReqId
 		var dateTime = $(this).attr('name')
@@ -575,6 +648,105 @@ $(document).ready(function() {
 		}
 	})*/
 })
+
+/*Dobavljanje slobodnih doktora i operacionih sala*/
+function availableDoctorsOrdinations(appDate, appTypeName) {
+	$.ajax({
+		type : "GET",
+		url : "../../theGoodShepherd/doctor/availableDoctorOrdinations/"+appDate+"/"+appTypeName,
+		dataType: "json",
+		success : function(output)  {
+			// dobavljanje ordinacija
+			availableOrdinations = output.availableOrdinations
+			initialiseCreateAppTable(output.availableDoctors)
+			$('select.available-times').trigger('change')
+			$('.clinic-appDoctors').show()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+/*Kreiranje pregleda - administrator klinike*/
+function initialiseCreateAppTable(availableDoctors) {
+	if (!$.fn.DataTable.isDataTable('#createAppTable')) {
+		createAppTable = $('#createAppTable').DataTable({
+			data: availableDoctors,
+			columns: [
+				{
+					data: null,
+					render: function(data) {
+						return data.name + " " + data.surname
+					}
+				},
+				{ 
+					data: null,
+					render: function() {
+						return newAppointment.appTypeName
+					}
+				},
+				{ 
+					data: null,
+					render: function() {
+						return newAppointment.date
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return data.price + " &euro;"
+					}
+				},
+				{
+					data: null,
+					render: function() {
+						return '<input type="number" class="form-control input-height discount" min="0" max="100" value="0"/>'
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						var availableTimes = data.availableTimes == null ? [] : (data.availableTimes instanceof Array ? data.availableTimes : [data.availableTimes])
+						var options = ""
+						for (var i = 0; i < availableTimes.length; i++) {
+							options += '<option value="'+availableTimes[i]+'">'+availableTimes[i]+':00</option>'
+						}
+						return '<select class="form-control input-height available-times" id="'+data.id+'">' + 
+								options + '</select>'
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return data.duration + " h"
+					}
+				},
+				{
+					data: null,
+					render: function() {
+						return "Choose start time first."
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						if (newAppointment.appTypeName && newAppointment.date && newAppointment.time) {
+							var button = '<button id="'+data.id+'" class="btn btn-info table-button-doctor">Schedule</button>';
+							return button;
+						} else {
+							return "Choose all parameters first."
+						}
+					}
+				}]
+		})
+	}else {
+		// jeste inicijalizovana
+		/*createAppTable.ajax.url("../../theGoodShepherd/doctor/availableDoctorOrdinations/"+appDate+"/"+appTypeName)
+		createAppTable.ajax.reload()*/
+		createAppTable.clear().rows.add(availableDoctors).draw();
+	}
+}
+/*******************************************/
 
 function viewAppointments(){
 	//nije inicijalizovana tabela

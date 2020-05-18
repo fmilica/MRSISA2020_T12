@@ -40,6 +40,8 @@ insert into doctor (id, email, password, name, surname, gender, date_of_birth, a
 values ('9', 'jova', 'jova', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '14');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
 values ('10', 'zova', 'zova', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16');
+insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
+values ('52', 'kova', 'kova', 'Kova', 'Kovic', 'female', '1993-06-01', 'Milosa Obilica 56', 'Negotin', 'Srbija', '55', '99', '3.7', '6', '5', '13', '21');
 /*Doktori nase druge klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work) 
 values ('11', 'gova', 'gova', 'Gova', 'Govic', 'male', '1972-10-19', 'Hajdova 5', 'Zrenjanin', 'Srbija', '55', '55', '4.8', '17', '5', '12', '20');
@@ -58,6 +60,7 @@ insert into appointment_type (id, name, duration, price, clinic_id) values ('49'
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('12', '9');
 /*insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('13', '10');klinika ima tip ali nema doktora*/
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('14', '10');
+insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('14', '52');
 /*Druga klinika*/
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('19', '11');
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('49', '48');

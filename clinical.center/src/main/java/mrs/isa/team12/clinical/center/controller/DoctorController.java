@@ -24,14 +24,19 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
+import mrs.isa.team12.clinical.center.dto.DoctorsOrdinationsFreeTimesDto;
+import mrs.isa.team12.clinical.center.dto.OrdinationFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
+import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
+import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
 @RestController
@@ -41,16 +46,18 @@ public class DoctorController {
 	private DoctorService doctorService;
 	private AppointmentTypeService appointmentTypeService;
 	private RegisteredUserService userService;
+	private OrdinationService ordinationService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService, 
-			RegisteredUserService userService) {
+			RegisteredUserService userService, OrdinationService ordinationService) {
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
 		this.userService = userService;
+		this.ordinationService = ordinationService;
 	}
 	
 	/*
@@ -197,6 +204,64 @@ public class DoctorController {
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/availableDoctorOrdinations/{appDate}/{appType}
+	 HTTP request for viewing available doctors and ordinations for given appointment type and date
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/availableDoctorOrdinations/{appDate}/{appType}" ,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DoctorsOrdinationsFreeTimesDto> availableDoctorOrdinations(@PathVariable("appDate") String appDate,
+																	  	@PathVariable("appType") String appType) {
+		
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view available doctors and ordinations.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		// parsiranje datuma
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = new Date(dt.parse(appDate).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Long clinicId = currentUser.getClinic().getId();
+		
+		AppointmentType type = appointmentTypeService.findOneByNameAndClinicId(appType, clinicId);
+		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicIdAndAppointmentTypes(clinicId, type);
+		
+		List<Ordination> clinicExamRooms = ordinationService.findAllByClinicIdAndType(clinicId, OrdinationType.ConsultingRoom);
+		List<OrdinationFreeTimesDto> availableOrdinations = new ArrayList<OrdinationFreeTimesDto>();
+		List<Integer> allAvailableExamRoomTimes = new ArrayList<Integer>();
+		for(Ordination o : clinicExamRooms) {
+			List<Integer> freeTimes = o.getAvailableTimesForDateAndType(date, type);
+			if (!freeTimes.isEmpty()) {
+				availableOrdinations.add(new OrdinationFreeTimesDto(o, freeTimes));
+			}
+			allAvailableExamRoomTimes.addAll(freeTimes);
+		}
+		
+		List<DoctorFreeTimesDto> availableCertifiedClinicDoctors = new ArrayList<DoctorFreeTimesDto>();
+		for (Doctor d : certifiedClinicDoctors) {
+			List<Integer> freeTimes = d.getAvailableTimesForDateAndType(date, type);
+			// da li ima slobodnog taj doktor kada je slobodna neka od ordinacija
+			freeTimes.retainAll(allAvailableExamRoomTimes);
+			if (!freeTimes.isEmpty()) {
+				availableCertifiedClinicDoctors.add(new DoctorFreeTimesDto(d, type.getDuration(), type.getPrice(), freeTimes));
+			}
+		}
+		
+		return new ResponseEntity<>(new DoctorsOrdinationsFreeTimesDto(availableCertifiedClinicDoctors, availableOrdinations), HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/doctor/certified/clinic/{appTypeName}/{appDate}/{clinicId}
 	 HTTP request for getting all doctors with appointment type given by name
 	 returns ResponseEntity object
@@ -270,7 +335,7 @@ public class DoctorController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/addNewDoctor")
-	public ResponseEntity<DoctorDto> addNewDoctor(@RequestBody Doctor doctor){
+	public ResponseEntity<DoctorDto> addNewDoctor(@RequestBody Doctor doctor) {
 		
 		ClinicAdmin admin;
 		try {

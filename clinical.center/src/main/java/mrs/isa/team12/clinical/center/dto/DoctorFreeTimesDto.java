@@ -10,6 +10,8 @@ public class DoctorFreeTimesDto {
 	private String name;
 	private String surname;
 	private Double rating;
+	private Integer duration;
+	private Double price;
 	private List<Integer> availableTimes;
 	
 	public DoctorFreeTimesDto() {}
@@ -19,6 +21,16 @@ public class DoctorFreeTimesDto {
 		this.name = doctor.getName();
 		this.surname = doctor.getSurname();
 		this.rating = doctor.getRating();
+		this.availableTimes = availableTimes;
+	}
+	
+	public DoctorFreeTimesDto(Doctor doctor, Integer duration, Double price, List<Integer> availableTimes) {
+		this.id = doctor.getId();
+		this.name = doctor.getName();
+		this.surname = doctor.getSurname();
+		this.rating = doctor.getRating();
+		this.duration = duration;
+		this.price = price;
 		this.availableTimes = availableTimes;
 	}
 	
@@ -45,6 +57,18 @@ public class DoctorFreeTimesDto {
 	}
 	public void setRating(Double rating) {
 		this.rating = rating;
+	}
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 	public List<Integer> getAvailableTimes() {
 		return availableTimes;

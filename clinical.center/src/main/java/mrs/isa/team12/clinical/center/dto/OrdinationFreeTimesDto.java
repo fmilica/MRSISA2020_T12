@@ -1,22 +1,25 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.List;
+
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
-public class OrdinationDto {
-	
+public class OrdinationFreeTimesDto {
+
 	private Long id;
 	private String name;
 	private Integer ordinationNumber;
 	private OrdinationType type;
+	private List<Integer> availableTimes;
 	
-	public OrdinationDto(Ordination o) {
+	public OrdinationFreeTimesDto(Ordination o, List<Integer> availableTimes) {
 		this.id = o.getId();
 		this.name = o.getName();
 		this.ordinationNumber = o.getOrdinationNumber();
-		this.type = o.getType();
+		this.availableTimes = availableTimes;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -40,5 +43,11 @@ public class OrdinationDto {
 	}
 	public void setType(OrdinationType type) {
 		this.type = type;
+	}
+	public List<Integer> getAvailableTimes() {
+		return availableTimes;
+	}
+	public void setAvailableTimes(List<Integer> availableTimes) {
+		this.availableTimes = availableTimes;
 	}
 }
