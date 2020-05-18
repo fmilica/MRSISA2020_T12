@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.repository.PatientRepository;
@@ -76,5 +77,28 @@ public class PatientImpl implements PatientService {
 	@Override
 	public void deleteById(Long id) {
 		patientRep.deleteById(id);
+	}
+
+	@Override
+	public Patient update(PatientProfileDto p) {
+		Patient patientToUpdate = patientRep.findOneById(p.getId());
+		patientToUpdate.setName(p.getName());
+		patientToUpdate.setSurname(p.getSurname());
+		patientToUpdate.setGender(p.getGender());
+		patientToUpdate.setDateOfBirth(p.getDateOfBirth());
+		patientToUpdate.setPhoneNumber(p.getPhoneNumber());
+		patientToUpdate.setAddress(p.getAddress());
+		patientToUpdate.setCity(p.getCity());
+		patientToUpdate.setCountry(p.getCountry());
+		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
+		return patientRep.save(patientToUpdate);
+	}
+
+	@Override
+	public Patient updatePassword(Long id, String newPassword) {
+		Patient patientToUpdate = patientRep.findOneById(id);
+		patientToUpdate.setPassword(newPassword);
+		
+		return patientRep.save(patientToUpdate);
 	}
 }

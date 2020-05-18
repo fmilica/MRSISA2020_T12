@@ -133,6 +133,32 @@ public class PatientController {
 	}
 	
 	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/changePassword/{password}
+	 HTTP request for changing password
+	 receives String password
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "changePassword/{password}")
+	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password){
+		
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can change his password.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient updated = patientService.updatePassword(currentUser.getId(), password);
+		
+		session.setAttribute("currentUser", updated);
+		
+		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/patient/viewProfile
 	 HTTP request for viewing logged in patient profile
 	 receives String securityNumber
@@ -158,6 +184,37 @@ public class PatientController {
 		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
 		medicalRecords.setMedicalReports(currentUser.getAppointments());
 		return new ResponseEntity<>(new PatientProfileDto(currentUser, medicalRecords), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/editPersonalInformation
+	 HTTP request for editing doctors personal information
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/editPersonalInformation")
+	public ResponseEntity<PatientProfileDto> editPersonalInformation(@RequestBody PatientProfileDto editedProfile) {
+
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can edit his personal information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		if (!currentUser.getEmail().equals(editedProfile.getEmail())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email can't be changed!");
+		}
+		
+		editedProfile.setId(currentUser.getId());
+				
+		Patient patient = patientService.update(editedProfile);
+		
+		// postavljanje novog, izmenjenog doktora na sesiju
+		session.setAttribute("currentUser", patient);
+			
+		return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 	}
 	
 	/*

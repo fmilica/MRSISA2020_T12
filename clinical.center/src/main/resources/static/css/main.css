@@ -384,6 +384,12 @@ body {
     display: none;
 }
 /* Clinical center admin */
+.clinical-centre-admin-profile{
+	display: none;
+}
+.clinical-centre-admin-edit-profile{
+	display: none;
+}
 .clinics {
     display: none;
 }
@@ -416,6 +422,12 @@ body {
 }
 
 /* Clinic admin */
+.clinic-admin-profile{
+	display: none;
+}
+.clinic-admin-edit-profile{
+	display: none;
+}
 .clinic-information {
     display: none;
 }
@@ -526,4 +538,7 @@ body {
 }
 .patient-profile {
     display: none;
+}
+.patient-edit-profile{
+	display: none;
 }

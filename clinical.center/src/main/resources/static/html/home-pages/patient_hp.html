@@ -194,6 +194,45 @@
 					</div>
 					<!-- end calendar -->
 				</div>
+				
+				<!-- Patient change password -->
+				<div class="content change-password">
+					<div class="col-md-12 col-sm-12">
+						<div class="card card-box">
+							<div class="card-head">
+								<header>Change password</header>
+							</div>
+							<div class="card-body">
+								<div class="form-group row">
+									<label class="control-label col-md-3">
+										Password
+										<span class="required"> * </span>
+									</label>
+									<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+										<input type="text" id="password" data-required="1"  class="form-control input-height" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="control-label col-md-3">
+										Confirm Password
+										<span class="required"> * </span>
+									</label>
+									<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+										<input type="text" id="passwordConfirm" data-required="1"  class="form-control input-height" />
+									</div>
+								</div>
+								<div class="form-actions">
+									<div class="row">
+										<div class="offset-md-3 col-md-12 form-buttons">
+											<button id="changePasswordBtn" type="submit" class="btn btn-info">Save changes</button>
+											<button id="cancelChangePasswordBtn" type="submit" class="btn btn-info">Cancel</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<!-- Patient profile content -->
 				<div class="content patient-profile">
@@ -250,6 +289,9 @@
 									</div>
 								</div>
 							</div>
+							<div class="edit-profile">
+								<button id="editPatientProfile" type="button" class="btn btn-info edit">Edit Profile</button>
+							</div>
 						</div>
 					</div>
 					<div class="col-md-7">
@@ -291,6 +333,119 @@
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<!-- Doctor edit profile content -->
+				<div class="content patient-edit-profile">
+					<div class="col-md-12 col-sm-12">
+						<div class="card card-box">
+							<div class="card-head">
+								<header>Edit personal information</header>
+							</div>
+							<div class="card-body">
+								<div class="form-body">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Email address
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input disabled type="text" id="emailEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            First Name
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="nameEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Last Name
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="surnameEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Gender
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <select class="form-control input-height" id="genderEdit">
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Date Of Birth
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                        <input id="dateOfBirthEdit" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Security Number
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7 validate-input"  data-validate="Must be a number!">
+                                            <input disabled type="text" id="securityNumberEdit" data-required="1"  class="form-control input-height"/>
+                                        </div>
+									</div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Phone Number
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="phoneNumberEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Address
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="addressEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            City
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="cityEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Country
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="countryEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+									</div>
+									<div class="form-actions">
+										<div class="row">
+											<div class="offset-md-3 col-md-12 form-buttons">
+												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+											</div>
+										</div>
+									</div>
+                                </div>
 							</div>
 						</div>
 					</div>

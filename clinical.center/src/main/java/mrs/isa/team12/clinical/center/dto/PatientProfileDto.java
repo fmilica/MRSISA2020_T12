@@ -1,7 +1,5 @@
 package mrs.isa.team12.clinical.center.dto;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
@@ -9,6 +7,7 @@ import mrs.isa.team12.clinical.center.model.Patient;
 
 public class PatientProfileDto {
 	
+	private Long id;
 	private String name;
 	private String surname;
 	private String email;
@@ -22,7 +21,22 @@ public class PatientProfileDto {
 	private MedicalRecordDto medicalRecords;
 	private AppointmentDto appointment;
 	
-	
+	public PatientProfileDto() {}
+
+	public PatientProfileDto(String name, String surname, String email, String gender, String dateOfBirth,
+			String phoneNumber, String securityNumber, String address, String city, String country) {
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.phoneNumber = phoneNumber;
+		this.securityNumber = securityNumber;
+		this.address = address;
+		this.city = city;
+		this.country = country;
+	}
+
 	public PatientProfileDto(Patient patient) {
 		this.name = patient.getName();
 		this.surname = patient.getSurname();
@@ -71,6 +85,12 @@ public class PatientProfileDto {
 		return false;
 	}
 	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

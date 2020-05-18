@@ -20,6 +20,7 @@ var medicalReportTable;
 
 $(document).ready(function() {
 
+	/*------------------------------------------------------------------------------*/
 	// pregled profila
 	$('.profile').click(function() {
 		$.ajax({
@@ -34,6 +35,64 @@ $(document).ready(function() {
 			}
 		})
 	})
+	
+	/*Edit personal information*/
+	$('#editPatientProfile').click(function(e) {
+		e.preventDefault();
+		$('.content').hide()
+        $('.patient-edit-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+        editPersonalInformation()
+	})
+	
+	$('#confirmEdit').click(function(e) {
+		e.preventDefault()
+		saveUpdatedProfile()
+	})
+
+	$('#cancelEdit').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.doctor-profile').show()
+	})
+	
+	/*Change password*/
+	$('#changePasswordBtn').click(function(e) {
+		e.preventDefault()
+		var passwordV = $("#password").val()
+		var confirmPasswordV = $("#passwordConfirm").val()
+
+		if(passwordV != confirmPasswordV){
+			alert("Passwords do not match!")
+			return;
+		}
+		
+		if(!passwordV || !confirmPasswordV){
+			alert("All fields must be filled!")
+			return;
+		}
+
+		$.ajax({
+			type : "POST",
+			async: false,
+			url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
+			success : function(data)  {
+				alert("Succesfully changed password.")
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+
+	$("#cancelChangePasswordBtn").click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.home-page').show()
+	})
+	
+	/*------------------------------------------------------------------------------*/
 	
 	/* Pregled svih klinika i njihovih predefinisanih pregleda */
 	// pregled svih klinika
@@ -224,6 +283,87 @@ $(document).ready(function() {
 	})
 	/**************/
 })
+
+/*Profile*/
+
+function editPersonalInformation(){
+	$.ajax({
+		type : "GET",
+		async: false,
+		url : "../../theGoodShepherd/patient/viewProfile" ,
+		dataType: "json",
+		success : function(output)  {
+			$("#emailEdit").val(output.email)
+			$("#nameEdit").val(output.name)
+			$("#surnameEdit").val(output.surname)
+			$("#genderEdit").val(output.gender);
+			$("#dateOfBirthEdit").val(output.dateOfBirth)
+			$("#phoneNumberEdit").val(output.phoneNumber)
+			$("#securityNumberEdit").val(output.securityNumber)
+			$("#addressEdit").val(output.address)
+			$("#cityEdit").val(output.city)
+			$("#countryEdit").val(output.country)
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+function saveUpdatedProfile(){
+	var emailV = $("#emailEdit").val()
+	var nameV = $("#nameEdit").val()
+	var surnameV = $("#surnameEdit").val()
+	var genderV = $("#genderEdit").val();
+	var dateOfBirthV = $("#dateOfBirthEdit").val()
+	var phoneNumberV = $("#phoneNumberEdit").val()
+	var securityNumberV = $("#securityNumberEdit").val()
+	var addressV = $("#addressEdit").val()
+	var cityV = $("#cityEdit").val()
+	var countryV = $("#countryEdit").val()
+	
+	if(!nameV || !surnameV || !genderV || !dateOfBirthV){
+		alert("Not all required fields are filled!")
+		return;
+	}
+
+	var dateObject = new Date(dateOfBirthV);
+	var currentDate = new Date();
+
+	if(currentDate < dateObject){
+		alert("Wrong date of birth!")
+		return;
+	}
+
+	var newPatient = {
+		name: nameV,
+		surname: surnameV,
+		email: emailV,
+		gender: genderV,
+		dateOfBirth: dateOfBirthV,
+		phoneNumber: phoneNumberV,
+		securityNumber: securityNumberV,
+		address: addressV,
+		city: cityV,
+		country: countryV
+	}
+	
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/patient/editPersonalInformation" ,
+		contentType : "application/json",
+		dataType : "json",
+		data : JSON.stringify(newPatient),
+		success : function(response)  {
+			edited = true
+			$(".profile").click()
+			alert("Succesfully edited personal information.")
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
 
 /* Predefinisani pregledi */
 // inicijalizacija tabele svih klinika
