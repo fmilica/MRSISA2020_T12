@@ -36,4 +36,6 @@ public interface DoctorService {
 	List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type);
 	
 	void sendNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Set<Doctor> doctors);
+	
+	void sendDoctorNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Doctor d);
 }

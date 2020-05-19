@@ -138,4 +138,26 @@ public class DoctorImpl implements DoctorService {
 		System.out.println("Email poslat!");
 	}
 
+	@Override
+	public void sendDoctorNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Doctor d) {
+		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
+		javaMailSender.setUsername(ca.getEmail());
+		javaMailSender.setPassword(ca.getPassword());
+		System.out.println("Slanje emaila...");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(d.getEmail());
+		mail.setFrom(ca.getEmail());
+		if(acceptance == true) {
+			mail.setSubject("New appointment assigned!");
+			mail.setText("Hello " + d.getName() + " " + d.getSurname() + ",\n\nYou have new appointment!\n" + 
+					a.getAppType().getName() + " appointment scheduled for " + 
+					sdf1.format(a.getDate()) + " at " + a.getStartTime() + ":00" +
+					" in clinic " + a.getClinic().getName() + ", operation room " + a.getOrdination().getName() + ".\n" +
+					"Patient is " + p.getName() + " " + p.getSurname() + ", with security number " + p.getSecurityNumber() + ".\n" + 
+					"\nBest wishes,\nClinical center The Good Shepherd");
+		}
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+
 }

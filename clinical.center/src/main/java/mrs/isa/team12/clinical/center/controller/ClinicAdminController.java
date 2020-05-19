@@ -327,6 +327,8 @@ public class ClinicAdminController {
 		clinicService.save(clinic);
 		appointmentService.save(appointmentReq.getAppointment());
 		try {
+			doctorService.sendDoctorNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
+					appointmentReq.getAppointment(), true, appointmentReq.getAppointment().getDoctor());
 			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
 					appointmentReq.getAppointment(), true, false, false);
 		}catch( Exception e ){
