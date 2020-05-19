@@ -2,6 +2,7 @@ package mrs.isa.team12.clinical.center.model;
 
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -49,7 +50,7 @@ public class MedicalReport {
 	private Diagnosis diagnosis;
 	
 	public MedicalReport() {}
-
+	
 	public MedicalReport(Long id, String description, Set<Prescription> prescriptions, 
 			Diagnosis diagnosis, Appointment appointment) {
 		super();
@@ -90,5 +91,14 @@ public class MedicalReport {
 	}
 	public void setDiagnosis(Diagnosis diagnosis) {
 		this.diagnosis = diagnosis;
+	}
+	
+	public void addPrescription(Prescription p) {
+		if(this.prescriptions == null) {
+			this.prescriptions = new HashSet<Prescription>();
+		}
+		if (!this.prescriptions.contains(p)) {
+			this.prescriptions.add(p);
+		}
 	}
 }

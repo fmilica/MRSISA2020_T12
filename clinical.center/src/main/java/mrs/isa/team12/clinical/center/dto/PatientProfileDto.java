@@ -72,7 +72,6 @@ public class PatientProfileDto {
 		for (Appointment a : patient.getAppointments()) {
 			if(currentApp(a)) {
 				this.appointment = new AppointmentDto(a);
-				System.out.println("IMAAAAAAAAAAAAAAAAAAAAaa");
 				break;
 			}
 		}
@@ -80,9 +79,6 @@ public class PatientProfileDto {
 	
 	private boolean currentApp(Appointment a) {
 		Date current = new Date();
-		System.out.println(current.getDate() == a.getDate().getDate());
-		System.out.println(current.getHours()+1 >= a.getStartTime());
-		System.out.println(current.getHours()+1 <= a.getEndTime());
 		if(current.getDate() == a.getDate().getDate() && (current.getHours()+1 >= a.getStartTime()) && (current.getHours()+1 <= a.getEndTime()) ) {
 			return true;
 		}

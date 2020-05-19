@@ -24,12 +24,14 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.AppointmentDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentPredefinedDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
@@ -42,8 +44,9 @@ import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 public class AppointmentController {
 	
 	private AppointmentService appointmentService;
-	private PatientService patientService;
 	private AppointmentTypeService appointmentTypeService;
+	private AppointmentRequestService appointmentRequestService;
+	private PatientService patientService;
 	private DoctorService doctorService;
 	private OrdinationService ordinationService;
 	private ClinicService clinicService;
@@ -54,13 +57,15 @@ public class AppointmentController {
 	@Autowired
 	public AppointmentController(AppointmentService appointmentService, PatientService patientService,
 			AppointmentTypeService appointmentTypeService, DoctorService doctorService,
-			OrdinationService ordinationService, ClinicService clinicService) {
+			OrdinationService ordinationService, ClinicService clinicService,
+			AppointmentRequestService appointmentRequestService) {
 		this.appointmentService = appointmentService;
 		this.patientService = patientService;
 		this.appointmentTypeService = appointmentTypeService;
 		this.doctorService = doctorService;
 		this.ordinationService = ordinationService;
 		this.clinicService = clinicService;
+		this.appointmentRequestService = appointmentRequestService;
 	}
 	
 	
@@ -116,6 +121,58 @@ public class AppointmentController {
 	}
 	
 	/*
+	 url: POST localhost:8081/theGoodShepherd/appointment/createPatientApp
+	 HTTP request for creating a patient appointment and appointment request
+	 receives Long appId
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "createPatientApp",
+				 consumes = MediaType.APPLICATION_JSON_VALUE,
+				 produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppointmentPredefinedDto> createPatientApp(@RequestBody AppointmentPredefinedDto appDto) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can schedule a new appointment.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient patient = patientService.findOneById(currentUser.getId());
+		// kreiranje novog appointmenta - pacijent
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = new Date(dt.parse(appDto.getDate()).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		AppointmentType type = appointmentTypeService.findOneByNameAndClinicId(appDto.getAppTypeName(), appDto.getClinicId());
+		Clinic c = clinicService.findOneById(appDto.getClinicId());
+		Doctor d = doctorService.findOneById(appDto.getDoctorId());
+																		//confirmed, finished
+		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, d, c, patient);
+		
+		// klinici dodamo novi pregled
+		c.addAppointment(appointment);
+		// doktoru dodamo novi pregled
+		d.addAppointment(appointment);
+		// pacijentu dodamo novi pregled
+		patient.addAppointment(appointment);
+		appointment = appointmentService.save(appointment);
+		
+		Date today = new Date(new java.util.Date().getTime());
+		// kreiramo zahtev za pregled
+																			// approved
+		AppointmentRequest appRequest = new AppointmentRequest(appointment, today, false, c);
+		appointmentRequestService.save(appRequest);
+
+		return new ResponseEntity<>(appDto, HttpStatus.OK);
+	}
+	
+	/*
 	 url: POST localhost:8081/theGoodShepherd/appointment/createPredefined
 	 HTTP request for creating a predefined appointment
 	 receives Long appId
@@ -135,7 +192,7 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		// kreiranje novog appointmenta
+		// kreiranje novog predefinisanog appointmenta
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
 		try {

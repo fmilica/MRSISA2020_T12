@@ -2,6 +2,7 @@ package mrs.isa.team12.clinical.center.model;
 
 import static javax.persistence.CascadeType.ALL;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -75,5 +76,14 @@ public class Prescription {
 	
 	public void addDiagnosis(Diagnosis diagnosis) {
 		this.diagnosis.add(diagnosis);
+	}
+	
+	public void addMedicalReport(MedicalReport medicalReport) {
+		if (this.medicalReports == null) {
+			this.medicalReports = new HashSet<MedicalReport>();
+		}
+		if (!this.medicalReports.contains(medicalReport)) {
+			this.medicalReports.add(medicalReport);
+		}
 	}
 }

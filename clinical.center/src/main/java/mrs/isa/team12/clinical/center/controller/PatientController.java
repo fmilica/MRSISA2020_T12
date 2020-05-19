@@ -319,7 +319,7 @@ public class PatientController {
 
 	/*
 	 * url: POST localhost:8081/theGoodShepherd/patient/sendAppointment
-	 * HTTP request for sending an email to clinic admin
+	 * HTTP request for sending an email to clinic admin(s)
 	 * receives: Appointment instance
 	 * returns: ReponseEntity instance
 	 * */
@@ -331,6 +331,7 @@ public class PatientController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current user doesn't exist!");
 		}
 		Patient currentPatient = (Patient) session.getAttribute("currentUser");
+
 		try {
 			//moramo svakom adminu klinike poslati mejl
 			for (ClinicAdmin admin : clinicAdminService.findAllByClinicId(appointment.getClinic().getId())) {

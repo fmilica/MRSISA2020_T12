@@ -89,7 +89,6 @@ public class DiagnosisController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DiagnosisDto> addNewDiagnose(@RequestBody Diagnosis diagnose) {
-		System.out.println(diagnose);
 		ClinicalCentreAdmin currentUser;
 		try {
 			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
@@ -116,7 +115,6 @@ public class DiagnosisController {
 	@PostMapping(value = "addDiagnosePrescription",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void addDiagnosePrescription(@RequestBody PrescriptionDto dtp) {
-		System.out.println(dtp);
 		ClinicalCentreAdmin currentUser;
 		try {
 			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");

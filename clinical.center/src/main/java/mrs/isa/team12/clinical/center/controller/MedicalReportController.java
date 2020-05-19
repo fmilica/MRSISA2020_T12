@@ -16,9 +16,11 @@ import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Diagnosis;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.MedicalReport;
+import mrs.isa.team12.clinical.center.model.Prescription;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
 import mrs.isa.team12.clinical.center.service.interfaces.MedicalReportService;
+import mrs.isa.team12.clinical.center.service.interfaces.PrescriptionService;
 
 @RestController
 @RequestMapping("theGoodShepherd/medicalReport")
@@ -27,15 +29,18 @@ public class MedicalReportController {
 	private MedicalReportService medicalReportService;
 	private AppointmentService appointmentService;
 	private DiagnosisService diagnosisService;
+	private PrescriptionService prescriptionService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public MedicalReportController(MedicalReportService mrs, AppointmentService as, DiagnosisService ds) {
+	public MedicalReportController(MedicalReportService mrs, AppointmentService as, DiagnosisService ds,
+			PrescriptionService ps) {
 		this.medicalReportService = mrs;
 		this.appointmentService = as;
 		this.diagnosisService = ds;
+		this.prescriptionService = ps;
 	}
 	
 	/*
@@ -45,7 +50,7 @@ public class MedicalReportController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/addNewMedicalReport")
-	public ResponseEntity<MedicalReportDto> addNewMedicalReport(@RequestBody MedicalReport medicalReport){
+	public ResponseEntity<MedicalReportDto> addNewMedicalReport(@RequestBody MedicalReportDto medicalReportDto){
 		
 		Doctor doctor;
 		try {
@@ -57,21 +62,33 @@ public class MedicalReportController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Appointment appointment = appointmentService.findById(medicalReport.getAppointment().getId());		
+		Appointment appointment = appointmentService.findById(medicalReportDto.getAppId());		
 		if(appointment == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment doesn't exist!");
 		}
-		Diagnosis d =  diagnosisService.findOneByName(medicalReport.getDiagnosis().getName());
+		
+		MedicalReport medicalReport = new MedicalReport();
+		medicalReport.setDescription(medicalReportDto.getDescription());
+		
+		Diagnosis d =  diagnosisService.findOneByName(medicalReportDto.getDiagnosisName());
 		medicalReport.setDiagnosis(d);
 		medicalReport.setAppointment(appointment);
 		appointment.setMedicalReport(medicalReport);
 		// zavrsava pregled
 		appointment.setFinished(true);
+		
+		// dodavanje lekova
+		for(Long prescriptionId : medicalReportDto.getPrescriptionIds()) {
+			Prescription p = prescriptionService.findOneById(prescriptionId);
+			p.addMedicalReport(medicalReport);
+			medicalReport.addPrescription(p);
+		}
+		
 		//diagnosisService.save(medicalReport.getDiagnosis());
 		medicalReportService.save(medicalReport);
 		appointmentService.save(appointment);
 		
-		MedicalReportDto medicalReportDto = new MedicalReportDto(medicalReport);
+		medicalReportDto = new MedicalReportDto(medicalReport);
 		
 		return new ResponseEntity<>(medicalReportDto, HttpStatus.CREATED);
 	}

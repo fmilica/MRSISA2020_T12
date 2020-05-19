@@ -16,6 +16,8 @@ public class MedicalRecordDto {
 	
 	private Set<MedicalReportDto> medicalReports;
 	
+	public MedicalRecordDto() {}
+	
 	public MedicalRecordDto(MedicalRecords medicalRecords) {
 		super();
 		this.id = medicalRecords.getId();

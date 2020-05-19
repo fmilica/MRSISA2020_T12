@@ -8,7 +8,8 @@ public class AppointmentPredefinedDto {
 	private Integer time;
 	private Double discount;
 	private Long ordinationId;
-	
+	private Long clinicId;
+
 	public AppointmentPredefinedDto() {}
 
 	public String getDate() {
@@ -46,5 +47,11 @@ public class AppointmentPredefinedDto {
 	}
 	public void setOrdinationId(Long ordinationId) {
 		this.ordinationId = ordinationId;
+	}
+	public Long getClinicId() {
+		return clinicId;
+	}
+	public void setClinicId(Long clinicId) {
+		this.clinicId = clinicId;
 	}
 }

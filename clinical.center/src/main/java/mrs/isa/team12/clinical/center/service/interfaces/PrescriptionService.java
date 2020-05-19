@@ -5,6 +5,7 @@ import java.util.List;
 import mrs.isa.team12.clinical.center.model.Prescription;
 
 public interface PrescriptionService {
+	
 	List<Prescription> findAll();
 	
 	List<Prescription> findAllByDiagnosisId(Long id);

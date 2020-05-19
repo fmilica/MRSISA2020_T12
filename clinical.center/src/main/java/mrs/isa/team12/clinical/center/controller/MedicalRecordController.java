@@ -62,7 +62,7 @@ public class MedicalRecordController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/modifyMedicalRecord")
-	public ResponseEntity<MedicalRecordDto> addNewMedicalReport(@RequestBody MedicalRecords medicalRecord){
+	public ResponseEntity<MedicalRecordDto> addNewMedicalReport(@RequestBody MedicalRecordDto medicalRecordDto){
 		
 		Doctor doctor;
 		try {
@@ -74,12 +74,21 @@ public class MedicalRecordController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		if(medicalRecordsService.findOneById(medicalRecord.getId()) == null) {
+		MedicalRecords medicalRecord = medicalRecordsService.findOneById(medicalRecordDto.getId());
+		
+		if(medicalRecord == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment doesn't exist!");
 		}
+		
+		medicalRecord.setHeight(medicalRecordDto.getHeight());
+		medicalRecord.setWeight(medicalRecordDto.getWeight());
+		medicalRecord.setBloodPressure(medicalRecordDto.getBloodPressure());
+		medicalRecord.setBloodType(medicalRecordDto.getBloodType());
+		medicalRecord.setAllergies(medicalRecordDto.getAllergies());
+		
 		medicalRecordsService.save(medicalRecord);
 		
-		MedicalRecordDto medicalRecordDto = new MedicalRecordDto(medicalRecord);
+		medicalRecordDto = new MedicalRecordDto(medicalRecord);
 		
 		return new ResponseEntity<>(medicalRecordDto, HttpStatus.CREATED);
 	}

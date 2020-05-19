@@ -92,6 +92,20 @@ public class Appointment {
 
 	public Appointment() {}
 
+	public Appointment(Date date, Integer startTime, AppointmentType type,
+			Boolean confirmed, Boolean finished, Doctor doctor, Clinic clinic,
+			Patient patient) {
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = startTime + type.getDuration();
+		this.appType = type;
+		this.confirmed = confirmed;
+		this.finished = finished;
+		this.doctor = doctor;
+		this.clinic = clinic;
+		this.patient = patient;
+	}
+
 	public Appointment(Date date, Integer startTime, AppointmentType type, Double discount,
 			Boolean confirmed, Boolean finished, Ordination ordination, Doctor doctor, Clinic clinic) {
 		this.date = date;

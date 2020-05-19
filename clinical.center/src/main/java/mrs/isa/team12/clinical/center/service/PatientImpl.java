@@ -63,7 +63,6 @@ public class PatientImpl implements PatientService {
 					"Best wishes,\nClinical center The Good Shepherd");
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
-		
 	}
 
 	@Override

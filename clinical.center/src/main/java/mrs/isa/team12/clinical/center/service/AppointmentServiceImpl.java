@@ -29,6 +29,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public Appointment save(Appointment a) {
 		return appointmentRepository.save(a);
 	}

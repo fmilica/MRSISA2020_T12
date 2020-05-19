@@ -301,7 +301,6 @@ public class ClinicAdminController {
 		}
 		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
 		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getReqId());
-		System.out.println(appointmentRequest);
 		if(appointmentReq == null) { //mozda bi ovde trebalo proveriti da li je to neki koji je pre prihvacen/odbijen? mozda kasnije..
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
 		}
@@ -381,7 +380,6 @@ public class ClinicAdminController {
 		}
 		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
 		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getReqId());
-		System.out.println(appointmentReq);
 		if(appointmentReq == null) { //mozda bi ovde trebalo proveriti da li je to neki koji je pre prihvacen/odbijen? mozda kasnije..
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
 		}

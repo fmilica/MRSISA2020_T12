@@ -8,6 +8,8 @@ var current_secNum;
 var edited = false;
 
 $(document).ready( function () {
+	//select2 radi zbog ovoga
+	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
 	/*View personal information*/
 	$('.d-profile').on('click', function(e){
@@ -126,7 +128,7 @@ $(document).ready( function () {
 			success : function(data)  {
 				$('#prescriptionMR').empty();
 				$.each(data, function(index, medicine){
-					$('#prescriptionMR').append(new Option(medicine.name));
+					$('#prescriptionMR').append(new Option(medicine.name, medicine.id));
 				})
 			},
 			error : function(response) {
@@ -165,14 +167,10 @@ $(document).ready( function () {
 		}
 
 		var medRec = {
-			appointment: {
-				id : appointment_id
-			},
+			appId: appointment_id,
 			description: description,
-			diagnosis: {
-				name : diagnosis
-			},
-			prescription: prescription
+			diagnosisName: diagnosis,
+			prescriptionIds: prescription
 		}
 
 		$.ajax({
@@ -260,12 +258,12 @@ $(document).ready( function () {
 		}
 		
 		var medRec = {
-				id: medicalRecord_id,
-				height: height,
-				weight: weight,
-				bloodPressure: bloodPressure,
-				bloodType: bloodType,
-				allergies: alergies
+			id: medicalRecord_id,
+			height: height,
+			weight: weight,
+			bloodPressure: bloodPressure,
+			bloodType: bloodType,
+			allergies: alergies
 		}
 		
 		$.ajax({

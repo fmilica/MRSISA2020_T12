@@ -31,7 +31,6 @@ public class DiagnosePrescriptionServiceImpl implements DiagnosisPrescriptionSer
 
 	@Override
 	public DiagnosePerscription findOneById(Long id) {
-		System.out.println(id);
 		return diagnosePrescriptionRep.findOneById(id);
 	}
 	

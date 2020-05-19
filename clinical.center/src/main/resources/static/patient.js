@@ -3,7 +3,7 @@ var duration;
 
 var newAppointment = {
 	date: "",
-	appType: "",
+	appTypeName: "",
 	appDuration: "",
 	clinicId: "",
 	clinicName: "",
@@ -186,6 +186,21 @@ $(document).ready(function() {
 			}
 		}
 		
+		// prvo upise novi pregled i zahtev za pregled u bazu
+		$.ajax({
+			type: "POST",
+			url: "../../theGoodShepherd/appointment/createPatientApp",
+			contentType: "application/json",
+			data: JSON.stringify(newAppointment),
+			success: function() {
+				// nista ne moramo ovde
+			},
+			error: function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+
+		// salje se mejl svim administratorima klinike
 		//kursor ceka
 		$("body").css("cursor", "progress")
 		$.ajax({
@@ -194,15 +209,25 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: JSON.stringify(app),
 			success : function() {
+				// ako ovo radimo van funkcije
+				// moguce je da nece cekati da se izvrsi
+				// problem je ako fejluje mislim
+				// u smislu moze otici negde daleko, a da mu on tek tad javi gresku
+				/*
 	    		$("body").css("cursor", "default");
 				alert("Appointment sent successfully!")
 				$('.content').hide()
-				$('.patient-createNewApp').show()
+				$('.patient-createNewApp').show()*/
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
 		})
+		// ovako ne cekamo
+		$("body").css("cursor", "default");
+		alert("Appointment sent successfully!")
+		$('.content').hide()
+		$('.patient-createNewApp').show()
 	})
 
 	$('#cancelApp').on('click', function(e){
@@ -235,7 +260,7 @@ $(document).ready(function() {
 		e.preventDefault()
 		// skidanje parametra pregleda
 		newAppointment.date = ""
-		newAppointment.appType = ""
+		newAppointment.appTypeName = ""
 		newAppointment.appDuration = ""
 		// dobavljanje svih klinika ponovo
 		clinicsTable.ajax.url("../../theGoodShepherd/patient/clinics")
@@ -249,7 +274,7 @@ $(document).ready(function() {
 		var date = $('#filterAppDate').val()
 		newAppointment.date = date
 		var appTypeName = $('#filterAppType').val()
-		newAppointment.appType = appTypeName
+		newAppointment.appTypeName = appTypeName
 
 		// filtriranje klinika na beku
 		clinicsTable.ajax.url("../../theGoodShepherd/clinics/filterClinics/"+appTypeName+"/"+date)
@@ -259,7 +284,7 @@ $(document).ready(function() {
 		// doda novu vrednost
 		clinicsTable.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 			var data = this.data();
-			data[4] = newAppointment.appType
+			data[4] = newAppointment.appTypeName
 			this.data(data)
 		 } )
 	})
@@ -568,9 +593,9 @@ function viewClinics(){
 				// price
 				data: null,
 				render: function (data) {
-					if (newAppointment.appType) {
+					if (newAppointment.appTypeName) {
 						for (var i = 0; i < data.appointmentTypes.length; i++) {
-							if (data.appointmentTypes[i].name == newAppointment.appType) {
+							if (data.appointmentTypes[i].name == newAppointment.appTypeName) {
 								return data.appointmentTypes[i].price + " &euro;"
 							}
 						}
@@ -584,8 +609,8 @@ function viewClinics(){
 				// appointmentType
 				data: null,
 				render: function () {
-					if (newAppointment.appType) {
-						return newAppointment.appType
+					if (newAppointment.appTypeName) {
+						return newAppointment.appTypeName
 					} else {
 						return "Not specified"
 					}
@@ -595,9 +620,9 @@ function viewClinics(){
 				// duration
 				data: null,
 				render: function (data) {
-					if (newAppointment.appType) {
+					if (newAppointment.appTypeName) {
 						for (var i = 0; i < data.appointmentTypes.length; i++) {
-							if (data.appointmentTypes[i].name == newAppointment.appType) {
+							if (data.appointmentTypes[i].name == newAppointment.appTypeName) {
 								duration = data.appointmentTypes[i].duration + "h"
 								return data.appointmentTypes[i].duration + "h"
 							}
@@ -611,7 +636,7 @@ function viewClinics(){
 			{
 				data: null,
 				render: function (data) {
-					if (!newAppointment.date || !newAppointment.appType) {
+					if (!newAppointment.date || !newAppointment.appTypeName) {
 						return "Choose all parameters to view available doctors"
 					}
 					var button = '<button id="'+data.id+'" class="btn btn-info table-button" name="'+data.name+ '|' + price + '|' + duration + '">View doctors</button>';
@@ -637,7 +662,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		doctorsClinicTable = $('#doctorsClinicTable').DataTable({
 			responsive: true,
 			ajax: {
-				url: "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appType+"/"+newAppointment.date+"/"+clinicId,
+				url: "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+clinicId,
 				dataSrc: ''
 			},
 			columns: [
@@ -665,7 +690,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 				{
 					data: null,
 					render: function (data) {
-						if (newAppointment.appType && newAppointment.date) {
+						if (newAppointment.appTypeName && newAppointment.date) {
 							var button = '<button id="'+data.id+'" name="' + data.name + ' ' + data.surname + '"class="btn btn-info table-button-doctor">Schedule</button>';
 							return button;
 						} else {
@@ -678,7 +703,7 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		$('#doctorTableDiv').show()
 	} else {
 		// jeste inicijalizovana
-		doctorsClinicTable.ajax.url( "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appType+"/"+newAppointment.date+"/"+clinicId)
+		doctorsClinicTable.ajax.url( "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+clinicId)
 		doctorsClinicTable.ajax.reload()
 		$('#doctorTableDiv').show()
 	}
@@ -686,12 +711,12 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 
 function createAppointment(doctorId, time) {
 	newAppointment.doctorId = doctorId;
-	newAppointment.time = time + ":00"
+	newAppointment.time = time
 	// prikaz svih podataka
 	$('#date').text(newAppointment.date)
-	$('#time').text(newAppointment.time)
+	$('#time').text(newAppointment.time + ":00")
 	$('#duration').text(newAppointment.appDuration)
-	$('#appType').text(newAppointment.appType)
+	$('#appType').text(newAppointment.appTypeName)
 	$('#doctor').text(newAppointment.doctorName)
 	$('#clinic').text(newAppointment.clinicName)
 	$('.content').hide()
