@@ -566,14 +566,14 @@ $(document).ready(function() {
 	//Cancel adding new diagnose
 	$('#cancel_diagnose').click(function(e){
 		e.preventDefault()
-		$('#name').val('')
+		$('#nameDiagnose').val('')
     	$('.content').hide()
 		$('.code-books').show()
 	})
 	
 	$('#addMedicine').click(function(e){
 		e.preventDefault()
-		
+		$('#medicineDiagnosis').val(null).trigger('change')
 		$('#medicineDiagnosis').select2({ width: '100%' })
 		
 		$.ajax({
@@ -630,7 +630,8 @@ $(document).ready(function() {
 	//Cancel adding new medicine
 	$('#cancel_medicine').click(function(e){
 		e.preventDefault()
-		$('#name').val('')
+		$('#medicineDiagnosis').val(null).trigger('change')
+		$('#nameMedicine').val('')
     	$('.content').hide()
 		$('.code-books').show()
 	})

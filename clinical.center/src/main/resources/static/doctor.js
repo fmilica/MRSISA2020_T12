@@ -42,30 +42,7 @@ $(document).ready( function () {
 	/*Change password*/
 	$('#changePasswordBtn').click(function(e) {
 		e.preventDefault()
-		var passwordV = $("#password").val()
-		var confirmPasswordV = $("#passwordConfirm").val()
-
-		if(passwordV != confirmPasswordV){
-			alert("Passwords do not match!")
-			return;
-		}
-		
-		if(!passwordV || !confirmPasswordV){
-			alert("All fields must be filled!")
-			return;
-		}
-
-		$.ajax({
-			type : "POST",
-			async: false,
-			url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
-			success : function(data)  {
-				alert("Succesfully changed password.")
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
+		changePassword()
 	})
 
 	$("#cancelChangePasswordBtn").click(function(e) {
@@ -546,6 +523,35 @@ function saveUpdatedDoctor(){
 			edited = true
 			$(".d-profile").click()
 			alert("Succesfully edited personal information.")
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+function changePassword() {
+	var passwordV = $("#password").val()
+	var confirmPasswordV = $("#passwordConfirm").val()
+
+	if(passwordV != confirmPasswordV){
+		alert("Passwords do not match!")
+		return;
+	}
+	
+	if(!passwordV || !confirmPasswordV){
+		alert("All fields must be filled!")
+		return;
+	}
+
+	$.ajax({
+		type : "POST",
+		async: false,
+		url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
+		success : function(data)  {
+			alert("Succesfully changed password.")
+			$('.content').hide()
+			$('.home-page').show()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
