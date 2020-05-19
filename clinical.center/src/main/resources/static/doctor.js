@@ -9,7 +9,7 @@ var edited = false;
 
 $(document).ready( function () {
 	//select2 radi zbog ovoga
-	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
+	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
 	/*View personal information*/
 	$('.d-profile').on('click', function(e){
@@ -103,7 +103,7 @@ $(document).ready( function () {
 			return
 		}
 		
-		$('#prescriptionMR').select2();
+		$('#prescriptionMR').select2({ width: '100%' });
 		$.ajax({
 			type : "GET",
 			async: false,
@@ -413,7 +413,7 @@ function viewPersonalInformation(){
 }
 
 function editPersonalInformation(){
-	$('#doctorQualifications').select2();
+	$('#doctorQualifications').select2({ width: '100%' });
 	$.ajax({
 		type : "GET",
 		async: false,

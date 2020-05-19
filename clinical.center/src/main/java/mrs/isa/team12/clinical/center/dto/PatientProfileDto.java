@@ -79,7 +79,7 @@ public class PatientProfileDto {
 	
 	private boolean currentApp(Appointment a) {
 		Date current = new Date();
-		if(current.getDate() == a.getDate().getDate() && (current.getHours()+1 >= a.getStartTime()) && (current.getHours()+1 <= a.getEndTime()) ) {
+		if(current.getDate() == a.getDate().getDate() && (current.getHours() >= a.getStartTime()) && (current.getHours() <= a.getEndTime()) ) {
 			return true;
 		}
 		return false;

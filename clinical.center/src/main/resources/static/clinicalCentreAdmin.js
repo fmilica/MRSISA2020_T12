@@ -12,7 +12,7 @@ var edited = false;
 $(document).ready(function() {
 	
 	//select2 ne radi bez ovoga
-	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
+	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 	
 	/*------------------------------------------------------------------*/
 	/*View personal information*/
@@ -574,7 +574,7 @@ $(document).ready(function() {
 	$('#addMedicine').click(function(e){
 		e.preventDefault()
 		
-		$('#medicineDiagnosis').select2()
+		$('#medicineDiagnosis').select2({ width: '100%' })
 		
 		$.ajax({
             type : "GET",

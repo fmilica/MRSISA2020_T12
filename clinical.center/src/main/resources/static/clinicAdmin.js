@@ -34,7 +34,7 @@ var edited = false;
 $(document).ready(function() {
 	
 	//select2 radi zbog ovoga
-	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
+	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 	
 	/*------------------------------------------------------------------------*/
 	/*View personal information*/
@@ -300,7 +300,7 @@ $(document).ready(function() {
 	/*View all appointment types*/
 	$("#clinicAppTypes").on('click', function(event){
 		
-		$('#certifiedDoctors').select2();
+		$('#certifiedDoctors').select2({ width: '100%' });
 		
 		$.ajax({
 			type : "GET",
@@ -1050,7 +1050,6 @@ function scheduleOrdination(ordinationId, currentDate, time) {
 			$('.content').hide()
 			$('.clinic-clinicExamReq').show()
 			examReqTable.ajax.reload()
-			('#operRoomTable tbody').empty()
 			// scroll to top of page
 			document.body.scrollTop = 0
 			document.documentElement.scrollTop = 0
@@ -1086,13 +1085,13 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 		}),
 		success : function(){
 			alert("Operation accepted!")
-			$('.content').hide()
-			$('.clinic-clinicOperReq').show()
 			operReqTable.ajax.reload()
+			$('#operRoomBody').empty()
 			// scroll to top of page
-			$('#operRequests tbody').empty()
 			document.body.scrollTop = 0
 			document.documentElement.scrollTop = 0
+			$('.content').hide()
+			$('.clinic-clinicOperReq').show()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -1229,7 +1228,7 @@ function viewOperationRoomsForAppointmentRequests(){
 									$('#operation'+data.id).select2()
 								}
 							})
-						return '<select class="form-control input-height available-times" multiple="multiple" id="operation'+data.id+'">'+ options +'</select>'
+						return '<select class="form-control input-height available-times overflow" multiple="multiple" id="operation'+data.id+'">'+ options +'</select>'
 					}
 				},
 				{

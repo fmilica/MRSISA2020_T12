@@ -2951,6 +2951,9 @@ select.form-control.form-control-sm{
 .input-height {
     height: 45px !important;
 }
+.overflow{
+	overflow-x: auto;
+}
 .mul-width{
 	min-width: 90%;
 }
