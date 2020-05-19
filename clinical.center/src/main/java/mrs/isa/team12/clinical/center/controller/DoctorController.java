@@ -340,7 +340,9 @@ public class DoctorController {
 		List<DoctorDto> freeCertifiedClinicDoctors = new ArrayList<DoctorDto>();
 		
 		for (Doctor d : certifiedClinicDoctors) {
+			if(!d.getEmail().equals(ar.getAppointment().getDoctor().getEmail())) {
 				freeCertifiedClinicDoctors.add(new DoctorDto(d));
+			}
 		}
 		
 		return new ResponseEntity<>(freeCertifiedClinicDoctors, HttpStatus.OK);

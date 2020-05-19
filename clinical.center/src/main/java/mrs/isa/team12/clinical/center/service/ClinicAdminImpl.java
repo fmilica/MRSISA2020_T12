@@ -49,15 +49,27 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	}
 
 	@Override
-	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient, Appointment appointment, boolean acceptance) {
+	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient, Appointment appointment, boolean acceptance, boolean operation, boolean predefined) {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-		javaMailSender.setUsername(admin.getEmail());
-		javaMailSender.setPassword(admin.getPassword());
+		String op = "Appointment";
+		if(operation == true) {
+			op = "Operation";
+		}
+		String adminFrom = "";
+		if(predefined == true) {
+			adminFrom = "thegoodshepherdadm@gmail.com";
+			javaMailSender.setUsername(adminFrom);
+			javaMailSender.setPassword("admin1tgs");
+		}else {
+			adminFrom = admin.getEmail();
+			javaMailSender.setUsername(admin.getEmail());
+			javaMailSender.setPassword(admin.getPassword());
+		}
 		System.out.println("Slanje emaila...");
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(patient.getEmail());
-		mail.setFrom(admin.getEmail());
+		
+		mail.setFrom(adminFrom);
 		String disc = "";
 		if(acceptance == true) {
 			if(appointment.getDiscount() == null) {
@@ -66,14 +78,31 @@ public class ClinicAdminImpl implements ClinicAdminService {
 			else {
 				disc = appointment.getDiscount()*100 + "";
 			}
-			mail.setSubject("Appointment request accepted!");
-			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your appointment request!\n" + 
-					appointment.getAppType().getName() + " appointment scheduled for " + 
+			mail.setSubject(op+" request accepted!");
+			String mailText = "Hello " + patient.getName();
+			
+			String details = appointment.getAppType().getName() +" "+ op.toLowerCase() + " scheduled for " + 
 					sdf1.format(appointment.getDate()) + " at " + appointment.getStartTime() + ":00" +
 					" in clinic " + appointment.getClinic().getName() + ", ordination " + appointment.getOrdination().getName() +
 					", by doctor "+ appointment.getDoctor().getName() + " " + appointment.getDoctor().getSurname() + ".\n" +
-					"Your appointment costs " + appointment.getAppType().getPrice() + " with " + disc + "% of discount." +
-					"\nBest wishes,\nClinical center The Good Shepherd");
+					"That "+ op.toLowerCase() +" costs " + appointment.getAppType().getPrice() + " with " + disc + "% of discount.";
+			
+			if(predefined == true) {
+				mailText += ",\n\nYou scheduled an appointment!\n";
+				mailText += details;
+				mailText += "You may see it in 'My Appointments' tab on your profile.";
+			}
+			else {
+				mailText += ",\n\nAdmin " + adminFrom + " accepted your "+ op.toLowerCase() +" request!\n";
+				mailText += details;
+				if(operation == true) {
+					mailText += "You may see it in 'My Appointments' tab on your profile.";
+				}else {
+					mailText += "You may confirm it or decline it in 'My Appointments' tab on your profile.";
+				}
+			}
+			mailText += "\nBest wishes,\nClinical center The Good Shepherd";
+			mail.setText(mailText);
 		}else {
 			mail.setSubject("Appointment request rejected!");
 			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " declined your appointment request!\n" + 

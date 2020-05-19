@@ -34,6 +34,7 @@ import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
@@ -50,6 +51,7 @@ public class AppointmentController {
 	private DoctorService doctorService;
 	private OrdinationService ordinationService;
 	private ClinicService clinicService;
+	private ClinicAdminService adminService;
 	
 	@Autowired
 	private HttpSession session;
@@ -58,7 +60,7 @@ public class AppointmentController {
 	public AppointmentController(AppointmentService appointmentService, PatientService patientService,
 			AppointmentTypeService appointmentTypeService, DoctorService doctorService,
 			OrdinationService ordinationService, ClinicService clinicService,
-			AppointmentRequestService appointmentRequestService) {
+			AppointmentRequestService appointmentRequestService, ClinicAdminService adminService) {
 		this.appointmentService = appointmentService;
 		this.patientService = patientService;
 		this.appointmentTypeService = appointmentTypeService;
@@ -66,6 +68,7 @@ public class AppointmentController {
 		this.ordinationService = ordinationService;
 		this.clinicService = clinicService;
 		this.appointmentRequestService = appointmentRequestService;
+		this.adminService = adminService;
 	}
 	
 	
@@ -242,6 +245,7 @@ public class AppointmentController {
 		Appointment app;
 		try {
 			app = appointmentService.update(patient, appId);
+			adminService.sendNotificaitionAsync(null, currentUser, app, true, false, true);
 		} catch (NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
 		}

@@ -26,5 +26,5 @@ public interface ClinicAdminService {
 	ClinicAdmin findOneById(Long id);
 	
 	@Async
-	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient,Appointment appointment, boolean acceptance);
+	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient,Appointment appointment, boolean acceptance, boolean operation, boolean predefined);
 }

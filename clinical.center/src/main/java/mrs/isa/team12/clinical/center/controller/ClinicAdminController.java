@@ -328,7 +328,7 @@ public class ClinicAdminController {
 		appointmentService.save(appointmentReq.getAppointment());
 		try {
 			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
-					appointmentReq.getAppointment(), true);
+					appointmentReq.getAppointment(), true, false, false);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -355,7 +355,7 @@ public class ClinicAdminController {
 		appointmentReq.setApproved(false);
 		appointmentReq.getAppointment().setConfirmed(false);
 		try {
-			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(),null, false);
+			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(),null, false,false, false);
 			return new ResponseEntity<>("Request rejected!", HttpStatus.OK);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -412,8 +412,10 @@ public class ClinicAdminController {
 		clinicService.save(clinic);
 		appointmentService.save(appointmentReq.getAppointment());
 		try {
+			doctorService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
+					appointmentReq.getAppointment(), true, appointmentReq.getAppointment().getDoctors());
 			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
-					appointmentReq.getAppointment(), true);
+					appointmentReq.getAppointment(), true, true, false);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

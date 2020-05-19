@@ -131,7 +131,6 @@ public class Doctor extends MedicalPersonnel {
 	}
 
 	public void addAppointment(Appointment appointment) {
-		appointment.setDoctor(this);
 		this.appointments.add(appointment);
 	}
 

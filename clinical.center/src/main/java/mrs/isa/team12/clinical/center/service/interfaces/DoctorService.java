@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface DoctorService {
 	
@@ -32,5 +35,5 @@ public interface DoctorService {
 	
 	List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type);
 	
-	
+	void sendNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Set<Doctor> doctors);
 }

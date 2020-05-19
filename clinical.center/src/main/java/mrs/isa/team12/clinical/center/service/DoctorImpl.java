@@ -1,15 +1,22 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.repository.DoctorRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
@@ -17,6 +24,9 @@ import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 public class DoctorImpl implements DoctorService {
 
 	private DoctorRepository doctorRep;
+	
+	@Autowired
+	private JavaMailSenderImpl javaMailSender;
 	
 	@Autowired
 	public DoctorImpl(DoctorRepository doctorRep) {
@@ -94,6 +104,38 @@ public class DoctorImpl implements DoctorService {
 		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
 		Doctor updated = doctorRep.save(doctorToUpdate);
 		return updated;
+	}
+
+	@Override
+	public void sendNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Set<Doctor> doctors) {
+		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
+		javaMailSender.setUsername(ca.getEmail());
+		javaMailSender.setPassword(ca.getPassword());
+		System.out.println("Slanje emaila...");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		Iterator<Doctor> itr = doctors.iterator();
+		String[] to = new String[doctors.size()+1];
+		to[0] = a.getDoctor().getEmail();
+		int i = 1;
+		while(itr.hasNext()) {
+			String toMail = itr.next().getEmail();
+			to[i] = toMail;
+			i++;
+		}
+		mail.setTo(to);
+		mail.setFrom(ca.getEmail());
+		if(acceptance == true) {
+			mail.setSubject("New operation assigned!");
+			mail.setText("Hello Doctor" + ",\n\nAdmin " + ca.getEmail() + " assigned you to participate in an operation!\n" + 
+					a.getAppType().getName() + " operation scheduled for " + 
+					sdf1.format(a.getDate()) + " at " + a.getStartTime() + ":00" +
+					" in clinic " + a.getClinic().getName() + ", operation room " + a.getOrdination().getName() +
+					", by doctor "+ a.getDoctor().getName() + " " + a.getDoctor().getSurname() + ".\n" +
+					"Patient is " + p.getName() + " " + p.getSurname() + ", with security number " + p.getSecurityNumber() + ".\n" + 
+					"\nBest wishes,\nClinical center The Good Shepherd");
+		}
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
 	}
 
 }
