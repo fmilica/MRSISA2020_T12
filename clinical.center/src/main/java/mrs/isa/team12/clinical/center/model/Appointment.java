@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.FetchType.LAZY;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 @Entity
 @Table(name = "appointment")
@@ -40,7 +44,9 @@ public class Appointment {
 	@Column(name = "app_end_time", unique = false, nullable = true)
 	private Integer endTime;
 	
-	//type
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
+	private AppointmentType appType;
 	
 	@Column(name = "discount", unique = false, nullable = true )
 	private Double discount;
@@ -69,12 +75,20 @@ public class Appointment {
 	private Clinic clinic;
 	
 	@ManyToOne
-	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
 	private Doctor doctor;
 	
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name= "app_type", referencedColumnName = "id", nullable = true)
-	private AppointmentType appType;
+	//dodato zbog operacija
+	@ManyToMany
+	@JoinTable(
+	        name = "appointment_doctors", 
+	        joinColumns = { @JoinColumn(name = "appointment_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "doctor_id") }
+	    )
+	private Set<Doctor> doctors;
+	
+	@Column(name = "ordination_type", unique = false, nullable = true)
+	private OrdinationType type;
 
 	public Appointment() {}
 
@@ -105,6 +119,22 @@ public class Appointment {
 		this.medicalReport = medicalReport;
 		this.ordination = ordination;
 		this.doctor = doctor;
+	}
+	
+	public Set<Doctor> getDoctors() {
+		return doctors;
+	}
+
+	public void setDoctors(Set<Doctor> doctors) {
+		this.doctors = doctors;
+	}
+
+	public OrdinationType getType() {
+		return type;
+	}
+
+	public void setType(OrdinationType type) {
+		this.type = type;
 	}
 	
 	public Boolean getFinished() {
@@ -219,6 +249,10 @@ public class Appointment {
 		this.medicalRecords = medicalRecords;
 	}
 */
+	public void addDoctor(Doctor d) {
+		this.doctors.add(d);
+	}
+	
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + "]";

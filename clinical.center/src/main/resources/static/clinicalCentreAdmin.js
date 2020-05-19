@@ -5,10 +5,14 @@ var requestsTable;
 var diagnosisTable;
 var medicineTable;
 var choosenRequest;
+var declineId;
 
 //ako su personalni podaci editovani, ponovo saljemo upit serveru
 var edited = false;
 $(document).ready(function() {
+	
+	//select2 ne radi bez ovoga
+	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
 	
 	/*------------------------------------------------------------------*/
 	/*View personal information*/
@@ -551,7 +555,7 @@ $(document).ready(function() {
             	$('#nameDiagnose').val('')
             	$('.content').hide()
         		$('.code-books').show()
-            	diagnosisTable.ajax.reload(); 
+            	diagnosisTable.ajax.reload();
             },
             error : function(response) {
             	alert(response.responseJSON.message)
@@ -567,11 +571,33 @@ $(document).ready(function() {
 		$('.code-books').show()
 	})
 	
+	$('#addMedicine').click(function(e){
+		e.preventDefault()
+		
+		$('#medicineDiagnosis').select2()
+		
+		$.ajax({
+            type : "GET",
+            url : "../../theGoodShepherd/diagnosis",
+            dataType: "json",
+            success: function(data){
+            	$("#medicineDiagnosis").empty()
+            	$.each(data, function(index, diagnose) {
+					$("#medicineDiagnosis").append('<option id="'+diagnose.id+'">'+diagnose.name+'</option>').trigger('change');;
+				})
+            },
+            error : function(response) {
+            	alert(response.responseJSON.message)
+            }
+        })
+	})
+	
 	//Add new medicine
 	$('#add_medicine').click(function(e){
 		e.preventDefault()
 		
 		var name = $('#nameMedicine').val()
+		var diagnose = $('#medicineDiagnosis').val()
 		
 		if(!name){
 			alert("All required fields must be filled!")
@@ -584,7 +610,8 @@ $(document).ready(function() {
             contentType : "application/json",
             dataType: "json",
             data : JSON.stringify({
-                "medicine" : name
+                "medicine" : name,
+                "diagnosis" : diagnose
             }),
             success: function(data){
             	alert("Successfully added new medicine!")
@@ -592,6 +619,7 @@ $(document).ready(function() {
             	$('.content').hide()
         		$('.code-books').show()
             	medicineTable.ajax.reload(); 
+    			//setDiagnosisToPrescription(data)
             },
             error : function(response) {
             	alert(response.responseJSON.message)
@@ -605,6 +633,43 @@ $(document).ready(function() {
 		$('#name').val('')
     	$('.content').hide()
 		$('.code-books').show()
+	})
+	
+	$('#decline_regreq').click(function(e){
+		var desc = $('#descriptionRegReq').val()
+		
+		if(!desc){
+			alert("All required fields must be filled!")
+	    	return;
+		}
+		
+		$.ajax({
+	        type : "POST",
+	        url : "../../theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest",
+	        contentType : "application/json",
+	        //dataType: "json",
+	        data : JSON.stringify({
+	            "id" : declineId,
+	            "description": desc
+	        }),
+	        success : function()  {
+	        	requestsTable.ajax.reload();
+	        	$('.content').hide()
+	    		$('.registration-req').show()
+	            alert("Registration request rejected!")
+	        },
+	        error : function(response) {
+	        	alert(response.responseJSON.message)
+	        }
+	    })
+	})
+	
+	$('#cancel_decline').click(function(e){
+		e.preventDefault()
+		
+		$('.content').hide()
+		$('.registration-req').show()
+		$('#descriptionRegReq').val('')
 	})
 })
 
@@ -787,25 +852,22 @@ function acceptReq(id){
 }
 
 function declineReq(id){
-	//kursor ceka 
-	$("body").css("cursor", "progress")
+	declineId = id;
+	console.log(declineId)
+	$('.content').hide()
+	$('.registration-req-decline').show()
+}
+
+function setDiagnosisToPrescription(data){
+	
 	$.ajax({
-        type : "POST",
-        url : "/theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest",
-        contentType : "application/json",
-        //dataType: "json",
-        data : JSON.stringify({
-            "id" : id
-        }),
-        success : function()  {
-        	requestsTable.ajax.reload();
-        	$('.content').hide()
-    		$('.registration-req').show()
-    		$("body").css("cursor", "default")
-            alert("Registration request rejected!")
-        },
-        error : function(response) {
-        	alert(response.responseJSON.message)
-        }
-    })
+		type : "POST",
+		async: false,
+		url : "../../theGoodShepherd/diagnosis/addDiagnosePrescription",
+		contentType: "application/json",
+		data: JSON.stringify(data),
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
 }

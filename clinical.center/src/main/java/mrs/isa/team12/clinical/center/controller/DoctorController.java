@@ -27,6 +27,7 @@ import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.DoctorsOrdinationsFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.OrdinationFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
@@ -34,6 +35,7 @@ import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
+import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
@@ -47,17 +49,19 @@ public class DoctorController {
 	private AppointmentTypeService appointmentTypeService;
 	private RegisteredUserService userService;
 	private OrdinationService ordinationService;
+	private AppointmentRequestService appointmentReqService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public DoctorController(DoctorService doctorService, AppointmentTypeService appointmentTypeService, 
-			RegisteredUserService userService, OrdinationService ordinationService) {
+			RegisteredUserService userService, OrdinationService ordinationService, AppointmentRequestService appointmentReqService) {
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
 		this.userService = userService;
 		this.ordinationService = ordinationService;
+		this.appointmentReqService = appointmentReqService;
 	}
 	
 	/*
@@ -301,6 +305,42 @@ public class DoctorController {
 			if (!freeTimes.isEmpty()) {
 				freeCertifiedClinicDoctors.add(new DoctorFreeTimesDto(d, freeTimes));
 			}
+		}
+		
+		return new ResponseEntity<>(freeCertifiedClinicDoctors, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/certified/operations/{operReqId}
+	 HTTP request for getting all doctors with appointment type given by name
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/certified/operations/{operReqId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<DoctorDto>> getDoctorsForOperation(@PathVariable("operReqId") Long operReqId) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admin can view certified doctors.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		AppointmentRequest ar = appointmentReqService.findOneById(operReqId);
+		if (ar == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Operation request with given id doesn't exist!");
+		}
+		
+		AppointmentType type = appointmentTypeService.findOneByNameAndClinicId(ar.getAppointment().getAppType().getName(), ar.getClinic().getId());
+		List<Doctor> certifiedClinicDoctors = doctorService.findAllByClinicIdAndAppointmentTypes(ar.getClinic().getId(), type);
+		
+		List<DoctorDto> freeCertifiedClinicDoctors = new ArrayList<DoctorDto>();
+		
+		for (Doctor d : certifiedClinicDoctors) {
+				freeCertifiedClinicDoctors.add(new DoctorDto(d));
 		}
 		
 		return new ResponseEntity<>(freeCertifiedClinicDoctors, HttpStatus.OK);

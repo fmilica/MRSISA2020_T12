@@ -28,4 +28,14 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 	public Prescription save(Prescription p) {
 		return prescriptionRepository.save(p);
 	}
+
+	@Override
+	public List<Prescription> findAllByDiagnosisId(Long id) {
+		return prescriptionRepository.findAllByDiagnosisId(id);
+	}
+
+	@Override
+	public Prescription findOneById(Long id) {
+		return prescriptionRepository.findOneById(id);
+	}
 }

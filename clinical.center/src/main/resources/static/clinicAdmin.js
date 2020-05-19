@@ -5,6 +5,8 @@ var examReqTable;
 var examRoomTable;
 var appointmentTable;
 var createAppTable;
+var operReqTable;
+var operRoomTable;
 
 var changedExamTime = false;
 
@@ -30,6 +32,9 @@ var examReq = {
 var edited = false;
 
 $(document).ready(function() {
+	
+	//select2 radi zbog ovoga
+	$.fn.modal.Constructor.prototype._enforceFocus = function() {};
 	
 	/*------------------------------------------------------------------------*/
 	/*View personal information*/
@@ -635,6 +640,18 @@ $(document).ready(function() {
 		//da se popuni tabela slobodnim klinikama za taj dan
 		viewExaminationRoomsForAppointmentRequests()
 	});
+	$('body').on('click', 'button.operation', function() {
+		// odabrao je da zakaze neki pregled, sada je to zapamceno
+		// podesi parametre koji je aktivan
+		//TODO DA SKOCI NA POCETAK TABELE SA EXAMINATION ROOMS
+		var examReqId = $(this).attr('id')
+		examReq.reqId = examReqId
+		var dateTime = $(this).attr('name')
+		examReq.date = dateTime.split(" ")[0]
+		examReq.time = dateTime.split(" ")[1]
+		//da se popuni tabela slobodnim klinikama za taj dan
+		viewOperationRoomsForAppointmentRequests()
+	});
 	$('body').on('click', 'button.table-button-schedule', function() {
 		// prikupljanje podataka i kreiranje pregleda
 		var ordinationId = $(this).attr('id')
@@ -643,7 +660,23 @@ $(document).ready(function() {
 		console.log("time "+time)
 		scheduleOrdination(ordinationId, currentDate, time)
 	});
-
+	$('body').on('click', 'button.table-button-schedule-operation', function() {
+		// prikupljanje podataka i kreiranje pregleda
+		var ordinationId = $(this).attr('id')
+		var currentDate = $(this).attr('name')
+		var time = $('#time'+ordinationId).val()
+		var doctors = $('#operation'+ordinationId).val()
+		var doctorsV = []
+		
+		$('#operation'+ ordinationId + '> option:selected').each(function() {
+		    //alert($(this).text() + ' ' + $(this).val());
+			doctorsV.push(parseInt($(this).attr("id")))
+		});
+		
+		console.log(doctorsV)
+		scheduleOperation(ordinationId, currentDate, time, doctorsV)
+	});
+	
 	$('#clinicExamReq').click(function(event) {
 		// tabela sa svim zahtevima
 		event.preventDefault()
@@ -674,6 +707,44 @@ $(document).ready(function() {
 						data: null,
 						render: function (data) {
 							var button = '<button id="'+data.id+'" name="'+data.date+" "+data.startTime+'" class="btn btn-info table-button">Choose request</button>';
+							return button;
+						}
+					}]
+			})
+		}
+	})
+	
+	
+	$('#clinicOperReq').click(function(event) {
+		// tabela sa svim zahtevima
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#operReqTable')) {
+			operReqTable = $('#operReqTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/appointmentRequest/operations",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'doctorFullName'},
+					{ data: 'patientFullName'},
+					{ data: 'date'},
+					{ 
+						data: null,
+						render: function(data) {
+							return data.startTime + ":00"
+						}
+					},
+					{ 
+						data: null,
+						render: function(data) {
+							return data.endTime + ":00"
+						}
+					},
+					{
+						data: null,
+						render: function (data) {
+							var button = '<button id="'+data.id+'" name="'+data.date+" "+data.startTime+'" class="btn btn-info table-button operation">Choose request</button>';
 							return button;
 						}
 					}]
@@ -979,6 +1050,7 @@ function scheduleOrdination(ordinationId, currentDate, time) {
 			$('.content').hide()
 			$('.clinic-clinicExamReq').show()
 			examReqTable.ajax.reload()
+			('#operRoomTable tbody').empty()
 			// scroll to top of page
 			document.body.scrollTop = 0
 			document.documentElement.scrollTop = 0
@@ -989,6 +1061,44 @@ function scheduleOrdination(ordinationId, currentDate, time) {
 	})
 }
 
+function scheduleOperation(ordinationId, currentDate, time, doctors) {
+	examReq.ordId = ordinationId
+	examReq.date = currentDate
+	examReq.time = time
+	
+	alert("You scheduled an operation room for an operation!")
+	alert(JSON.stringify({
+		id: examReq.reqId,
+		date: examReq.date,
+		time: examReq.time,
+		doctors: doctors
+	}))
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/clinicAdmin/acceptOperationRequest",
+		contentType : "application/json",
+		data : JSON.stringify({
+			reqId: examReq.reqId,
+			ordId : ordinationId,
+			date: examReq.date,
+			time: examReq.time,
+			doctors: doctors
+		}),
+		success : function(){
+			alert("Operation accepted!")
+			$('.content').hide()
+			$('.clinic-clinicOperReq').show()
+			operReqTable.ajax.reload()
+			// scroll to top of page
+			$('#operRequests tbody').empty()
+			document.body.scrollTop = 0
+			document.documentElement.scrollTop = 0
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
 
 function filterExaminationRooms(){
 	
@@ -1061,6 +1171,83 @@ function viewExaminationRoomsForAppointmentRequests(){
 	}
 	if (changedExamTime) {
 		alert("No examination rooms available for given date and time.\nPlease choose new examination time.")
+	}
+}
+
+function viewOperationRoomsForAppointmentRequests(){
+	// tabela sa sobama za operacije
+	if (!$.fn.DataTable.isDataTable('#operRoomTable')) {
+		operRoomTable = $('#operRoomTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/ordination/getAvailableOperationRooms/"+examReq.reqId,
+				dataSrc: '',
+				async: false
+			},
+			columns: [
+				{ data: 'name'},
+				{ data: 'ordinationNumber'},
+				{ data: 'date'},
+				{
+					data: null,
+					render: function (data) {
+						var availableTimes = data.availableTimes == null ? [] : (data.availableTimes instanceof Array ? data.availableTimes : [data.availableTimes])
+						
+						if (data.date != examReq.date) {
+							changedOperTime = true
+						} else {
+							if (availableTimes.length > 1) {
+								changedOperTime = true
+							} else {
+								if (availableTimes[0] != examReq.time) {
+									changedOperTime = true
+								} else {
+									changedOperTime = false
+								}
+							}
+						}
+						var options = ""
+						for (var i = 0; i < availableTimes.length; i++) {
+							options += '<option value="'+availableTimes[i]+'">'+availableTimes[i]+':00</option>'
+						}
+						return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
+								options + '</select>'
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						var options = ""
+							$.ajax({
+								type : "GET",
+								async: false,
+								url : "../../theGoodShepherd/doctor/certified/operations/"+examReq.reqId,
+								dataType: "json",
+								success : function(output)  {
+									$.each(output, function(index, doctor){
+										options += '<option id="'+ doctor.id +'">'+ doctor.name + ' ' + doctor.surname +'</option>'
+									})
+									$('#operation'+data.id).select2()
+								}
+							})
+						return '<select class="form-control input-height available-times" multiple="multiple" id="operation'+data.id+'">'+ options +'</select>'
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						if (!examReq.reqId) {
+							return "Specify operation request to schedule"
+						}
+						return '<button id="'+data.id+'" name="'+data.date+'" class="btn btn-info table-button-schedule-operation">Schedule ordination</button>';
+					}
+				}]
+		})
+	} else {
+		operRoomTable.ajax.url("../../theGoodShepherd/ordination/getAvailableOperationRooms/"+examReq.reqId)
+		operRoomTable.ajax.reload()
+	}
+	if (changedOperTime) {
+		alert("No operation rooms available for given date and time.\nPlease choose new operation time.")
 	}
 }
 

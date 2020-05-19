@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -28,11 +30,23 @@ public class Prescription {
 	@ManyToMany(mappedBy = "prescriptions")
 	private Set<MedicalReport> medicalReports;
 	
+	//CascadeType.PERSIST, CascadeType.MERGE
+	@ManyToMany(cascade={ALL}, mappedBy = "prescriptions")
+	private Set<Diagnosis> diagnosis;
+	
 	public Prescription() {}
 
 	public Prescription(String medicine) {
 		super();
 		this.medicine = medicine;
+	}
+	
+	public Prescription(Long id, String medicine, Set<MedicalReport> medicalReports, Set<Diagnosis> diagnosis) {
+		super();
+		this.id = id;
+		this.medicine = medicine;
+		this.medicalReports = medicalReports;
+		this.diagnosis = diagnosis;
 	}
 
 	public Long getId() {
@@ -51,4 +65,15 @@ public class Prescription {
 		this.medicine = medicine;
 	}
 	
+	public Set<Diagnosis> getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(Set<Diagnosis> diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+	
+	public void addDiagnosis(Diagnosis diagnosis) {
+		this.diagnosis.add(diagnosis);
+	}
 }

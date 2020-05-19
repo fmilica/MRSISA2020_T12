@@ -355,6 +355,9 @@ body {
 .display {
     width: 100% !important;
 }
+.discount {
+    display: none;
+}
 .date-filter {
     padding: 6px 6px !important;
 }
@@ -452,6 +455,9 @@ body {
 .clinic-reports {
     display: none;
 }
+.clinic-clinicOperReq {
+    display: none;
+}
 .clinic-clinicExamReq {
     display: none;
 }
@@ -525,6 +531,9 @@ body {
     display: none;
 }
 .patient-createNewApp {
+    display: none;
+}
+.patient-clinics {
     display: none;
 }
 .patient-apps {

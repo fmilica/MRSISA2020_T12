@@ -23,6 +23,17 @@ public class DiagnosePrescriptionServiceImpl implements DiagnosisPrescriptionSer
 	public List<DiagnosePerscription> findAll() {
 		return diagnosePrescriptionRep.findAll();
 	}
+
+	@Override
+	public DiagnosePerscription save(DiagnosePerscription ds) {
+		return diagnosePrescriptionRep.save(ds);
+	}
+
+	@Override
+	public DiagnosePerscription findOneById(Long id) {
+		System.out.println(id);
+		return diagnosePrescriptionRep.findOneById(id);
+	}
 	
 	
 }

@@ -33,4 +33,9 @@ public class DiagnosisServiceImpl implements DiagnosisService{
 	public Diagnosis findOneByName(String name) {
 		return diagnosisRepository.findOneByName(name);
 	}
+
+	@Override
+	public Diagnosis findOneById(Long id) {
+		return diagnosisRepository.findOneById(id);
+	}
 }

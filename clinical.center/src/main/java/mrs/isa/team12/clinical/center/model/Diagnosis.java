@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.model;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,7 +34,8 @@ public class Diagnosis {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	//CascadeType.PERSIST, CascadeType.MERGE
+	@ManyToMany
 	@JoinTable(name = "diagnosis_perscription", 
 				joinColumns = @JoinColumn(name = "diagnosis_id"),
 				inverseJoinColumns = @JoinColumn(name = "perscription_id"))
@@ -42,11 +44,28 @@ public class Diagnosis {
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="diagnosis")
 	private Set<MedicalReport> medicalReports;
 	
-	@ManyToOne
-	@JoinColumn(name = "sifarnik_id", referencedColumnName = "id", nullable = false)
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "sifarnik_id", referencedColumnName = "id", nullable = true)
 	private DiagnosePerscription diagnosePerscription;
 
 	public Diagnosis() {}
+
+	public Diagnosis(String name) {
+		super();
+		this.name = name;
+	}
+	
+	public Diagnosis(String name, DiagnosePerscription diagnosePerscription) {
+		super();
+		this.name = name;
+		this.diagnosePerscription = diagnosePerscription;
+	}
+
+	public Diagnosis(Long id, DiagnosePerscription diagnosePerscription) {
+		super();
+		this.id = id;
+		this.diagnosePerscription = diagnosePerscription;
+	}
 
 	public Diagnosis(Long id, String name, Set<Prescription> prescriptions, Set<MedicalReport> medicalReports) {
 		super();
@@ -94,6 +113,13 @@ public class Diagnosis {
 
 	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
 		this.diagnosePerscription = diagnosePerscription;
+	}
+	
+	public void addPrescription(Prescription p) {
+		if(this.prescriptions == null) {
+			this.prescriptions = new HashSet<Prescription>();
+		}
+		this.prescriptions.add(p);
 	}
 
 	@Override

@@ -247,6 +247,15 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
+	// Clinic operation requests
+    $('#clinicOperReq').click(function() {
+        $('.content').hide()
+        $('.clinic-clinicOperReq').show()
+        $('#clinicProfile').removeClass('active-sub')
+        $('#sub').hide("slow")
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
     // Clinic vacation/paid leave
     $('#clinicVacation').click(function() {
         $('.content').hide()

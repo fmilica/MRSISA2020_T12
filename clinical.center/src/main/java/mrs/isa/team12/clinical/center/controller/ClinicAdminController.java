@@ -363,4 +363,61 @@ public class ClinicAdminController {
 		}
 	}
 	
+	/*
+	 * url: POST localhost:8081/theGoodShepherd/clinicAdmin/acceptOperationRequest
+	 * HTTP request for sending an acceptance email to patient
+	 * receives: AppointmentRequest instance
+	 * returns: String instance
+	 * */
+	@PostMapping(value = "/acceptOperationRequest" ,
+			consumes = MediaType.APPLICATION_JSON_VALUE //-> {"id" : 2, "appointment" :{ "ordination" :{ "name" : "Ordination1" }}} npr
+			)
+	public void acceptOperationRequest(@RequestBody AppointmentReqDto appointmentRequest){
+		//proveriti da li je termin slobodan
+			//ako jeste posalji mejl korisniku da je odobreno
+			//ako nije, pronadji prvi slobodni termin i posalji koristiku te detalje
+		if(session.getAttribute("currentUser") == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
+		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getReqId());
+		System.out.println(appointmentReq);
+		if(appointmentReq == null) { //mozda bi ovde trebalo proveriti da li je to neki koji je pre prihvacen/odbijen? mozda kasnije..
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
+		}
+		//postavi confirmed na true kod AppointmentRequest i Appointment
+		appointmentReq.setApproved(true);
+		appointmentReq.getAppointment().setDate(appointmentRequest.getDate());
+		appointmentReq.getAppointment().setStartTime(appointmentRequest.getTime());
+		appointmentReq.getAppointment().setEndTime(appointmentRequest.getTime() + appointmentReq.getAppointment().getAppType().getDuration());
+		//dodati appointment doktoru, pacijentu i svima kojima treba
+		for (Long d : appointmentRequest.getDoctors()) {
+			Doctor doc = doctorService.findOneById(d);
+			appointmentReq.getAppointment().addDoctor(doc);
+			doc.addAppointment(appointmentReq.getAppointment());
+			doctorService.save(doc);
+		}
+		Doctor doctor = doctorService.findOneByEmail(appointmentReq.getAppointment().getDoctor().getEmail());
+		doctor.addAppointment(appointmentReq.getAppointment());
+		Clinic clinic = clinicService.findOneById(appointmentReq.getClinic().getId());
+		clinic.addAppointment(appointmentReq.getAppointment());
+		
+		//
+		Ordination ord = ordinationService.findOneById(appointmentRequest.getOrdId());
+		ord.addAppointment(appointmentReq.getAppointment());
+		appointmentReq.getAppointment().setOrdination(ord);
+		ordinationService.save(ord);
+		//
+		
+		//sacuvati sve u bazama
+		doctorService.save(doctor);
+		clinicService.save(clinic);
+		appointmentService.save(appointmentReq.getAppointment());
+		try {
+			adminService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
+					appointmentReq.getAppointment(), true);
+		}catch( Exception e ){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
 }

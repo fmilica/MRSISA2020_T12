@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -17,23 +18,32 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.DiagnosisDto;
+import mrs.isa.team12.clinical.center.dto.PrescriptionDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.DiagnosePerscription;
 import mrs.isa.team12.clinical.center.model.Diagnosis;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Prescription;
+import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisPrescriptionService;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
+import mrs.isa.team12.clinical.center.service.interfaces.PrescriptionService;
 
 @RestController
 @RequestMapping("theGoodShepherd/diagnosis")
 public class DiagnosisController {
 	
 	private DiagnosisService diagnosiService;
+	private DiagnosisPrescriptionService diagnosisPrescriptionService;
+	private PrescriptionService prescriptionService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public DiagnosisController(DiagnosisService ds) {
+	public DiagnosisController(DiagnosisService ds, DiagnosisPrescriptionService dps, PrescriptionService ps) {
 		this.diagnosiService = ds;
+		this.diagnosisPrescriptionService = dps;
+		this.prescriptionService = ps;
 	}
 	
 	/*
@@ -90,10 +100,40 @@ public class DiagnosisController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
+		DiagnosePerscription dp = diagnosisPrescriptionService.findOneById(diagnose.getDiagnosePerscription().getId());
+		diagnose.setDiagnosePerscription(dp);
 		diagnosiService.save(diagnose);
 		DiagnosisDto diagnosisDto = new DiagnosisDto(diagnose);
 		
 		return new ResponseEntity<>(diagnosisDto, HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/diagnosis/addDiagnosePrescription
+	 nista me ne pitajte, ovo ce optimistickim zakljucavanjem da se sredi
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "addDiagnosePrescription",
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void addDiagnosePrescription(@RequestBody PrescriptionDto dtp) {
+		System.out.println(dtp);
+		ClinicalCentreAdmin currentUser;
+		try {
+			currentUser = (ClinicalCentreAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can add new medicine.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		Prescription p = prescriptionService.findOneById(dtp.getId());
+		
+		Iterator<Diagnosis> i = p.getDiagnosis().iterator(); // traversing over HashSet
+		while(i.hasNext()) {
+			Diagnosis d = diagnosiService.findOneByName(i.next().getName());
+			d.addPrescription(p);
+			diagnosiService.save(d);
+		}
+		
+	}
 }

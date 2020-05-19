@@ -117,6 +117,7 @@ $(document).ready( function () {
 				alert(response.responseJSON.message)
 			}
 		})
+		var name = $('#diagnosisMR').val()
 		$.ajax({
 			type : "GET",
 			async: false,
@@ -132,12 +133,16 @@ $(document).ready( function () {
 				alert(response.responseJSON.message)
 			}
 		})
-
 		$('.doctor-patient-profile').hide()
 		$('.writeMedicalReport').show()
 		// scroll to top of page
 		document.body.scrollTop = 0
 		document.documentElement.scrollTop = 0
+	})
+	
+	$('#diagnosisMR').change(function(e){
+		e.preventDefault()
+		//ovde ako se predomislimo
 	})
 	
 	/*Adding new medical report*/
@@ -183,6 +188,7 @@ $(document).ready( function () {
 				$('.doctor-patient-profile').show()
 				viewPatientProfile(current_secNum)
 				//patientsTable.ajax.reload()
+				//medicalReportTable.ajax.reload()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -210,6 +216,8 @@ $(document).ready( function () {
 		
 		if(appointment_id == null){
 			alert("You can only change patient's medical record during an appointment!")
+			$('.content').hide()
+			$('.doctor-patient-profile').show()
 			return
 		}
 		

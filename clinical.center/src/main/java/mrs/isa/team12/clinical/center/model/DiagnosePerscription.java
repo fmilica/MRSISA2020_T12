@@ -29,6 +29,11 @@ public class DiagnosePerscription {
 
 	public DiagnosePerscription() {}
 
+	public DiagnosePerscription(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

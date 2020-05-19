@@ -205,6 +205,13 @@
 									<span class="arrow"></span>
 								</a>
                             </li>
+							<li class="nav-item">
+	                            <a id="clinicOperReq" class="nav-link nav-toggle">
+									<img class="icon" src="../../img/icons/medical_record.png">
+									<span class="title">Operation request</span>
+									<span class="arrow"></span>
+								</a>
+                            </li>
                             <li class="nav-item">
 	                            <a id="clinicVacation" class="nav-link nav-toggle">
 									<img class="icon" src="../../img/icons/medical_record.png">
@@ -797,6 +804,100 @@
 													<th>Number</th>
 													<th>Examination date</th>
 													<th>Available times</th>
+													<th>Schedule</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Clinic operation request content -->
+				<div class="content clinic-clinicOperReq">
+					<!-- Active operation requests -->
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Active operation requests</header>
+									</div>
+									<div class="card-body">
+										<table id="operReqTable" class="display">
+											<thead>
+												<tr>
+													<th>Doctor</th>
+													<th>Patient</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Schedule Operation Room</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Doctor</th>
+													<th>Patient</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Schedule Operation Room</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Operation rooms -->
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header id="operRequests">Operation rooms</header>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="control-label col-md-1">
+												Name:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="operRoomName" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<label class="control-label col-md-1">
+												Number:
+											</label>
+											<div class="col-md-2">
+												<input type="text" id="operRoomNumber" data-required="1"  class="form-control doctor-input-height" />
+											</div>
+											<div class="col-md-2">
+												<button id="filterOperRoom" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+											</div>
+										</div>
+										<table id="operRoomTable" class="display">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Number</th>
+													<th>Operation date</th>
+													<th>Available times</th>
+													<th>Doctors</th>
+													<th>Schedule</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Number</th>
+													<th>Operation date</th>
+													<th>Available times</th>
+													<th>Doctors</th>
 													<th>Schedule</th>
 												</tr>
 											</tfoot>

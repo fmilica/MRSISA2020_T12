@@ -9,4 +9,6 @@ import mrs.isa.team12.clinical.center.model.DiagnosePerscription;
 public interface DiagnosisPrescriptionRepository extends JpaRepository<DiagnosePerscription, Long>{
 	
 	List<DiagnosePerscription> findAll();
+	
+	DiagnosePerscription findOneById(Long id);
 }

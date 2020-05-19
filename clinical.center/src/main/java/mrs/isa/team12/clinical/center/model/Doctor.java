@@ -46,6 +46,10 @@ public class Doctor extends MedicalPersonnel {
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
 	private Set<Appointment> appointments;
 	
+	//dodato zbog operacija	
+	@ManyToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")	
+	private Set<Appointment> operationAppointments;
+	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
 	private Set<Rating> ratings;
 	

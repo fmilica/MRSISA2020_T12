@@ -11,4 +11,6 @@ public interface DiagnosisService {
 	Diagnosis findOneByName(String name);
 	
 	Diagnosis save(Diagnosis d);
+	
+	Diagnosis findOneById(Long id);
 }

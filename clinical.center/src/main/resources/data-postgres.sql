@@ -37,14 +37,14 @@ values ('22', 'perapera2359@gmail.com', 'perapera2', 'Petar', 'Isailovic', 'male
 
 /*Doktori nase prve klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version) 
-values ('9', 'jova', 'jova', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '14', '0');
+values ('9', 'jovadoktor1@gmail.com', 'jovajova1', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '14', '0');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version) 
-values ('10', 'zova', 'zova', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16', '0');
+values ('10', 'zovadoktorka@gmail.com', 'zovazova1', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16', '0');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version) 
 values ('52', 'kova', 'kova', 'Kova', 'Kovic', 'female', '1993-06-01', 'Milosa Obilica 56', 'Negotin', 'Srbija', '55', '99', '3.7', '6', '5', '13', '21', '0');
 /*Doktori nase druge klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version) 
-values ('11', 'gova', 'gova', 'Gova', 'Govic', 'male', '1972-10-19', 'Hajdova 5', 'Zrenjanin', 'Srbija', '55', '55', '4.8', '17', '5', '12', '20', '0');
+values ('11', 'govadoktor@gmail.com', 'govagova1', 'Gova', 'Govic', 'male', '1972-10-19', 'Hajdova 5', 'Zrenjanin', 'Srbija', '55', '55', '4.8', '17', '5', '12', '20', '0');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version) 
 values ('48', 'mova', 'mova', 'Mova', 'Movic', 'female', '1978-7-18', 'Ivanjicka 17', 'Ivanjica', 'Srbija', '55', '88', '3.9', '17', '3', '08', '14', '0');
 
@@ -67,7 +67,7 @@ insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('49
 
 /* Medicinske sestre */
 insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, version) 
-values ('15', 'zika', 'zika', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City', 'Country', '44', '66', '0');
+values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City', 'Country', '44', '66', '0');
 
 /* Pacijenti i njihovi zdravstveni kartoni*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
@@ -78,7 +78,7 @@ update patient
 set medical_record_id = '30'
 where id = '16';
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('29', 'milka', 'milka', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '111', '1', '0');
+values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '111', '1', '0');
 insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies, patient_id, version)
 values ('43' ,'163', '67', '130/80', 'AB-','Polen', '29', '0');
 update patient
@@ -97,7 +97,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', 
 /*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-17', '21', '22', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-19', '3', '4', 'true', '29', '6', '9', '12', '19', '0');
 
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
@@ -141,6 +141,13 @@ insert into appointment (id, app_finished, app_date, app_start_time, app_end_tim
 values ('27', 'false', '2020-05-15', '08', '11', 'true', '29', '6', '10', '14', '37', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('28', '27', '2020-05-15', 'true', '6', '0');
+
+/*PROBA*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version)
+values ('55', 'false', '2020-05-25', '13', '15', 'false', '29', '6', '9', '12', '0', '0');
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
+values ('56', '55', '2020-05-15', 'false', '6', '0');
+/*PROBA*/
 
 /*Sifarnik*/
 insert into diagnose_perscription (id, version)

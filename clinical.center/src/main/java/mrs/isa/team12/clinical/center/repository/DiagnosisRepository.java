@@ -13,4 +13,6 @@ public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
 	Diagnosis findOneByName(String name);
 	
 	Diagnosis save(Diagnosis d);
+	
+	Diagnosis findOneById(Long id);
 }

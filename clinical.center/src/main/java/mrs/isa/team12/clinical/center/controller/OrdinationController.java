@@ -320,4 +320,107 @@ public class OrdinationController {
 		// vracamo sve sobe za pregled
 		return new ResponseEntity<>(satisfyingOrdinations, HttpStatus.OK);
 	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/ordination/getAvailableOperationRooms/{appointReqId}
+	 HTTP request for getting all available examination rooms for given appointment request
+	 receives Ordination object
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/getAvailableOperationRooms/{operReqId}", 
+				 produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ExamRoomDto>> getAvailableOperationRooms(@PathVariable("operReqId") Long id) throws ParseException {
+		
+		ClinicAdmin admin;
+		try {
+			admin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view available operation rooms.");
+		}
+		if (admin == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		//uzimamo appointment request da bismo dosli do njegovog datuma
+		AppointmentRequest appReq = appointmentRequestService.findOneById(id);
+		
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date examDate = appReq.getAppointment().getDate();
+		AppointmentType examType = appReq.getAppointment().getAppType();
+		Doctor examDoctor = appReq.getAppointment().getDoctor();
+		Integer examStartTime = appReq.getAppointment().getStartTime();
+		Integer examEndTime = appReq.getAppointment().getEndTime();
+		
+		List<Integer> availableTimes = new ArrayList<Integer>();
+		
+		//sve ordinacije te klinike
+		List<Ordination> examRooms = ordinationService.findAllByClinicIdAndType(admin.getClinic().getId(), OrdinationType.OperatingRoom);
+		
+		// lista prihvatljivih ordinacija
+		List<ExamRoomDto> satisfyingOrdinations = new ArrayList<ExamRoomDto>();
+		
+		// lista prihvatljivih ordinacija ZA DRUGI DATUM ili VREME
+		List<ExamRoomDto> substituteOrdinations = new ArrayList<ExamRoomDto>();
+		
+		//prolazimo kroz ordinacije te klinike
+		for (Ordination o : examRooms) {
+			// uzimamo u obzir trenutnu ordinaciju
+			boolean satisfying = true;
+			// prolazimo kroz zakazane preglede u toj ordinaciji
+			if (o.getAppointments() != null) {
+				for (Appointment a : o.getAppointments()) {
+					// proveravamo da li ima za taj datum zakazan pregled
+					if (a.getDate().equals(examDate)) {
+						// proveravamo od kada do kada traje zakazani pregled
+						if (!(examEndTime <= a.getStartTime() || examStartTime >= a.getEndTime())) {
+							satisfying = false;
+							break;
+						}
+						
+					}
+				}
+			}
+			if(satisfying) {
+				// dodajemo samo jedno vreme, ono za koji je zakazan
+				// brisemo vremena prethodne
+				availableTimes.clear();
+				availableTimes.add(examStartTime);
+				satisfyingOrdinations.add(new ExamRoomDto(o, dt.format(examDate), availableTimes));
+			} else {
+				// ne zadovoljava za trazeni datum i vreme
+				// trazimo prvo slobodno vreme za koje ima slobodnu ordinaciju i da je doktor slobodan
+				List<Integer> examRoomFree;
+				Date newExamDate = examDate;
+				while(true) {
+					// idemo kroz datume dok ne nadjemo prvi za koji zadovoljavaju
+					// kada je doktor slobodan
+					List<Integer> doctorFree = examDoctor.getAvailableTimesForDateAndType(newExamDate, examType);
+					examRoomFree = o.getAvailableTimesForDateAndType(newExamDate, examType);
+
+					// presek slobodnih vremena
+					examRoomFree.retainAll(doctorFree);
+					
+					if(!examRoomFree.isEmpty()) {
+						// postoje slobodni i za doktora i za ordinaciju
+						break;
+					}
+					// ne postoje slobodni za doktora i ordinaciju
+					// uvecavamo dan za jedan
+					newExamDate = new Date(examDate.getTime() + (1000 * 60 * 60 * 24));
+				}
+				substituteOrdinations.add(new ExamRoomDto(o, dt.format(newExamDate), examRoomFree));
+			}
+		}
+		
+		if(satisfyingOrdinations.isEmpty()) {
+			// nema slobodnih soba za pregled
+			// za svaku sobu vracamo datum za koji ima prvi slobodan termin
+			// i listu termina
+			return new ResponseEntity<>(substituteOrdinations, HttpStatus.OK);
+		}
+		
+		// vracamo sve sobe za pregled
+		return new ResponseEntity<>(satisfyingOrdinations, HttpStatus.OK);
+	}
 }
