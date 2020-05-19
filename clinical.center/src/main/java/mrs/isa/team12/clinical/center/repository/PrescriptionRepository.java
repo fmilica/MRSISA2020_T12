@@ -14,5 +14,7 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
 	
 	Prescription findOneById(Long id);
 	
+	Prescription findOneByMedicine(String medicine);
+	
 	Prescription save(Prescription p);
 }

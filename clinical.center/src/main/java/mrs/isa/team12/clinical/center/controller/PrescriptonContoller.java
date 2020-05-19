@@ -129,17 +129,26 @@ public class PrescriptonContoller {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		Set<Diagnosis> diagnosis = new HashSet<Diagnosis>();
-		/*Iterator<Diagnosis> i = prescription.getDiagnosis().iterator(); // traversing over HashSet
+		Iterator<Diagnosis> i = prescription.getDiagnosis().iterator(); // traversing over HashSet
 		while(i.hasNext()) {
 			Diagnosis d = diagnosisService.findOneByName(i.next().getName());
 			diagnosis.add(d);
 		}
-		prescription.setDiagnosis(diagnosis);*/
-		Prescription p = prescriptionService.save(prescription);
 		
-		PrescriptionDto prescriptionDto = new PrescriptionDto(p);
+		Prescription p = prescriptionService.findOneByMedicine(prescription.getMedicine());
 		
-		return new ResponseEntity<>(prescriptionDto, HttpStatus.OK);
+		if(p == null) {
+			prescription.setDiagnosis(diagnosis);
+			
+			Prescription pp = prescriptionService.save(prescription);
+			
+			PrescriptionDto prescriptionDto = new PrescriptionDto(pp);
+			
+			return new ResponseEntity<>(prescriptionDto, HttpStatus.OK);
+		}
+		
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prescription with given name already exists!");
+		
 	}
 	
 }

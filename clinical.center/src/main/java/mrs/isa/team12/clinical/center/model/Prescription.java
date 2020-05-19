@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -32,7 +34,10 @@ public class Prescription {
 	private Set<MedicalReport> medicalReports;
 	
 	//CascadeType.PERSIST, CascadeType.MERGE
-	@ManyToMany(cascade={ALL}, mappedBy = "prescriptions")
+	@ManyToMany(cascade={ALL})
+	@JoinTable(name = "perscription_diagnosis", 
+		joinColumns = @JoinColumn(name = "perscription_id"),
+		inverseJoinColumns = @JoinColumn(name = "diagnosis_id"))
 	private Set<Diagnosis> diagnosis;
 	
 	public Prescription() {}

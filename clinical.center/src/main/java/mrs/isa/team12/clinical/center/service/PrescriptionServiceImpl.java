@@ -38,4 +38,9 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 	public Prescription findOneById(Long id) {
 		return prescriptionRepository.findOneById(id);
 	}
+
+	@Override
+	public Prescription findOneByMedicine(String medicine) {
+		return prescriptionRepository.findOneByMedicine(medicine);
+	}
 }

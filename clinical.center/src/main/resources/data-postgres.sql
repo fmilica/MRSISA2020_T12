@@ -97,7 +97,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', 
 /*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-19', '11', '12', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-19', '13', '14', 'true', '29', '6', '9', '12', '19', '0');
 
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
@@ -163,9 +163,9 @@ values ('32', 'Krema za vitiligo', '0');
 insert into prescription (id, medicine, version)
 values ('35', 'Tablete za vitiligo', '0');
 /*Povezivanje dijagnoze i lekova za nju*/
-insert into diagnosis_perscription (diagnosis_id, perscription_id)
+insert into perscription_diagnosis (diagnosis_id, perscription_id)
 values ('31', '32');
-insert into diagnosis_perscription (diagnosis_id, perscription_id)
+insert into perscription_diagnosis (diagnosis_id, perscription_id)
 values ('31', '35');
 
 /*Medical report (izvestaj doktora)*/

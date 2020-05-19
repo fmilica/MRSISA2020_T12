@@ -13,4 +13,6 @@ public interface PrescriptionService {
 	Prescription save(Prescription p);
 	
 	Prescription findOneById(Long id);
+	
+	Prescription findOneByMedicine(String medicine);
 }

@@ -119,11 +119,21 @@ $(document).ready( function () {
 				alert(response.responseJSON.message)
 			}
 		})
+		
+		$('.doctor-patient-profile').hide()
+		$('.writeMedicalReport').show()
+		// scroll to top of page
+		document.body.scrollTop = 0
+		document.documentElement.scrollTop = 0
+	})
+	
+	$('#diagnosisMR').change(function(e){
+		e.preventDefault()
 		var name = $('#diagnosisMR').val()
 		$.ajax({
 			type : "GET",
 			async: false,
-			url : "../../theGoodShepherd/prescription",
+			url : "../../theGoodShepherd/prescription/doctor/"+name,
 			dataType : "json",
 			success : function(data)  {
 				$('#prescriptionMR').empty();
@@ -135,16 +145,6 @@ $(document).ready( function () {
 				alert(response.responseJSON.message)
 			}
 		})
-		$('.doctor-patient-profile').hide()
-		$('.writeMedicalReport').show()
-		// scroll to top of page
-		document.body.scrollTop = 0
-		document.documentElement.scrollTop = 0
-	})
-	
-	$('#diagnosisMR').change(function(e){
-		e.preventDefault()
-		//ovde ako se predomislimo
 	})
 	
 	/*Adding new medical report*/
