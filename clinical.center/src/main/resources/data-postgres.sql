@@ -97,7 +97,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', 
 /*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-19', '13', '14', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-19', '14', '15', 'true', '29', '6', '9', '12', '19', '0');
 
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)

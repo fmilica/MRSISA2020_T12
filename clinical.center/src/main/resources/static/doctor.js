@@ -3,6 +3,7 @@ var medicalReportTable;
 var appointment_id;
 var medicalRecord_id;
 var current_secNum;
+var diagnosis = [];
 
 // ako su personalni podaci editovani, ponovo saljemo upit serveru
 var edited = false;
@@ -111,9 +112,17 @@ $(document).ready( function () {
 			dataType : "json",
 			success : function(data)  {
 				$('#diagnosisMR').empty();
+				$('#prescriptionMR').empty();
 				$.each(data, function(index, diagnose){
+					diagnosis.push(diagnose)
 					$('#diagnosisMR').append(new Option(diagnose.name));
+					if(index == 0){
+						$.each(diagnose.prescriptions, function(i, medicine){
+							$('#prescriptionMR').append(new Option(medicine.name, medicine.id));
+					})
+					}
 				})
+				
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -130,7 +139,16 @@ $(document).ready( function () {
 	$('#diagnosisMR').change(function(e){
 		e.preventDefault()
 		var name = $('#diagnosisMR').val()
-		$.ajax({
+		
+		$('#prescriptionMR').empty();
+		$.each(diagnosis, function(index, diagnose){
+			if(diagnose.name == name){
+				$.each(diagnose.prescriptions, function(index, medicine){
+					$('#prescriptionMR').append(new Option(medicine.name, medicine.id));
+				})
+			}
+		})
+		/*$.ajax({
 			type : "GET",
 			async: false,
 			url : "../../theGoodShepherd/prescription/doctor/"+name,
@@ -144,7 +162,7 @@ $(document).ready( function () {
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
-		})
+		})*/
 	})
 	
 	/*Adding new medical report*/

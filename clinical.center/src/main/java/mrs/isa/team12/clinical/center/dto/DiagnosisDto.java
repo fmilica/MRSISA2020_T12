@@ -1,11 +1,16 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import mrs.isa.team12.clinical.center.model.Diagnosis;
+import mrs.isa.team12.clinical.center.model.Prescription;
 
 public class DiagnosisDto {
 	private Long id;
 	private String name;
 	private DiagnosisPrescriptionDto dpDto;
+	private Collection<PrescriptionDto> prescriptions;
 	
 	public DiagnosisDto() {}
 	
@@ -13,6 +18,13 @@ public class DiagnosisDto {
 		this.id = d.getId();
 		this.name = d.getName();
 		this.dpDto = new DiagnosisPrescriptionDto(d.getDiagnosePerscription());
+		this.prescriptions = new ArrayList<PrescriptionDto>();
+		if(d.getPrescriptions() != null) {
+			for (Prescription p : d.getPrescriptions()) {
+				prescriptions.add(new PrescriptionDto(p));
+			}
+		}
+		
 	}
 
 	public Long getId() {
@@ -37,6 +49,14 @@ public class DiagnosisDto {
 
 	public void setDpDto(DiagnosisPrescriptionDto dpDto) {
 		this.dpDto = dpDto;
+	}
+
+	public Collection<PrescriptionDto> getPrescriptions() {
+		return prescriptions;
+	}
+
+	public void setPrescriptions(Collection<PrescriptionDto> prescriptions) {
+		this.prescriptions = prescriptions;
 	}
 	
 }
