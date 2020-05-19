@@ -519,6 +519,12 @@ body {
 .nurse-patients {
     display: none;
 }
+.nurse-profile {
+    display: none;
+}
+.nurse-edit-profile{
+	display: none;
+}
 
 /* Patient */
 .patient-viewAllClinics {

@@ -76,7 +76,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a id="dropdownProfile">
+                                    <a id="dropdownProfile" class="n-profile">
 										<img class="icon" src="../../img/icons/profile.png">
 										My Profile
 									</a>
@@ -186,6 +186,220 @@
 					<!-- end calendar -->
 				</div>
 
+				<!-- Nurse change password -->
+				<div class="content change-password">
+					<div class="col-md-12 col-sm-12">
+						<div class="card card-box">
+							<div class="card-head">
+								<header>Change password</header>
+							</div>
+							<div class="card-body">
+								<div class="form-group row">
+									<label class="control-label col-md-3">
+										Password
+										<span class="required"> * </span>
+									</label>
+									<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+										<input type="text" id="password" data-required="1"  class="form-control input-height" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="control-label col-md-3">
+										Confirm Password
+										<span class="required"> * </span>
+									</label>
+									<div class="col-md-7 validate-input"  data-validate="Passwords don't match!">
+										<input type="text" id="passwordConfirm" data-required="1"  class="form-control input-height" />
+									</div>
+								</div>
+								<div class="form-actions">
+									<div class="row">
+										<div class="offset-md-3 col-md-12 form-buttons">
+											<button id="changePasswordBtn" type="submit" class="btn btn-info">Save changes</button>
+											<button id="cancelChangePasswordBtn" type="submit" class="btn btn-info">Cancel</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Nurse profile content -->
+				<div class="content nurse-profile">
+					<div class="col-md-5">
+						<div class="card card-topline-theme">
+							<div class="card-body no-padding height-9">
+								<div class="row">
+									<div class="profile-userpic">
+										<img src="../../img/icons/user.png" class="img-responsive" alt="">
+									</div>
+								</div>
+								<div class="profile-usertitle">
+									<div id="fullNameBig" class="profile-usertitle-name fullName"></div>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-head card-topline-theme">
+								<header>About Me</header>
+							</div>
+							<div class="card-body no-padding height-9">
+								<div class="user-btm-box">
+									<div class="row text-center m-t-10">
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
+											<p id = "fullName" class="fullName"></p>
+										</div>
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
+											<p id="email"></p>
+										</div>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Gender</strong>
+											<p id="gender"></p>
+										</div>
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Date of birth</strong>
+											<p id = "dateOfBirth"></p>
+										</div>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Phone number</strong>
+											<p id="phoneNumber"></p>
+										</div>
+										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Security number</strong>
+											<p id = "securityNumber"></p>
+										</div>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-md-12"><strong>Address</strong>
+											<p id="address"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="edit-profile">
+							<button id="editNurseProfile" type="button" class="btn btn-info edit">Edit Profile</button>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Nurse edit profile content -->
+				<div class="content nurse-edit-profile">
+					<div class="col-md-12 col-sm-12">
+						<div class="card card-box">
+							<div class="card-head">
+								<header>Edit personal information</header>
+							</div>
+							<div class="card-body">
+								<div class="form-body">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Email address
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input disabled type="text" id="emailEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            First Name
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="nameEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Last Name
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="surnameEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Gender
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <select class="form-control input-height" id="genderEdit">
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Date Of Birth
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7">
+                                        <input id="dateOfBirthEdit" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Security Number
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-7 validate-input"  data-validate="Must be a number!">
+                                            <input disabled type="text" id="securityNumberEdit" data-required="1"  class="form-control input-height"/>
+                                        </div>
+									</div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Phone Number
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="phoneNumberEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Address
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="addressEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            City
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="cityEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3">
+                                            Country
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="text" id="countryEdit" data-required="1"  class="form-control input-height" />
+                                        </div>
+									</div>
+									<div class="form-actions">
+										<div class="row">
+											<div class="offset-md-3 col-md-12 form-buttons">
+												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+											</div>
+										</div>
+									</div>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
 				<!-- Verify prescription content -->
 				<div class="content nurse-verifyPrescription">
 					nurse verify prescription
@@ -220,5 +434,6 @@
 		</div>
     <!-- end footer -->
 	</div>
+	<script src="../../nurse.js"></script>
 </body>
 </html>

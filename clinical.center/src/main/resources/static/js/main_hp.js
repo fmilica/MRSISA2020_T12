@@ -308,6 +308,14 @@ $(document).ready( function () {
     })
 
     /* Nurse */
+    
+    //Nurse profile
+     $('.n-profile').click(function() {
+        $('.content').hide()
+        $('.nurse-profile').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
     // Nurse verify prescription
     $('#nurseVerifyPrescription').click(function() {
         $('.content').hide()
