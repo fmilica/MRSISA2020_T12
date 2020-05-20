@@ -576,7 +576,6 @@ $(document).ready(function() {
 				},
 				columns: [
 					{ data: 'user.email'},
-					{ data: 'user.password'},
 					{ data: 'user.name'},
 					{ data: 'user.surname'},
 					{ data: 'user.gender'},

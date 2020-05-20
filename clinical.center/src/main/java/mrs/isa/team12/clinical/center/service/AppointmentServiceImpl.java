@@ -63,6 +63,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 		Appointment app = this.findById(appId);
 		// postavljanje unakrsne veze sa pacijentom
 		app.setPatient(patient);
+		// posto je predefinisani, automatski je potvrdjen
+		app.setConfirmed(true);
 		patient.addAppointment(app);
 		// snimanje u bazu
 		appointmentRepository.save(app);

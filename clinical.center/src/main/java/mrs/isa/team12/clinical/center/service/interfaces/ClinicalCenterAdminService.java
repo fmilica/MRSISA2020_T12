@@ -24,5 +24,8 @@ public interface ClinicalCenterAdminService {
 	public ClinicalCentreAdmin save(ClinicalCentreAdmin cca);
 	
 	@Async
+	public void sendNotificaitionAsync(ClinicalCentreAdmin admin);
+	
+	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance);
 }

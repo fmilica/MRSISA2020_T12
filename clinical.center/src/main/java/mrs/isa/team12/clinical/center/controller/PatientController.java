@@ -28,6 +28,7 @@ import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
@@ -35,6 +36,7 @@ import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
@@ -45,6 +47,7 @@ public class PatientController {
 
 	private PatientService patientService;
 	private ClinicService clinicService;
+	private ClinicalCenterAdminService centerAdminService;
 	private AppointmentService appointmentService;
 	private ClinicAdminService clinicAdminService;
 	private RegisteredUserService userService;
@@ -56,9 +59,11 @@ public class PatientController {
 	@Autowired
 	public PatientController(PatientService patientService,
 			ClinicService clinicService, AppointmentService appointmentService, ClinicAdminService clinicAdminService,
-			RegisteredUserService userService, RegistrationRequestService registrationService) {
+			RegisteredUserService userService, RegistrationRequestService registrationService,
+			ClinicalCenterAdminService centerAdminService) {
 		this.patientService = patientService;
 		this.clinicService = clinicService;
+		this.centerAdminService = centerAdminService;
 		this.appointmentService = appointmentService;
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
@@ -237,12 +242,16 @@ public class PatientController {
 		if(appointments.size() == 0) {
 			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 		}
-		
-		MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
-		// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
-		// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
-		medicalRecords.setMedicalReports(patient.getAppointments());
-		return new ResponseEntity<>(new PatientProfileDto(patient, medicalRecords), HttpStatus.OK);
+		// if nisu null! mogu biti i null, da nije do sad imala pregled!
+		if (patient.getMedicalRecords() != null) {
+			MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
+			// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
+			// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
+			medicalRecords.setMedicalReports(patient.getAppointments());
+			return new ResponseEntity<>(new PatientProfileDto(patient, medicalRecords), HttpStatus.OK);
+		}
+		// prvi pregled, nema records
+		return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 	}
 	
 	
@@ -263,6 +272,11 @@ public class PatientController {
 		
 		if(patient == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient with given email does not exist.");
+		}
+
+		// nepotvrdjen zahtev za registraciju
+		if(!patient.getRegistrationRequest().getApproved()) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Registration request not approved yet!");
 		}
 		
 		if(!patient.getPassword().equals(password)) {
@@ -301,9 +315,18 @@ public class PatientController {
 		}
 		// ne postoji u bazi
 		// sacuvamo ga
-		Patient saved = patientService.save(patient);
 		RegistrationRequest regReq = new RegistrationRequest(patient, false, "");
+		Patient saved = patientService.save(patient);
 		registrationService.save(regReq);
+		// dodavanje reference na registration request
+		saved = patientService.update(saved, regReq);
+		
+		List<ClinicalCentreAdmin> admins = centerAdminService.findAll();
+		
+		for (ClinicalCentreAdmin cca : admins) {
+			centerAdminService.sendNotificaitionAsync(cca);
+		}
+		
 		return new ResponseEntity<>(new PatientDto(saved), HttpStatus.CREATED);
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.repository.PatientRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 
@@ -85,6 +86,12 @@ public class PatientImpl implements PatientService {
 		patientRep.deleteById(id);
 	}
 
+	@Override
+	public Patient update(Patient p, RegistrationRequest regReq) {
+		p.setRegistrationRequest(regReq);
+		return patientRep.save(p);
+	}
+	
 	@Override
 	public Patient update(PatientProfileDto p) {
 		Patient patientToUpdate = patientRep.findOneById(p.getId());

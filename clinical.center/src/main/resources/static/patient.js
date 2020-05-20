@@ -86,7 +86,7 @@ $(document).ready(function() {
 		$.ajax({
 			type : "POST",
 			async: false,
-			url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
+			url : "../../theGoodShepherd/patient/changePassword/"+passwordV,
 			success : function(data)  {
 				alert("Succesfully changed password.")
 				$('.content').hide()
@@ -247,7 +247,12 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: JSON.stringify(newAppointment),
 			success: function() {
-				// nista ne moramo ovde
+				$("body").css("cursor", "default");
+				alert("Appointment request sent successfully!\n" +
+					  "You will get an email when a clinic administrator confirms it.\n" +
+					  "The appointment then becomes visible in 'Unconfirmed appointments' tab.")
+				$('.content').hide()
+				$('.patient-createNewApp').show()
 			},
 			error: function(response) {
 				alert(response.responseJSON.message)
@@ -263,10 +268,7 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: JSON.stringify(app),
 			success : function() {
-	    		$("body").css("cursor", "default");
-				alert("Appointment sent successfully!")
-				$('.content').hide()
-				$('.patient-createNewApp').show()
+	    		// ovde ne mora nista
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)

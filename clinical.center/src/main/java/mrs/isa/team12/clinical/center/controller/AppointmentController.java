@@ -176,7 +176,8 @@ public class AppointmentController {
 		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
 		for(Appointment a : appointments) {
 			// ako nema ordinaciju, nije odobren jos uvek!
-			if (a.getOrdination() != null) {
+			// ako nije odobren, znaci da je predefinisan
+			if (a.getOrdination() != null && a.getConfirmed() == false) {
 				dto.add(new AppointmentDto(a));
 			}
 		}
@@ -324,6 +325,10 @@ public class AppointmentController {
 																			// approved
 		AppointmentRequest appRequest = new AppointmentRequest(appointment, today, false, c);
 		appointmentRequestService.save(appRequest);
+		
+		// dodavanje u appointment njegov appointment request
+		appointment.setAppointmentRequest(appRequest);
+		appointmentService.save(appointment);
 
 		return new ResponseEntity<>(appDto, HttpStatus.OK);
 	}
@@ -398,6 +403,7 @@ public class AppointmentController {
 		Appointment app;
 		try {
 			app = appointmentService.update(patient, appId);
+			app.getAppType();
 			adminService.sendNotificaitionAsync(null, currentUser, app, true, false, true);
 		} catch (NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");

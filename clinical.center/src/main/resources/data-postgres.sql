@@ -72,51 +72,57 @@ values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', '1990
 /* Pacijenti i njihovi zdravstveni kartoni*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
 values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', '1993-06-01', 'Adresa', 'City', 'Country', '55', '77', '1', '0');
+/*Potvrdjen zahtev za registraciju*/
+insert into registration_request(id, registered_user_id, approved, description, version) 
+values ('56', '16', 'true', '', '0');
 insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies, patient_id, version)
 values ('30' ,'180', '60', '120/60', 'A','No allergies', '16', '0');
 update patient
-set medical_record_id = '30'
+set medical_record_id = '30', registration_request_id = '56'
 where id = '16';
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
 values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '55', '111', '1', '0');
+/*Potvrdjen zahtev za registraciju*/
+insert into registration_request(id, registered_user_id, approved, description, version) 
+values ('55', '29', 'true', '', '0');
 insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies, patient_id, version)
 values ('43' ,'163', '67', '130/80', 'AB-','Polen', '29', '0');
 update patient
-set medical_record_id = '43'
+set medical_record_id = '43', registration_request_id = '55'
 where id = '29';
-/*Nova registracija pacijenta*/
+/*Nova registracija pacijenta
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
 values ('30', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0');
 insert into registration_request(id, registered_user_id, approved, description, version) 
-values ('31', '30', 'false', '', '0');
+values ('31', '30', 'false', '', '0');*/
 
 /*Jedan pregled potvrdjen i zavrsen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
-values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', '0');
+values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '9', '19', '0');
 
 /*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 /*JOS JEDAN MILKIN PREGLED KOJI JE TRENUTNO*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-20', '13', '14', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-20', '20', '21', 'true', '29', '6', '9', '12', '19', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('54', '44', '2020-05-15', 'true', '6', '0');
 
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
-values ('36', 'false', '2020-05-15', '06', '07', 'false', '29', '6', '9', '12', '0');
+values ('36', 'false', '2020-05-21', '06', '07', 'false', '29', '6', '9', '12', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
-values ('38', '36', '2020-05-15', 'false', '6', '0');
+values ('38', '36', '2020-05-20', 'false', '6', '0');
 /*NE preklapa se sa jednim drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
-values ('41', 'false', '2020-05-15', '08', '09', 'false', '29', '6', '9', '12', '0');
+values ('41', 'false', '2020-05-21', '08', '09', 'false', '29', '6', '9', '12', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
-values ('42', '41', '2020-05-15', 'false', '6', '0');
+values ('42', '41', '2020-05-20', 'false', '6', '0');
 /*Preklapa se sa drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
-values ('39', 'false', '2020-05-15', '09', '10', 'false', '29', '6', '9', '12', '0');
+values ('39', 'false', '2020-05-21', '09', '10', 'false', '29', '6', '9', '12', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
-values ('40', '39', '2020-05-15', 'false', '6', '0');
+values ('40', '39', '2020-05-20', 'false', '6', '0');
 
 /*Jedan pregled NEpotvrdjen*/
 /*ZAHTEVI DRUGE KLINIKE!!!*/
@@ -129,11 +135,11 @@ values ('24', '23', '2020-05-15', 'false', '17', '0');
 /*Predefinisani pregledi*/
 /*Predefinisani druga klinika*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('45', 'false', '2020-05-17', '16', '20', 'false', '17', '11', '19', '50', '0');
+values ('45', 'false', '2020-05-21', '16', '20', 'false', '17', '11', '19', '50', '0');
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('46', 'false', '2020-05-17', '12', '16', 'false', '17', '11', '19', '51', '0');
+values ('46', 'false', '2020-05-21', '12', '16', 'false', '17', '11', '19', '51', '0');
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('47', 'false', '2020-05-17', '08', '10', 'false', '17', '48', '49', '50', '0');
+values ('47', 'false', '2020-05-21', '08', '10', 'false', '17', '48', '49', '50', '0');
 
 /*Zahtevi u prvoj klinici*/
 /*Milkini pregledi - OBA ODOBRENA!*/
@@ -142,16 +148,16 @@ insert into appointment (id, app_finished, app_date, app_start_time, app_end_tim
 values ('57', 'true', '2020-05-13', '09', '10', 'true', '29', '6', '9', '12', '20', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('58', '57', '2020-05-12', 'true', '6', '0');
-/*Jedan potvrdjen*/
+/*Jedan potvrdjen - preklapanje sa njim*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('25', 'false', '2020-05-15', '09', '10', 'true', '29', '6', '9', '12', '20', '0');
+values ('25', 'false', '2020-05-21', '09', '10', 'true', '29', '6', '9', '12', '20', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('26', '25', '2020-05-15', 'true', '6', '0');
-/*Jedan nepotvrdjen*/
+/*Jedan nepotvrdjen - preklapanje sa njim*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('27', 'false', '2020-05-15', '08', '11', 'false', '29', '6', '10', '14', '37', '0');
+values ('27', 'false', '2020-05-21', '08', '11', 'false', '29', '6', '10', '14', '37', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
-values ('28', '27', '2020-05-15', 'true', '6', '0');
+values ('28', '27', '2020-05-20', 'true', '6', '0');
 update appointment
 set appointment_request_id = '28'
 where id = '27';

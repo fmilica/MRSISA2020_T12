@@ -28,6 +28,10 @@ public class Patient extends RegisteredUser {
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	private ClinicalCentre clinicalCentre;
 	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "registration_request_id")
+	private RegistrationRequest registrationRequest;
+	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "patient")
 	private Set<Rating> ratings;
 	
@@ -39,6 +43,16 @@ public class Patient extends RegisteredUser {
 		this.appointments = appointments;
 		this.medicalRecords = medicalRecords;
 		this.clinicalCentre = clinicalCentre;
+		this.ratings = ratings;
+	}
+	
+	public Patient(Set<Appointment> appointments, MedicalRecords medicalRecords, ClinicalCentre clinicalCentre,
+			RegistrationRequest registrationRequest, Set<Rating> ratings) {
+		super();
+		this.appointments = appointments;
+		this.medicalRecords = medicalRecords;
+		this.clinicalCentre = clinicalCentre;
+		this.registrationRequest = registrationRequest;
 		this.ratings = ratings;
 	}
 
@@ -72,6 +86,14 @@ public class Patient extends RegisteredUser {
 
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
+	}
+
+	public RegistrationRequest getRegistrationRequest() {
+		return registrationRequest;
+	}
+
+	public void setRegistrationRequest(RegistrationRequest registrationRequest) {
+		this.registrationRequest = registrationRequest;
 	}
 
 	public void addAppointment(Appointment app) {

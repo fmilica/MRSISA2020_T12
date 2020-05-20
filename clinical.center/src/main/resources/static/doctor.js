@@ -654,6 +654,8 @@ function viewPatientProfile(secNum) {
 			}
 			if (data.appointment != null) {
 				appointment_id = data.appointment.id
+			} else {
+				appointment_id = null
 			}
 			viewMedicalReports(data)
 		},
@@ -682,8 +684,13 @@ function viewMedicalReports(data){
     }else{
 		$('#medicalReport').show()
 		$('h5').show()
-		// prikaz dugmadi za pregled
-		$('.app-btns').show()
+		if (appointment_id == null) {
+			// sakrivanje dugmadi za pregled
+			$('.app-btns').hide()
+		} else {
+			// prikaz dugmadi za pregled
+			$('.app-btns').show()
+		}
 		$("#generalReport").text("")
     	$("#height").text(data.medicalRecords.height)
     	$("#weight").text(data.medicalRecords.weight)

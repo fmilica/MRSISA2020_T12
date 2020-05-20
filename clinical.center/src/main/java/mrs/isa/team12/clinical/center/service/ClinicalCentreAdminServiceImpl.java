@@ -42,6 +42,22 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 		return clinicCentreAdminRep.save(cca);
 	}
 
+	@Async
+	@Override
+	public void sendNotificaitionAsync(ClinicalCentreAdmin admin) {
+		javaMailSender.setUsername("thegoodshepherdadm@gmail.com");
+		javaMailSender.setPassword("admin1tgs");
+		System.out.println("Slanje emaila...");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(admin.getEmail());
+		mail.setFrom("thegoodshepherdadm@gmail.com");
+		mail.setSubject("Registration request");
+		mail.setText("Hello " + admin.getName() + ",\n\nYou have a new registration request.\n\n" + 
+					"Best wishes,\nClinical center The Good Shepherd");
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
 	@Override
 	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance) {
