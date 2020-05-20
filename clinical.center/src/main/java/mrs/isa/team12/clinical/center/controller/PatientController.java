@@ -32,12 +32,9 @@ import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
-import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
-import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
-import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
@@ -47,11 +44,8 @@ import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestServ
 public class PatientController {
 
 	private PatientService patientService;
-	private AppointmentRequestService appointmentRequestService;
 	private ClinicService clinicService;
-	private DoctorService doctorService;
 	private AppointmentService appointmentService;
-	private AppointmentTypeService appointmentTypeService;
 	private ClinicAdminService clinicAdminService;
 	private RegisteredUserService userService;
 	private RegistrationRequestService registrationService;
@@ -60,16 +54,12 @@ public class PatientController {
 	private HttpSession session;
 	
 	@Autowired
-	public PatientController(PatientService patientService, AppointmentRequestService appointmentRequestService,
-			ClinicService clinicService, DoctorService doctorService, AppointmentService appointmentService,
-			AppointmentTypeService appointmentTypeService, ClinicAdminService clinicAdminService,
+	public PatientController(PatientService patientService,
+			ClinicService clinicService, AppointmentService appointmentService, ClinicAdminService clinicAdminService,
 			RegisteredUserService userService, RegistrationRequestService registrationService) {
 		this.patientService = patientService;
-		this.appointmentRequestService = appointmentRequestService;
 		this.clinicService = clinicService;
-		this.doctorService = doctorService;
 		this.appointmentService = appointmentService;
-		this.appointmentTypeService = appointmentTypeService;
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
 		this.registrationService = registrationService;

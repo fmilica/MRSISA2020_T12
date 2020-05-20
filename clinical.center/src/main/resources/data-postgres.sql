@@ -26,7 +26,7 @@ values('51', '1', 'The Good Exam', '2', '17', '0');
 
 /*Admin klinickog centra*/
 insert into clinical_centre_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('7', 'thegoodshepherdadm@gmail.com', 'admin1tgs', 'Ksenija', 'Prcic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '22', '1', '0');
+values ('7', 'thegoodshepherdadm@gmail.com', 'admin1tgs', 'Ksenija', 'Prcic', 'female', '1990-06-15', 'Adresa', 'City', 'Country', '55', '22', '1', '0');
 
 /*Admin klinike*/
 insert into clinic_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number,clinic_id, version) 
@@ -67,18 +67,18 @@ insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('49
 
 /* Medicinske sestre */
 insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, version) 
-values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', 'datum', 'Adresa', 'City', 'Country', '44', '66', '0');
+values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', '1990-06-15', 'Adresa', 'City', 'Country', '44', '66', '0');
 
 /* Pacijenti i njihovi zdravstveni kartoni*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', 'datum', 'Adresa', 'City', 'Country', '55', '77', '1', '0');
+values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', '1993-06-01', 'Adresa', 'City', 'Country', '55', '77', '1', '0');
 insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies, patient_id, version)
 values ('30' ,'180', '60', '120/60', 'A','No allergies', '16', '0');
 update patient
 set medical_record_id = '30'
 where id = '16';
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', 'datum', 'Adresa', 'City', 'Country', '55', '111', '1', '0');
+values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '55', '111', '1', '0');
 insert into medical_records(id, height, weight, blood_pressure, blood_type, allergies, patient_id, version)
 values ('43' ,'163', '67', '130/80', 'AB-','Polen', '29', '0');
 update patient
@@ -86,7 +86,7 @@ set medical_record_id = '43'
 where id = '29';
 /*Nova registracija pacijenta*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('30', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', 'datum', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0');
+values ('30', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0');
 insert into registration_request(id, registered_user_id, approved, description, version) 
 values ('31', '30', 'false', '', '0');
 
@@ -98,7 +98,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', 
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 /*JOS JEDAN MILKIN PREGLED KOJI JE TRENUTNO*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-19', '20', '21', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-20', '13', '14', 'true', '29', '6', '9', '12', '19', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('54', '44', '2020-05-15', 'true', '6', '0');
 
@@ -190,3 +190,15 @@ values ('34', '35');
 update appointment
 set medical_report_id = '34'
 where id = '21';
+
+insert into medical_report (id, description, diagnosis_id, appointment_id, version)
+values ('59', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '57', '0');
+/*Lekovi prepisani ovim izvestajem gore*/
+insert into medical_report_perscription(medical_report_id, prescription_id)
+values ('59', '32');
+insert into medical_report_perscription(medical_report_id, prescription_id)
+values ('59', '35');
+/*Dodavanje izvestaja u appointment*/
+update appointment
+set medical_report_id = '59'
+where id = '57';

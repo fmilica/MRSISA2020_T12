@@ -45,6 +45,8 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.content').hide()
 		$('.clinical-centre-admin-profile').show()
+		document.body.scrollTop = 0
+	    document.documentElement.scrollTop = 0
 	})
 	
 	/*Change password*/
@@ -161,10 +163,42 @@ $(document).ready(function() {
 					{ data: 'surname'},
 					{ data: 'gender'},
 					{ data: 'dateOfBirth'},
-					{ data: 'address'},
-					{ data: 'city'},
-					{ data: 'country'},
-					{ data: 'phoneNumber'},
+					{ data: null,
+						render: function (data) {
+							if(data.address == ''){
+								return '/'
+							}else{
+								return data.address
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.city == ''){
+								return '/'
+							}else{
+								return data.city
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.country == ''){
+								return '/'
+							}else{
+								return data.country
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.phoneNumber == ''){
+								return '/'
+							}else{
+								return data.phoneNumber
+							}
+						}
+					},
 					{ data: 'securityNumber'},
 					{
 						data: null,
@@ -353,11 +387,11 @@ $(document).ready(function() {
             }),
             success: function(data){
             	alert("Successfully added new clinic!")
-            	$('#name').val('')
-		        $('#country').val('')
-		        $('#city').val('')
-		        $('#address').val('')
-		        $('#description').val('')
+            	$('#nameClinic').val('')
+		        $('#countryClinic').val('')
+		        $('#cityClinic').val('')
+		        $('#addressClinic').val('')
+		        $('#descriptionClinic').val('')
             	$('.content').hide()
         		$('.clinics').show()
 				clinicsTable.ajax.reload();
@@ -372,11 +406,11 @@ $(document).ready(function() {
     
     $('#cancel_clinic').click(function(e){
     	e.preventDefault()
-    	$('#name').val('')
-        $('#country').val('')
-        $('#city').val('')
-        $('#address').val('')
-        $('#description').val('')
+    	$('#nameClinic').val('')
+        $('#countryClinic').val('')
+        $('#cityClinic').val('')
+        $('#addressClinic').val('')
+        $('#descriptionClinic').val('')
         $('.content').hide()
 		$('.clinics').show()
         document.body.scrollTop = 0
@@ -399,10 +433,42 @@ $(document).ready(function() {
 					{ data: 'surname'},
 					{ data: 'gender'},
 					{ data: 'dateOfBirth'},
-					{ data: 'address'},
-					{ data: 'city'},
-					{ data: 'country'},
-					{ data: 'phoneNumber'},
+					{ data: null,
+						render: function (data) {
+							if(data.address == ''){
+								return '/'
+							}else{
+								return data.address
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.city == ''){
+								return '/'
+							}else{
+								return data.city
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.country == ''){
+								return '/'
+							}else{
+								return data.country
+							}
+						}
+					},
+					{ data: null,
+						render: function (data) {
+							if(data.phoneNumber == ''){
+								return '/'
+							}else{
+								return data.phoneNumber
+							}
+						}
+					},
 					{ data: 'securityNumber'}]
 			})
 		} else {

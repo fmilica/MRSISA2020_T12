@@ -66,6 +66,8 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.content').hide()
 		$('.clinic-admin-profile').show()
+		document.body.scrollTop = 0
+		document.documentElement.scrollTop = 0
 	})
 	
 	/*Change password*/
@@ -496,11 +498,6 @@ $(document).ready(function() {
 				{ data: 'name'},
 				{ data: 'surname'},
 				{ data: 'gender'},
-				//{ data: 'dateOfBirth'},
-				//{ data: 'address'},
-				//{ data: 'city'},
-				//{ data: 'country'},
-				//{ data: 'securityNumber'},
 				{ data: 'specialization'},
 				{ 
 					data: null,
@@ -514,11 +511,24 @@ $(document).ready(function() {
 							return data.endWork + ":00"
 						}
 				},
-				{ data: 'phoneNumber'},
+				{ data: null,
+					render: function (data) {
+						if(data.phoneNumber == ''){
+							return '/'
+						}else{
+							return data.phoneNumber
+						}
+					}
+				},
 				{
 					data: null,
 					render: function(data) {
-						return data.address + ", " + data.city + ", " + data.country
+						var adresa=  data.address + ", " + data.city + ", " + data.country
+						if(adresa == ', , '){
+							return '/'
+						}else{
+							return adresa
+						}
 					}
 				}]
 			})
@@ -544,7 +554,7 @@ $(document).ready(function() {
 		var cityV = $("#cityDoctor").val()
 		var countryV = $("#countryDoctor").val()
 		
-		if(!emailV || !nameV || !surnameV || !passwordV || !confirmPasswordV || !genderV ||
+		if(!emailV || !nameV || !surnameV || !passwordV || !genderV ||
 				!dateOfBirthV || !specializationV || !securityNumV || !startWorkV || !endWorkV){
 			alert("Not all required fields are filled!")
 			return;
@@ -637,6 +647,8 @@ $(document).ready(function() {
 		hideValidate($("#passwordDoctor"))
 		hideValidate($("#confirm-passwordDoctor"))
 		hideValidate($("#securityNumberDoctor"))
+		hideValidate($("#startWorkDoctor"))
+		hideValidate($("#endWorkDoctor"))
 		// scroll to top of page
 		document.body.scrollTop = 0
   		document.documentElement.scrollTop = 0
@@ -813,35 +825,6 @@ $(document).ready(function() {
 		e.preventDefault()
 		filterOperationRooms()
 	})
-
-	/*// filtriranje soba za preglede
-	$('#filterExamRoom').click(function(e) {
-		e.preventDefault()
-
-		var nameV = $('#examRoomName').val()
-		var numberV = $('#examRoomNumber').val()
-		var dateV = $('#examRoomDate').val()
-
-		if (isNaN(numberV)) {
-			alert("Ordination number must be a number.")
-			return
-		}
-
-		// filtriranje klinika na beku
-		if (nameV && numberV) {
-			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExamination/"+nameV+"/"+numberV)
-			examRoomTable.ajax.reload()
-		} else if (!nameV && numberV) {
-			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExaminationNumber/"+numberV)
-			examRoomTable.ajax.reload()
-		} else if (nameV && !numberV) {
-			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExaminationName/"+nameV)
-			examRoomTable.ajax.reload()
-		} else if (!nameV && !numberV) {
-			examRoomTable.ajax.url("../../theGoodShepherd/ordination/getClinicsExamination")
-			examRoomTable.ajax.reload()
-		}
-	})*/
 })
 
 function viewPersonalInformation(){
@@ -1343,7 +1326,7 @@ function clearDoctorForm() {
 	$("#firstNameDoctor").val('')
 	$("#lastNameDoctor").val('')
 	$("#passwordDoctor").val('')
-	$("#confirm-passwordDoctor").val('')
+	$("#dateOfBirthDoctor").val('')
 	$("#securityNumberDoctor").val('')
 	$("#startWorkDoctor").val('')
 	$("#endWorkDoctor").val('')
