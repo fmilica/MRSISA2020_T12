@@ -105,9 +105,18 @@ function viewPersonalInformation(){
 				$("#email").text(output.email)
 				$("#gender").text(output.gender)
 				$("#dateOfBirth").text(output.dateOfBirth)
-				$("#phoneNumber").text(output.phoneNumber)
+				if(output.phoneNumber == ''){
+					$("#phoneNumber").text('/')
+				}else{
+					$("#phoneNumber").text(output.phoneNumber)
+				}
 				$("#securityNumber").text(output.securityNumber)
-				$("#address").text(output.address + ", " + output.city + ", " + output.country)
+				var adresa = output.address + ", " + output.city + ", " + output.country
+				if(adresa == ', , '){
+					$("#address").text('/')
+				}else{
+					$("#address").text(adresa)
+				}
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)

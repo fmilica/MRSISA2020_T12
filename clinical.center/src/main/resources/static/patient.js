@@ -799,9 +799,19 @@ function fillProfile(data){
     $("#email").text(data.email)
     $("#gender").text(data.gender)
     $("#dateOfBirth").text(data.dateOfBirth)
-    $("#phoneNumber").text(data.phoneNumber)
     $("#securityNumber").text(data.securityNumber)
-    $("#address").text(data.address + ", " + data.city + ", " + data.country)
+    if(data.phoneNumber == ''){
+		$("#phoneNumber").text('/')
+	}else{
+		$("#phoneNumber").text(data.phoneNumber)
+	}
+	$("#securityNumber").text(data.securityNumber)
+	var adresa = data.address + ", " + data.city + ", " + data.country
+	if(adresa == ', , '){
+		$("#address").text('/')
+	}else{
+		$("#address").text(adresa)
+	}
 	// medical reports
 	$('#medicalReport').show()
 	$('h5').show()

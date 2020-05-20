@@ -447,9 +447,19 @@ function viewPersonalInformation(){
 				$("#email").text(output.email)
 				$("#gender").text(output.gender)
 				$("#dateOfBirth").text(output.dateOfBirth)
-				$("#phoneNumber").text(output.phoneNumber)
 				$("#securityNumber").text(output.securityNumber)
-				$("#address").text(output.address + ", " + output.city + ", " + output.country)
+				if(output.phoneNumber == ''){
+					$("#phoneNumber").text('/')
+				}else{
+					$("#phoneNumber").text(output.phoneNumber)
+				}
+				$("#securityNumber").text(output.securityNumber)
+				var adresa = output.address + ", " + output.city + ", " + output.country
+				if(adresa == ', , '){
+					$("#address").text('/')
+				}else{
+					$("#address").text(adresa)
+				}
 				$("#workingHours").text(output.startWork + ":00 - " + output.endWork + ":00")
 				$("#specialization").text(output.specialization)
 				$("#qualifications").empty()
