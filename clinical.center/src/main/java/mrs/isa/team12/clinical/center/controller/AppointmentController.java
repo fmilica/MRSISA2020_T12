@@ -142,7 +142,9 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmed(currentUser.getId(), true);
+		//mislim da je ovo greska da ovde treba da bude confirmed true and finished false posto su upcoming
+		//List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmed(currentUser.getId(), true);
+		List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmedAndFinished(currentUser.getId(), true, false);
 		
 		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
 		for(Appointment a : appointments) {
@@ -217,7 +219,7 @@ public class AppointmentController {
 	 */
 	@PostMapping(value="declineApp/{appId}",
 				produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> declineAppointment(@PathVariable("appId") Long appId) {
+	public void declineAppointment(@PathVariable("appId") Long appId) {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -228,6 +230,9 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
+		Appointment app = appointmentService.findById(appId);
+		appointmentService.delete(app);
+
 		// PACIJENT MOZE DA PRIHVATI/ODBIJE SAMO NE-PREDEFINISANE
 		// PREDEFINISANI IDU DIREKTNO U NJIHOVE POTVRDJENE
 		// ne znam kako da obrisem :(((
@@ -243,7 +248,6 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
 		}
 		*/
-		return new ResponseEntity<>("Deleted.", HttpStatus.OK);
 	}
 	
 	/*

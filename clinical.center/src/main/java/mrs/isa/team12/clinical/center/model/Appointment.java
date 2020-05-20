@@ -5,6 +5,7 @@ import static javax.persistence.FetchType.LAZY;
 import java.sql.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -90,7 +91,8 @@ public class Appointment {
 	@Column(name = "ordination_type", unique = false, nullable = true)
 	private OrdinationType type;
 
-	@OneToOne(fetch = LAZY)
+	//OVO SAM DODALA JA KSENIJA DA PROBAM DA OBRISEM APPOINTMENT I APPOINTMENT REQUEST
+	@OneToOne(fetch = LAZY, cascade =  CascadeType.REMOVE, orphanRemoval = true)
 	@JoinColumn(name = "appointment_request_id")
 	private AppointmentRequest appointmentRequest;
 	

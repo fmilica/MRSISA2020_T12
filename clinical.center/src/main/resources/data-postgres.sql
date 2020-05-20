@@ -152,6 +152,9 @@ insert into appointment (id, app_finished, app_date, app_start_time, app_end_tim
 values ('27', 'false', '2020-05-15', '08', '11', 'false', '29', '6', '10', '14', '37', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('28', '27', '2020-05-15', 'true', '6', '0');
+update appointment
+set appointment_request_id = '28'
+where id = '27';
 
 /*Zahtev za operaciju*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version)
