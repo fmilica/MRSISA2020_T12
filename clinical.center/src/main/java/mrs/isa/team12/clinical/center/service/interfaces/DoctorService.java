@@ -13,7 +13,7 @@ import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface DoctorService {
 	
-	Doctor findOneByEmail(String email);
+	Doctor findOneById(Long id);
 	
 	Doctor save(Doctor d);
 	
@@ -21,19 +21,19 @@ public interface DoctorService {
 	
 	Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes);
 	
+	Doctor findOneByEmail(String email);
+	
 	List<Doctor> findAll();
 	
 	List<Doctor> findAllByClinicId(Long id);
-	
-	Doctor findOneById(Long id);
 	
 	List<Doctor> findAllByAppointmentTypes(AppointmentType a);
 	
 	List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types);
 	
-	List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types);
-	
 	List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type);
+
+	List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types);
 	
 	void sendNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Set<Doctor> doctors);
 	

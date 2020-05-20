@@ -7,6 +7,8 @@ import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface AppointmentService {
 	
+	Appointment findById(Long id);
+	
 	Appointment save(Appointment a);
 	
 	void delete(Appointment a);
@@ -15,19 +17,18 @@ public interface AppointmentService {
 	
 	Appointment update(Patient patient, Long appId) throws Exception;
 	
+	List<Appointment> findAll();
+	
+	List<Appointment> findAllByClinicIdAndPatient(Long clinicId, Patient patient);
+	
 	List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId);
 	
 	List<Appointment> findAllByPatientIdAndFinished(Long patientId, Boolean finished);
 	
 	List<Appointment> findAllByPatientIdAndConfirmed(Long patientId, Boolean confirmed);
 	
-	List<Appointment> findAllByPatientIdAndConfirmedAndFinished(Long patientId, Boolean confirmed, Boolean finished);
-	
-	List<Appointment> findAll();
-	
-	Appointment findById(Long id);
-	
 	List<Appointment> findAllByClinicIdAndConfirmedAndFinished(Long id, Boolean confirmed, Boolean finished);
 	
-	List<Appointment> findAllByClinicIdAndPatient(Long clinicId, Patient patient);
+	List<Appointment> findAllByPatientIdAndConfirmedAndFinished(Long patientId, Boolean confirmed, Boolean finished);
+
 }

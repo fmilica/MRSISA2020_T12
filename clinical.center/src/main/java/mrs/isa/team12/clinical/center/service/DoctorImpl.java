@@ -5,11 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
@@ -22,7 +26,10 @@ import mrs.isa.team12.clinical.center.repository.DoctorRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 @Service
+@Transactional(readOnly = true)
 public class DoctorImpl implements DoctorService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private DoctorRepository doctorRep;
 	
@@ -35,60 +42,37 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
-	public Doctor findOneByEmail(String email) {
-		return doctorRep.findOneByEmail(email);
-	}
-
-	@Override
-	public Doctor save(Doctor d) {
-		return doctorRep.save(d);
-	}
-
-	@Override
-	public List<Doctor> findAll() {
-		return doctorRep.findAll();
-	}
-
-	@Override
-	public List<Doctor> findAllByClinicId(Long id) {
-		return doctorRep.findAllByClinicId(id);
-	}
-
-	@Override
 	public Doctor findOneById(Long id) {
-		return doctorRep.findOneById(id);
-	}
-
-	@Override
-	public List<Doctor> findAllByAppointmentTypes(AppointmentType a) {
-		return doctorRep.findAllByAppointmentTypes(a);
-	}
-
-	@Override
-	public List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types) {
-		return doctorRep.findAllByAppointmentTypesIn(types);
-	}
-
-	@Override
-	public List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types) {
-		return doctorRep.findAllByClinicAndAppointmentTypesIn(clinic, types);
-	}
-
-	@Override
-	public List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type) {
-		return doctorRep.findAllByClinicIdAndAppointmentTypes(clinicId, type);
+		logger.info("> findOneById id:{}", id);
+		Doctor doctor =  doctorRep.findOneById(id);
+		logger.info("< findOneById id:{}", id);
+		return doctor;
 	}
 	
 	@Override
+	@Transactional( readOnly = false)
+	public Doctor save(Doctor d) {
+		logger.info("> create");
+		Doctor doctor =  doctorRep.save(d);
+		logger.info("< create");
+		return doctor;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Doctor updatePassword(Long doctorId, String newPassword) {
+		logger.info("> update id{}", doctorId);
 		Doctor doctorToUpdate = doctorRep.findOneById(doctorId);
 		doctorToUpdate.setPassword(newPassword);
 		Doctor updated = doctorRep.save(doctorToUpdate);
+		logger.info("< update id{}", doctorId);
 		return updated; 
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes) {
+		logger.info("> update id{}", editedDoctor.getId());
 		Doctor doctorToUpdate = doctorRep.findOneById(editedDoctor.getId());
 		doctorToUpdate.setName(editedDoctor.getName());
 		doctorToUpdate.setSurname(editedDoctor.getSurname());
@@ -102,9 +86,65 @@ public class DoctorImpl implements DoctorService {
 		doctorToUpdate.setCountry(editedDoctor.getCountry());
 		doctorToUpdate.setSpecialization(editedDoctor.getSpecialization());
 		doctorToUpdate.setAppointmentTypes(appTypes);
-		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
 		Doctor updated = doctorRep.save(doctorToUpdate);
+		logger.info("< update id{}", editedDoctor.getId());
 		return updated;
+	}
+	
+	@Override
+	public Doctor findOneByEmail(String email) {
+		logger.info("> findOneByEmail email:{}", email);
+		Doctor doctor =  doctorRep.findOneByEmail(email);
+		logger.info("< findOneByEmail email:{}", email);
+		return doctor;
+	}
+	
+	@Override
+	public List<Doctor> findAll() {
+		logger.info("> findAll");
+		List<Doctor> doctors = doctorRep.findAll();
+		logger.info("< findAll");
+		return doctors;
+	}
+
+	@Override
+	public List<Doctor> findAllByClinicId(Long id) {
+		logger.info("> findAllByClinicId id:{}", id);
+		List<Doctor> doctors = doctorRep.findAllByClinicId(id);
+		logger.info("< findAllByClinicId id:{}", id);
+		return doctors;
+	}
+
+	@Override
+	public List<Doctor> findAllByAppointmentTypes(AppointmentType a) {
+		logger.info("> findAllByAppointmentTypes appTypeName:{}", a.getName());
+		List<Doctor> doctors =  doctorRep.findAllByAppointmentTypes(a);
+		logger.info("< findAllByAppointmentTypes appTypeName:{}", a.getName());
+		return doctors;
+	}
+
+	@Override
+	public List<Doctor> findAllByAppointmentTypesIn(List<AppointmentType> types) {
+		logger.info("> findAllByAppointmentTypesIn");
+		List<Doctor> doctors =  doctorRep.findAllByAppointmentTypesIn(types);
+		logger.info("< findAllByAppointmentTypesIn");
+		return doctors;
+	}
+
+	@Override
+	public List<Doctor> findAllByClinicIdAndAppointmentTypes(Long clinicId, AppointmentType type) {
+		logger.info("> findAllByClinicIdAndAppointmentTypes clinicId:{}, appTypeName:{}", clinicId, type.getName());
+		List<Doctor> doctors =  doctorRep.findAllByClinicIdAndAppointmentTypes(clinicId, type);
+		logger.info("< findAllByClinicIdAndAppointmentTypes clinicId:{}, appTypeName:{}", clinicId, type.getName());
+		return doctors;
+	}
+	
+	@Override
+	public List<Doctor> findAllByClinicAndAppointmentTypesIn(Clinic clinic, List<AppointmentType> types) {
+		logger.info("> findAllByClinicAndAppointmentTypesIn");
+		List<Doctor> doctors =  doctorRep.findAllByClinicAndAppointmentTypesIn(clinic, types);
+		logger.info("< findAllByClinicAndAppointmentTypesIn");
+		return doctors;
 	}
 
 	@Override

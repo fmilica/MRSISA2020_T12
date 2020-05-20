@@ -3,56 +3,89 @@ package mrs.isa.team12.clinical.center.service;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.repository.AppointmentTypeRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 
 @Service
+@Transactional(readOnly = true)
 public class AppointmentTypeImpl implements AppointmentTypeService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private AppointmentTypeRepository appointmentTypeRep;
-	
+		
 	@Autowired
 	public AppointmentTypeImpl(AppointmentTypeRepository appointmentTypeRep) {
 		this.appointmentTypeRep = appointmentTypeRep;
 	}
 	
-	@Override
-	public AppointmentType findOneByName(String name) {
-		return appointmentTypeRep.findOneByName(name);
-	}
-	
-	@Override
-	public List<AppointmentType> findAllByName(String name) {
-		return appointmentTypeRep.findAllByName(name);
-	}
+	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
+		@Transactional(readOnly = false)
+		@Override
+		public AppointmentType save(AppointmentType at) {
+			logger.info("> create");
+			AppointmentType appType = appointmentTypeRep.save(at);
+			logger.info("< create");
+			return appType;
+		}
 
-	@Override
-	public AppointmentType save(AppointmentType at) {
-		return appointmentTypeRep.save(at);
-	}
+		
+		@Override
+		public AppointmentType findOneByName(String name) {
+			logger.info("> findOneByName name:{}", name);
+			AppointmentType appType = appointmentTypeRep.findOneByName(name);
+			logger.info("< findOneByName name:{}", name);
+			return appType;
+		}
+		
+		@Override
+		public AppointmentType findOneByNameAndClinicId(String name, Long id) {
+			logger.info("> findOneByNameAndClinicId name:{},{}", name, id);
+			AppointmentType appType = appointmentTypeRep.findOneByNameAndClinicId(name, id);
+			logger.info("< findOneByNameAndClinicId name:{},{}", name, id);
+			return appType;
+		}
 
-	@Override
-	public List<AppointmentType> findAll() {
-		return appointmentTypeRep.findAll();
-	}
-	
-	@Override
-	public List<AppointmentType> findAllByClinicId(Long clinicId) {
-		return appointmentTypeRep.findAllByClinicId(clinicId);
-	}
 
-	@Override
-	public AppointmentType findOneByNameAndClinicId(String name, Long id) {
-		return appointmentTypeRep.findOneByNameAndClinicId(name, id);
-	}
+		@Override
+		public List<AppointmentType> findAll() {
+			logger.info("> findAll");
+			List<AppointmentType> appTypes = appointmentTypeRep.findAll();
+			logger.info("< findAll");
+			return appTypes;
+		}
+		
+		
+		@Override
+		public List<AppointmentType> findAllByName(String name) {
+			logger.info("> findAllByName");
+			List<AppointmentType> appTypes = appointmentTypeRep.findAllByName(name);
+			logger.info("< findAllByName");
+			return appTypes;
+		}
 
-	@Override
-	public Set<AppointmentType> findAllByClinicIdAndNameIn(Long clinicId, List<String> appTypeNames) {
-		return appointmentTypeRep.findAllByClinicIdAndNameIn(clinicId, appTypeNames);
-	}
+		
+		@Override
+		public List<AppointmentType> findAllByClinicId(Long clinicId) {
+			logger.info("> findAllByClinicId");
+			List<AppointmentType> appTypes = appointmentTypeRep.findAllByClinicId(clinicId);
+			logger.info("< findAllByClinicId");
+			return appTypes;
+		}
+		
+		@Override
+		public Set<AppointmentType> findAllByClinicIdAndNameIn(Long clinicId, List<String> appTypeNames) {
+			logger.info("> findAllByClinicIdAndNameIn");
+			Set<AppointmentType> appTypes = appointmentTypeRep.findAllByClinicIdAndNameIn(clinicId, appTypeNames);
+			logger.info("< findAllByClinicIdAndNameIn");
+			return appTypes;
+		}
 	
 }

@@ -4,7 +4,7 @@ import mrs.isa.team12.clinical.center.model.MedicalRecords;
 
 public interface MedicalRecordsService {
 	
-	MedicalRecords save(MedicalRecords mr);
-	
 	MedicalRecords findOneById(Long id);
+	
+	MedicalRecords save(MedicalRecords mr);
 }

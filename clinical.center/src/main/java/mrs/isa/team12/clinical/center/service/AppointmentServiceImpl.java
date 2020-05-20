@@ -29,9 +29,21 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	@Override
+	public Appointment findById(Long id) {
+		logger.info("> findOneById id:{}", id);
+		Appointment app = appointmentRepository.findOneById(id);
+		logger.info("< findOneById id:{}", id);
+		return app;
+	}
+	
+	@Override
+	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
 	@Transactional(readOnly = false)
 	public Appointment save(Appointment a) {
-		return appointmentRepository.save(a);
+		logger.info("> create");
+		Appointment app = appointmentRepository.save(a);
+		logger.info("< create");
+		return app;
 	}
 
 	@Override
@@ -63,54 +75,68 @@ public class AppointmentServiceImpl implements AppointmentService{
 		Appointment app = this.findById(appId);
 		// postavljanje unakrsne veze sa pacijentom
 		app.setPatient(patient);
-		// posto je predefinisani, automatski je potvrdjen
-		app.setConfirmed(true);
 		patient.addAppointment(app);
 		// snimanje u bazu
 		appointmentRepository.save(app);
 		logger.info("< update id:{}", app.getId());
 		return app;
 	}
-
-	@Override
-	public List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId) {
-		return appointmentRepository.findAllByPatientIdAndDoctorId(patientId, doctorId);
-	}
 	
 	@Override
-	public List<Appointment> findAllByPatientIdAndFinished(Long patientId, Boolean finished) {
-		return appointmentRepository.findAllByPatientIdAndFinished(patientId, finished);
-	}
-
-	@Override
-	public List<Appointment> findAllByPatientIdAndConfirmed(Long patientId, Boolean confirmed) {
-		return appointmentRepository.findAllByPatientIdAndConfirmed(patientId, confirmed);
-	}
-
-	@Override
 	public List<Appointment> findAll() {
-		return appointmentRepository.findAll();
-	}
-
-	@Override
-	public Appointment findById(Long id) {
-		return appointmentRepository.findOneById(id);
-	}
-
-	@Override
-	public List<Appointment> findAllByClinicIdAndConfirmedAndFinished(Long id, Boolean confirmed, Boolean finished) {
-		return appointmentRepository.findAllByClinicIdAndConfirmedAndFinished(id, confirmed, finished);
+		logger.info("> findAll");
+		List<Appointment> appointments = appointmentRepository.findAll();
+		logger.info("< findAll");
+		return appointments;
 	}
 
 	@Override
 	public List<Appointment> findAllByClinicIdAndPatient(Long clinicId, Patient patient) {
-		return appointmentRepository.findAllByClinicIdAndPatient(clinicId, patient);
+		logger.info("> findAllByClinicIdAndPatient");
+		List<Appointment> appointments = appointmentRepository.findAllByClinicIdAndPatient(clinicId, patient);
+		logger.info("< findAllByClinicIdAndPatient");
+		return appointments;
+	}
+	
+	@Override
+	public List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId) {
+		logger.info("> findAllByPatientIdAndDoctorId");
+		List<Appointment> appointments = appointmentRepository.findAllByPatientIdAndDoctorId(patientId, doctorId);
+		logger.info("< findAllByPatientIdAndDoctorId");
+		return appointments;
+	}
+	
+	@Override
+	public List<Appointment> findAllByPatientIdAndFinished(Long patientId, Boolean finished) {
+		logger.info("> findAllByPatientIdAndFinished");
+		List<Appointment> appointments =  appointmentRepository.findAllByPatientIdAndFinished(patientId, finished);
+		logger.info("< findAllByPatientIdAndFinished");
+		return appointments;
+	}
+
+	@Override
+	public List<Appointment> findAllByPatientIdAndConfirmed(Long patientId, Boolean confirmed) {
+		logger.info("> findAllByPatientIdAndConfirmed");
+		List<Appointment> appointments =  appointmentRepository.findAllByPatientIdAndConfirmed(patientId, confirmed);
+		logger.info("< findAllByPatientIdAndConfirmed");
+		return appointments;
+	}
+
+	@Override
+	public List<Appointment> findAllByClinicIdAndConfirmedAndFinished(Long id, Boolean confirmed, Boolean finished) {
+		logger.info("> findAllByClinicIdAndConfirmedAndFinished");
+		List<Appointment> appointments = appointmentRepository.findAllByClinicIdAndConfirmedAndFinished(id, confirmed, finished);
+		logger.info("< findAllByClinicIdAndConfirmedAndFinished");
+		return appointments;
 	}
 
 	@Override
 	public List<Appointment> findAllByPatientIdAndConfirmedAndFinished(Long patientId, Boolean confirmed,
 			Boolean finished) {
-		return appointmentRepository.findAllByPatientIdAndConfirmedAndFinished(patientId, confirmed, finished);
+		logger.info("> findAllByPatientIdAndConfirmedAndFinished");
+		List<Appointment> appointments = appointmentRepository.findAllByPatientIdAndConfirmedAndFinished(patientId, confirmed, finished);
+		logger.info("< findAllByPatientIdAndConfirmedAndFinished");
+		return appointments;
 	}
 	
 }

@@ -6,11 +6,11 @@ import mrs.isa.team12.clinical.center.model.Diagnosis;
 
 public interface DiagnosisService {
 	
-	List<Diagnosis> findAll();
-	
-	Diagnosis findOneByName(String name);
+	Diagnosis findOneById(Long id);
 	
 	Diagnosis save(Diagnosis d);
 	
-	Diagnosis findOneById(Long id);
+	Diagnosis findOneByName(String name);
+	
+	List<Diagnosis> findAll();
 }

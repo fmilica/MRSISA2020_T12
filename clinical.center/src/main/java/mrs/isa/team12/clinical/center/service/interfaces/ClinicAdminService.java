@@ -11,19 +11,19 @@ import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface ClinicAdminService {
 	
+	ClinicAdmin findOneById(Long id);
+	
+	ClinicAdmin save(ClinicAdmin ca);
+	
 	ClinicAdmin updatePassword(Long id, String newPassword);
 	
 	ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile);
 	
+	ClinicAdmin findOneByEmail(String email);
+	
 	List<ClinicAdmin> findAll();
 	
 	List<ClinicAdmin> findAllByClinicId(Long clinicId);
-	
-	ClinicAdmin save(ClinicAdmin ca);
-	
-	ClinicAdmin findOneByEmail(String email);
-	
-	ClinicAdmin findOneById(Long id);
 	
 	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient,Appointment appointment, boolean acceptance, boolean operation, boolean predefined);

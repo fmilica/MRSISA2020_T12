@@ -12,17 +12,17 @@ import mrs.isa.team12.clinical.center.model.RegisteredUser;
 public interface ClinicalCenterAdminService {
 	
 	ClinicalCentreAdmin findOneById(Long id);
-
-	ClinicalCentreAdmin findOneByEmail(String email);
 	
+	ClinicalCentreAdmin save(ClinicalCentreAdmin cca);
+
 	ClinicalCentreAdmin updatePassword(Long id, String newPassword);
 	
 	ClinicalCentreAdmin update(ClinicalCentreAdminPersonalInformationDto editedProfile);
 	
+	ClinicalCentreAdmin findOneByEmail(String email);
+	
 	List<ClinicalCentreAdmin> findAll();
-	
-	public ClinicalCentreAdmin save(ClinicalCentreAdmin cca);
-	
+
 	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin);
 	

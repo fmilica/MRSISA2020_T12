@@ -5,10 +5,10 @@ import java.util.List;
 import mrs.isa.team12.clinical.center.model.DiagnosePerscription;
 
 public interface DiagnosisPrescriptionService {
-	
-	List<DiagnosePerscription> findAll();
+
+	DiagnosePerscription findOneById(Long id);
 	
 	DiagnosePerscription save(DiagnosePerscription ds);
 	
-	DiagnosePerscription findOneById(Long id);
+	List<DiagnosePerscription> findAll();
 }

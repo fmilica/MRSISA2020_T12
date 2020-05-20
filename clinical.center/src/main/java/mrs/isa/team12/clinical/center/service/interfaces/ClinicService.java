@@ -6,16 +6,15 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 
 public interface ClinicService {
 	
-	public List<Clinic> findAll();
+	Clinic findOneById(Long id);
 	
-	public List<Clinic> findAllByAppointmentTypeId(Long appTypeId);
+	Clinic save(Clinic c);
 	
-	public List<Clinic> findAllByAppointmentTypeName(String appTypeName);
+	List<Clinic> findAll();
 	
-	public Clinic findOneById(Long id);
+	Clinic findOneByName(String name);
 	
-	public Clinic findOneByName(String name);
-
-	public Clinic save(Clinic c);
+	List<Clinic> findAllByAppointmentTypeId(Long appTypeId);
 	
+	List<Clinic> findAllByAppointmentTypeName(String appTypeName);	
 }

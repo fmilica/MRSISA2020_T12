@@ -6,18 +6,18 @@ import java.util.Set;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 
 public interface AppointmentTypeService {
-
-	AppointmentType findOneByName(String name);
 	
 	AppointmentType save(AppointmentType at);
+	
+	AppointmentType findOneByName(String name);
+	
+	AppointmentType findOneByNameAndClinicId(String name, Long id);
 	
 	List<AppointmentType> findAll();
 	
 	List<AppointmentType> findAllByName(String name);
 	
 	List<AppointmentType> findAllByClinicId(Long clinicId);
-	
-	AppointmentType findOneByNameAndClinicId(String name, Long id);
 	
 	Set<AppointmentType> findAllByClinicIdAndNameIn(Long clinicId, List<String> appTypeNames);
 }

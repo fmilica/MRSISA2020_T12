@@ -3,11 +3,15 @@ package mrs.isa.team12.clinical.center.service;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
@@ -17,7 +21,10 @@ import mrs.isa.team12.clinical.center.repository.ClinicAdminRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 
 @Service
+@Transactional(readOnly = true)
 public class ClinicAdminImpl implements ClinicAdminService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private ClinicAdminRepository clinicAdminRep;
 	
@@ -28,27 +35,79 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	public ClinicAdminImpl(ClinicAdminRepository clinicAdminRep) {
 		this.clinicAdminRep = clinicAdminRep;
 	}
-
-	@Override
-	public List<ClinicAdmin> findAll() {
-		return this.clinicAdminRep.findAll();
-	}
-
-	@Override
-	public ClinicAdmin save(ClinicAdmin ca) {
-		return this.clinicAdminRep.save(ca);
-	}
-
-	@Override
-	public ClinicAdmin findOneByEmail(String email) {
-		return clinicAdminRep.findOneByEmail(email);
-	}
 	
 	@Override
 	public ClinicAdmin findOneById(Long id) {
-		return clinicAdminRep.findOneById(id);
+		logger.info("> findOneById id:{}", id);
+		ClinicAdmin clinicAdmin = clinicAdminRep.findOneById(id);
+		logger.info("< findOneById id:{}", id);
+		return clinicAdmin;
 	}
 
+	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
+	@Transactional(readOnly = false)
+	@Override
+	public ClinicAdmin save(ClinicAdmin ca) {
+		logger.info("> create");
+		ClinicAdmin clinicAdmin = clinicAdminRep.save(ca);
+		logger.info("< create");
+		return clinicAdmin;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public ClinicAdmin updatePassword(Long id, String newPassword) {
+		logger.info("> update id:{}", id);
+		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(id);
+		clinicAdminToUpdate.setPassword(newPassword);
+		clinicAdminRep.save(clinicAdminToUpdate);
+		logger.info("< update id:{}", id);
+		return clinicAdminToUpdate;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile) {
+		logger.info("> update id:{}", editedProfile.getId());
+		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(editedProfile.getId());
+		clinicAdminToUpdate.setName(editedProfile.getName());
+		clinicAdminToUpdate.setSurname(editedProfile.getSurname());
+		clinicAdminToUpdate.setGender(editedProfile.getGender());
+		clinicAdminToUpdate.setDateOfBirth(editedProfile.getDateOfBirth());
+		clinicAdminToUpdate.setPhoneNumber(editedProfile.getPhoneNumber());
+		clinicAdminToUpdate.setAddress(editedProfile.getAddress());
+		clinicAdminToUpdate.setCity(editedProfile.getCity());
+		clinicAdminToUpdate.setCountry(editedProfile.getCountry());
+		clinicAdminRep.save(clinicAdminToUpdate);
+		logger.info("< update id:{}", editedProfile.getId());
+		return clinicAdminToUpdate;
+	}
+	
+	@Override
+	public ClinicAdmin findOneByEmail(String email) {
+		logger.info("> findOneByEmail email:{}", email);
+		ClinicAdmin clinicAdmin =  clinicAdminRep.findOneByEmail(email);
+		logger.info("> findOneByEmail email:{}", email);
+		return clinicAdmin;
+	}
+	
+	@Override
+	public List<ClinicAdmin> findAll() {
+		logger.info("> findAll");
+		List<ClinicAdmin> clinicAdmins = clinicAdminRep.findAll();
+		logger.info("< findAll");
+		return clinicAdmins;
+	}
+	
+	@Override
+	public List<ClinicAdmin> findAllByClinicId(Long clinicId) {
+		logger.info("> findAllByClinicId id:{}", clinicId);
+		List<ClinicAdmin> clinicAdmins = clinicAdminRep.findAllByClinicId(clinicId);
+		logger.info("< findAllByClinicId id:{}", clinicId);
+		return clinicAdmins;
+	}
+	
+	//ne znam kako mejl i transakcije ??
 	@Override
 	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient, Appointment appointment, boolean acceptance, boolean operation, boolean predefined) {
@@ -114,35 +173,4 @@ public class ClinicAdminImpl implements ClinicAdminService {
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 	}
-
-	@Override
-	public List<ClinicAdmin> findAllByClinicId(Long clinicId) {
-		return clinicAdminRep.findAllByClinicId(clinicId);
-	}
-
-	@Override
-	public ClinicAdmin updatePassword(Long id, String newPassword) {
-		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(id);
-		clinicAdminToUpdate.setPassword(newPassword);
-
-		return clinicAdminRep.save(clinicAdminToUpdate);
-	}
-
-	@Override
-	public ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile) {
-		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(editedProfile.getId());
-		clinicAdminToUpdate.setName(editedProfile.getName());
-		clinicAdminToUpdate.setSurname(editedProfile.getSurname());
-		clinicAdminToUpdate.setGender(editedProfile.getGender());
-		clinicAdminToUpdate.setDateOfBirth(editedProfile.getDateOfBirth());
-		clinicAdminToUpdate.setPhoneNumber(editedProfile.getPhoneNumber());
-		clinicAdminToUpdate.setAddress(editedProfile.getAddress());
-		clinicAdminToUpdate.setCity(editedProfile.getCity());
-		clinicAdminToUpdate.setCountry(editedProfile.getCountry());
-		//da li treba da se snimi mozda moze i bez snimanja tj sam da snimi ?
-		return clinicAdminRep.save(clinicAdminToUpdate);
-	}
-
-	
-
 }
