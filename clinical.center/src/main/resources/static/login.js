@@ -6,15 +6,18 @@
     /*index.html page buttons*/
     $(".user_type").on('click',function(event){
     	event.preventDefault()
-    	var user_type = $(this).attr('id')
+        var user_type = $(this).attr('id')
+        var user_name = $(this).attr('name')
+        sessionStorage.setItem('user_name', user_name)
     	sessionStorage.setItem('user_type', user_type);
     	if(user_type == 'patient'){
     		window.location.href = "loginP.html"
     	}else{
     		window.location.href = "loginO.html"
     	}
-    	
     })
+
+    $("#userName").text(sessionStorage.getItem("user_name"))
     
     /*==================================================================
     [ Focus input ]*/

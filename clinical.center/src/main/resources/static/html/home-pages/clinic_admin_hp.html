@@ -294,9 +294,15 @@
 								</div>
 								<div class="profile-usertitle">
 									<div id="fullNameBig" class="profile-usertitle-name fullName"></div>
+									<hr class="edit-personal">
 								</div>
 							</div>
+							<div class="edit-profile">
+								<button id="editClinicAdminProfile" type="button" class="btn btn-info edit">Edit Profile</button>
+							</div>
 						</div>
+					</div>
+					<div class="col-md-7">
 						<div class="card">
 							<div class="card-head card-topline-theme">
 								<header>About Me</header>
@@ -304,10 +310,15 @@
 							<div class="card-body no-padding height-9">
 								<div class="user-btm-box">
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
+										<div class="col-md-12">
+											<strong>Full name</strong>
 											<p id = "fullName" class="fullName"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-md-12">
+											<strong>Email</strong>
 											<p id="email"></p>
 										</div>
 									</div>
@@ -337,9 +348,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="edit-profile">
-							<button id="editClinicAdminProfile" type="button" class="btn btn-info edit">Edit Profile</button>
 						</div>
 					</div>
 				</div>
@@ -446,7 +454,7 @@
 										<div class="row">
 											<div class="offset-md-3 col-md-12 form-buttons">
 												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
-												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Cancel</button>
 											</div>
 										</div>
 									</div>
@@ -522,15 +530,15 @@
 													<th>Name</th>
 													<th>Surname</th>
 													<th>Gender</th>
-													<th>Date of Birth</th>
-													<th>Address</th>
-													<th>City</th>
-													<th>Country</th>
-													<th>Phone Number</th>
-													<th>Security Number</th>
+													<!--<th>Date of Birth</th>-->
+													<!--<th>City</th>
+													<th>Country</th>-->
+													<!--<th>Security Number</th>-->
 													<th>Specialization</th>
 													<th>Start work</th>
 													<th>End work</th>
+													<th>Phone Number</th>
+													<th>Address</th>
 												</tr>
 											</thead>
 											<tfoot>
@@ -541,15 +549,15 @@
 													<th>Name</th>
 													<th>Surname</th>
 													<th>Gender</th>
-													<th>Date of Birth</th>
-													<th>Address</th>
-													<th>City</th>
-													<th>Country</th>
-													<th>Phone Number</th>
-													<th>Security Number</th>
+													<!--<th>Date of Birth</th>-->
+													<!--<th>City</th>
+													<th>Country</th>-->
+													<!--<th>Security Number</th>-->
 													<th>Specialization</th>
 													<th>Start work</th>
 													<th>End work</th>
+													<th>Phone Number</th>
+													<th>Address</th>
 												</tr>
 											</tfoot>
 										</table>
@@ -664,7 +672,6 @@
 											<div class="offset-md-3 col-md-12">
 												<div class="centered">
 													<button id="chooseParams" class="btn btn-info filter-btn center">Choose</button>
-													<button id="clearParams" class="btn btn-info filter-btn center">Clear</button>
 												</div>
 											</div>
 										</div>
@@ -855,7 +862,7 @@
 					</div>
 					
 					<!-- Operation rooms -->
-					<div class="table-view">
+					<div class="table-view clinic-oper-rooms">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
@@ -1172,9 +1179,9 @@
 														<select class="form-control input-height" id="appointment_duration">
 															<option selected="selected" value="1">1</option>
 															<option value="2">2</option>
-															<option value="2">3</option>
-															<option value="2">4</option>
-															<option value="2">5</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
 														</select>
 													</div>
 												</div>

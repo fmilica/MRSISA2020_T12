@@ -96,8 +96,11 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '17', '11', '19', 
 
 /*TREBAO MI JE SAMO APPOINTMENT KOJI JE POTVRDJEN A NIJE ZAVRSEN*/
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
+/*JOS JEDAN MILKIN PREGLED KOJI JE TRENUTNO*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
 values ('44', 'false', '2020-05-19', '20', '21', 'true', '29', '6', '9', '12', '19', '0');
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
+values ('54', '44', '2020-05-15', 'true', '6', '0');
 
 /*NE preklapa se NI SA JEDNIM drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version)
@@ -133,21 +136,28 @@ insert into appointment (id, app_finished, app_date, app_start_time, app_end_tim
 values ('47', 'false', '2020-05-17', '08', '10', 'false', '17', '48', '49', '50', '0');
 
 /*Zahtevi u prvoj klinici*/
+/*Milkini pregledi - OBA ODOBRENA!*/
+/*Jedan prosao*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
+values ('57', 'true', '2020-05-13', '09', '10', 'true', '29', '6', '9', '12', '20', '0');
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
+values ('58', '57', '2020-05-12', 'true', '6', '0');
+/*Jedan potvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
 values ('25', 'false', '2020-05-15', '09', '10', 'true', '29', '6', '9', '12', '20', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('26', '25', '2020-05-15', 'true', '6', '0');
+/*Jedan nepotvrdjen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('27', 'false', '2020-05-15', '08', '11', 'true', '29', '6', '10', '14', '37', '0');
+values ('27', 'false', '2020-05-15', '08', '11', 'false', '29', '6', '10', '14', '37', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('28', '27', '2020-05-15', 'true', '6', '0');
 
-/*PROBA*/
+/*Zahtev za operaciju*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version)
 values ('55', 'false', '2020-05-25', '13', '15', 'false', '29', '6', '9', '12', '0', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('56', '55', '2020-05-15', 'false', '6', '0');
-/*PROBA*/
 
 /*Sifarnik*/
 insert into diagnose_perscription (id, version)

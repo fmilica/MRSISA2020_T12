@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -17,7 +17,6 @@ import mrs.isa.team12.clinical.center.repository.PatientRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 
 @Service
-@Transactional(readOnly = true)
 public class PatientImpl implements PatientService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -51,6 +50,7 @@ public class PatientImpl implements PatientService {
 	}
 
 	@Override
+	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient) {
 		javaMailSender.setUsername(patient.getEmail());
 		javaMailSender.setPassword(patient.getPassword());

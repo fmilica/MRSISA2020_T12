@@ -32,6 +32,10 @@ var examReq = {
 var edited = false;
 
 $(document).ready(function() {
+
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
+	document.getElementById("dateOfBirthDoctor").max = new Date().toISOString().split("T")[0];
 	
 	//select2 radi zbog ovoga
 	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -86,6 +90,10 @@ $(document).ready(function() {
 			url : "../../theGoodShepherd/clinicAdmin/changePassword/"+passwordV,
 			success : function(data)  {
 				alert("Succesfully changed password.")
+				$('.content').hide()
+				$('.home-page').show()
+				$("#password").val("")
+				$("#passwordConfirm").val("")
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -97,6 +105,46 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.content').hide()
 		$('.home-page').show()
+		$("#password").val("")
+		$("#passwordConfirm").val("")
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+
+	/*Check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 	})
 	
 	/*------------------------------------------------------------------------*/
@@ -135,11 +183,6 @@ $(document).ready(function() {
 		} else {
 			alert("Date must be selected!")
 		}
-	})
-	/*Ponisti parametre pregleda*/
-	$('#clearParams').click(function(e) {
-		e.preventDefault()
-		//TODO
 	})
 	// kada se promeni vrednost selekta vremena u redu, abdejtuju se ordinacije
 	$('#createAppTable tbody').on('change', 'select.available-times', function() {
@@ -453,12 +496,11 @@ $(document).ready(function() {
 				{ data: 'name'},
 				{ data: 'surname'},
 				{ data: 'gender'},
-				{ data: 'dateOfBirth'},
-				{ data: 'address'},
-				{ data: 'city'},
-				{ data: 'country'},
-				{ data: 'phoneNumber'},
-				{ data: 'securityNumber'},
+				//{ data: 'dateOfBirth'},
+				//{ data: 'address'},
+				//{ data: 'city'},
+				//{ data: 'country'},
+				//{ data: 'securityNumber'},
 				{ data: 'specialization'},
 				{ 
 					data: null,
@@ -471,7 +513,14 @@ $(document).ready(function() {
 						render: function(data) {
 							return data.endWork + ":00"
 						}
-				},]
+				},
+				{ data: 'phoneNumber'},
+				{
+					data: null,
+					render: function(data) {
+						return data.address + ", " + data.city + ", " + data.country
+					}
+				}]
 			})
 		}
 	})
@@ -651,6 +700,7 @@ $(document).ready(function() {
 		examReq.time = dateTime.split(" ")[1]
 		//da se popuni tabela slobodnim klinikama za taj dan
 		viewOperationRoomsForAppointmentRequests()
+		$('.clinic-oper-rooms').show()
 	});
 	$('body').on('click', 'button.table-button-schedule', function() {
 		// prikupljanje podataka i kreiranje pregleda
@@ -752,10 +802,16 @@ $(document).ready(function() {
 		}
 	})
 	
-	/*Front filter for clinics*/
+	/*Front filter for examination rooms*/
 	$("#filterExamRoom").on('click', function(e){
 		e.preventDefault()
 		filterExaminationRooms()
+	})
+
+	/*Front filter for operating rooms*/
+	$("#filterOperRoom").on('click', function(e){
+		e.preventDefault()
+		filterOperationRooms()
 	})
 
 	/*// filtriranje soba za preglede
@@ -974,7 +1030,7 @@ function initialiseCreateAppTable(availableDoctors) {
 					data: null,
 					render: function (data) {
 						if (newAppointment.appTypeName && newAppointment.date && newAppointment.time) {
-							var button = '<button id="'+data.id+'" class="btn btn-info table-button-doctor">Schedule</button>';
+							var button = '<button id="'+data.id+'" class="btn btn-info">Create</button>';
 							return button;
 						} else {
 							return "Choose all parameters first."
@@ -1038,17 +1094,15 @@ function scheduleOrdination(ordinationId, currentDate, time) {
 	examReq.date = currentDate
 	examReq.time = time
 	alert("You scheduled an examination room for an appointment!")
-	alert(JSON.stringify(examReq))
-	//alert("Milice, send mejl pacijentu da potvrdi ili odbije")
 	$.ajax({
 		type : "POST",
 		url : "../../theGoodShepherd/clinicAdmin/acceptAppointmentRequest",
 		contentType : "application/json",
 		data : JSON.stringify(examReq),
 		success : function(){
-			alert("Appointment accepted!")
 			$('.content').hide()
 			$('.clinic-clinicExamReq').show()
+			$('.clinic-exam-rooms').hide()
 			examReqTable.ajax.reload()
 			// scroll to top of page
 			document.body.scrollTop = 0
@@ -1066,12 +1120,6 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 	examReq.time = time
 	
 	alert("You scheduled an operation room for an operation!")
-	alert(JSON.stringify({
-		id: examReq.reqId,
-		date: examReq.date,
-		time: examReq.time,
-		doctors: doctors
-	}))
 	$.ajax({
 		type : "POST",
 		url : "../../theGoodShepherd/clinicAdmin/acceptOperationRequest",
@@ -1084,7 +1132,6 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 			doctors: doctors
 		}),
 		success : function(){
-			alert("Operation accepted!")
 			operReqTable.ajax.reload()
 			$('#operRoomBody').empty()
 			// scroll to top of page
@@ -1092,6 +1139,7 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 			document.documentElement.scrollTop = 0
 			$('.content').hide()
 			$('.clinic-clinicOperReq').show()
+			$('.clinic-oper-rooms').hide()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -1171,6 +1219,22 @@ function viewExaminationRoomsForAppointmentRequests(){
 	if (changedExamTime) {
 		alert("No examination rooms available for given date and time.\nPlease choose new examination time.")
 	}
+}
+
+function filterOperationRooms(){
+	
+	var nameV = $('#operRoomName').val()
+	var roomNumberV = $('#operRoomNumber').val()
+	
+	operRoomTable
+    .column(0)
+    .search(nameV)
+    .draw();
+	
+	operRoomTable
+    .column(1)
+    .search(roomNumberV)
+    .draw();
 }
 
 function viewOperationRoomsForAppointmentRequests(){

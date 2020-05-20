@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
@@ -107,6 +108,7 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
+	@Async
 	public void sendNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Set<Doctor> doctors) {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
 		javaMailSender.setUsername(ca.getEmail());
@@ -129,7 +131,7 @@ public class DoctorImpl implements DoctorService {
 			mail.setText("Hello Doctor" + ",\n\nAdmin " + ca.getEmail() + " assigned you to participate in an operation!\n" + 
 					a.getAppType().getName() + " operation scheduled for " + 
 					sdf1.format(a.getDate()) + " at " + a.getStartTime() + ":00" +
-					" in clinic " + a.getClinic().getName() + ", operation room " + a.getOrdination().getName() +
+					" in clinic " + a.getClinic().getName() + ", operation room " + a.getOrdination().getName() + " " + a.getOrdination().getOrdinationNumber() + 
 					", by doctor "+ a.getDoctor().getName() + " " + a.getDoctor().getSurname() + ".\n" +
 					"Patient is " + p.getName() + " " + p.getSurname() + ", with security number " + p.getSecurityNumber() + ".\n" + 
 					"\nBest wishes,\nClinical center The Good Shepherd");
@@ -139,6 +141,7 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
+	@Async
 	public void sendDoctorNotificaitionAsync(ClinicAdmin ca, Patient p, Appointment a, boolean acceptance, Doctor d) {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
 		javaMailSender.setUsername(ca.getEmail());

@@ -247,11 +247,18 @@
 							<div class="card-body no-padding height-9">
 								<div class="user-btm-box">
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
-											<p id = "fullName" class="fullName"></p>
+										<div class="row text-center m-t-10">
+											<div class="col-md-12">
+												<strong>Full name</strong>
+												<p id = "fullName" class="fullName"></p>
+											</div>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
-											<p id="email"></p>
+										<hr>
+										<div class="row text-center m-t-10">
+											<div class="col-md-12">
+												<strong>Email</strong>
+												<p id="email"></p>
+											</div>
 										</div>
 									</div>
 									<hr>
@@ -461,7 +468,7 @@
 										<div class="row">
 											<div class="offset-md-3 col-md-12 form-buttons">
 												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
-												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Cancel</button>
 											</div>
 										</div>
 									</div>
@@ -550,10 +557,15 @@
 							<div class="card-body">
 								<div class="user-btm-box">
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
+										<div class="col-md-12">
+											<strong>Full name</strong>
 											<p id="fullNamePatient"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-md-12">
+											<strong>Email</strong>
 											<p id="emailPatient"></p>
 										</div>
 									</div>
@@ -590,6 +602,7 @@
 						<div class="card card-box">
 							<div class="card-head">
 								<header>Medical record</header>
+								<button id="patientBack" type="button" class="btn back-btn">Back</button>
 							</div>
 							<div class="card-body">
 								<div class="medical-record">
@@ -602,7 +615,10 @@
 								</div>
 								<!-- Medical reports -->
 								<hr>
-								<button id="changeRecord" type="button" class="btn btn-info">Modify Record</button>
+								<div class="app-btns">
+									<button id="changeRecord" type="button" class="btn btn-info app-btn">Modify Record</button>
+									<button id="startAppointment" type="button" class="btn btn-info app-btn">Start Appointment</button>	
+								</div>
 								<!--table-->
 								<div id="medicalReport" class="row">
 									<div class="col-md-12">
@@ -624,7 +640,6 @@
 										</div>
 									</div>
 								</div>
-								<button id="startAppointment" type="button" class="btn btn-info">Start Appointment</button>	
 							</div>
 						</div>
 					</div>

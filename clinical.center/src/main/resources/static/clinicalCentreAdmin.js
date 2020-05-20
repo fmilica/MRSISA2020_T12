@@ -11,6 +11,11 @@ var declineId;
 var edited = false;
 $(document).ready(function() {
 	
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
+	document.getElementById("dateBirthCA").max = new Date().toISOString().split("T")[0];
+	document.getElementById("dateBirthC").max = new Date().toISOString().split("T")[0];
+
 	//select2 ne radi bez ovoga
 	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 	
@@ -64,6 +69,10 @@ $(document).ready(function() {
 			url : "../../theGoodShepherd/clinicalCenterAdmin/changePassword/"+passwordV,
 			success : function(data)  {
 				alert("Succesfully changed password.")
+				$('.content').hide()
+				$('.home-page').show()
+				$("#password").val("")
+				$("#passwordConfirm").val("")
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -75,6 +84,46 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.content').hide()
 		$('.home-page').show()
+		$("#password").val("")
+		$("#passwordConfirm").val("")
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	
+	/*Check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 	})
 	
 	/*------------------------------------------------------------------*/
@@ -146,12 +195,13 @@ $(document).ready(function() {
         var birth = $('#dateBirthC').val()
         
         if(!name || !surname || !security || !username ||
-        		!password || !repeatPassword || !clinicId || !gender || !birth){
+        		!password || !clinicId || !gender || !birth) {
         	alert("All required fields must be filled!")
         	return;
         }
         
         if(isNaN(security)){
+			alert("Security number must be a number!")
         	return;
         }
         var dateObject = new Date(birth);
@@ -213,6 +263,8 @@ $(document).ready(function() {
 		e.preventDefault()
 		if(isNaN($("#securityC").val())){
 			showValidate($("#securityC"))
+		} else {
+			hideValidate($("#securityC"))
 		}
 	})
 	$("#securityC").on('click', function(e){
@@ -276,11 +328,11 @@ $(document).ready(function() {
     /*Add new clinic*/
 	$('#add_clinic').click(function(e){
         e.preventDefault()
-        var name = $('#name').val()
-        var country = $('#country').val()
-        var city = $('#city').val()
-        var address = $('#address').val()
-        var description = $('#description').val()
+        var name = $('#nameClinic').val()
+        var country = $('#countryClinic').val()
+        var city = $('#cityClinic').val()
+        var address = $('#addressClinic').val()
+        var description = $('#descriptionClinic').val().trim()
         
         if( !name || !country || !city || !address){
         	alert("All required fields must be filled!")
@@ -308,7 +360,9 @@ $(document).ready(function() {
 		        $('#description').val('')
             	$('.content').hide()
         		$('.clinics').show()
-            	clinicsTable.ajax.reload();
+				clinicsTable.ajax.reload();
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
             },
             error : function(response) {
             	alert(response.responseJSON.message)
@@ -324,7 +378,9 @@ $(document).ready(function() {
         $('#address').val('')
         $('#description').val('')
         $('.content').hide()
-        $('.clinics').show()
+		$('.clinics').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
     })
 	
     /*View all clinical center admins*/
@@ -462,7 +518,7 @@ $(document).ready(function() {
 					{ data: null,
 						render: function(data){
 							return '<button name="acceptRequest" class="btn btn-info add-button" onclick="acceptReq('+ data.id +')">Accept</button>' +
-							'<button name="declineRequest" class="btn btn-info add-button" onclick="declineReq('+ data.id +')">Deline</button>'
+							'<button name="declineRequest" class="btn btn-info add-button" onclick="declineReq('+ data.id +')">Decline</button>'
 						}
 					}
 				]
@@ -473,7 +529,7 @@ $(document).ready(function() {
 	})
 	
 	/*View all code books*/
-    $('#codeBooks').click(function(event) {
+    $('#diagnosisBook').click(function(event) {
 		event.preventDefault()
 		// inicijalizujemo je ako vec nismo
 		if (!$.fn.DataTable.isDataTable('#diagnosisTable')) {
@@ -494,6 +550,8 @@ $(document).ready(function() {
 		} else {
 			diagnosisTable.ajax.reload()
 		}
+	})
+	$('#prescriptionBook').click(function(event) {
 		if (!$.fn.DataTable.isDataTable('#medicineTable')) {
 			medicineTable = $('#medicineTable').DataTable({
 				ajax: {
@@ -554,7 +612,7 @@ $(document).ready(function() {
             	alert("Successfully added new diagnose!")
             	$('#nameDiagnose').val('')
             	$('.content').hide()
-        		$('.code-books').show()
+        		$('.diagnosis-book').show()
             	diagnosisTable.ajax.reload();
             },
             error : function(response) {
@@ -568,7 +626,7 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('#nameDiagnose').val('')
     	$('.content').hide()
-		$('.code-books').show()
+		$('.diagnosis-book').show()
 	})
 	
 	$('#addMedicine').click(function(e){
@@ -617,7 +675,7 @@ $(document).ready(function() {
             	alert("Successfully added new medicine!")
             	$('#nameMedicine').val('')
             	$('.content').hide()
-        		$('.code-books').show()
+        		$('.prescription-book').show()
             	medicineTable.ajax.reload(); 
     			//setDiagnosisToPrescription(data)
             },
@@ -633,17 +691,18 @@ $(document).ready(function() {
 		$('#medicineDiagnosis').val(null).trigger('change')
 		$('#nameMedicine').val('')
     	$('.content').hide()
-		$('.code-books').show()
+		$('.prescription-book').show()
 	})
 	
 	$('#decline_regreq').click(function(e){
-		var desc = $('#descriptionRegReq').val()
+		var desc = $('#descriptionRegReq').val().trim()
 		
 		if(!desc){
 			alert("All required fields must be filled!")
 	    	return;
 		}
-		
+		//kursor ceka
+		$("body").css("cursor", "progress")
 		$.ajax({
 	        type : "POST",
 	        url : "../../theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest",
@@ -657,12 +716,13 @@ $(document).ready(function() {
 	        	requestsTable.ajax.reload();
 	        	$('.content').hide()
 	    		$('.registration-req').show()
-	            alert("Registration request rejected!")
+				alert("Registration request rejected!")
+				$("body").css("cursor", "default");
 	        },
 	        error : function(response) {
 	        	alert(response.responseJSON.message)
 	        }
-	    })
+		})
 	})
 	
 	$('#cancel_decline').click(function(e){
@@ -854,7 +914,6 @@ function acceptReq(id){
 
 function declineReq(id){
 	declineId = id;
-	console.log(declineId)
 	$('.content').hide()
 	$('.registration-req-decline').show()
 }

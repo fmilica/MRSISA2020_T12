@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
@@ -49,6 +50,7 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	}
 
 	@Override
+	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient, Appointment appointment, boolean acceptance, boolean operation, boolean predefined) {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
 		String op = "Appointment";
@@ -84,8 +86,9 @@ public class ClinicAdminImpl implements ClinicAdminService {
 			String details = appointment.getAppType().getName() +" "+ op.toLowerCase() + " scheduled for " + 
 					sdf1.format(appointment.getDate()) + " at " + appointment.getStartTime() + ":00" +
 					" in clinic " + appointment.getClinic().getName() + ", ordination " + appointment.getOrdination().getName() +
+					" " + appointment.getOrdination().getOrdinationNumber() +
 					", by doctor "+ appointment.getDoctor().getName() + " " + appointment.getDoctor().getSurname() + ".\n" +
-					"That "+ op.toLowerCase() +" costs " + appointment.getAppType().getPrice() + " with " + disc + "% of discount.";
+					"That "+ op.toLowerCase() +" costs " + appointment.getAppType().getPrice() + "\u20ac with " + disc + "% of discount.";
 			
 			if(predefined == true) {
 				mailText += ",\n\nYou scheduled an appointment!\n";

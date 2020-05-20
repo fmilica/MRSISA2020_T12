@@ -116,14 +116,15 @@ public class Ordination {
 		if (this.getAppointments() != null) {
 			for (Appointment a : this.getAppointments()) {
 				// samo gledamo potvrdjene preglede
-				if (a.getConfirmed()) {
+				// ipak ne, gledamo sve
+				//if (a.getConfirmed()) {
 					if (a.getDate().equals(date)) {
 						Integer start = a.getStartTime();
 						for (int i = 0; i < a.getAppType().getDuration(); i++) {
 							times.remove(Integer.valueOf(start+i));
 						}
 					}
-				}
+				//}
 			}
 		}
 		// imamo listu slobodnih vremena

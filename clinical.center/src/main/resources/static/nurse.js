@@ -4,6 +4,9 @@ var edited = false;
 
 $(document).ready(function(){
 
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
+
 	/*------------------------------------------------------------------------*/
 	/*View profile*/
 	$('.n-profile').on('click', function(e){
@@ -44,6 +47,46 @@ $(document).ready(function(){
 		e.preventDefault()
 		$('.content').hide()
 		$('.home-page').show()
+		$("#password").val("")
+		$("#passwordConfirm").val("")
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	
+	/*Check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 	})
 	/*------------------------------------------------------------------------*/
 })
@@ -174,6 +217,8 @@ function changePassword() {
 			alert("Succesfully changed password.")
 			$('.content').hide()
 			$('.home-page').show()
+			$("#password").val("")
+			$("#passwordConfirm").val("")
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -195,4 +240,16 @@ function logInNurse(email, password){
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+/*Validation and forms*/
+function showValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).addClass('alert-validate');
+}
+function hideValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).removeClass('alert-validate');
 }

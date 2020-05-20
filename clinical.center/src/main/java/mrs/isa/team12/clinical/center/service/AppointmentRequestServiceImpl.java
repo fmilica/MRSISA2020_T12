@@ -29,6 +29,11 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 	public AppointmentRequest save(AppointmentRequest ar) {
 		return appointmentRequestRep.save(ar);
 	}
+	
+	@Override
+	public void delete(AppointmentRequest ar) {
+		appointmentRequestRep.delete(ar);
+	}
 
 	@Override
 	public AppointmentRequest findOneById(Long id) {

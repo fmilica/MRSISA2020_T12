@@ -55,4 +55,16 @@ public class ClinicPatientDto {
 			this.appointmentTypes.add(new AppointmentTypeDto(a));
 		}
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof ClinicPatientDto)) {
+			return false;
+		}
+		ClinicPatientDto c = (ClinicPatientDto) obj;
+		return this.getId().equals(c.getId());
+	}
 }

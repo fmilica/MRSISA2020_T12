@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformationDto;
@@ -42,6 +43,7 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	}
 
 	@Override
+	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance) {
 		javaMailSender.setUsername(admin.getEmail());
 		javaMailSender.setPassword(admin.getPassword());

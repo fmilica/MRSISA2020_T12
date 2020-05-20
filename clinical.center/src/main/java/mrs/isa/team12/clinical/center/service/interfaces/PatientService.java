@@ -2,6 +2,8 @@ package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.scheduling.annotation.Async;
+
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -18,6 +20,7 @@ public interface PatientService {
 	
 	Patient update(PatientProfileDto p);
 	
+	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient);
 	
 	public List<Patient> findAll();

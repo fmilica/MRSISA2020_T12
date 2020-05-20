@@ -98,6 +98,155 @@ public class AppointmentController {
 	}
 
 	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/allPatientFinished
+	 HTTP request for getting all confirmed appointments for the logged in patient
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value="allPatientFinished",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentDto>> getAllPatientFinishedApps() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can view all his appointments!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByPatientIdAndFinished(currentUser.getId(), true);
+		
+		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
+		for(Appointment a : appointments) {
+			dto.add(new AppointmentDto(a));
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/allPatientConfirmed
+	 HTTP request for getting all confirmed appointments for the logged in patient
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value="allPatientConfirmed",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentDto>> getAllPatientConfirmedApps() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can view all his appointments!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmed(currentUser.getId(), true);
+		
+		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
+		for(Appointment a : appointments) {
+			dto.add(new AppointmentDto(a));
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/allPatientUnconfirmed
+	 HTTP request for getting all unconfirmed appointments for the logged in patient
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value="allPatientUnconfirmed",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentDto>> getAllPatientUnconfirmedApps() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can view all his appointments!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmed(currentUser.getId(), false);
+		
+		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
+		for(Appointment a : appointments) {
+			// ako nema ordinaciju, nije odobren jos uvek!
+			if (a.getOrdination() != null) {
+				dto.add(new AppointmentDto(a));
+			}
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/appointment/confirmApp/{appId}
+	 HTTP request for appointment confirmation
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value="confirmApp/{appId}",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppointmentDto> confirmAppointment(@PathVariable("appId") Long appId) throws Exception {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can confirm his appointment!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Appointment app = null;
+		
+		try {
+			app = appointmentService.update(appId);
+		} catch (NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
+		}
+		
+		return new ResponseEntity<>(new AppointmentDto(app), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/appointment/declineApp/{appId}
+	 HTTP request for declining an appointment
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value="declineApp/{appId}",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> declineAppointment(@PathVariable("appId") Long appId) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can confirm his appointment!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		// PACIJENT MOZE DA PRIHVATI/ODBIJE SAMO NE-PREDEFINISANE
+		// PREDEFINISANI IDU DIREKTNO U NJIHOVE POTVRDJENE
+		// ne znam kako da obrisem :(((
+		// help pliz :(
+		/*
+		Appointment app = appointmentService.findById(appId);
+		AppointmentRequest appReq = app.getAppointmentRequest();
+		
+		try {
+			appointmentRequestService.delete(appReq);
+			appointmentService.delete(app);
+		} catch (NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
+		}
+		*/
+		return new ResponseEntity<>("Deleted.", HttpStatus.OK);
+	}
+	
+	/*
 	 url: GET localhost:8081/theGoodShepherd/appointment/available/{clinicId}
 	 HTTP request for getting all appointments in one clinic
 	 returns ResponseEntity object

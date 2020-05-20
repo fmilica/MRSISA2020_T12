@@ -32,7 +32,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.PrescriptionService;
 @RequestMapping("theGoodShepherd/diagnosis")
 public class DiagnosisController {
 	
-	private DiagnosisService diagnosiService;
+	private DiagnosisService diagnosisService;
 	private DiagnosisPrescriptionService diagnosisPrescriptionService;
 	private PrescriptionService prescriptionService;
 	
@@ -41,7 +41,7 @@ public class DiagnosisController {
 	
 	@Autowired
 	public DiagnosisController(DiagnosisService ds, DiagnosisPrescriptionService dps, PrescriptionService ps) {
-		this.diagnosiService = ds;
+		this.diagnosisService = ds;
 		this.diagnosisPrescriptionService = dps;
 		this.prescriptionService = ps;
 	}
@@ -70,7 +70,7 @@ public class DiagnosisController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		List<Diagnosis> diagnosis = diagnosiService.findAll();
+		List<Diagnosis> diagnosis = diagnosisService.findAll();
 		
 		List<DiagnosisDto> diagnosisDto = new ArrayList<DiagnosisDto>();
 		for (Diagnosis diagnose : diagnosis) {
@@ -99,12 +99,16 @@ public class DiagnosisController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		DiagnosePerscription dp = diagnosisPrescriptionService.findOneById(diagnose.getDiagnosePerscription().getId());
-		diagnose.setDiagnosePerscription(dp);
-		diagnosiService.save(diagnose);
-		DiagnosisDto diagnosisDto = new DiagnosisDto(diagnose);
+		Diagnosis existing = diagnosisService.findOneByName(diagnose.getName());
+		if(existing == null) {
+			DiagnosePerscription dp = diagnosisPrescriptionService.findOneById(diagnose.getDiagnosePerscription().getId());
+			diagnose.setDiagnosePerscription(dp);
+			diagnosisService.save(diagnose);
+			DiagnosisDto diagnosisDto = new DiagnosisDto(diagnose);
+			return new ResponseEntity<>(diagnosisDto, HttpStatus.OK);
+		}
 		
-		return new ResponseEntity<>(diagnosisDto, HttpStatus.OK);
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Diagnosis with given name already exists!");
 	}
 	
 	/*
@@ -128,9 +132,9 @@ public class DiagnosisController {
 		
 		Iterator<Diagnosis> i = p.getDiagnosis().iterator(); // traversing over HashSet
 		while(i.hasNext()) {
-			Diagnosis d = diagnosiService.findOneByName(i.next().getName());
+			Diagnosis d = diagnosisService.findOneByName(i.next().getName());
 			d.addPrescription(p);
-			diagnosiService.save(d);
+			diagnosisService.save(d);
 		}
 		
 	}

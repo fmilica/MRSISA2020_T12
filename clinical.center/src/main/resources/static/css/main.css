@@ -151,6 +151,8 @@ body {
 
 .edit-profile {
     align-items: center;
+    width: 30%;
+    margin: auto;
 }
 .edit {
     margin: 0 !important;
@@ -304,6 +306,18 @@ body {
     height: 100px !important;
 }
 
+.app-btns {
+    align-items: center;
+    width: 69%;
+    margin: auto;
+}
+.app-btn {
+    margin: 0 15px !important;
+}
+
+.edit-personal {
+    margin-bottom: 3px;
+}
 /*
 * View table
 */
@@ -355,9 +369,6 @@ body {
 .display {
     width: 100% !important;
 }
-.discount {
-    display: none;
-}
 .date-filter {
     padding: 6px 6px !important;
 }
@@ -405,7 +416,16 @@ body {
 .registration-req {
     display: none;
 }
-.code-books {
+.registration-req-decline {
+    display: none;
+}
+/*.code-books {
+    display: none;
+}*/
+.diagnosis-book {
+    display: none;
+}
+.prescription-book {
     display: none;
 }
 .addClinicAdmin {
@@ -482,6 +502,9 @@ body {
 .clinic-exam-rooms {
     display: none;
 }
+.clinic-oper-rooms {
+    display: none;
+}
 
 /* Medical personnel */
 .medical-calendar {
@@ -542,7 +565,16 @@ body {
 .patient-clinics {
     display: none;
 }
-.patient-apps {
+/*.patient-apps {
+    display: none;
+}*/
+.patient-finished-apps {
+    display: none;
+}
+.patient-confirmed-apps {
+    display: none;
+}
+.patient-unconfirmed-apps {
     display: none;
 }
 .patient-medicalRecord {

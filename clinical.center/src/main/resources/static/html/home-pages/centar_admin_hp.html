@@ -170,13 +170,25 @@
 									<span class="title">Registration requests</span>
 									<span class="arrow"></span>
 								</a>
-                            </li>
-                            <li class="nav-item">
+							</li>
+							<li class="nav-item">
 	                            <a id="codeBooks" class="nav-link nav-toggle">
 									<img class="icon" src="../../img/icons/medical_record.png">
 									<span class="title">Code Books</span>
 									<span class="arrow"></span>
 								</a>
+								<ul id="sub" class="sub-menu">
+	                                <li class="nav-item">
+	                                    <a id="diagnosisBook" class="nav-link">
+	                                        <span class="title">Diagnosis Book</span>
+	                                    </a>
+									</li>
+									<li class="nav-item">
+	                                    <a id="prescriptionBook" class="nav-link">
+	                                        <span class="title">Prescription Book</span>
+	                                    </a>
+									</li>
+								</ul>
 							</li>
 	                    </ul>
 	                </div>
@@ -253,9 +265,15 @@
 								</div>
 								<div class="profile-usertitle">
 									<div id="fullNameBig" class="profile-usertitle-name fullName"></div>
+									<hr class="edit-personal">
 								</div>
 							</div>
+							<div class="edit-profile">
+								<button id="editClinicalCentreAdminProfile" type="button" class="btn btn-info edit">Edit Profile</button>
+							</div>
 						</div>
+					</div>
+					<div class="col-md-7">
 						<div class="card">
 							<div class="card-head card-topline-theme">
 								<header>About Me</header>
@@ -263,42 +281,48 @@
 							<div class="card-body no-padding height-9">
 								<div class="user-btm-box">
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
+										<div class="col-md-12">
+											<strong>Full name</strong>
 											<p id = "fullName" class="fullName"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-md-12">
+											<strong>Email</strong>
 											<p id="email"></p>
 										</div>
 									</div>
 									<hr>
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Gender</strong>
+										<div class="col-lg-6 col-md-12 col-sm-6">
+											<strong>Gender</strong>
 											<p id="gender"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Date of birth</strong>
+										<div class="col-lg-6 col-md-12 col-sm-6">
+											<strong>Date of birth</strong>
 											<p id = "dateOfBirth"></p>
 										</div>
 									</div>
 									<hr>
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Phone number</strong>
+										<div class="col-lg-6 col-md-12 col-sm-6">
+											<strong>Phone number</strong>
 											<p id="phoneNumber"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Security number</strong>
+										<div class="col-lg-6 col-md-12 col-sm-6">
+											<strong>Security number</strong>
 											<p id = "securityNumber"></p>
 										</div>
 									</div>
 									<hr>
 									<div class="row text-center m-t-10">
-										<div class="col-md-12"><strong>Address</strong>
+										<div class="col-md-12">
+											<strong>Address</strong>
 											<p id="address"></p>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- ovo dugme ni ne treba tu ne znam kakav ce biti dizajn ali mi je trebalo -->
-							<div class="edit-profile">
-									<button id="editClinicalCentreAdminProfile" type="button" class="btn btn-info edit">Edit Profile</button>
 							</div>
 						</div>
 					</div>
@@ -406,7 +430,7 @@
 										<div class="row">
 											<div class="offset-md-3 col-md-12 form-buttons">
 												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
-												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Cancel</button>
 											</div>
 										</div>
 									</div>
@@ -640,8 +664,8 @@
 					<!-- end add form -->
 				</div>
 				
-				<!-- Prescription book content -->
-				<div class="content code-books">
+				<!-- Diagnosis book content -->
+				<div class="content diagnosis-book">
 					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
@@ -672,7 +696,10 @@
 							</div>
 						</div>
 					</div>
-					
+				</div>
+
+				<!-- Prescription book content -->
+				<div class="content prescription-book">
 					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
@@ -1090,7 +1117,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="name" data-required="1"  class="form-control input-height" />
+														<input type="text" id="nameClinic" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
@@ -1099,7 +1126,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="address" data-required="1"  class="form-control input-height" />
+														<input type="text" id="addressClinic" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
@@ -1108,7 +1135,7 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="city" data-required="1"  class="form-control input-height" />
+														<input type="text" id="cityClinic" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
@@ -1117,16 +1144,15 @@
 														<span class="required"> * </span>
 													</label>
 													<div class="col-md-7">
-														<input type="text" id="country" data-required="1"  class="form-control input-height" />
+														<input type="text" id="countryClinic" data-required="1"  class="form-control input-height" />
 													</div>
 												</div>
 												<div class="form-group row">
 													<label class="control-label col-md-3">
 														Description
-														<span class="required"> </span>
 													</label>
 													<div class="col-md-7">
-														<textarea id="description" data-required="1"  class="form-control textarea-height">
+														<textarea id="descriptionClinic" data-required="1"  class="form-control textarea-height">
 														</textarea>
 													</div>
 												</div>

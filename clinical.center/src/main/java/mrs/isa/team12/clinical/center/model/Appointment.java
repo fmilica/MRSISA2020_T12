@@ -90,6 +90,10 @@ public class Appointment {
 	@Column(name = "ordination_type", unique = false, nullable = true)
 	private OrdinationType type;
 
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "appointment_request_id")
+	private AppointmentRequest appointmentRequest;
+	
 	public Appointment() {}
 
 	public Appointment(Date date, Integer startTime, AppointmentType type,
@@ -254,7 +258,16 @@ public class Appointment {
 	public void setId(Long id) {
 		this.id = id;
 	}
-/*
+	
+	public AppointmentRequest getAppointmentRequest() {
+		return appointmentRequest;
+	}
+
+	public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+		this.appointmentRequest = appointmentRequest;
+	}
+
+	/*
 	public MedicalRecords getMedicalRecords() {
 		return medicalRecords;
 	}

@@ -36,6 +36,27 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void delete(Appointment app) {
+		logger.info("> delete id:{}", app.getId());
+		appointmentRepository.delete(app);
+		logger.info("< delete id:{}", app.getId());
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Appointment update(Long appId) throws Exception {
+		logger.info("> update id:{}", appId);
+		// pronalenje pregleda
+		Appointment app = this.findById(appId);
+		app.setConfirmed(true);
+		// snimanje u bazu
+		appointmentRepository.save(app);
+		logger.info("< update id:{}", app.getId());
+		return app;
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Appointment update(Patient patient, Long appId) throws ResponseStatusException {
 		logger.info("> update id:{}", appId);
 		// pronalenje pregleda
@@ -52,6 +73,16 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Override
 	public List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId) {
 		return appointmentRepository.findAllByPatientIdAndDoctorId(patientId, doctorId);
+	}
+	
+	@Override
+	public List<Appointment> findAllByPatientIdAndFinished(Long patientId, Boolean finished) {
+		return appointmentRepository.findAllByPatientIdAndFinished(patientId, finished);
+	}
+
+	@Override
+	public List<Appointment> findAllByPatientIdAndConfirmed(Long patientId, Boolean confirmed) {
+		return appointmentRepository.findAllByPatientIdAndConfirmed(patientId, confirmed);
 	}
 
 	@Override

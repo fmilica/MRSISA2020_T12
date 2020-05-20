@@ -152,14 +152,15 @@ public class Doctor extends MedicalPersonnel {
 		if (this.getAppointments() != null) {
 			for (Appointment a : this.getAppointments()) {
 				// gledamo samo potvrdjene preglede
-				if (a.getConfirmed()) {
+				// ipak ne, gledamo sve!
+				//if (a.getConfirmed()) {
 					if (a.getDate().equals(date)) {
 						Integer start = a.getStartTime();
 						for (int i = 0; i < a.getAppType().getDuration(); i++) {
 							times.remove(Integer.valueOf(start+i));
 						}
 					}
-				}
+				//}
 			}
 		}
 		// imamo listu slobodnih vremena

@@ -22,6 +22,7 @@ import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformation
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
+import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
@@ -261,10 +262,11 @@ public class ClinicalCenterAdminController {
 		if(registrationRequest == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
 		}
+		Patient user = patientService.findOneById(registrationRequest.getUser().getId());
 		registrationRequest.setApproved(true);
 		registrationService.save(registrationRequest);
 		try {
-			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(),registrationRequest.getDescription(), true);
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, registrationRequest.getDescription(), true);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -289,12 +291,14 @@ public class ClinicalCenterAdminController {
 		if(registrationRequest == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
 		}
-		registrationService.deleteById(registrationRequest.getId());
-		patientService.deleteById(registrationRequest.getUser().getId());
+		Patient user = patientService.findOneById(registrationRequest.getUser().getId());
+		registrationRequest.setDescription(regReq.getDescription());
 		try {
-			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(),registrationRequest.getDescription(), false);
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, registrationRequest.getDescription(), false);
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+		registrationService.deleteById(registrationRequest.getId());
+		patientService.deleteById(registrationRequest.getUser().getId());
 	}
 }

@@ -122,8 +122,25 @@ $(document).ready( function () {
     })
     // Code books
     $('#codeBooks').click(function() {
+        if ($(this).hasClass('active-sub')) {
+            $(this).removeClass('active-sub')
+            $('#sub').hide("slow")
+        } else {
+            $(this).addClass('active-sub')
+            $('#sub').show("slow")
+        }
+    })
+    // Diagnosis book
+    $('#diagnosisBook').click(function() {
         $('.content').hide()
-        $('.code-books').show()
+        $('.diagnosis-book').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    // Prescription book
+    $('#prescriptionBook').click(function() {
+        $('.content').hide()
+        $('.prescription-book').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
@@ -161,7 +178,6 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
-    
     // Clinic profile
     $('#clinicProfile').click(function() {
         if ($(this).hasClass('active-sub')) {
@@ -356,9 +372,27 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
+    /* Patient existing appointments */
     $('#patientApps').click(function() {
+        if ($(this).hasClass('active-sub')) {
+            $(this).removeClass('active-sub')
+            $('#sub2').hide("slow")
+        } else {
+            $(this).addClass('active-sub')
+            $('#sub2').show("slow")
+        }
+    })
+    /* Patient confirmed appointments */
+    $('#confirmedApps').click(function() {
         $('.content').hide()
-        $('.patient-apps').show()
+        $('.patient-confirmed-apps').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    /* Patient unconfirmed appointments */
+    $('#unconfirmedApps').click(function() {
+        $('.content').hide()
+        $('.patient-unconfirmed-apps').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

@@ -1,7 +1,10 @@
 $(document).ready(function() {
-	
+
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirth").max = new Date().toISOString().split("T")[0];
+
 	// date format : yyyy-mm-dd
-	
+
 	$('#register').on('click', function(e){
 		e.preventDefault();
 
@@ -20,8 +23,7 @@ $(document).ready(function() {
 		
 		// check if all fields are filled
 		if (!emailV || !nameV || !surnameV || !passwordV1 || !passwordV2 ||
-				!genderV || !dateOfBirthV || !securityNumberV || 
-				!phoneNumberV || !addressV || !cityV || !countryV) {
+				!genderV || !dateOfBirthV || !securityNumberV) {
 			alert("All fields must be filled!")
 			return
 		}
@@ -75,6 +77,8 @@ $(document).ready(function() {
 	
 	/*When cancel is clicked*/
 	$("#cancel").on('click', function(e){
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 		window.location.href = "../../loginP.html"
 	})
 	

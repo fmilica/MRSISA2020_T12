@@ -9,6 +9,10 @@ var diagnosis = [];
 var edited = false;
 
 $(document).ready( function () {
+
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
+
 	//select2 radi zbog ovoga
 	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
@@ -35,6 +39,8 @@ $(document).ready( function () {
 
 	$('#cancelEdit').click(function(e) {
 		e.preventDefault()
+		document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
 		$('.content').hide()
 		$('.doctor-profile').show()
 	})
@@ -49,6 +55,46 @@ $(document).ready( function () {
 		e.preventDefault()
 		$('.content').hide()
 		$('.home-page').show()
+		$("#password").val("")
+		$("#passwordConfirm").val("")
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+
+	/*Check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 	})
 
 	/*View all patients*/
@@ -71,6 +117,15 @@ $(document).ready( function () {
 		current_secNum = secNum
 		viewPatientProfile(secNum)
 	});
+
+	// vracanje na prikaz svih pacijenata
+	$('#patientBack').click(function() {
+		$('.content').hide()
+		$('.doctor-patients').show()
+		// scroll to top of page
+		document.body.scrollTop = 0
+		document.documentElement.scrollTop = 0
+	})
 	
 	/*Show form to create medical report*/
 	$('#startAppointment').click(function(e){
@@ -147,7 +202,7 @@ $(document).ready( function () {
 		
 		event.preventDefault()
 		
-		var description = $("#descriptionMR").val()
+		var description = $("#descriptionMR").val().trim()
 		var diagnosis = $("#diagnosisMR").val()
 		var presc = $('#prescriptionMR').val()
 
@@ -245,7 +300,7 @@ $(document).ready( function () {
 		var weight = $('#weightMR').val()
 		var bloodPressure = $('#bloodPressureMR').val()
 		var bloodType = $('#bloodTypeMR').val()
-		var alergies = $('#alergiesMR').val()
+		var alergies = $('#alergiesMR').val().trim()
 		
 		if (!height || !weight || !bloodPressure || !bloodType || !alergies) {
 			alert("Not all required fields are filled!")
@@ -372,6 +427,8 @@ function viewAllPatients(){
 				}
 				]
 		})
+	} else {
+		patientsTable.ajax.reload()
 	}
 }
 
@@ -552,6 +609,8 @@ function changePassword() {
 			alert("Succesfully changed password.")
 			$('.content').hide()
 			$('.home-page').show()
+			$("#password").val("")
+			$("#passwordConfirm").val("")
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -605,12 +664,16 @@ function viewMedicalReports(data){
     $("#securityNumberPatient").text(data.securityNumber)
     $("#addressPatient").text(data.address + ", " + data.city + ", " + data.country)
     if(data.medicalRecords == null){
-        $('#medicalReport').hide()
-        $('h5').hide()
-        $("#generalReport").text("You dont have access to patients medical record.")
+		$('#medicalReport').hide()
+		$('h5').hide()
+		// sakrivanje dugmadi za pregled
+		$('.app-btns').hide()
+        $("#generalReport").text("You do not have access to patients medical record.")
     }else{
-    	$('#medicalReport').show()
+		$('#medicalReport').show()
 		$('h5').show()
+		// prikaz dugmadi za pregled
+		$('.app-btns').show()
 		$("#generalReport").text("")
     	$("#height").text(data.medicalRecords.height)
     	$("#weight").text(data.medicalRecords.weight)
@@ -640,7 +703,9 @@ function viewMedicalReports(data){
 					}]
     		})
     	} else {
-			medicalReportTable.clear().rows.add(data.medicalRecords.medicalReports).draw();
+			if (data.medicalRecords.medicalReports != null) {
+				medicalReportTable.clear().rows.add(data.medicalRecords.medicalReports).draw();
+			}
 		}
 	}
 }

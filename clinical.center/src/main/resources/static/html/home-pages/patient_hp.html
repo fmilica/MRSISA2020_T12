@@ -161,7 +161,24 @@
 									<img class="icon" src="../../img/icons/appointment.png">
 									<span class="title">My appointments</span>
 									<span class="arrow"></span>
-	                            </a>
+								</a>
+								<ul id="sub2" class="sub-menu">
+									<li class="nav-item">
+	                                    <a id="finishedApps" class="nav-link">
+	                                        <span class="title">Appointment history</span>
+	                                    </a>
+									</li>
+	                                <li class="nav-item">
+	                                    <a id="confirmedApps" class="nav-link">
+	                                        <span class="title">Upcoming appointments</span>
+	                                    </a>
+									</li>
+	                                <li class="nav-item">
+	                                    <a id="unconfirmedApps" class="nav-link">
+	                                        <span class="title">Unconfirmed appointments</span>
+	                                    </a>
+									</li>
+								</ul>
 							</li>
 							<li class="nav-item">
 	                            <a id="patientMedicalRecord" class="nav-link nav-toggle">
@@ -246,7 +263,11 @@
 								</div>
 								<div class="profile-usertitle">
 									<div class="profile-usertitle-name fullName"></div>
+									<hr class="edit-personal">
 								</div>
+							</div>
+							<div class="edit-profile">
+								<button id="editPatientProfile" type="button" class="btn btn-info edit">Edit Profile</button>
 							</div>
 						</div>
 						<div class="card">
@@ -288,9 +309,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="edit-profile">
-								<button id="editPatientProfile" type="button" class="btn btn-info edit">Edit Profile</button>
 							</div>
 						</div>
 					</div>
@@ -441,7 +459,7 @@
 										<div class="row">
 											<div class="offset-md-3 col-md-12 form-buttons">
 												<button id="confirmEdit" type="submit" class="btn btn-info">Save changes</button>
-												<button id="cancelEdit" type="button" class="btn btn-default">Discard changes</button>
+												<button id="cancelEdit" type="button" class="btn btn-default">Cancel</button>
 											</div>
 										</div>
 									</div>
@@ -526,7 +544,7 @@
 										<div class="profile-usertitle-name clinicName"></div>
 									</div>
 									<hr>
-									<button id="viewPredefined" type="submit" class="btn btn-info predefined-app-btn">View predefined appointments</button>
+									<button id="viewPredefined" class="btn btn-info predefined-app-btn">View predefined appointments</button>
 								</div>
 							</div>
 						</div>
@@ -819,8 +837,133 @@
 				</div>
 				
 				<!-- Patient appointments content -->
-				<div class="content patient-apps">
-					patient appointments
+				<!-- Patients finished appointments -->
+				<div class="content patient-finished-apps">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>My appointments history</header>
+									</div>
+									<div class="card-body">
+										<table id="finishedAppsTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Patients confirmed appointments -->
+				<div class="content patient-confirmed-apps">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>My upcoming appointments</header>
+									</div>
+									<div class="card-body">
+										<table id="confirmedAppsTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Patients uncofirmed appointments - pending acceptance -->
+				<div class="content patient-unconfirmed-apps">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>My unconfirmed appointments</header>
+									</div>
+									<div class="card-body">
+										<table id="unconfirmedAppsTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+													<th>Command</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment type</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Ordination</th>
+													<th>Price</th>
+													<th>Discount</th>
+													<th>Doctor</th>
+													<th>Command</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Patient medical record content -->

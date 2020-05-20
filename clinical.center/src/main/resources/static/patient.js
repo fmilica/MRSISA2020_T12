@@ -17,8 +17,14 @@ var predefinedApps;
 var clinicsTable;
 var doctorsClinicTable;
 var medicalReportTable;
+var finishedAppsTable;
+var confirmedAppsTable;
+var unconfirmedAppsTable;
 
 $(document).ready(function() {
+
+	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
+	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
 
 	/*------------------------------------------------------------------------------*/
 	// pregled profila
@@ -49,12 +55,16 @@ $(document).ready(function() {
 	$('#confirmEdit').click(function(e) {
 		e.preventDefault()
 		saveUpdatedProfile()
+		document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
 	})
 
 	$('#cancelEdit').click(function(e) {
 		e.preventDefault()
 		$('.content').hide()
-		$('.doctor-profile').show()
+		$('.patient-profile').show()
+		document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
 	})
 	
 	/*Change password*/
@@ -79,6 +89,10 @@ $(document).ready(function() {
 			url : "../../theGoodShepherd/doctor/changePassword/"+passwordV,
 			success : function(data)  {
 				alert("Succesfully changed password.")
+				$('.content').hide()
+				$('.home-page').show()
+				$("#password").val("")
+				$("#passwordConfirm").val("")
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -90,6 +104,46 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.content').hide()
 		$('.home-page').show()
+		$("#password").val("")
+		$("#passwordConfirm").val("")
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+
+	/*Check if passwords match*/
+	$("#password").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#passwordConfirm").on('blur', function(event){
+		event.preventDefault()
+		var pass = $("#password").val()
+		var rep = $("#passwordConfirm").val()
+		if(pass != rep){
+			showValidate($("#password"))
+			showValidate($("#passwordConfirm"))
+		}else{
+			hideValidate($("#password"))
+			hideValidate($("#passwordConfirm"))
+		}
+	})
+	$("#password").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
+	})
+	$("#passwordConfirm").on('focus', function(event){
+		event.preventDefault()
+		hideValidate($("#password"))
+		hideValidate($("#passwordConfirm"))
 	})
 	
 	/*------------------------------------------------------------------------------*/
@@ -209,25 +263,15 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: JSON.stringify(app),
 			success : function() {
-				// ako ovo radimo van funkcije
-				// moguce je da nece cekati da se izvrsi
-				// problem je ako fejluje mislim
-				// u smislu moze otici negde daleko, a da mu on tek tad javi gresku
-				/*
 	    		$("body").css("cursor", "default");
 				alert("Appointment sent successfully!")
 				$('.content').hide()
-				$('.patient-createNewApp').show()*/
+				$('.patient-createNewApp').show()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
 		})
-		// ovako ne cekamo
-		$("body").css("cursor", "default");
-		alert("Appointment sent successfully!")
-		$('.content').hide()
-		$('.patient-createNewApp').show()
 	})
 
 	$('#cancelApp').on('click', function(e){
@@ -307,6 +351,28 @@ $(document).ready(function() {
 		filterDoctors()
 	})
 	/**************/
+
+	/*---------------------------------------------------------------*/
+	/* View my appointments */
+	// view finished appointments
+	$('#finishedApps').click(function() {
+		initialiseFinishedApps()
+		$('.content').hide()
+		$('.patient-finished-apps').show()
+	})
+	// view confirmed appointments
+	$('#confirmedApps').click(function() {
+		initialiseConfirmedApps()
+		$('.content').hide()
+		$('.patient-confirmed-apps').show()
+	})
+	// view unconfirmed appointments
+	$('#unconfirmedApps').click(function() {
+		initialiseUnconfirmedApps()
+		$('.content').hide()
+		$('.patient-unconfirmed-apps').show()
+	})
+	/*---------------------------------------------------------------*/
 })
 
 /*Profile*/
@@ -500,7 +566,7 @@ function viewAvailableApps(clinicId, clinicName) {
 			{ 
 				data: null,
 				render: function(data) {
-					if (data.dicsount == null) {
+					if (data.discount == null) {
 						return "/"
 					} else {
 						return data.discount + " %"
@@ -770,6 +836,184 @@ function fillProfile(data){
 	}
 }
 
+/*-----------------------------------------------------*/
+function initialiseFinishedApps() {
+	if (!$.fn.DataTable.isDataTable('#finishedAppsTable')) {
+		finishedAppsTable = $('#finishedAppsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointment/allPatientFinished",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appType'},
+				{ data: 'date'},
+				{
+					data: null,
+					render: function(data) {
+						return data.startTime + ":00"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return data.endTime + ":00"
+					}
+				},
+				{ data: 'ordination'},
+				{
+					data: null,
+					render: function(data) {
+						return data.price + " &euro;"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						if (data.discount) {
+							return data.discount + "%"
+						} else {
+							return "0%"
+						}
+					}
+				},
+				{ data: 'doctor'}
+			]
+		})
+	} else {
+		finishedAppsTable.ajax.reload()
+	}
+}
+function initialiseConfirmedApps() {
+	if (!$.fn.DataTable.isDataTable('#confirmedAppsTable')) {
+		confirmedAppsTable = $('#confirmedAppsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointment/allPatientConfirmed",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appType'},
+				{ data: 'date'},
+				{
+					data: null,
+					render: function(data) {
+						return data.startTime + ":00"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return data.endTime + ":00"
+					}
+				},
+				{ data: 'ordination'},
+				{
+					data: null,
+					render: function(data) {
+						return data.price + " &euro;"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						if (data.discount) {
+							return data.discount + "%"
+						} else {
+							return "0%"
+						}
+					}
+				},
+				{ data: 'doctor'}
+			]
+		})
+	} else {
+		confirmedAppsTable.ajax.reload()
+	}
+}
+
+function initialiseUnconfirmedApps() {
+	if (!$.fn.DataTable.isDataTable('#unconfirmedAppsTable')) {
+		unconfirmedAppsTable = $('#unconfirmedAppsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointment/allPatientUnconfirmed",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appType'},
+				{ data: 'date'},
+				{
+					data: null,
+					render: function(data) {
+						return data.startTime + ":00"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return data.endTime + ":00"
+					}
+				},
+				{ data: 'ordination'},
+				{
+					data: null,
+					render: function(data) {
+						return data.price + " &euro;"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						if (data.discount) {
+							return data.discount + "%"
+						} else {
+							return "0%"
+						}
+					}
+				},
+				{ data: 'doctor'},
+				{ data: null,
+					render: function(data){
+						return '<button name="confirmApp" class="btn btn-info add-button" onclick="confirmApp('+ data.id +')">Confirm</button>' +
+						'<button name="declineApp" class="btn btn-info add-button" onclick="declineApp('+ data.id +')">Decline</button>'
+					}
+				}
+			]
+		})
+	} else {
+		unconfirmedAppsTable.ajax.reload()
+	}
+}
+// prihvatanje pregleda
+function confirmApp(appId) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/appointment/confirmApp/"+appId,
+		contentType: "application/json",
+		success : function() {
+			alert("Succesfully accepted an appointment!\nYou can view all your upcoming appointments in the 'Upcoming appointments' tab.")
+			unconfirmedAppsTable.ajax.reload()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+// odbijanje pregleda
+function declineApp(appId) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/appointment/declineApp/"+appId,
+		contentType: "application/json",
+		success : function() {
+			alert("Succesfully declined an appointment!\nThis appointment does no longer exist among yours.")
+			unconfirmedAppsTable.ajax.reload()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+/*-----------------------------------------------------*/
+
 function logInPatient(email, password) {
 
 	$.ajax({
@@ -785,4 +1029,16 @@ function logInPatient(email, password) {
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+/*Validation and forms*/
+function showValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).addClass('alert-validate');
+}
+function hideValidate(input) {
+	var thisAlert = $(input).parent();
+
+	$(thisAlert).removeClass('alert-validate');
 }
