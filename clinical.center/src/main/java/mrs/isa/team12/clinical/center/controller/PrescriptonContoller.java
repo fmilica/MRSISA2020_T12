@@ -117,7 +117,7 @@ public class PrescriptonContoller {
 	@PostMapping(value = "addNewPrescription",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PrescriptionDto> addNewPrescription(@RequestBody Prescription prescription) {
+	public ResponseEntity<PrescriptionDto> addNewPrescription(@RequestBody Prescription prescription) throws Exception {
 		
 		ClinicalCentreAdmin currentUser;
 		try {
@@ -135,20 +135,14 @@ public class PrescriptonContoller {
 			diagnosis.add(d);
 		}
 		
-		Prescription p = prescriptionService.findOneByMedicine(prescription.getMedicine());
+		Prescription p = prescriptionService.update(prescription.getMedicine(), prescription,diagnosis);
 		
 		if(p == null) {
-			prescription.setDiagnosis(diagnosis);
-			
-			Prescription pp = prescriptionService.save(prescription);
-			
-			PrescriptionDto prescriptionDto = new PrescriptionDto(pp);
-			
-			return new ResponseEntity<>(prescriptionDto, HttpStatus.OK);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prescription with given name already exists!");
 		}
 		
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prescription with given name already exists!");
-		
+		PrescriptionDto prescriptionDto = new PrescriptionDto(p);
+		return new ResponseEntity<>(prescriptionDto, HttpStatus.OK);
 	}
 	
 }

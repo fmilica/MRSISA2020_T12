@@ -17,4 +17,6 @@ public interface AppointmentRequestRepository extends JpaRepository<AppointmentR
 	
 	List<AppointmentRequest> findAllByClinicAndApproved(Clinic clinic, Boolean approved);
 	
+	void deleteOneById(Long id);
+	
 }

@@ -399,10 +399,10 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Patient patient = patientService.findOneById(currentUser.getId());
+		//Patient patient = patientService.findOneById(currentUser.getId());
 		Appointment app;
 		try {
-			app = appointmentService.update(patient, appId);
+			app = appointmentService.update(currentUser, appId); //ovde promenjeno sa patient na currentUser jer vec ga imamo, sto bi ga dobavljali
 			app.getAppType();
 			adminService.sendNotificaitionAsync(null, currentUser, app, true, false, true);
 		} catch (NoSuchElementException e) {

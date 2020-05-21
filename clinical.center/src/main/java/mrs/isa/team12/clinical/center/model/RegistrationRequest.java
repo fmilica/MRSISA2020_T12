@@ -53,9 +53,11 @@ public class RegistrationRequest {
 	public RegisteredUser getUser() {
 		return user;
 	}
+
 	public void setUser(RegisteredUser user) {
 		this.user = user;
 	}
+
 	public Boolean getApproved() {
 		return approved;
 	}

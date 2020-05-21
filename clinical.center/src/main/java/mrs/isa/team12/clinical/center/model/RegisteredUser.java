@@ -76,6 +76,24 @@ public class RegisteredUser {
 		this.phoneNumber = phoneNumber;
 		this.securityNumber = securityNumber;
 	}
+	
+	public RegisteredUser(Long id, String email, String password, String name, String surname, String gender, 
+			String dateOfBirth, String address, String city, String country, 
+			String phoneNumber, String securityNumber) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.surname = surname;
+		this.address = address;
+		this.city = city;
+		this.country = country;
+		this.phoneNumber = phoneNumber;
+		this.securityNumber = securityNumber;
+	}
 
 	public String getEmail() {
 		return email;

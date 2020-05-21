@@ -17,11 +17,11 @@ public interface PatientService {
 	
 	Patient save(Patient p);
 	
-	Patient updatePassword(Long id, String newPassword);
+	Patient updatePassword(Long id, String newPassword) throws Exception;
 	
-	Patient update(Patient p, RegistrationRequest regReq);
+	Patient update(PatientProfileDto p) throws Exception;
 	
-	Patient update(PatientProfileDto p);
+	Patient update(Patient p, RegistrationRequest r) throws Exception;
 	
 	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient);
@@ -32,5 +32,7 @@ public interface PatientService {
 	
 	Patient findOneBySecurityNumber(String securityNumber);
 	
-	void deleteById(Long id);
+	Patient findOneByRegistrationRequestId(Long id);
+	
+	Patient deleteByRequestId(Long id);
 }

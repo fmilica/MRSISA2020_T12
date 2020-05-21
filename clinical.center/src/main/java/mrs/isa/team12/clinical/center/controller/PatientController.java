@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,7 +29,6 @@ import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
-import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
@@ -134,7 +134,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "changePassword/{password}")
-	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password){
+	public ResponseEntity<RegisteredUserDto> changePassword(@PathVariable String password) throws Exception{
 		
 		Patient currentUser;
 		try {
@@ -146,7 +146,12 @@ public class PatientController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Patient updated = patientService.updatePassword(currentUser.getId(), password);
+		Patient updated;
+		try {
+			updated = patientService.updatePassword(currentUser.getId(), password);
+		}catch(NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given id doesn't exist!");
+		}
 		
 		session.setAttribute("currentUser", updated);
 		
@@ -188,7 +193,7 @@ public class PatientController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/editPersonalInformation")
-	public ResponseEntity<PatientProfileDto> editPersonalInformation(@RequestBody PatientProfileDto editedProfile) {
+	public ResponseEntity<PatientProfileDto> editPersonalInformation(@RequestBody PatientProfileDto editedProfile) throws Exception {
 
 		Patient currentUser;
 		try {
@@ -205,7 +210,13 @@ public class PatientController {
 		
 		editedProfile.setId(currentUser.getId());
 				
-		Patient patient = patientService.update(editedProfile);
+		Patient patient;
+		
+		try {
+			patient = patientService.update(editedProfile);
+		}catch(NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patient with given id doesn't exist!");
+		}
 		
 		// postavljanje novog, izmenjenog pacijenta na sesiju
 		session.setAttribute("currentUser", patient);
@@ -298,7 +309,7 @@ public class PatientController {
 	@PostMapping(value = "/register",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PatientDto> registerPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDto> registerPatient(@RequestBody Patient patient) throws Exception {
 		// vec postoji ulogovani korisnik, ne moze se registrovati
 		if (session.getAttribute("currentUser") != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already loged in!");
@@ -320,13 +331,16 @@ public class PatientController {
 		registrationService.save(regReq);
 		// dodavanje reference na registration request
 		saved = patientService.update(saved, regReq);
-		
-		List<ClinicalCentreAdmin> admins = centerAdminService.findAll();
-		
-		for (ClinicalCentreAdmin cca : admins) {
-			centerAdminService.sendNotificaitionAsync(cca);
+		try {
+			/*regReq = registrationService.save(new RegistrationRequest(patient, false, ""));
+			System.out.println("---------------regreq id: "+regReq.getId());
+			saved = patientService.update(saved, regReq);
+			System.out.println("---------------regreq pacijenta: "+saved.getRegistrationRequest().getId());
+			*/
+			centerAdminService.sendNotificaitionAsync();
+		}catch(NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Registration request with given id doesn't exist!");
 		}
-		
 		return new ResponseEntity<>(new PatientDto(saved), HttpStatus.CREATED);
 	}
 
