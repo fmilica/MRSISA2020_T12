@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
@@ -28,6 +29,9 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	
 	@Autowired
 	private JavaMailSenderImpl javaMailSender;
+	
+	@Autowired
+	private Environment env;
 	
 	@Autowired
 	public ClinicalCentreAdminServiceImpl(ClinicalCentreAdminRepository clinicCentreAdminRep) {
@@ -100,14 +104,14 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	@Async
 	@Override
 	public void sendNotificaitionAsync() {
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
+		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
 		
 		for (ClinicalCentreAdmin cca : this.findAll()) {
-			javaMailSender.setUsername("thegoodshepherdadm@gmail.com");
-			javaMailSender.setPassword("admin1tgs");
 			System.out.println("Slanje emaila...");
 			SimpleMailMessage mail = new SimpleMailMessage();
 			mail.setTo(cca.getEmail());
-			mail.setFrom("thegoodshepherdadm@gmail.com");
+			mail.setFrom(env.getProperty("spring.mail.username"));
 			mail.setSubject("Registration request");
 			mail.setText("Hello " + cca.getName() + ",\n\nYou have a new registration request.\n\n" + 
 						"Best wishes,\nClinical center The Good Shepherd");
@@ -119,12 +123,12 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	@Override
 	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance) {
-		javaMailSender.setUsername(admin.getEmail());
-		javaMailSender.setPassword(admin.getPassword());
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
+		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
 		System.out.println("Slanje emaila...");
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
-		mail.setFrom(admin.getEmail());
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
 		if(acceptance == true) {
 			mail.setSubject("Registration request accepted!");
 			mail.setText("Hello " + user.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your registration request!\n" + 
