@@ -12,8 +12,8 @@ addons:
 
 script:
   - cd clinical.center
-  - ./mvnw clean install -DskipTests=false -B
-  - ./mvnw sonar:sonar -Dsonar.projectKey=fmilica_MRSISA2020_T12 -Dsonar.organization=tim12 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=04ef90a2a5c450339d1ebaaedb5fbc1fbbc94de6
+  - mvnw clean install -DskipTests=false -B
+  - mvnw sonar:sonar -Dsonar.projectKey=fmilica_MRSISA2020_T12 -Dsonar.organization=tim12 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=04ef90a2a5c450339d1ebaaedb5fbc1fbbc94de6
 
 dist: trusty
 
