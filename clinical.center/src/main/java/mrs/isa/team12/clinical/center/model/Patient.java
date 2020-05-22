@@ -28,7 +28,7 @@ public class Patient extends RegisteredUser {
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	private ClinicalCentre clinicalCentre;
 	
-	@OneToOne(fetch = LAZY)
+	@OneToOne(cascade = {ALL}, fetch = LAZY)
 	@JoinColumn(name = "registration_request_id")
 	private RegistrationRequest registrationRequest;
 	

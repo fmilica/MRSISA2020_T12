@@ -315,12 +315,11 @@ public class ClinicAdminController {
 		Clinic clinic = clinicService.findOneById(appointmentReq.getClinic().getId());
 		clinic.addAppointment(appointmentReq.getAppointment());
 		
-		//
-		Ordination ord = ordinationService.findOneById(appointmentRequest.getOrdId());
-		ord.addAppointment(appointmentReq.getAppointment());
-		appointmentReq.getAppointment().setOrdination(ord);
-		ordinationService.save(ord);
-		//
+		try {
+			ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
+		}
 		
 		//sacuvati sve u bazama
 		doctorService.save(doctor);
@@ -402,12 +401,11 @@ public class ClinicAdminController {
 		Clinic clinic = clinicService.findOneById(appointmentReq.getClinic().getId());
 		clinic.addAppointment(appointmentReq.getAppointment());
 		
-		//
-		Ordination ord = ordinationService.findOneById(appointmentRequest.getOrdId());
-		ord.addAppointment(appointmentReq.getAppointment());
-		appointmentReq.getAppointment().setOrdination(ord);
-		ordinationService.save(ord);
-		//
+		try {
+			ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
+		}
 		
 		//sacuvati sve u bazama
 		doctorService.save(doctor);

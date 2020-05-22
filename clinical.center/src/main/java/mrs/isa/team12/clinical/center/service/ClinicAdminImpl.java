@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
@@ -30,6 +31,9 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	
 	@Autowired
 	private JavaMailSenderImpl javaMailSender;
+	
+	@Autowired
+	private Environment env;
 	
 	@Autowired
 	public ClinicAdminImpl(ClinicAdminRepository clinicAdminRep) {
@@ -112,11 +116,13 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	@Async
 	public void sendNotificaitionAsync(ClinicAdmin admin, Patient patient, Appointment appointment, boolean acceptance, boolean operation, boolean predefined) {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy.");
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
+		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
 		String op = "Appointment";
 		if(operation == true) {
 			op = "Operation";
 		}
-		String adminFrom = "";
+		/*String adminFrom = "";
 		if(predefined == true) {
 			adminFrom = "thegoodshepherdadm@gmail.com";
 			javaMailSender.setUsername(adminFrom);
@@ -125,12 +131,11 @@ public class ClinicAdminImpl implements ClinicAdminService {
 			adminFrom = admin.getEmail();
 			javaMailSender.setUsername(admin.getEmail());
 			javaMailSender.setPassword(admin.getPassword());
-		}
+		}*/
 		System.out.println("Slanje emaila...");
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(patient.getEmail());
-		
-		mail.setFrom(adminFrom);
+		mail.setFrom(env.getProperty("spring.mail.username"));
 		String disc = "";
 		if(acceptance == true) {
 			if(appointment.getDiscount() == null) {
@@ -155,7 +160,7 @@ public class ClinicAdminImpl implements ClinicAdminService {
 				mailText += "You may see it in 'My Appointments' tab on your profile.";
 			}
 			else {
-				mailText += ",\n\nAdmin " + adminFrom + " accepted your "+ op.toLowerCase() +" request!\n";
+				mailText += ",\n\nAdmin " + admin.getEmail() + " accepted your "+ op.toLowerCase() +" request!\n";
 				mailText += details;
 				if(operation == true) {
 					mailText += "You may see it in 'My Appointments' tab on your profile.";

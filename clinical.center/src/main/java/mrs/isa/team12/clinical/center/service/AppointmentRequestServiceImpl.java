@@ -36,8 +36,8 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 	}
 
 	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
-	@Transactional(readOnly = false)
 	@Override
+	@Transactional(readOnly = false)
 	public AppointmentRequest save(AppointmentRequest ar) {
 		logger.info("> create");
 		AppointmentRequest savedAppReq = appointmentRequestRep.save(ar);

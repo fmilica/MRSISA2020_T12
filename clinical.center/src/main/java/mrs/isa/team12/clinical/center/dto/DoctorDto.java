@@ -19,6 +19,7 @@ public class DoctorDto {
 	private Specialization specialization;
 	private Integer startWork;
 	private Integer endWork;
+	private Double rating;
 	
 	public DoctorDto(Doctor doctor) {
 		this.id = doctor.getId();
@@ -35,6 +36,7 @@ public class DoctorDto {
 		this.specialization = doctor.getSpecialization();
 		this.startWork = doctor.getStartWork();
 		this.endWork = doctor.getEndWork();
+		this.rating = doctor.getRating();
 	}
 	
 	public Long getId() {
@@ -120,5 +122,13 @@ public class DoctorDto {
 	}
 	public void setEndWork(Integer endWork) {
 		this.endWork = endWork;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
 	}
 }

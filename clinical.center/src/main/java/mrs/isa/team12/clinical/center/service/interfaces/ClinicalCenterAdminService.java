@@ -24,7 +24,7 @@ public interface ClinicalCenterAdminService {
 	List<ClinicalCentreAdmin> findAll();
 
 	@Async
-	public void sendNotificaitionAsync(ClinicalCentreAdmin admin);
+	public void sendNotificaitionAsync();
 	
 	@Async
 	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance);

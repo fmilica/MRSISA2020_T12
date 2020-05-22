@@ -1,5 +1,6 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
 import java.sql.Date;
@@ -26,7 +27,7 @@ public class AppointmentRequest {
 	@Version
 	private Long version;
 	
-	@OneToOne(fetch = EAGER)
+	@OneToOne(cascade = {ALL}, fetch = EAGER)
 	@JoinColumn(name = "appointment_id")
 	private Appointment appointment;
 	

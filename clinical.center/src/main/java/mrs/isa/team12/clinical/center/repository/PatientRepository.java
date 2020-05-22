@@ -16,5 +16,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
 	Patient findOneBySecurityNumber(String securityNumber);
 	
+	Patient findOneByRegistrationRequestId(Long id);
+	
 	void deleteById(Long id);
 }

@@ -2,6 +2,7 @@ package mrs.isa.team12.clinical.center.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
 
@@ -240,7 +241,11 @@ public class ClinicalCenterAdminController {
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 	
-
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicalCenterAdmin/acceptRegistrationRequest
+	 HTTP request for accepting registration request
+	 receives RegistrationRequest object
+	 */
 	@PostMapping(value = "/acceptRegistrationRequest",
 			 consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void acceptRegistrationRequest(@RequestBody RegistrationRequest regReq) {
@@ -257,21 +262,26 @@ public class ClinicalCenterAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		RegistrationRequest registrationRequest = registrationService.findOneById(regReq.getId());
-		
-		if(registrationRequest == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
-		}
-		Patient user = patientService.findOneById(registrationRequest.getUser().getId());
-		registrationRequest.setApproved(true);
-		registrationService.save(registrationRequest);
+		RegistrationRequest registrationRequest;
 		try {
+			registrationRequest = registrationService.update(regReq.getId(), true);
+			
+			Patient user = patientService.findOneById(registrationRequest.getUser().getId());
+			
 			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, registrationRequest.getDescription(), true);
+		}catch(NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data with requested id doesn't exist!");
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 	
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinicalCenterAdmin/declineRegistrationRequest
+	 HTTP request for declining a registration request
+	 receives RegistrationRequest object
+	 */
 	@PostMapping(value = "/declineRegistrationRequest",
 			 consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void declineRegistrationRequest(@RequestBody RegistrationRequest regReq) {
@@ -286,19 +296,14 @@ public class ClinicalCenterAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		RegistrationRequest registrationRequest = registrationService.findOneById(regReq.getId());
-		
-		if(registrationRequest == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request with given id does not exist.");
-		}
-		Patient user = patientService.findOneById(registrationRequest.getUser().getId());
-		registrationRequest.setDescription(regReq.getDescription());
+		//pokusam da obrisem samo patient i nadam se da ce pobrisati i ostalo
 		try {
-			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, registrationRequest.getDescription(), false);
+			Patient user = patientService.deleteByRequestId(regReq.getId());
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, regReq.getDescription(), false);
+		}catch( NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patient with requested id doesn't exist!");
 		}catch( Exception e ){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		registrationService.deleteById(registrationRequest.getId());
-		patientService.deleteById(registrationRequest.getUser().getId());
 	}
 }
