@@ -20,6 +20,10 @@
 	
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.projectKey>fmilica_MRSISA2020_T12</sonar.projectKey>
+		<sonar.organization>tim12</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.login>59b794ae77066f94dcda384694882bfb1083cb50</sonar.login>
 	</properties>
 
 	<dependencies>
@@ -78,6 +82,26 @@
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-surefire-plugin</artifactId>
 		    </plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+				<execution>
+					<id>default-prepare-agent</id>
+					<goals>
+					<goal>prepare-agent</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>default-report</id>
+					<phase>prepare-package</phase>
+					<goals>
+					<goal>report</goal>
+					</goals>
+				</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
