@@ -16,36 +16,56 @@
          url('../fonts/varela-round-v12-latin-regular.svg#VarelaRound') format('svg'); /* Legacy iOS */
   }
 
-  @font-face {
+@font-face {
     font-family: Poppins-Regular;
-    src: url('../css/fonts/poppins/Poppins-Regular.ttf'); 
-  }
-  
-  @font-face {
+    src: url('fonts/poppins/Poppins-Regular.ttf'); 
+}
+
+@font-face {
     font-family: Poppins-Medium;
-    src: url('../css/fonts/poppins/Poppins-Medium.ttf'); 
-  }
-  
-  @font-face {
+    src: url('fonts/poppins/Poppins-Medium.ttf'); 
+}
+
+@font-face {
     font-family: Poppins-Bold;
-    src: url('../css/fonts/poppins/Poppins-Bold.ttf'); 
-  }
-  
-  @font-face {
+    src: url('fonts/poppins/Poppins-Bold.ttf'); 
+}
+
+@font-face {
     font-family: Poppins-SemiBold;
-    src: url('../css/fonts/poppins/Poppins-SemiBold.ttf'); 
-  }
+    src: url('fonts/poppins/Poppins-SemiBold.ttf'); 
+}
 
 html {
-    font-family: Poppins-Regular, sans-serif !important;
+    font-family: Poppins-Regular, sans-serif;
     /*font-family: 'Varela Round' !important;*/
 }
 
 body {
+    font-family: Poppins-Regular, sans-serif;
     background-image: url(../img/background_transparent.png);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+}
+
+h1, h2, h3,
+h4, h5 {
+    font-family: Poppins-Regular, sans-serif !important;
+}
+
+.dropdown-menu {
+    font-family: Poppins-Regular, sans-serif !important;
+}
+
+i {
+    font-style: normal !important;
+}
+
+.table-action{
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 7px;
 }
 
 /*
@@ -102,7 +122,7 @@ body {
 }
 
 .logo-default {
-    font-size: medium !important;
+    font-size: small !important;
     color: black;
 }
 

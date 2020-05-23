@@ -530,6 +530,13 @@ $(document).ready(function() {
 							return adresa
 						}
 					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return '<span id="'+data.id+'" class="table-action edit-doctor"><i class="fas fa-edit"></i></span>'+
+								'<span id="'+data.id+'" class="table-action delete-doctor"><i class="fas fa-trash"></i></span>'
+					}
 				}]
 			})
 		}
@@ -684,7 +691,22 @@ $(document).ready(function() {
 	$("#endWorkDoctor").on('click', function(e){
 		hideValidate($("#endWorkDoctor"))
 	})
+
+	/*--------------------------------------------------*/
+	// Editing and deleting doctors
+	$('body').on('click', 'span.edit-doctor', function() {
+		alert("Hello, ja sam edit doktora, nalazim se na 698. liniji!")
+		var doctorId = $(this).attr('id')
+		alert("Id doktora koji je kliknut je: " + doctorId)
+	})
+
+	$('body').on('click', 'span.delete-doctor', function() {
+		alert("Hello, ja sam delete doktora, nalazim se na 702. liniji!")
+		var doctorId = $(this).attr('id')
+		alert("Id doktora koji je kliknut je: " + doctorId)
+	})
 	/**********/
+
 	/*Appointment requests*/
 
 	// pretplata svih elemenata sa klasom na klik
