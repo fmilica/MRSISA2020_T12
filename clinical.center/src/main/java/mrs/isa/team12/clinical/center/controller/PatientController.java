@@ -30,6 +30,8 @@ import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.MedicalReport;
+import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
@@ -37,6 +39,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
+import mrs.isa.team12.clinical.center.service.interfaces.MedicalReportService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
@@ -52,6 +55,7 @@ public class PatientController {
 	private ClinicAdminService clinicAdminService;
 	private RegisteredUserService userService;
 	private RegistrationRequestService registrationService;
+	private MedicalReportService medicalReportService;
 	
 	@Autowired
 	private HttpSession session;
@@ -60,7 +64,7 @@ public class PatientController {
 	public PatientController(PatientService patientService,
 			ClinicService clinicService, AppointmentService appointmentService, ClinicAdminService clinicAdminService,
 			RegisteredUserService userService, RegistrationRequestService registrationService,
-			ClinicalCenterAdminService centerAdminService) {
+			ClinicalCenterAdminService centerAdminService, MedicalReportService medicalReportService) {
 		this.patientService = patientService;
 		this.clinicService = clinicService;
 		this.centerAdminService = centerAdminService;
@@ -68,6 +72,7 @@ public class PatientController {
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
 		this.registrationService = registrationService;
+		this.medicalReportService = medicalReportService;
 	}
 	
 
@@ -80,13 +85,18 @@ public class PatientController {
 	public ResponseEntity<List<PatientsDto>> getAllPatients() {
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
-		Doctor currentUser;
+		Doctor currentUser = null;
+		Nurse nurse = null;
 		try {
 			currentUser = (Doctor) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view registered patients");
+			try {
+				nurse = (Nurse) session.getAttribute("currentUser");
+			} catch (ClassCastException ex) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors and nurses can view registered patients");
+			}
 		}
-		if (currentUser == null) {
+		if (currentUser == null && nurse == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
@@ -265,6 +275,41 @@ public class PatientController {
 		return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/viewProfile/nurse/{secNum}
+	 HTTP request for viewing chosen patient profile
+	 receives String securityNumber
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/viewProfile/nurse/{secNum}")
+	public ResponseEntity<PatientProfileDto> viewProfileNurse(@PathVariable String secNum){
+		
+		Nurse currentUser;
+		try {
+			currentUser = (Nurse) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only nurses can view registered patients");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient patient = patientService.findOneBySecurityNumber(secNum);
+		List<MedicalReport> medicalReports = medicalReportService.findAllByNurseIdAndAppointmentPatientId(currentUser.getId(), patient.getId());
+		if(medicalReports.size() == 0) {
+			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
+		}
+		// if nisu null! mogu biti i null, da nije do sad imala pregled!
+		if (patient.getMedicalRecords() != null) {
+			MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
+			// uzecemo sve preglede, ali cemo dodati samo one koji su finished!
+			// da bismo izbegli dodavanje medical record i u appointment, vec da bude samo u pacijentu
+			medicalRecords.setMedicalReports(patient.getAppointments());
+			return new ResponseEntity<>(new PatientProfileDto(patient, medicalRecords), HttpStatus.OK);
+		}
+		// prvi pregled, nema records
+		return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
+	}
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/patient/logIn/{email}/{password}

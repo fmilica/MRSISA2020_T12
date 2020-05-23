@@ -1,10 +1,16 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.MedicalReportDto;
+import mrs.isa.team12.clinical.center.dto.MedicalReportVerifyDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Diagnosis;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.MedicalReport;
+import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Prescription;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
@@ -44,6 +52,35 @@ public class MedicalReportController {
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/medicalReport/
+	 HTTP request for geting all not verified medical reports 
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "")
+	public ResponseEntity<List<MedicalReportVerifyDto>> getMedicalReports(){
+		
+		Nurse nurse;
+		try {
+			nurse = (Nurse) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only nurses can verify medical reports.");
+		}
+		if (nurse == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<MedicalReport> medicalReports = medicalReportService.findAll();
+		List<MedicalReportVerifyDto> medicalReportDtos = new ArrayList<MedicalReportVerifyDto>();
+		
+		for (MedicalReport mr : medicalReports) {
+			if(!mr.isVerified()) {
+				medicalReportDtos.add(new MedicalReportVerifyDto(mr));
+			}
+		}
+		return new ResponseEntity<>(medicalReportDtos, HttpStatus.CREATED);
+	}
+	
+	/*
 	 url: POST localhost:8081/theGoodShepherd/medicalReport/addNewMedicalReport
 	 HTTP request for adding new medical report
 	 receives Doctor object doctor
@@ -68,6 +105,7 @@ public class MedicalReportController {
 		}
 		
 		MedicalReport medicalReport = new MedicalReport();
+		medicalReport.setVerified(false);
 		medicalReport.setDescription(medicalReportDto.getDescription());
 		
 		Diagnosis d =  diagnosisService.findOneByName(medicalReportDto.getDiagnosisName());
@@ -91,5 +129,31 @@ public class MedicalReportController {
 		medicalReportDto = new MedicalReportDto(medicalReport);
 		
 		return new ResponseEntity<>(medicalReportDto, HttpStatus.CREATED);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/medicalReport/verify/{medicalRecordId}
+	 HTTP request for verifing a prescription
+	 receives Doctor object doctor
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/verify/{medicalRecordId}")
+	public void verifyPrescription(@PathVariable("medicalRecordId") Long medicalRecordId) throws Exception{
+		
+		Nurse nurse;
+		try {
+			nurse = (Nurse) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only nurses can verify prescription.");
+		}
+		if (nurse == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		try {
+			medicalReportService.update(medicalRecordId, nurse);
+		}catch(NoSuchElementException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medical report with given id doesn't exist!");
+		}
 	}
 }

@@ -49,6 +49,13 @@ public class MedicalReport {
 	@JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
 	private Diagnosis diagnosis;
 	
+	@Column(name = "verified", unique = false, nullable = true)
+	private boolean verified;
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "nurse_id", referencedColumnName = "id", nullable = true)
+	private Nurse nurse;
+	
 	public MedicalReport() {}
 	
 	public MedicalReport(Long id, String description, Set<Prescription> prescriptions, 
@@ -93,6 +100,14 @@ public class MedicalReport {
 		this.diagnosis = diagnosis;
 	}
 	
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
+	}
+
 	public void addPrescription(Prescription p) {
 		if(this.prescriptions == null) {
 			this.prescriptions = new HashSet<Prescription>();
@@ -100,5 +115,13 @@ public class MedicalReport {
 		if (!this.prescriptions.contains(p)) {
 			this.prescriptions.add(p);
 		}
+	}
+
+	public Nurse getNurse() {
+		return nurse;
+	}
+
+	public void setNurse(Nurse nurse) {
+		this.nurse = nurse;
 	}
 }

@@ -188,8 +188,8 @@ insert into perscription_diagnosis (diagnosis_id, perscription_id)
 values ('31', '35');
 
 /*Medical report (izvestaj doktora)*/
-insert into medical_report (id, description, diagnosis_id, appointment_id, version)
-values ('34', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '21', '0');
+insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified)
+values ('34', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '21', '0', 'false');
 /*Lekovi prepisani ovim izvestajem gore*/
 insert into medical_report_perscription(medical_report_id, prescription_id)
 values ('34', '32');
@@ -200,8 +200,8 @@ update appointment
 set medical_report_id = '34'
 where id = '21';
 
-insert into medical_report (id, description, diagnosis_id, appointment_id, version)
-values ('59', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '57', '0');
+insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id)
+values ('59', 'Pacijent pokazuje pocetni stadijum Vitiliga, pecati se nalaze na sakama i ledjima.', '31', '57', '0', 'true', '15');
 /*Lekovi prepisani ovim izvestajem gore*/
 insert into medical_report_perscription(medical_report_id, prescription_id)
 values ('59', '32');
@@ -211,3 +211,9 @@ values ('59', '35');
 update appointment
 set medical_report_id = '59'
 where id = '57';
+
+/*Zahtevi za bolovanje/odmor*/
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id)
+values ('60', '0', '2020-05-27', '2020-06-03', '0', '15');
+insert into leave_request(id, version, leave_id, approved, description)
+values ('61', '0', '60', 'false', '');

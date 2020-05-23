@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.model;
 
+import static javax.persistence.FetchType.LAZY;
+
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -7,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -33,14 +38,23 @@ public class Leave {
 	
 	@Column(name = "leave_type", nullable = false, unique = false)
 	private LeaveType type;
+	
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name= "medical_personnel_id", referencedColumnName = "id", nullable = false)
+	private MedicalPersonnel medicalPersone;
+	
+	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "leave_request_id")
+	private LeaveRequest leaveRequest;
 
 	public Leave() {}
 	
-	public Leave(Date startDate, Date endDate, LeaveType type) {
+	public Leave(Date startDate, Date endDate, LeaveType type, MedicalPersonnel mp) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.type = type;
+		this.medicalPersone = mp;
 	}
 
 	public Date getStartDate() {

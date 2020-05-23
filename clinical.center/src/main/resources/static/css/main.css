@@ -568,6 +568,12 @@ i {
 .nurse-edit-profile{
 	display: none;
 }
+.nurse-create-leave-request{
+	display: none;
+}
+.nurse-patient-profile{
+	display: none;
+}
 
 /* Patient */
 .patient-viewAllClinics {
