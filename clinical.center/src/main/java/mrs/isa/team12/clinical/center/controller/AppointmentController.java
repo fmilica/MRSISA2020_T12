@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.dto.AppointmentDto;
+import mrs.isa.team12.clinical.center.dto.AppointmentFollowupDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentPredefinedDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
@@ -31,6 +32,7 @@ import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
@@ -409,5 +411,72 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
 		}
 		return new ResponseEntity<>(new AppointmentDto(app), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/appointment/createFollowupRequest
+	 HTTP request for creating a followup examination or operation request
+	 receives AppointmentFollowupDto
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/createFollowupRequest",
+				 consumes = MediaType.APPLICATION_JSON_VALUE,
+				 produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppointmentFollowupDto> createPredefinedAppointment(@RequestBody AppointmentFollowupDto appDto) {
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a doctor can schedule a followup exam!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		// kreiranje novog followup appointmenta
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = new Date(dt.parse(appDto.getDate()).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		AppointmentType type = appointmentTypeService.findOneById(appDto.getAppTypeId());
+		Doctor doctor = doctorService.findOneById(currentUser.getId());
+		Clinic clinic = doctor.getClinic();
+		Patient patient = patientService.findOneBySecurityNumber(appDto.getPatientSecurityNumber());
+		
+		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, doctor, clinic, patient);
+		
+		if (appDto.getOperation()) {
+			appointment.setType(OrdinationType.OperatingRoom);
+		} else {
+			appointment.setType(OrdinationType.ConsultingRoom);
+		}
+		
+		// klinici dodamo novi pregled
+		clinic.addAppointment(appointment);
+		// doktoru dodamo novi pregled
+		doctor.addAppointment(appointment);
+		// pacijentu dodamo novi pregled
+		patient.addAppointment(appointment);
+		appointment = appointmentService.save(appointment);
+		
+		// kreiramo zahtev za pregled
+		Date today = new Date(new java.util.Date().getTime());
+																			// approved
+		AppointmentRequest appRequest = new AppointmentRequest(appointment, today, false, clinic);
+		appointmentRequestService.save(appRequest);
+		
+		// dodavanje u appointment njegov appointment request
+		appointment.setAppointmentRequest(appRequest);
+		appointmentService.save(appointment);
+		
+		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA FOLLOWUP, DA NE KAZEM KONTROLU!
+		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA OPERACIJU!
+		// ZAVISNO OD TIPA NARAVNO
+		// GORE VEC IMA IF ZA TIP, AKO MOZE DA SE IZKORISTI
+		
+		return new ResponseEntity<>(appDto, HttpStatus.OK);
 	}
 }

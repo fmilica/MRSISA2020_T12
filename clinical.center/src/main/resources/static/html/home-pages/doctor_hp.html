@@ -644,7 +644,6 @@
 						</div>
 					</div>
 				</div>
-				
 				<!-- Write medical report -->
 				<div class = "content writeMedicalReport">
 					<div class="add">
@@ -686,11 +685,18 @@
 														</select>
 													</div>
 												</div>
+												<div id="followup" class="app-followup">
+													<button id="scheduleFollowupForm" type="button" class="btn btn-info app-sch-btn">Schedule Followup</button>
+													<button id="scheduleOperationForm" type="button" class="btn btn-info app-sch-btn">Schedule Operation</button>	
+												</div>
+												<div id="modifyReport" class="app-text">
+													<p>You can only specify followup or operation only when you first write the report.</p>
+												</div>
 											</div>
 											<div class="form-actions">
 												<div class="row">
-													<div class="offset-md-3 col-md-12 form-buttons">
-														<button id="write_report" type="button" class="btn btn-info">Create</button>
+													<div class="offset-md-3 col-md-12 form-btns">
+														<button id="write_report" type="button" class="btn btn-info">Finish</button>
 														<button id="cancel_report" type="button" class="btn btn-default">Cancel</button>
 													</div>
 												</div>
@@ -702,9 +708,119 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Schedule followup examination -->
+				<div class="content schedule-followup">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Schedule followup examination</header>
+									</div>
+									<form class="form-horizontal">
+										<div class="form-body">
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Date
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<input type="date" id="dateFollowup" data-required="1"  class="form-control input-height" />
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Time
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<input type="text" id="timeFollowup" data-required="1"  class="form-control input-height" />
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Appointment type
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<select id="appTypeFollowup" class="form-control input-height">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="offset-md-3 col-md-12 form-buttons">
+													<button id="scheduleFollowup" type="button" class="btn btn-info">Schedule</button>
+													<button id="cancelFollowup" type="button" class="btn btn-default">Cancel</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Schedule operation -->
+				<div class="content schedule-operation">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Schedule operation</header>
+									</div>
+									<form class="form-horizontal">
+										<div class="form-body">
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Date
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<input type="date" id="dateOperation" data-required="1"  class="form-control input-height" />
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Time
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<input type="text" id="timeOperation" data-required="1"  class="form-control input-height" />
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="control-label col-md-3">
+													Appointment type
+													<span class="required"> * </span>
+												</label>
+												<div class="col-md-7">
+													<select id="appTypeOperation" class="form-control input-height">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="offset-md-3 col-md-12 form-buttons">
+													<button id="scheduleOperation" type="button" class="btn btn-info">Schedule</button>
+													<button id="cancelOperation" type="button" class="btn btn-default">Cancel</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				
 				<!-- Modify medical record -->
-				<div class = "content modify-medical-record">
+				<div class="content modify-medical-record">
 					<div class="add">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">

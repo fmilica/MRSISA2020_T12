@@ -5,6 +5,18 @@ var medicalRecord_id;
 var current_secNum;
 var diagnosis = [];
 
+var appointment = {
+	appId: null,
+	// da li je pregled zavrsen
+	finished: null
+	/*
+	// da li vec postoji zakazan pregled
+	followup = false,
+	// da li vec postoji zakazana operacija
+	operation = false
+	*/
+}
+
 // ako su personalni podaci editovani, ponovo saljemo upit serveru
 var edited = false;
 
@@ -131,7 +143,7 @@ $(document).ready( function () {
 	$('#startAppointment').click(function(e){
 		e.preventDefault()
 		
-		if(appointment_id == null){
+		if(appointment.appId == null){
 			alert("There's no current appointment for this patient!")
 			return
 		}
@@ -151,7 +163,7 @@ $(document).ready( function () {
 					if(index == 0){
 						$.each(diagnose.prescriptions, function(i, medicine){
 							$('#prescriptionMR').append(new Option(medicine.name, medicine.id));
-					})
+						})
 					}
 				})
 				
@@ -163,6 +175,17 @@ $(document).ready( function () {
 		
 		$('.doctor-patient-profile').hide()
 		$('.writeMedicalReport').show()
+		// dugmad za followup i operation se pojavljuju 
+		// samo prvi put kada lekar pristupi pregledu
+		if (appointment.finished == false) {
+			$('#followup').show()
+			$('#scheduleFollowupForm').show()
+			$('#scheduleOperationForm').show()
+			$('#modifyReport').hide()
+		} else {
+			$('#followup').hide()
+			$('#modifyReport').show()
+		}
 		// scroll to top of page
 		document.body.scrollTop = 0
 		document.documentElement.scrollTop = 0
@@ -217,7 +240,7 @@ $(document).ready( function () {
 		}
 
 		var medRec = {
-			appId: appointment_id,
+			appId: appointment.appId,
 			description: description,
 			diagnosisName: diagnosis,
 			prescriptionIds: prescription
@@ -248,7 +271,7 @@ $(document).ready( function () {
 		$('#prescriptionMR').val(null).trigger('change')
 	})
 	
-	/*Canceling appointment report?*/
+	/*Canceling appointment report*/
 	$('#cancel_report').click(function(e){
 		e.preventDefault()
 		$('.content').hide()
@@ -262,7 +285,7 @@ $(document).ready( function () {
 	$('#changeRecord').click(function(e){
 		e.preventDefault()
 		
-		if(appointment_id == null){
+		if(appointment.appId == null){
 			alert("You can only change patient's medical record during an appointment!")
 			$('.content').hide()
 			$('.doctor-patient-profile').show()
@@ -346,6 +369,168 @@ $(document).ready( function () {
 		document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
 	})
+
+	// show schedule followup form
+	$('#scheduleFollowupForm').click(function(e) {
+		e.preventDefault()
+
+		// postavljanje minimalnog datuma
+		document.getElementById("dateFollowup").min = new Date().toISOString().split("T")[0];
+
+		// TODO dobavljanje vremena kada je doktor slobodan!
+		
+		alert("ZAVRSI OVO ZABOGA, 380. linija -> dobavljanje vremena kad je doktor slobodan")
+
+		// dobavljanje appTypes datog doktora
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/doctor/qualifications" ,
+			dataType: "json",
+			success : function(output)  {
+				$("#appTypeFollowup").empty()
+				$.each(output.appTypes, function(i, appType){
+					$('#appTypeFollowup').append(new Option(appType.name, appType.id));
+				})
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+
+		$('.content').hide()
+		$('.schedule-followup').show()
+	})
+
+	// zakazivanje kontrole (followup)
+	$('#scheduleFollowup').click(function(e) {
+		e.preventDefault()
+
+		var dateV = $('#dateFollowup').val()
+		var timeV = $('#timeFollowup').val()
+		var appTypeV = $('#appTypeFollowup').val()
+
+		if (!dateV || !timeV || !appTypeV) {
+			alert("All mandatory fields must be filled!")
+			return
+		}
+
+		var followupReq = {
+			date: dateV,
+			time: timeV,
+			appTypeId: appTypeV,
+			patientSecurityNumber: current_secNum,
+			operation: false
+		}
+
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/appointment/createFollowupRequest",
+			contentType : "application/json",
+			dataType : "json",
+			data : JSON.stringify(followupReq),
+			success : function()  {
+				alert("Succesfully send request for a followup exam!")
+				$('.content').hide()
+				$('.writeMedicalReport').show()
+				$('#scheduleFollowupForm').hide()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+
+	})
+
+	// odustajanje od zakazivanja operacije
+	$('#cancelFollowup').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.writeMedicalReport').show()
+		$('#dateFollowup').val("")
+		$('#timeFollowup').val("")
+	})
+
+	// schedule operation form
+	$('#scheduleOperationForm').click(function(e) {
+		e.preventDefault()
+
+		// postavljanje minimalnog datuma
+		document.getElementById("dateOperation").min = new Date().toISOString().split("T")[0];
+
+		// TODO dobavljanje vremena kada je doktor slobodan!
+		alert("ZAVRSI OVO ZABOGA, 461. linija -> dobavljanje vremena kada je doktor slobodan")
+
+		// dobavljanje appTypes datog doktora
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/doctor/qualifications" ,
+			dataType: "json",
+			success : function(output)  {
+				$("#appTypeOperation").empty()
+				$.each(output.appTypes, function(i, appType){
+					$('#appTypeOperation').append(new Option(appType.name, appType.id));
+				})
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+
+		$('.content').hide()
+		$('.schedule-operation').show()
+	})
+
+	// zakazivanje operacije
+	$('#scheduleOperation').click(function(e) {
+		e.preventDefault()
+
+		var dateV = $('#dateOperation').val()
+		var timeV = $('#timeOperation').val()
+		var appTypeV = $('#appTypeOperation').val()
+
+		if (!dateV || !timeV || !appTypeV) {
+			alert("All mandatory fields must be filled!")
+			return
+		}
+
+		var followupReq = {
+			date: dateV,
+			time: timeV,
+			appTypeId: appTypeV,
+			patientSecurityNumber: current_secNum,
+			operation: true
+		}
+
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/appointment/createFollowupRequest",
+			contentType : "application/json",
+			dataType : "json",
+			data : JSON.stringify(followupReq),
+			success : function()  {
+				alert("Succesfully send request for an operation!")
+				$('.content').hide()
+				$('.writeMedicalReport').show()
+				$('#scheduleOperationForm').hide()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+
+	})
+
+	// odustajanje od zakazivanja operacije
+	$('#cancelOperation').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.writeMedicalReport').show()
+		$('#dateOperation').val("")
+		$('#timeOperation').val("")
+	})
+
 
 	/*Changing password check if passwords match*/
 	$("#password").on('blur', function(event){
@@ -652,11 +837,8 @@ function viewPatientProfile(secNum) {
 			if (data.medicalRecords != null) {
 				medicalRecord_id = data.medicalRecords.id
 			}
-			if (data.appointment != null) {
-				appointment_id = data.appointment.id
-			} else {
-				appointment_id = null
-			}
+			appointment.appId = data.appointment.id
+			appointment.finished = data.appointment.finished
 			viewMedicalReports(data)
 		},
 		error : function(response) {
@@ -684,7 +866,7 @@ function viewMedicalReports(data){
     }else{
 		$('#medicalReport').show()
 		$('h5').show()
-		if (appointment_id == null) {
+		if (appointment.appId == null) {
 			// sakrivanje dugmadi za pregled
 			$('.app-btns').hide()
 		} else {

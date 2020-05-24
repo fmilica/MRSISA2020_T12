@@ -9,6 +9,8 @@ import mrs.isa.team12.clinical.center.model.AppointmentType;
 
 public interface AppointmentTypeRepository extends JpaRepository<AppointmentType, Long> {
 
+	AppointmentType findOneById(Long id);
+	
 	AppointmentType findOneByName(String name);
 	
 	List<AppointmentType> findAllByName(String name);

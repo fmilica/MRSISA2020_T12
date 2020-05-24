@@ -4,16 +4,24 @@ import mrs.isa.team12.clinical.center.model.AppointmentType;
 
 public class AppointmentTypeDto {
 	
+	private Long id;
 	private String name;
 	private Double price;
 	private Integer duration;
 	
 	public AppointmentTypeDto(AppointmentType appType) {
+		this.id = appType.getId();
 		this.name = appType.getName();
 		this.price = appType.getPrice();
 		this.duration = appType.getDuration();
 	}
 	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

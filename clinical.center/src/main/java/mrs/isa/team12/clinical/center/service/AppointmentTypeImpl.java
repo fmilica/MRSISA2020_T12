@@ -36,6 +36,13 @@ public class AppointmentTypeImpl implements AppointmentTypeService {
 			return appType;
 		}
 
+		@Override
+		public AppointmentType findOneById(Long id) {
+			logger.info("> findOneById id:{}", id);
+			AppointmentType appType = appointmentTypeRep.findOneById(id);
+			logger.info("< findOneById id:{}", id);
+			return appType;
+		}
 		
 		@Override
 		public AppointmentType findOneByName(String name) {

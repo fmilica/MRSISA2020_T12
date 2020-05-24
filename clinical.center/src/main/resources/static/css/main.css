@@ -273,6 +273,9 @@ i {
 .form-buttons {
     padding-left: 230px;
 }
+.form-btns {
+    padding-left: 283px;
+}
 .filter-btn {
     margin: -3px 15px 5px 0 !important;
 }
@@ -332,7 +335,20 @@ i {
     margin: auto;
 }
 .app-btn {
-    margin: 0 15px !important;
+    margin: 0 22px !important;
+}
+.app-sch-btn {
+    margin: 0 13px !important;
+}
+.app-followup {
+    align-items: center;
+    width: 52%;
+    margin: auto;
+}
+.app-text {
+    align-items: center;
+    width: 77%;
+    margin: auto;
 }
 
 .edit-personal {
@@ -552,6 +568,12 @@ i {
     display: none;
 }
 .modify-medical-record {
+    display: none;
+}
+.schedule-followup {
+    display: none;
+}
+.schedule-operation {
     display: none;
 }
 

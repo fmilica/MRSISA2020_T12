@@ -9,6 +9,8 @@ public interface AppointmentTypeService {
 	
 	AppointmentType save(AppointmentType at);
 	
+	AppointmentType findOneById(Long id);
+	
 	AppointmentType findOneByName(String name);
 	
 	AppointmentType findOneByNameAndClinicId(String name, Long id);

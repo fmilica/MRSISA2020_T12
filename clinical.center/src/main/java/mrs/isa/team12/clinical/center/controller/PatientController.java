@@ -263,7 +263,7 @@ public class PatientController {
 		if(appointments.size() == 0) {
 			return new ResponseEntity<>(new PatientProfileDto(patient), HttpStatus.OK);
 		}
-		// if nisu null! mogu biti i null, da nije do sad imala pregled!
+		// mogu biti i null, da nije do sad imala pregled!
 		if (patient.getMedicalRecords() != null) {
 			MedicalRecordDto medicalRecords = new MedicalRecordDto(patient.getMedicalRecords());
 			// uzecemo sve preglede, ali cemo dodati samo one koji su finished!

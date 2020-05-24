@@ -17,6 +17,7 @@ public class AppointmentDto {
 	private Integer endTime;
 	private Double price;
 	private Double discount;
+	private Boolean finished;
 	
 	public AppointmentDto() {}
 	
@@ -33,6 +34,7 @@ public class AppointmentDto {
 		this.endTime = app.getEndTime();
 		this.price = app.getAppType().getPrice();
 		this.discount = app.getDiscount();
+		this.finished = app.getFinished();
 	}
 	
 	
@@ -95,5 +97,11 @@ public class AppointmentDto {
 	}
 	public void setDiscount(Double discount) {
 		this.discount = discount;
+	}
+	public Boolean getFinished() {
+		return finished;
+	}
+	public void setFinished(Boolean finished) {
+		this.finished = finished;
 	}
 }

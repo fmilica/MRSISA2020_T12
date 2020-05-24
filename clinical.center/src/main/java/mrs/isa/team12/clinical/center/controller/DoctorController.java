@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
+import mrs.isa.team12.clinical.center.dto.DoctorAppointmentTypesDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.dto.DoctorFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
@@ -117,6 +119,36 @@ public class DoctorController {
 		session.setAttribute("currentUser", updated);
 		
 		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/qualifications
+	 HTTP request for doctors qualifications (appointment types he can perform)
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/qualifications",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DoctorAppointmentTypesDto> getQualifications() {
+		
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctor can view all his qualifications.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Doctor doctor = doctorService.findOneById(currentUser.getId());
+
+		DoctorAppointmentTypesDto dto = new DoctorAppointmentTypesDto(doctor.getId());
+		Set<AppointmentType> appTypes = doctor.getAppointmentTypes();
+		for(AppointmentType a : appTypes) {
+			dto.addAppType(new AppointmentTypeDto(a));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*
