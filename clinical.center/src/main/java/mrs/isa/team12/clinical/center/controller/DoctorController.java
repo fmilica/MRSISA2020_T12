@@ -437,6 +437,41 @@ public class DoctorController {
 		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/doctor/getFreeTimes/{appTypeId}/{appDate}
+	 HTTP request for getting available times of a doctor for specified date and appointment type
+	 receives Long appTypeId, String date
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/getFreeTimes/{appTypeId}/{appDate}")
+	public ResponseEntity<List<Integer>> addNewDoctor(@PathVariable("appTypeId") Long appTypeId,
+												  @PathVariable("appDate") String appDate) {
+		Doctor currentUser;
+		try {
+			currentUser = (Doctor) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can add new doctors.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		// parsiranje datuma
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = new Date(dt.parse(appDate).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		AppointmentType appType = appointmentTypeService.findOneById(appTypeId);
+		Doctor doctor = doctorService.findOneById(currentUser.getId());
+		List<Integer> freeTimes = doctor.getAvailableTimesForDateAndType(date, appType);
+		
+		return new ResponseEntity<>(freeTimes, HttpStatus.CREATED);
+	}
+	
 	// FILTRIRANJE DOKTORA NA BEKU
 	// MOZDA ZATREBA
 	/*

@@ -377,10 +377,6 @@ $(document).ready( function () {
 		// postavljanje minimalnog datuma
 		document.getElementById("dateFollowup").min = new Date().toISOString().split("T")[0];
 
-		// TODO dobavljanje vremena kada je doktor slobodan!
-		
-		alert("ZAVRSI OVO ZABOGA, 380. linija -> dobavljanje vremena kad je doktor slobodan")
-
 		// dobavljanje appTypes datog doktora
 		$.ajax({
 			type : "GET",
@@ -400,6 +396,19 @@ $(document).ready( function () {
 
 		$('.content').hide()
 		$('.schedule-followup').show()
+	})
+
+	// dobavljanje slobodnih termina za odabrani datum i tip pregleda
+	// na svaki change datuma i tipa pregleda
+	$('#appTypeFollowup').change(function() {
+		var appTypeId = $(this).val()
+		var date = $('#dateFollowup').val()
+		getAvailableTimesForFollowup(appTypeId, date, $("#timeFollowup"))
+	})
+	$('#dateFollowup').change(function() {
+		var date = $(this).val()
+		var appTypeId = $('#appTypeFollowup').val()
+		getAvailableTimesForFollowup(appTypeId, date, $("#timeFollowup"))
 	})
 
 	// zakazivanje kontrole (followup)
@@ -455,17 +464,10 @@ $(document).ready( function () {
 	$('#scheduleOperationForm').click(function(e) {
 		e.preventDefault()
 
-		// postavljanje minimalnog datuma
-		document.getElementById("dateOperation").min = new Date().toISOString().split("T")[0];
-
-		// TODO dobavljanje vremena kada je doktor slobodan!
-		alert("ZAVRSI OVO ZABOGA, 461. linija -> dobavljanje vremena kada je doktor slobodan")
-
 		// dobavljanje appTypes datog doktora
 		$.ajax({
 			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/doctor/qualifications" ,
+			url : "../../theGoodShepherd/doctor/qualifications",
 			dataType: "json",
 			success : function(output)  {
 				$("#appTypeOperation").empty()
@@ -477,9 +479,24 @@ $(document).ready( function () {
 				alert(response.responseJSON.message)
 			}
 		})
+		// postavljanje minimalnog datuma
+		document.getElementById("dateOperation").min = new Date().toISOString().split("T")[0];
 
 		$('.content').hide()
 		$('.schedule-operation').show()
+	})
+
+	// dobavljanje slobodnih termina za odabrani datum i tip operacije
+	// na svaki change datuma i tipa operacije
+	$('#appTypeOperation').change(function() {
+		var appTypeId = $(this).val()
+		var date = $('#dateOperation').val()
+		getAvailableTimesForFollowup(appTypeId, date, $('#timeOperation'))
+	})
+	$('#dateOperation').change(function() {
+		var date = $(this).val()
+		var appTypeId = $('#appTypeOperation').val()
+		getAvailableTimesForFollowup(appTypeId, date, $('#timeOperation'))
 	})
 
 	// zakazivanje operacije
@@ -837,8 +854,10 @@ function viewPatientProfile(secNum) {
 			if (data.medicalRecords != null) {
 				medicalRecord_id = data.medicalRecords.id
 			}
-			appointment.appId = data.appointment.id
-			appointment.finished = data.appointment.finished
+			if (data.appointment != null) {
+				appointment.appId = data.appointment.id
+				appointment.finished = data.appointment.finished	
+			}
 			viewMedicalReports(data)
 		},
 		error : function(response) {
@@ -909,6 +928,23 @@ function viewMedicalReports(data){
 	}
 }
 
+// dobavljanje vremena kada je doktor slobodan za tip pregleda i datum
+function getAvailableTimesForFollowup(appTypeId, date, timeSelectObject) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/doctor/getFreeTimes/"+appTypeId+"/"+date,
+		dataType: "json",
+		success : function(freeTimes)  {
+			timeSelectObject.empty()
+			$.each(freeTimes, function(i, time){
+				timeSelectObject.append(new Option(time+":00", time));
+			})
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
 
 function logInDoctor(email, password){
 		
