@@ -501,23 +501,30 @@ public class AppointmentController {
 		
 		Doctor doctor = null;
 		Nurse nurse = null;
+		Patient patient = null;
 		try {
 			doctor = (Doctor) session.getAttribute("currentUser");
 		}catch(ClassCastException e) {
 			try {
 				nurse = (Nurse) session.getAttribute("currentUser");
 			}catch(ClassCastException ex) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors and nurses can view their callendar.");
+				try {
+					patient = (Patient) session.getAttribute("currentUser");
+				}catch(ClassCastException exc) {
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors,nurses and patients can view their callendar.");
+				}
 			}
 		}
-		if(doctor == null && nurse == null) {
+		if(doctor == null && nurse == null && patient == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		List<DoctorsAppointmentDto> appDtos = new ArrayList<DoctorsAppointmentDto>();
 		List<LeaveDto> reqDtos = new ArrayList<LeaveDto>();
-		if(nurse == null) {
-			List<Appointment> apps = appointmentService.findAllByDoctorId(doctor.getId());
-			List<LeaveRequest> reqs = leaveReqService.findAllByLeaveMedicalPersoneId(doctor.getId());
+		List<Appointment> apps;
+		List<LeaveRequest> reqs;
+		if(doctor != null) {
+			apps = appointmentService.findAllByDoctorId(doctor.getId());
+			reqs = leaveReqService.findAllByLeaveMedicalPersoneId(doctor.getId());
 			
 			for (Appointment ar : apps) {
 				if(ar.getAppointmentRequest() == null) {
@@ -536,16 +543,33 @@ public class AppointmentController {
 				}
 			}
 			
-			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos), HttpStatus.CREATED);
-		}else {
-			List<LeaveRequest> reqs = leaveReqService.findAllByLeaveMedicalPersoneId(nurse.getId());
+			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos, "doctor"), HttpStatus.CREATED);
+		}
+		else if (nurse != null) {
+			reqs = leaveReqService.findAllByLeaveMedicalPersoneId(nurse.getId());
 			
 			for (LeaveRequest leaveRequest : reqs) {
 				if(leaveRequest.getApproved()) {
 					reqDtos.add(new LeaveDto(leaveRequest.getLeave().getStartDate(), leaveRequest.getLeave().getEndDate(), leaveRequest.getLeave().getType()+""));
 				}
 			}
-			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos), HttpStatus.CREATED);
+			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos, "nurse"), HttpStatus.CREATED);
+		}else {
+			apps = appointmentService.findAllByPatientId(patient.getId());
+			
+			for (Appointment ar : apps) {
+				if(ar.getAppointmentRequest() == null) {
+					if(ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}else {
+					if(ar.getAppointmentRequest().getApproved() && ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}
+			}
+			
+			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos, "patient"), HttpStatus.CREATED);
 		}
 	}
 }

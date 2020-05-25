@@ -1034,6 +1034,7 @@ function logInPatient(email, password) {
 		url : "theGoodShepherd/patient/logIn//" + email + "//" + password ,
 		dataType: "json",
 		success : function(output)  {
+			currentIsPatient = true;
 			sessionStorage.setItem('nameSurname', output.name + ' ' + output.surname);
 			window.location.href = "html/home-pages/patient_hp.html"
 		},

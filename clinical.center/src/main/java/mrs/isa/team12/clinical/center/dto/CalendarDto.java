@@ -5,12 +5,14 @@ import java.util.List;
 public class CalendarDto {
 	private List<LeaveDto> leaves;
 	private List<DoctorsAppointmentDto> appointments;
+	private String user;
 	
 	public CalendarDto() {}
 	
-	public CalendarDto(List<LeaveDto> leaves, List<DoctorsAppointmentDto> appointments) {
+	public CalendarDto(List<LeaveDto> leaves, List<DoctorsAppointmentDto> appointments, String user) {
 		this.leaves = leaves;
 		this.appointments= appointments;
+		this.user = user;
 	}
 
 	public List<LeaveDto> getLeaves() {
@@ -27,5 +29,13 @@ public class CalendarDto {
 
 	public void setAppointments(List<DoctorsAppointmentDto> appointments) {
 		this.appointments = appointments;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 }

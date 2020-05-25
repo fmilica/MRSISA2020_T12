@@ -1,4 +1,5 @@
 var calendar;
+var loggedUser;
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: true,
         events: calendarFill(),
         eventClick: function(data){
-        		if(data.event.title == "Appointment"){
+        		if(data.event.title == "Appointment" && loggedUser == "doctor"){
         			alert(data.event.extendedProps.description+"\nOpening patient's profile..")
         			document.body.scrollTop = 0
         			document.documentElement.scrollTop = 0
@@ -408,6 +409,7 @@ function calendarFill(){
 		url : "../../theGoodShepherd/appointment/medicalPersonnel",
 		dataType: "json",
 		success : function(output)  {
+			loggedUser = output.user
 			$.each(output.appointments, function(index, appointment){
 				if(appointment.type == "Appointment"){
 					colorEvent = '#48baf7' 

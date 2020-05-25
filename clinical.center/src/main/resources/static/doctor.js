@@ -134,7 +134,7 @@ $(document).ready( function () {
 	$('#patientBack').click(function() {
 		if (!$.fn.DataTable.isDataTable('#patientsTable')) {
 			$('.content').hide()
-			$('.home-page').show()
+			$('.medical-calendar').show()
 			return
 		}
 		$('.content').hide()
