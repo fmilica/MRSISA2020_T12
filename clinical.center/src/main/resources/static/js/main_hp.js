@@ -408,7 +408,7 @@ function calendarFill(){
 		url : "../../theGoodShepherd/appointment/medicalPersonnel",
 		dataType: "json",
 		success : function(output)  {
-			$.each(output, function(index, appointment){
+			$.each(output.appointments, function(index, appointment){
 				if(appointment.type == "Appointment"){
 					colorEvent = '#48baf7' 
 				}else{
@@ -420,6 +420,19 @@ function calendarFill(){
 			        description: appointment.type+' with patient ' + appointment.patient,
 			        start: appointment.date+"T"+appointment.startTime+":00:00",
 			        end: appointment.date+"T"+appointment.endTime+":00:00",
+			        color: colorEvent
+			    });
+			});
+			$.each(output.leaves, function(index, leave){
+				if(leave.type == "Paid"){
+					colorEvent = '#f7825e' 
+				}else{
+					colorEvent = '#bc3af0'
+				}
+				eventsToAdd.push({
+			        title: leave.type,
+			        start: leave.startDate,
+			        end: leave.endDate,
 			        color: colorEvent
 			    });
 			});

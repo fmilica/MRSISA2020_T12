@@ -104,7 +104,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '6', '9', '19', '0
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 /*JOS JEDAN MILKIN PREGLED KOJI JE TRENUTNO*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-25', '00', '01', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-25', '20', '21', 'true', '29', '6', '9', '12', '19', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('54', '44', '2020-05-15', 'true', '6', '0');
 update appointment
@@ -194,7 +194,7 @@ where id = '55';
 
 /*Zahtev za operaciju*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, ordination_id)
-values ('220', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', '19');
+values ('62', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', '19');
 
 /*Sifarnik*/
 insert into diagnose_perscription (id, version)
@@ -245,3 +245,19 @@ insert into leave(id, version, start_date, end_date, leave_type, medical_personn
 values ('60', '0', '2020-05-27', '2020-06-03', '0', '15');
 insert into leave_request(id, version, leave_id, approved, description)
 values ('61', '0', '60', 'false', '');
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id)
+values ('63', '0', '2020-06-06', '2020-06-13', '1', '15');
+insert into leave_request(id, version, leave_id, approved, description)
+values ('64', '0', '63', 'true', '');
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id)
+values ('65', '0', '2020-05-27', '2020-06-03', '0', '9');
+insert into leave_request(id, version, leave_id, approved, description)
+values ('66', '0', '65', 'true', '');
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id)
+values ('67', '0', '2020-05-02', '2020-05-07', '1', '9');
+insert into leave_request(id, version, leave_id, approved, description)
+values ('68', '0', '67', 'true', '');
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id)
+values ('69', '0', '2020-05-27', '2020-06-03', '0', '10');
+insert into leave_request(id, version, leave_id, approved, description)
+values ('70', '0', '69', 'false', '');

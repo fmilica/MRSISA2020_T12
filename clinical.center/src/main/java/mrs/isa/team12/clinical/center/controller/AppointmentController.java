@@ -24,13 +24,17 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.AppointmentDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentFollowupDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentPredefinedDto;
+import mrs.isa.team12.clinical.center.dto.CalendarDto;
 import mrs.isa.team12.clinical.center.dto.DoctorsAppointmentDto;
+import mrs.isa.team12.clinical.center.dto.LeaveDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Leave;
+import mrs.isa.team12.clinical.center.model.LeaveRequest;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -41,6 +45,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
+import mrs.isa.team12.clinical.center.service.interfaces.LeaveRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 
@@ -56,6 +61,7 @@ public class AppointmentController {
 	private OrdinationService ordinationService;
 	private ClinicService clinicService;
 	private ClinicAdminService adminService;
+	private LeaveRequestService leaveReqService;
 	
 	@Autowired
 	private HttpSession session;
@@ -64,7 +70,8 @@ public class AppointmentController {
 	public AppointmentController(AppointmentService appointmentService, PatientService patientService,
 			AppointmentTypeService appointmentTypeService, DoctorService doctorService,
 			OrdinationService ordinationService, ClinicService clinicService,
-			AppointmentRequestService appointmentRequestService, ClinicAdminService adminService) {
+			AppointmentRequestService appointmentRequestService, ClinicAdminService adminService, 
+			LeaveRequestService leaveReqService) {
 		this.appointmentService = appointmentService;
 		this.patientService = patientService;
 		this.appointmentTypeService = appointmentTypeService;
@@ -73,6 +80,7 @@ public class AppointmentController {
 		this.clinicService = clinicService;
 		this.appointmentRequestService = appointmentRequestService;
 		this.adminService = adminService;
+		this.leaveReqService = leaveReqService;
 	}
 	
 	
@@ -489,7 +497,7 @@ public class AppointmentController {
 	 */
 	@GetMapping(value = "/medicalPersonnel",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<DoctorsAppointmentDto>> getDoctorAppointments() {
+	public ResponseEntity<CalendarDto> getDoctorAppointments() {
 		
 		Doctor doctor = null;
 		Nurse nurse = null;
@@ -506,8 +514,10 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		List<DoctorsAppointmentDto> appDtos = new ArrayList<DoctorsAppointmentDto>();
+		List<LeaveDto> reqDtos = new ArrayList<LeaveDto>();
 		if(nurse == null) {
 			List<Appointment> apps = appointmentService.findAllByDoctorId(doctor.getId());
+			List<LeaveRequest> reqs = leaveReqService.findAllByLeaveMedicalPersoneId(doctor.getId());
 			
 			for (Appointment ar : apps) {
 				if(ar.getAppointmentRequest() == null) {
@@ -519,12 +529,23 @@ public class AppointmentController {
 						appDtos.add(new DoctorsAppointmentDto(ar));
 					}
 				}
-				
+			}
+			for (LeaveRequest leaveRequest : reqs) {
+				if(leaveRequest.getApproved()) {
+					reqDtos.add(new LeaveDto(leaveRequest.getLeave().getStartDate(), leaveRequest.getLeave().getEndDate(), leaveRequest.getLeave().getType()+""));
+				}
 			}
 			
-			return new ResponseEntity<>(appDtos, HttpStatus.CREATED);
+			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos), HttpStatus.CREATED);
 		}else {
-			return new ResponseEntity<>(appDtos, HttpStatus.CREATED);
+			List<LeaveRequest> reqs = leaveReqService.findAllByLeaveMedicalPersoneId(nurse.getId());
+			
+			for (LeaveRequest leaveRequest : reqs) {
+				if(leaveRequest.getApproved()) {
+					reqDtos.add(new LeaveDto(leaveRequest.getLeave().getStartDate(), leaveRequest.getLeave().getEndDate(), leaveRequest.getLeave().getType()+""));
+				}
+			}
+			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos), HttpStatus.CREATED);
 		}
 	}
 }
