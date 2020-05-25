@@ -24,12 +24,14 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.AppointmentDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentFollowupDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentPredefinedDto;
+import mrs.isa.team12.clinical.center.dto.DoctorsAppointmentDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
@@ -478,5 +480,51 @@ public class AppointmentController {
 		// GORE VEC IMA IF ZA TIP, AKO MOZE DA SE IZKORISTI
 		
 		return new ResponseEntity<>(appDto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/appointment/medicalPersonnel
+	 HTTP request for getting doctor and nurses calendar
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/medicalPersonnel",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<DoctorsAppointmentDto>> getDoctorAppointments() {
+		
+		Doctor doctor = null;
+		Nurse nurse = null;
+		try {
+			doctor = (Doctor) session.getAttribute("currentUser");
+		}catch(ClassCastException e) {
+			try {
+				nurse = (Nurse) session.getAttribute("currentUser");
+			}catch(ClassCastException ex) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors and nurses can view their callendar.");
+			}
+		}
+		if(doctor == null && nurse == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		List<DoctorsAppointmentDto> appDtos = new ArrayList<DoctorsAppointmentDto>();
+		if(nurse == null) {
+			List<Appointment> apps = appointmentService.findAllByDoctorId(doctor.getId());
+			
+			for (Appointment ar : apps) {
+				if(ar.getAppointmentRequest() == null) {
+					if(ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}else {
+					if(ar.getAppointmentRequest().getApproved() && ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}
+				
+			}
+			
+			return new ResponseEntity<>(appDtos, HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>(appDtos, HttpStatus.CREATED);
+		}
 	}
 }

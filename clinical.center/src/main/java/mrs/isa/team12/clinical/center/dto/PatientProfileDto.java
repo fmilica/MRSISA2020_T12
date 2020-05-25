@@ -1,9 +1,12 @@
 package mrs.isa.team12.clinical.center.dto;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 public class PatientProfileDto {
 	
@@ -78,9 +81,13 @@ public class PatientProfileDto {
 	}
 	
 	private boolean currentApp(Appointment a) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH");
 		Date current = new Date();
-		if(current.getDate() == a.getDate().getDate() && (current.getHours() >= a.getStartTime()) && (current.getHours() <= a.getEndTime()) ) {
-			return true;
+		int currentHour = Integer.parseInt(sdf.format(current));
+		if(a.getType() != OrdinationType.OperatingRoom) {
+			if(current == a.getDate() && (currentHour >= a.getStartTime()) && (currentHour <= a.getEndTime()) ) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -16,4 +16,6 @@ public interface AppointmentRequestService {
 	List<AppointmentRequest> findAllByClinic(Clinic clinic);
 	
 	List<AppointmentRequest> findAllByClinicAndApproved(Clinic clinic, Boolean approved);
+	
+	List<AppointmentRequest> findAllByAppointmentDoctorId(Long id);
 }

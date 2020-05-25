@@ -8,6 +8,8 @@ var medicalRecord_id;
 var patientsTable;
 var medicalReportTable;
 
+var calendarNurse;
+
 $(document).ready(function(){
 
 	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas

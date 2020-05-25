@@ -132,6 +132,11 @@ $(document).ready( function () {
 
 	// vracanje na prikaz svih pacijenata
 	$('#patientBack').click(function() {
+		if (!$.fn.DataTable.isDataTable('#patientsTable')) {
+			$('.content').hide()
+			$('.home-page').show()
+			return
+		}
 		$('.content').hide()
 		$('.doctor-patients').show()
 		// scroll to top of page
@@ -284,7 +289,7 @@ $(document).ready( function () {
 	/*Show form for modifying medical record and fill it in*/
 	$('#changeRecord').click(function(e){
 		e.preventDefault()
-		
+		console.log(appointment.appId)
 		if(appointment.appId == null){
 			alert("You can only change patient's medical record during an appointment!")
 			$('.content').hide()

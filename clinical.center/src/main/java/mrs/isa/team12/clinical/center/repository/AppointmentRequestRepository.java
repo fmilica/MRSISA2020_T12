@@ -19,4 +19,6 @@ public interface AppointmentRequestRepository extends JpaRepository<AppointmentR
 	
 	void deleteOneById(Long id);
 	
+	List<AppointmentRequest> findAllByAppointmentDoctorId(Long id);
+	
 }

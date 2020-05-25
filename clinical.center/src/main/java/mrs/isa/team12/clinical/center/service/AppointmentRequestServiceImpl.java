@@ -69,4 +69,12 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 		return appRequests;
 	}
 
+	@Override
+	public List<AppointmentRequest> findAllByAppointmentDoctorId(Long id) {
+		logger.info("> findAllByAppointmentDoctorId");
+		List<AppointmentRequest> ars = appointmentRequestRep.findAllByAppointmentDoctorId(id);
+		logger.info("< findAllByAppointmentDoctorId");
+		return ars;
+	}
+
 }

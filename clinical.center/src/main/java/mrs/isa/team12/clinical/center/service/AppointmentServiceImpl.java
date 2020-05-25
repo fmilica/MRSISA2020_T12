@@ -138,5 +138,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 		logger.info("< findAllByPatientIdAndConfirmedAndFinished");
 		return appointments;
 	}
+
+	@Override
+	public List<Appointment> findAllByDoctorId(Long id) {
+		logger.info("> findAllByDoctorId");
+		List<Appointment> apps = appointmentRepository.findAllByDoctorId(id);
+		logger.info("< findAllByDoctorId");
+		return apps;
+	}
 	
 }

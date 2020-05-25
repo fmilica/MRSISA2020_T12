@@ -1,40 +1,28 @@
+var calendar;
+
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
         height: 450,
         plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list'],
         header: {
-          left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+          left: 'listYear,dayGridMonth,timeGridWeek', //timeGridDay,listWeek, a dodat je timelineCustom
           center: 'title',
           right: 'prev,next'
         },
         selectable: true,
-        events: [
-            { // this object will be "parsed" into an Event Object
-                title: 'The First', // a property!
-                start: '2020-04-14', // a property!
-                end: '2020-04-15' // a property! ** see important note below about 'end' **
-            },
-            { // this object will be "parsed" into an Event Object
-                title: 'https://fullcalendar.io/docs/event-source-object', // a property!
-                start: '2020-04-18T17:30:00', // a property!
-                end: '2020-04-18T22:00:00' // a property! ** see important note below about 'end' **
-            },
-            {
-                title: 'https://fullcalendar.io/docs/external-dragging-demo',
-                start: '2020-04-16T08:30:00', // a property!
-                end: '2020-04-16T22:00:00' // a property! ** see important note below about 'end' **
-            },
-            {
-                title: 'payed leave',
-                start: '2020-04-01',
-                end: '2020-04-08',
-                rendering: 'background'
-            }
-          ]
-    });
-
+        events: calendarFill(),
+        eventClick: function(data){
+        		if(data.event.title == "Appointment"){
+        			alert(data.event.extendedProps.description+"\nOpening patient's profile..")
+        			document.body.scrollTop = 0
+        			document.documentElement.scrollTop = 0
+        			viewPatientProfile(data.event.id)
+        		}
+    		}
+    	}
+    );
     calendar.render();
   });
 
@@ -409,3 +397,34 @@ $(document).ready( function () {
         document.documentElement.scrollTop = 0
     })
 })
+
+
+function calendarFill(){
+	var eventsToAdd = []
+	var colorEvent;
+	$.ajax({
+		type : "GET",
+		async: false,
+		url : "../../theGoodShepherd/appointment/medicalPersonnel",
+		dataType: "json",
+		success : function(output)  {
+			$.each(output, function(index, appointment){
+				if(appointment.type == "Appointment"){
+					colorEvent = '#48baf7' 
+				}else{
+					colorEvent = '#2aebb4'
+				}
+				eventsToAdd.push({
+					id: appointment.id,
+			        title: appointment.type,
+			        description: appointment.type+' with patient ' + appointment.patient,
+			        start: appointment.date+"T"+appointment.startTime+":00:00",
+			        end: appointment.date+"T"+appointment.endTime+":00:00",
+			        color: colorEvent
+			    });
+			});
+		}
+	})
+	console.log(eventsToAdd);
+	return eventsToAdd;
+}

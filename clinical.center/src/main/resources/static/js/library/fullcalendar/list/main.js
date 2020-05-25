@@ -342,6 +342,7 @@ Docs & License: https://fullcalendar.io/
             },
             listYear: {
                 type: 'list',
+                buttonText: 'year',
                 duration: { year: 1 },
                 listDayAltFormat: { weekday: 'long' } // day-of-week is nice-to-have
             }
