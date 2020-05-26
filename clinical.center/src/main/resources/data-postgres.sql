@@ -104,7 +104,7 @@ values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '6', '9', '19', '0
 /*pregled kod jove koji je sada, pa moze da pristupi medical record*/
 /*JOS JEDAN MILKIN PREGLED KOJI JE TRENUTNO*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version)
-values ('44', 'false', '2020-05-25', '20', '21', 'true', '29', '6', '9', '12', '19', '0');
+values ('44', 'false', '2020-05-26', '16', '17', 'true', '29', '6', '9', '12', '19', '0');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version)
 values ('54', '44', '2020-05-15', 'true', '6', '0');
 update appointment

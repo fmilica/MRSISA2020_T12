@@ -1,8 +1,8 @@
 package mrs.isa.team12.clinical.center.dto;
 
 import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -40,7 +40,7 @@ public class PatientProfileDto {
 		this.country = country;
 	}
 
-	public PatientProfileDto(Patient patient) {
+	public PatientProfileDto(Patient patient){
 		this.name = patient.getName();
 		this.surname = patient.getSurname();
 		this.email = patient.getEmail();
@@ -60,7 +60,7 @@ public class PatientProfileDto {
 		}
 	}
 
-	public PatientProfileDto(Patient patient, MedicalRecordDto medicalRecords) {
+	public PatientProfileDto(Patient patient, MedicalRecordDto medicalRecords){
 		this.name = patient.getName();
 		this.surname = patient.getSurname();
 		this.email = patient.getEmail();
@@ -80,12 +80,13 @@ public class PatientProfileDto {
 		}
 	}
 	
-	private boolean currentApp(Appointment a) {
+	private boolean currentApp(Appointment a){
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 		Date current = new Date();
 		int currentHour = Integer.parseInt(sdf.format(current));
 		if(a.getType() != OrdinationType.OperatingRoom) {
-			if(current == a.getDate() && (currentHour >= a.getStartTime()) && (currentHour <= a.getEndTime()) ) {
+			if(sdf1.format(current).equals(a.getDate().toString()) && (currentHour >= a.getStartTime()) && (currentHour <= a.getEndTime()) ) {
 				return true;
 			}
 		}

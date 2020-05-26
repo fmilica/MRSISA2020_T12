@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.repository.ClinicAdminRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
@@ -175,6 +176,29 @@ public class ClinicAdminImpl implements ClinicAdminService {
 			mail.setText("Hello " + patient.getName() + ",\n\nAdmin " + admin.getEmail() + " declined your appointment request!\n" + 
 					"Best wishes,\nClinical center The Good Shepherd");
 		}
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+
+	@Override
+	public void sendAppOperRequestNotification(Long clinicId, Doctor doctor, String type) {
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
+		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
+		System.out.println("Slanje emaila...");
+		List<ClinicAdmin> cas = this.findAllByClinicId(clinicId);
+		String[] toAdmins = new String[cas.size()];
+		int i = 0;
+		for (ClinicAdmin ca : cas) {
+			toAdmins[i] = ca.getEmail();
+			i++;
+		}
+		
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(toAdmins);
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Scheduling an "+type.toLowerCase());
+		mail.setText("Hello " + ",\n\nDoctor " + doctor.getEmail() + " sent a request for an "+ type.toLowerCase() +".\n" + 
+					"Best wishes,\nClinical center The Good Shepherd");
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 	}

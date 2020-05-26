@@ -457,11 +457,14 @@ public class AppointmentController {
 		Patient patient = patientService.findOneBySecurityNumber(appDto.getPatientSecurityNumber());
 		
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, doctor, clinic, patient);
+		String appType = "";
 		
 		if (appDto.getOperation()) {
 			appointment.setType(OrdinationType.OperatingRoom);
+			appType = "Operation";
 		} else {
 			appointment.setType(OrdinationType.ConsultingRoom);
+			appType = "Appointment";
 		}
 		
 		// klinici dodamo novi pregled
@@ -486,6 +489,7 @@ public class AppointmentController {
 		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA OPERACIJU!
 		// ZAVISNO OD TIPA NARAVNO
 		// GORE VEC IMA IF ZA TIP, AKO MOZE DA SE IZKORISTI
+		adminService.sendAppOperRequestNotification(currentUser.getClinic().getId(), doctor, appType);
 		
 		return new ResponseEntity<>(appDto, HttpStatus.OK);
 	}
