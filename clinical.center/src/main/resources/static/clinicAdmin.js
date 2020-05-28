@@ -382,6 +382,15 @@ $(document).ready(function() {
 					render: function (data) {
 						return data.price + " &euro;";
 					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return  '<div class="table-action-btns">'+
+									'<span id="'+data.id+'" class="table-action edit-appType"><i class="fas fa-edit"></i></span>'+
+									'<span id="'+data.id+'" class="table-action delete-appType"><i class="fas fa-trash"></i></span>'+
+								'</div>'
+						}
 				}]
 			})
 		}
@@ -534,8 +543,9 @@ $(document).ready(function() {
 				{
 					data: null,
 					render: function(data) {
-						return '<span id="'+data.id+'" class="table-action edit-doctor"><i class="fas fa-edit"></i></span>'+
-								'<span id="'+data.id+'" class="table-action delete-doctor"><i class="fas fa-trash"></i></span>'
+						return  '<div class="table-action-btns">'+
+									'<span id="'+data.id+'" class="table-action delete-doctor"><i class="fas fa-trash"></i></span>'+
+								'</div>'
 					}
 				}]
 			})
@@ -693,19 +703,24 @@ $(document).ready(function() {
 	})
 
 	/*--------------------------------------------------*/
-	// Editing and deleting doctors
-	$('body').on('click', 'span.edit-doctor', function() {
-		alert("Hello, ja sam edit doktora, nalazim se na 698. liniji!")
-		var doctorId = $(this).attr('id')
-		alert("Id doktora koji je kliknut je: " + doctorId)
-	})
-
 	$('body').on('click', 'span.delete-doctor', function() {
-		alert("Hello, ja sam delete doktora, nalazim se na 702. liniji!")
+		//preslatko Eva hvala ti :3 <3 <333
 		var doctorId = $(this).attr('id')
 		alert("Id doktora koji je kliknut je: " + doctorId)
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/doctor/delete/" + doctorId ,
+			success : function(output)  {
+				alert("Doctor successfuly deleted!")
+				doctorTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
 	})
-	/**********/
+	/*******************************************************/
 
 	/*Appointment requests*/
 

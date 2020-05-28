@@ -19,10 +19,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 @Entity
 @Table(name = "appointment")
+@Where(clause="is_active=true")
 public class Appointment {
 	
 	@Id
@@ -31,6 +34,9 @@ public class Appointment {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "app_finished", unique = false, nullable = false)
 	private Boolean finished;
@@ -59,7 +65,7 @@ public class Appointment {
 	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
 	private Patient patient;
 	
-	@OneToOne(fetch = LAZY)
+	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "medical_report_id")
 	private MedicalReport medicalReport;
 /*
@@ -110,6 +116,7 @@ public class Appointment {
 		this.doctor = doctor;
 		this.clinic = clinic;
 		this.patient = patient;
+		this.active = true;
 	}
 
 	public Appointment(Date date, Integer startTime, AppointmentType type, Double discount,
@@ -124,6 +131,7 @@ public class Appointment {
 		this.ordination = ordination;
 		this.doctor = doctor;
 		this.clinic = clinic;
+		this.active = true;
 	}
 	
 	public Appointment(Date date, Integer startTime, AppointmentType type, Double discount,
@@ -139,6 +147,7 @@ public class Appointment {
 		this.medicalReport = medicalReport;
 		this.ordination = ordination;
 		this.doctor = doctor;
+		this.active = true;
 	}
 	
 	public Set<Doctor> getDoctors() {
@@ -267,6 +276,14 @@ public class Appointment {
 
 	public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
 		this.appointmentRequest = appointmentRequest;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	/*

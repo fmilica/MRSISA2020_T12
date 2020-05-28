@@ -13,15 +13,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "diagnosis")
+@Where(clause="is_active=true")
 public class Diagnosis {
 	
 	@Id
@@ -30,6 +32,9 @@ public class Diagnosis {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
@@ -41,7 +46,7 @@ public class Diagnosis {
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="diagnosis")
 	private Set<MedicalReport> medicalReports;
 	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.ALL})
 	@JoinColumn(name = "sifarnik_id", referencedColumnName = "id", nullable = true)
 	private DiagnosePerscription diagnosePerscription;
 
@@ -50,18 +55,21 @@ public class Diagnosis {
 	public Diagnosis(String name) {
 		super();
 		this.name = name;
+		this.active = true;
 	}
 	
 	public Diagnosis(String name, DiagnosePerscription diagnosePerscription) {
 		super();
 		this.name = name;
 		this.diagnosePerscription = diagnosePerscription;
+		this.active = true;
 	}
 
 	public Diagnosis(Long id, DiagnosePerscription diagnosePerscription) {
 		super();
 		this.id = id;
 		this.diagnosePerscription = diagnosePerscription;
+		this.active = true;
 	}
 
 	public Diagnosis(Long id, String name, Set<Prescription> prescriptions, Set<MedicalReport> medicalReports) {
@@ -70,6 +78,7 @@ public class Diagnosis {
 		this.name = name;
 		this.prescriptions = prescriptions;
 		this.medicalReports = medicalReports;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -112,6 +121,14 @@ public class Diagnosis {
 		this.diagnosePerscription = diagnosePerscription;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public void addPrescription(Prescription p) {
 		if(this.prescriptions == null) {
 			this.prescriptions = new HashSet<Prescription>();

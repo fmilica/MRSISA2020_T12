@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -16,10 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import mrs.isa.team12.clinical.center.model.enums.Specialization;
 
 @Entity
 @Table(name="doctor")
+@Where(clause="is_active=1")
 public class Doctor extends MedicalPersonnel {
 	
 	@Column(name = "specialization", unique = false, nullable = false)
@@ -40,7 +44,8 @@ public class Doctor extends MedicalPersonnel {
 	private Clinic clinic;
 	
 	//@OneToMany(cascade = {ALL}, fetch = LAZY)
-	@ManyToMany(mappedBy = "doctors")
+	//dodato za probu kaskadnog brisanja
+	@ManyToMany(mappedBy = "doctors",  cascade = CascadeType.ALL)
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")

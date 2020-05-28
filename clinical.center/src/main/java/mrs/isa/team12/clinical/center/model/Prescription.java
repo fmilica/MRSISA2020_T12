@@ -16,8 +16,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "prescription")
+@Where(clause="is_active=true")
 public class Prescription {
 	
 	@Id
@@ -26,6 +29,9 @@ public class Prescription {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "medicine", unique = false, nullable = false)
 	private String medicine;
@@ -53,6 +59,7 @@ public class Prescription {
 		this.medicine = medicine;
 		this.medicalReports = medicalReports;
 		this.diagnosis = diagnosis;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -79,6 +86,14 @@ public class Prescription {
 		this.diagnosis = diagnosis;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public void addDiagnosis(Diagnosis diagnosis) {
 		this.diagnosis.add(diagnosis);
 	}

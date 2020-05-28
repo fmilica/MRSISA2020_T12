@@ -15,10 +15,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 import mrs.isa.team12.clinical.center.model.enums.LeaveType;
 
 @Entity
 @Table(name = "leave")
+@Where(clause="is_active=true")
 public class Leave {
 	
 	@Id
@@ -27,6 +30,9 @@ public class Leave {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "start_date", nullable = false, unique = false)
 	//@Temporal(TemporalType.DATE)
@@ -55,6 +61,7 @@ public class Leave {
 		this.endDate = endDate;
 		this.type = type;
 		this.medicalPersone = mp;
+		this.active = true;
 	}
 
 	public Date getStartDate() {
@@ -80,7 +87,29 @@ public class Leave {
 	public void setType(LeaveType type) {
 		this.type = type;
 	}
-	
-	
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public MedicalPersonnel getMedicalPersone() {
+		return medicalPersone;
+	}
+
+	public void setMedicalPersone(MedicalPersonnel medicalPersone) {
+		this.medicalPersone = medicalPersone;
+	}
+	
 }

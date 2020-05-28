@@ -19,10 +19,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "clinic")
+@Where(clause="is_active=true")
 public class Clinic {
 	
 	@Id
@@ -31,6 +34,9 @@ public class Clinic {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name="name", unique=true, nullable=false)
 	private String name;
@@ -110,6 +116,7 @@ public class Clinic {
 	public Clinic(String name) {
 		super();
 		this.name = name;
+		this.active = true;
 	}
 
 	public Clinic(Long id, String name, String address, String city, String country, String description, Double rating,
@@ -139,6 +146,7 @@ public class Clinic {
 		this.appointmentRequests = appointmentRequests;
 		this.leaveRequests = leaveRequests;
 		this.ratings = ratings;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -260,6 +268,12 @@ public class Clinic {
 	}
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	public void addAppType(AppointmentType appType) {

@@ -19,10 +19,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 @Entity
 @Table(name = "ordination")
+@Where(clause="is_active=true")
 public class Ordination {
 	
 	@Id
@@ -31,6 +34,9 @@ public class Ordination {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "ordination_type", unique = false, nullable = false)
 	private OrdinationType type;
@@ -57,6 +63,7 @@ public class Ordination {
 		this.ordinationNumber = ordinationNumber;
 		this.clinic = clinic;
 		this.appointments = appointments;
+		this.active = true;
 	}
 
 	public OrdinationType getType() {
@@ -100,6 +107,14 @@ public class Ordination {
 		this.appointments.add(a);
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "Ordination [id=" + id + ", type=" + type + ", name=" + name + ", clinic=" + clinic + ", appointments="

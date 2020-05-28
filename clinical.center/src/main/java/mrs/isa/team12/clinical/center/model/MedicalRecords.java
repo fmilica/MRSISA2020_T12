@@ -12,8 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "medical_records")
+@Where(clause="is_active=true")
 public class MedicalRecords {
 	
 	@Id
@@ -22,6 +25,9 @@ public class MedicalRecords {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "height", unique = false, nullable = false)
 	private Integer height;
@@ -56,6 +62,7 @@ public class MedicalRecords {
 		this.bloodType = bloodType;
 		this.allergies = allergies;
 		this.patient = patient;
+		this.active = true;
 		//this.appointments = appointments;
 	}
 
@@ -114,6 +121,15 @@ public class MedicalRecords {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+	
 /*
 	public Set<Appointment> getAppointments() {
 		return appointments;

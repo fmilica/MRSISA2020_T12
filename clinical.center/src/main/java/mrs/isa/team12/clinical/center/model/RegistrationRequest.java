@@ -12,8 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "registration_request")
+@Where(clause="is_active=true")
 public class RegistrationRequest {
 	
 	@Id
@@ -22,6 +25,9 @@ public class RegistrationRequest {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "registered_user_id")
@@ -40,6 +46,7 @@ public class RegistrationRequest {
 		this.user = user;
 		this.approved = approved;
 		this.description = description;
+		this.active = true;
 	}
 	
 	public Long getId() {
@@ -69,5 +76,13 @@ public class RegistrationRequest {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 }

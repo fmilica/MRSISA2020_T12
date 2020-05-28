@@ -16,8 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "rating")
+@Where(clause="is_active=true")
 public class Rating {
 	
 	@Id
@@ -26,6 +29,9 @@ public class Rating {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "rated", unique = false, nullable = false )
 	private int rated;
@@ -56,6 +62,7 @@ public class Rating {
 		this.clinic = clinic;
 		this.patient = patient;
 		this.reports = reports;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -105,4 +112,14 @@ public class Rating {
 	public void setReports(Set<Report> reports) {
 		this.reports = reports;
 	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+	
+	
 }

@@ -29,6 +29,7 @@ import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.DoctorsOrdinationsFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.OrdinationFreeTimesDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -210,6 +211,39 @@ public class DoctorController {
 		session.setAttribute("currentUser", doctor);
 		
 		return new ResponseEntity<>(new DoctorPersonalInformationDto(doctor), HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/delete/{doctorId}
+	 HTTP request for deleting doctor
+	 parameter: String
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/delete/{doctorId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteDoctor(@PathVariable Long doctorId) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admins can remove doctors from their clinic.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Doctor doctor = doctorService.findOneById(doctorId);
+		
+		//provera da li doktor ima zakazane preglede
+		//ukoliko ima zakazane preglede ne moze biti obrisan
+		for(Appointment a : doctor.getAppointments()) {
+			if(!a.getFinished()) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Doctor with scheduled appointments cant be deleted!");
+			}
+		}
+
+		doctorService.delete(doctor);
 	}
 	
 	/*

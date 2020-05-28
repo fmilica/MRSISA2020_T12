@@ -50,7 +50,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void delete(Appointment app) {
 		logger.info("> delete id:{}", app.getId());
-		appointmentRepository.delete(app);
+		app.setActive(false);
+		appointmentRepository.save(app);
 		logger.info("< delete id:{}", app.getId());
 	}
 

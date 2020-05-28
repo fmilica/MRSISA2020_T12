@@ -11,9 +11,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 // Registered user class
 @Entity
 @Table(name = "registered_user")
+@Where(clause="is_active=true")
 @Inheritance(strategy=TABLE_PER_CLASS)
 public class RegisteredUser {
 
@@ -23,6 +26,9 @@ public class RegisteredUser {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name="email", unique= true, nullable=false)
 	private String email;
@@ -75,6 +81,7 @@ public class RegisteredUser {
 		this.country = country;
 		this.phoneNumber = phoneNumber;
 		this.securityNumber = securityNumber;
+		this.active = true;
 	}
 	
 	public RegisteredUser(Long id, String email, String password, String name, String surname, String gender, 
@@ -93,6 +100,7 @@ public class RegisteredUser {
 		this.country = country;
 		this.phoneNumber = phoneNumber;
 		this.securityNumber = securityNumber;
+		this.active = true;
 	}
 
 	public String getEmail() {
@@ -168,6 +176,14 @@ public class RegisteredUser {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@Override

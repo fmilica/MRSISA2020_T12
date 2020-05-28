@@ -13,8 +13,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "leave_request")
+@Where(clause="is_active=true")
 public class LeaveRequest {
 	
 	@Id
@@ -23,6 +26,9 @@ public class LeaveRequest {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@OneToOne(cascade = {ALL}, fetch = LAZY)
 	@JoinColumn(name = "leave_id")
@@ -41,6 +47,7 @@ public class LeaveRequest {
 		this.leave = leave;
 		this.approved = approved;
 		this.description = description;
+		this.active = true;
 	}
 
 	public Leave getLeave() {
@@ -65,5 +72,21 @@ public class LeaveRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 }

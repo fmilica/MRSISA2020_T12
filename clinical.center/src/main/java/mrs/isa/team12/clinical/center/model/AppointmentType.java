@@ -18,8 +18,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "appointment_type")
+@Where(clause="is_active=true")
 public class AppointmentType {
 	
 	@Id
@@ -28,6 +31,9 @@ public class AppointmentType {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	// ime ne mora biti jedinstveno jer razlicite klinike mogu imati isti naziv za tip pregleda
 	@Column(name = "name", unique = false, nullable = false)
@@ -72,6 +78,7 @@ public class AppointmentType {
 		this.name = name;
 		this.duration = duration;
 		this.price = price;
+		this.active = true;
 	}
 
 	public AppointmentType(Long id, String name, Integer duration, Set<Appointment> appointments, Set<Doctor> doctors) {
@@ -81,6 +88,7 @@ public class AppointmentType {
 		this.duration = duration;
 		this.appointments = appointments;
 		this.doctors = doctors;
+		this.active = true;
 	}
 
 	public AppointmentType(Long id, String name, Set<Appointment> appointments, Set<Doctor> doctors) {
@@ -89,6 +97,7 @@ public class AppointmentType {
 		this.name = name;
 		this.appointments = appointments;
 		this.doctors = doctors;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -145,6 +154,14 @@ public class AppointmentType {
 
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@Override

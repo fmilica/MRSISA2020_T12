@@ -14,8 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "clinical_centre")
+@Where(clause="is_active=true")
 public class ClinicalCentre {
 	
 	@Id
@@ -24,6 +27,9 @@ public class ClinicalCentre {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
@@ -45,6 +51,7 @@ public class ClinicalCentre {
 	public ClinicalCentre(String name) {
 		super();
 		this.name = name;
+		this.active = true;
 	}
 	
 	public ClinicalCentre(Long id, String name, Set<Clinic> clinics,
@@ -56,6 +63,7 @@ public class ClinicalCentre {
 		this.admins = admins;
 		this.registrationRequests = registrationRequests;
 		this.patients = patients;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -106,6 +114,14 @@ public class ClinicalCentre {
 		this.patients = patients;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public void add(ClinicalCentreAdmin clinicalCentreAdmin) {
 		if(!this.admins.contains(clinicalCentreAdmin)) {
 			this.admins.add(clinicalCentreAdmin);

@@ -16,8 +16,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "appointment_request")
+@Where(clause="is_active=true")
 public class AppointmentRequest {
 	
 	@Id
@@ -26,6 +29,9 @@ public class AppointmentRequest {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@OneToOne(cascade = {ALL}, fetch = EAGER)
 	@JoinColumn(name = "appointment_id")
@@ -49,6 +55,7 @@ public class AppointmentRequest {
 		this.requestDate = requestDate;
 		this.approved = approved;
 		this.clinic = clinic;
+		this.active = true;
 	}
 	
 	public Long getId() {
@@ -90,6 +97,14 @@ public class AppointmentRequest {
 		this.clinic = clinic;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "AppointmentRequest [id=" + id + ", appointment=" + appointment + ", requestDate=" + requestDate

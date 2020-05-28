@@ -49,7 +49,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
 		logger.info("< update id:{}", rr.getId());
 		return rr;
 	}
-	
+	/*
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void deleteById(Long id) {
@@ -57,7 +57,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
 		requestRepository.deleteById(id);
 		logger.info("< delete id:{}", id);
 	}
-	
+	*/
 	@Override
 	public List<RegistrationRequest> findAll() {
 		logger.info("> findAll");

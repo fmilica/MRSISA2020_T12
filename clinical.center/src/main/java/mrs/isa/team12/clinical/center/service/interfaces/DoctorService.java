@@ -17,6 +17,8 @@ public interface DoctorService {
 	
 	Doctor save(Doctor d);
 	
+	void delete(Doctor d);
+	
 	Doctor updatePassword(Long doctorId, String newPassword);
 	
 	Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes);

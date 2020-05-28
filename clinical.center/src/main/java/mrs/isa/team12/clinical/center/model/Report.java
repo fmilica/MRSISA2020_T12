@@ -16,8 +16,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "report")
+@Where(clause="is_active=true")
 public class Report {
 	
 	@Id
@@ -26,6 +29,9 @@ public class Report {
 	
 	@Version
 	private Long version;
+	
+	@Column(name="is_active")
+	private Boolean active;
 	
 	@Column(name = "clinicRating", unique = false, nullable = true)
 	private Double clinicRating;
@@ -54,6 +60,7 @@ public class Report {
 		this.income = income;
 		this.clinic = clinic;
 		this.ratings = ratings;
+		this.active = true;
 	}
 
 	public Long getId() {
@@ -102,5 +109,13 @@ public class Report {
 
 	public void setRatings(Set<Report> ratings) {
 		this.ratings = ratings;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 }

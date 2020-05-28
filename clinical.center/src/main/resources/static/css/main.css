@@ -297,6 +297,10 @@ i {
     border: 1px solid #006e97 !important;
     color: #ffff !important;*/
 }
+.table-action-btns {
+    margin: 0 auto;
+    width: 50%;
+}
 /*
 * Sidebar
 */

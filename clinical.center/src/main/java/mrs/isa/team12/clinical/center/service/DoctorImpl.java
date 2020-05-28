@@ -60,6 +60,16 @@ public class DoctorImpl implements DoctorService {
 	
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void delete(Doctor d) {
+		logger.info("> delete id:{}", d.getId());
+		d.setActive(false);
+		doctorRep.save(d);
+		logger.info("< delete id:{}", d.getId());
+		
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Doctor updatePassword(Long doctorId, String newPassword) {
 		logger.info("> update id{}", doctorId);
 		Doctor doctorToUpdate = doctorRep.findOneById(doctorId);

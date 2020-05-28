@@ -53,7 +53,8 @@ public class PatientImpl implements PatientService {
 	public Patient deleteByRequestId(Long id) {
 		Patient p = this.findOneByRegistrationRequestId(id);
 		logger.info("> delete id{}:", p.getId());
-		patientRep.deleteById(p.getId());
+		p.setActive(false);
+		patientRep.save(p);
 		logger.info("< delete id{}:", p.getId());
 		return p;
 	}

@@ -48,9 +48,10 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public void delete(AppointmentRequest ar) {
-		logger.info("> delete");
-		appointmentRequestRep.delete(ar);
-		logger.info("< delete");
+		logger.info("> delete id:{}", ar.getId());
+		ar.setActive(false);
+		appointmentRequestRep.save(ar);
+		logger.info("< delete id:{}", ar.getId());
 	}
 	
 	@Override
