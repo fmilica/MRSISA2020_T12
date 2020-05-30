@@ -28,6 +28,8 @@ var examReq = {
 	time: ""
 }
 
+var editAppTypeId;
+
 //ako su personalni podaci editovani, ponovo saljemo upit serveru
 var edited = false;
 
@@ -701,12 +703,12 @@ $(document).ready(function() {
 	$("#endWorkDoctor").on('click', function(e){
 		hideValidate($("#endWorkDoctor"))
 	})
-
+	
+	/*Delete doctor*/
 	/*--------------------------------------------------*/
 	$('body').on('click', 'span.delete-doctor', function() {
 		//preslatko Eva hvala ti :3 <3 <333
 		var doctorId = $(this).attr('id')
-		alert("Id doktora koji je kliknut je: " + doctorId)
 		$.ajax({
 			type : "GET",
 			async: false,
@@ -714,6 +716,82 @@ $(document).ready(function() {
 			success : function(output)  {
 				alert("Doctor successfuly deleted!")
 				doctorTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	/*******************************************************/
+	
+	/*Edit and delete appTypes*/
+	$('body').on('click', 'span.edit-appType', function() {
+		editAppTypeId = $(this).attr('id')
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/appointmentType/viewAppType/"+editAppTypeId,
+			contentType : "application/json",
+			success : function(output)  {
+				$('.content').hide()
+				$('.clinic-editAppType').show()
+				$('#edit_appointment_name').val(output.name)
+				$('#edit_appointment_duration').val(output.duration)
+				$('#edit_appointment_price').val(output.price)
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+		
+		// OVO JE KUL NE TREBA OVO DA ZABORAVIMO MOZDA ZATREBA
+		/*var tr = $(this).closest('tr')
+		var selectedAppType = appTypeTable.row(tr).data()*/
+	})
+	$('#submit_edit_appointment_type').click(function(e) {
+		e.preventDefault()
+		var nameV = $('#edit_appointment_name').val()
+		var durationV = $('#edit_appointment_duration').val()
+		var priceV = $('#edit_appointment_price').val()
+		
+		var editedAppType = {
+			id: editAppTypeId,
+			name: nameV,
+			price: priceV,
+			duration: durationV
+		}
+		
+		$.ajax({
+			type : "POST",
+			async: false,
+			url : "../../theGoodShepherd/appointmentType/edit",
+			contentType : "application/json",
+			data : JSON.stringify(editedAppType),
+			success : function()  {
+				alert("Appointment type successfuly edited!")
+				$(".content").hide()
+				$(".clinic-appTypes").show()
+				appTypeTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	$('#cancel-edit-appointment-type').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.clinic-appTypes').show()
+	})
+	$('body').on('click', 'span.delete-appType', function() {
+		var appTypeId = $(this).attr('id')
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/appointmentType/delete/" + appTypeId ,
+			success : function(output)  {
+				alert("Appointment type successfuly deleted!")
+				appTypeTable.ajax.reload()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)

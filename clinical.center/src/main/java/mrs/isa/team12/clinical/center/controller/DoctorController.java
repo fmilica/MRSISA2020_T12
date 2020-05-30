@@ -466,6 +466,7 @@ public class DoctorController {
 		// ne postoji u bazi
 		// sacuvamo ga
 		doctor.setClinic(admin.getClinic());
+		doctor.setActive(true);
 		Doctor saved = doctorService.save(doctor);
 		
 		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
@@ -478,7 +479,7 @@ public class DoctorController {
 	 returns ResponseEntity object
 	 */
 	@PostMapping(value = "/getFreeTimes/{appTypeId}/{appDate}")
-	public ResponseEntity<List<Integer>> addNewDoctor(@PathVariable("appTypeId") Long appTypeId,
+	public ResponseEntity<List<Integer>> getFreeTimes(@PathVariable("appTypeId") Long appTypeId,
 												  @PathVariable("appDate") String appDate) {
 		Doctor currentUser;
 		try {

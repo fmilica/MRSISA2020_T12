@@ -65,7 +65,6 @@ public class DoctorImpl implements DoctorService {
 		d.setActive(false);
 		doctorRep.save(d);
 		logger.info("< delete id:{}", d.getId());
-		
 	}
 	
 	@Override

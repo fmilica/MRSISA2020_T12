@@ -9,6 +9,8 @@ public class AppointmentTypeDto {
 	private Double price;
 	private Integer duration;
 	
+	public AppointmentTypeDto() {}
+
 	public AppointmentTypeDto(AppointmentType appType) {
 		this.id = appType.getId();
 		this.name = appType.getName();

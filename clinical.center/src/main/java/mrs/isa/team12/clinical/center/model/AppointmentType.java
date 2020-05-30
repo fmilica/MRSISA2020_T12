@@ -117,7 +117,7 @@ public class AppointmentType {
 	}
 
 	public Set<Appointment> getAppointments() {
-		return null;
+		return appointments;
 	}
 
 	public void setAppointments(Set<Appointment> appointments) {

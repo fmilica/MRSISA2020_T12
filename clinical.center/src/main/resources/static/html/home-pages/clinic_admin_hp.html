@@ -1214,6 +1214,70 @@
 					</div>
 					<!-- end add form -->
 				</div>
+				
+				<!-- Edit appointment type -->
+				<div class="content clinic-editAppType">
+					<!-- add form -->
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Edit appointment type</header>
+									</div>
+									<div class="card-body">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="edit_appointment_name" name="name" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Duration
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input"  data-validate="Duration must be a number!">
+														<select class="form-control input-height" id="edit_appointment_duration">
+															<option selected="selected" value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Price
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input"  data-validate="Price must be a number!">
+														<input type="text" id="edit_appointment_price" name="price" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-actions">
+													<div class="row">
+														<div class="offset-md-3 col-md-12 form-buttons">
+															<button id="submit_edit_appointment_type" type="submit" class="btn btn-info">Save</button>
+															<button id="cancel-edit-appointment-type" type="button" class="btn btn-default">Cancel</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
+				</div>
 			</div>
 
 			<!-- end page content -->

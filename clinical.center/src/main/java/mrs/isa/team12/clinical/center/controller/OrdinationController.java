@@ -205,7 +205,7 @@ public class OrdinationController {
 		if (admin == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-		
+		ordination.setActive(true);
 		Ordination o = ordinationService.update(admin.getClinic().getId(), ordination.getName(), ordination.getOrdinationNumber(), ordination, admin.getClinic());
 			
 		if(o == null) {
@@ -213,18 +213,6 @@ public class OrdinationController {
 		}
 		
 		return new ResponseEntity<>(new OrdinationDto(ordination), HttpStatus.CREATED);
-		
-		
-		/*Ordination o = ordinationService.findOneByClinicIdAndNameAndOrdinationNumber(admin.getClinic().getId(), ordination.getName(), ordination.getOrdinationNumber());
-		
-		if(o == null) {
-			ordination.setClinic(admin.getClinic());
-			ordinationService.save(ordination);
-			return new ResponseEntity<>(new OrdinationDto(ordination), HttpStatus.CREATED);
-		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given name and number combination already exists!");
-		*/
-		
 	}
 	
 	/*

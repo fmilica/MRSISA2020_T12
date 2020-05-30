@@ -533,6 +533,9 @@ i {
 .clinic-addAppType {
     display: none;
 }
+.clinic-editAppType {
+	display: none;
+}
 .clinic-createClinicApp {
     display: none;
 }
