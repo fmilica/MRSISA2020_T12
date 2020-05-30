@@ -10,6 +10,8 @@ public class OrdinationDto {
 	private Integer ordinationNumber;
 	private OrdinationType type;
 	
+	public OrdinationDto() {}
+
 	public OrdinationDto(Ordination o) {
 		this.id = o.getId();
 		this.name = o.getName();

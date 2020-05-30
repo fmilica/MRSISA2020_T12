@@ -1,9 +1,9 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -186,6 +186,36 @@ public class OrdinationController {
 	}
 	
 	/*
+	 url: GET localhost:8081/theGoodShepherd/ordination/viewOrdination/{ordinationId}
+	 HTTP request for viewing specified ordination
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/viewOrdination/{ordinationId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrdinationDto> viewAppType(@PathVariable Long ordinationId) {
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can edit ordinations.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Ordination ordination = ordinationService.findOneById(ordinationId);
+		
+		//provera da li ordinacija ima zakazane preglede
+		//ukoliko ima zakazane preglede ne moze biti obrisan
+		for(Appointment a : ordination.getAppointments()) {
+			if(!a.getFinished()) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ordiantion with scheduled appointments cant be edited!");
+			}
+		}
+		return new ResponseEntity<>(new OrdinationDto(ordination), HttpStatus.OK);
+	}
+	
+	/*
 	 url: POST localhost:8081/theGoodShepherd/ordination/addNewOrdination/{name}/{type}
 	 HTTP request for adding new ordination
 	 receives Ordination object
@@ -213,6 +243,69 @@ public class OrdinationController {
 		}
 		
 		return new ResponseEntity<>(new OrdinationDto(ordination), HttpStatus.CREATED);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/ordination/edit
+	 HTTP request for editing ordination
+	 parameter: String
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/edit",
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void editOrdination(@RequestBody OrdinationDto editedOrdination) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admins can edit ordinations from their clinic.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Ordination ordination = ordinationService.findOneById(editedOrdination.getId());
+		
+		if((!ordination.getName().equals(editedOrdination.getName()) || 
+		   !ordination.getOrdinationNumber().equals(editedOrdination.getOrdinationNumber())) &&
+		   ordinationService.findOneByClinicIdAndNameAndOrdinationNumber(currentUser.getClinic().getId(),
+		   editedOrdination.getName(), editedOrdination.getOrdinationNumber()) != null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ordination with given name and number already exists!");
+		}
+		
+		ordinationService.update(ordination, editedOrdination);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointmentType/delete/{ordinationId}
+	 HTTP request for deleting ordination
+	 parameter: String
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/delete/{ordinationId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteAppType(@PathVariable Long ordinationId) {
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admins can remove ordinations from their clinic.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Ordination ordination = ordinationService.findOneById(ordinationId);
+		
+		//provera da li ordinacija ima zakazane preglede
+		//ukoliko ima zakazane preglede ne moze biti obrisana
+		for(Appointment a : ordination.getAppointments()) {
+			if(!a.getFinished()) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ordination with scheduled appointments cant be deleted!");
+			}
+		}
+		ordinationService.delete(ordination);
 	}
 	
 	/*

@@ -2,12 +2,23 @@ package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
 
+import mrs.isa.team12.clinical.center.dto.OrdinationDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 public interface OrdinationService {
+	
+	Ordination save(Ordination o);
+	
+	void delete(Ordination o);
+	
+	Ordination update(Ordination o, OrdinationDto edited);
+	
+	void update(Long id, AppointmentRequest ar) throws Exception;
+	
+	Ordination update(Long clinicId, String name, Integer ordNumber, Ordination ord, Clinic clinic);
 
 	Ordination findOneByName(String name);
 	
@@ -26,11 +37,5 @@ public interface OrdinationService {
 	List<Ordination> findAllByClinicIdAndOrdinationNumberAndType(Long clinicId, Integer ordinationNumber, OrdinationType type);
 	
 	List<Ordination> findAllByClinicIdAndNameContainingIgnoreCaseAndOrdinationNumberAndType(Long clinicId, String name, Integer ordinationNumber, OrdinationType type);
-	
-	Ordination save(Ordination o);
-	
-	void update(Long id, AppointmentRequest ar) throws Exception;
-	
-	Ordination update(Long clinicId, String name, Integer ordNumber, Ordination ord, Clinic clinic);
 	
 }

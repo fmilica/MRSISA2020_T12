@@ -548,6 +548,9 @@ i {
 .clinic-oper-rooms {
     display: none;
 }
+.clinic-edit-ordination{
+	display: none;
+}
 
 /* Medical personnel */
 .medical-calendar {

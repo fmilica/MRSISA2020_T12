@@ -28,7 +28,8 @@ var examReq = {
 	time: ""
 }
 
-var editAppTypeId;
+var editedAppTypeId;
+var editedOrdinationId;
 
 //ako su personalni podaci editovani, ponovo saljemo upit serveru
 var edited = false;
@@ -265,7 +266,16 @@ $(document).ready(function() {
 				columns: [
 					{ data: 'name'},
 					{ data: 'ordinationNumber'},
-					{ data: 'type'}]
+					{ data: 'type'},
+					{
+						data: null,
+						render: function(data) {
+							return  '<div class="table-action-btns">'+
+										'<span id="'+data.id+'" class="table-action edit-ordination"><i class="fas fa-edit"></i></span>'+
+										'<span id="'+data.id+'" class="table-action delete-ordination"><i class="fas fa-trash"></i></span>'+
+									'</div>'
+							}
+					}]
 				})
 		}
 	})
@@ -722,15 +732,14 @@ $(document).ready(function() {
 			}
 		})
 	})
-	/*******************************************************/
+	/********************************************************************************/
 	
 	/*Edit and delete appTypes*/
 	$('body').on('click', 'span.edit-appType', function() {
-		editAppTypeId = $(this).attr('id')
+		editedAppTypeId = $(this).attr('id')
 		$.ajax({
 			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/appointmentType/viewAppType/"+editAppTypeId,
+			url : "../../theGoodShepherd/appointmentType/viewAppType/"+editedAppTypeId,
 			contentType : "application/json",
 			success : function(output)  {
 				$('.content').hide()
@@ -754,8 +763,13 @@ $(document).ready(function() {
 		var durationV = $('#edit_appointment_duration').val()
 		var priceV = $('#edit_appointment_price').val()
 		
+		if(!nameV || !durationV || priceV){
+			alert("All fields must be filled")
+			return
+		}
+		
 		var editedAppType = {
-			id: editAppTypeId,
+			id: editedAppTypeId,
 			name: nameV,
 			price: priceV,
 			duration: durationV
@@ -763,7 +777,6 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "POST",
-			async: false,
 			url : "../../theGoodShepherd/appointmentType/edit",
 			contentType : "application/json",
 			data : JSON.stringify(editedAppType),
@@ -784,22 +797,105 @@ $(document).ready(function() {
 		$('.clinic-appTypes').show()
 	})
 	$('body').on('click', 'span.delete-appType', function() {
-		var appTypeId = $(this).attr('id')
+		if (confirm('Are you sure you want to delete selected appointment type ?')) {
+			var appTypeId = $(this).attr('id')
+			$.ajax({
+				type : "GET",
+				url : "../../theGoodShepherd/appointmentType/delete/" + appTypeId ,
+				success : function(output)  {
+					alert("Appointment type successfuly deleted!")
+					appTypeTable.ajax.reload()
+				},
+				error : function(response) {
+					alert(response.responseJSON.message)
+				}
+			})
+		} else {
+	}
+		
+	})
+	/************************************************************************************/
+
+	/*Edit and delete ordinations*/
+	$('body').on('click', 'span.edit-ordination', function() {
+		ordinationId = $(this).attr('id')
+		editedOrdinationId = $(this).attr('id')
 		$.ajax({
 			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/appointmentType/delete/" + appTypeId ,
+			url : "../../theGoodShepherd/ordination/viewOrdination/"+ordinationId,
+			contentType : "application/json",
 			success : function(output)  {
-				alert("Appointment type successfuly deleted!")
-				appTypeTable.ajax.reload()
+				$('.content').hide()
+				$('.clinic-edit-ordination').show()
+				$('#edit_ordination_name').val(output.name)
+				$('#edit_ordination_number').val(output.ordinationNumber)
+				$('#edit_ordination_type').val(output.type)
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
 			}
 		})
 	})
-	/*******************************************************/
-
+	$('#submit_edit_ordination').click(function(e) {
+		e.preventDefault()
+		var nameV = $('#edit_ordination_name').val()
+		var numberV = $('#edit_ordination_number').val()
+		var ordinationTypeV = $('#edit_ordination_type').val()
+		
+		if(!nameV || !numberV || !ordinationTypeV){
+			alert("All fields must be filled!")
+			return
+		}
+		
+		var editedOrdination = {
+			id: editedOrdinationId,
+			name: nameV,
+			ordinationNumber: numberV,
+			type: ordinationTypeV
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/ordination/edit",
+			contentType : "application/json",
+			data : JSON.stringify(editedOrdination),
+			success : function()  {
+				alert("Ordination type successfuly edited!")
+				$(".content").hide()
+				$(".clinic-ordinations").show()
+				ordinationTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	$('#cancel_edit_ordination').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.clinic-ordinations').show()
+	})
+	$('body').on('click', 'span.delete-ordination', function() {
+		if (confirm('Are you sure you want to delete selected ordination?')) {
+			var ordinationId = $(this).attr('id')
+			$.ajax({
+				type : "GET",
+				url : "../../theGoodShepherd/ordination/delete/" + ordinationId ,
+				success : function(output)  {
+					alert("Ordinatio successfuly deleted!")
+					ordinationTable.ajax.reload()
+				},
+				error : function(response) {
+					alert(response.responseJSON.message)
+				}
+			})
+		} else {
+		}
+		
+	})
+	
+	
+	/************************************************************************************/
 	/*Appointment requests*/
 
 	// pretplata svih elemenata sa klasom na klik

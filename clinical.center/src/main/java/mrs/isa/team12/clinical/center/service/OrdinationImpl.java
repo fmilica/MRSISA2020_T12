@@ -1,7 +1,6 @@
 package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import mrs.isa.team12.clinical.center.dto.OrdinationDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Ordination;
@@ -30,6 +30,28 @@ public class OrdinationImpl implements OrdinationService {
 		this.ordinationRep = ordinationRep;
 	}
 
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void delete(Ordination o) {
+		logger.info("> delete id:{}", o.getId());
+		o.setActive(false);
+		ordinationRep.save(o);
+		logger.info("< delete id:{}", o.getId());
+		
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Ordination update(Ordination o, OrdinationDto edited) {
+		logger.info("> update id:{}", o.getId());
+		o.setName(edited.getName());
+		o.setOrdinationNumber(edited.getOrdinationNumber());
+		o.setType(edited.getType());
+		Ordination updated = ordinationRep.save(o);
+		logger.info("< update id:{}", o.getId());
+		return updated;
+	}
+	
 	@Override
 	public Ordination findOneByName(String name) {
 		logger.info("> findOneByName");
