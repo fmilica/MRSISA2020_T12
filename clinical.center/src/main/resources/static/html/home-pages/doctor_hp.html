@@ -542,7 +542,100 @@
 
 				<!-- Medical personnel vacation content -->
 				<div class="content medical-vacation">
-					doctor vacation
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Vacation/Leave Requests</header>
+									</div>
+									<div class="card-body">
+										<button id="makeVacationRequest" class="btn btn-info add-button">Create Vacation Request</button>
+										<table id="vacationTable" class="display">
+											<thead>
+												<tr>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Description</th>
+													<th>Approved</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Description</th>
+													<th>Approved</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Create Leave Request -->
+				<div class="content nurse-create-leave-request">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Create Leave Request - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Start Date
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+				                                        <input id="startDate" type="date" class="form-control">
+				                                    </div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														End Date
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+				                                       <input id="endDate" type="date" class="form-control">
+				                                    </div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Type
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+				                                       <select class="form-control input-height" id="leaveType">
+		                                                	<option selected="selected" value="paid">Paid</option>
+		                                               	 	<option value="vacation">Vacation</option>
+		                                               </select>
+				                                    </div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="create_leaveRequest" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_leaveRequest" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- View patient profile -->

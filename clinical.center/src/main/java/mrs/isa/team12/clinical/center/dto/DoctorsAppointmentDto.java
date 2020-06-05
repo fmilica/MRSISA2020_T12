@@ -7,18 +7,20 @@ import mrs.isa.team12.clinical.center.model.Appointment;
 public class DoctorsAppointmentDto {
 	private String id;
 	private String patient;
+	private String doctor;
 	private String ordination;
 	private Date date;
 	private String startTime;
 	private String endTime;
 	private String type;
+	private String appType;
 	
 	public DoctorsAppointmentDto() {
 		super();
 	}
 
 	public DoctorsAppointmentDto(String id, String patient, String ordination, Date date, String startTime,
-			String endTime, String type) {
+			String endTime, String type, String appType, String doctor) {
 		super();
 		this.id = id;
 		this.patient = patient;
@@ -27,6 +29,8 @@ public class DoctorsAppointmentDto {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.type = type;
+		this.appType = appType;
+		this.doctor = doctor;
 	}
 
 	public DoctorsAppointmentDto(Appointment a) {
@@ -45,10 +49,12 @@ public class DoctorsAppointmentDto {
 			this.endTime = a.getEndTime()+"";
 		}
 		if(a.getType() == null) {
-			this.type = "Appointment";
+			this.type = "appointment";
 		}else {
-			this.type = "Operation";
+			this.type = "operation";
 		}
+		this.appType = a.getAppType().getName();
+		this.doctor = a.getDoctor().getName() + " " + a.getDoctor().getSurname();
 	}
 
 	public String getId() {
@@ -105,5 +111,21 @@ public class DoctorsAppointmentDto {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getAppType() {
+		return appType;
+	}
+
+	public void setAppType(String appType) {
+		this.appType = appType;
+	}
+
+	public String getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(String doctor) {
+		this.doctor = doctor;
 	}
 }

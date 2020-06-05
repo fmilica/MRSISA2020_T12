@@ -168,16 +168,6 @@ $(document).ready(function(){
 					{
 						data: null,
 						render: function (data) {
-							var options = ""
-							$.each(data.prescriptions, function(index, medicine){
-								options += '<option>'+ medicine +'</option>'
-							})
-						  	return '<select class="form-control input-height">'+ options +'</select>';
-						}
-					},
-					{
-						data: null,
-						render: function (data) {
 							var button = '<button id="'+data.id+'" class="btn btn-info table-button-verify" name="'+data.id+'">Verify</button>';
 						  	return button;
 						}

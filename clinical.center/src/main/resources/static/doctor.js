@@ -4,6 +4,7 @@ var appointment_id;
 var medicalRecord_id;
 var current_secNum;
 var diagnosis = [];
+var vacationTable;
 
 var appointment = {
 	appId: null,
@@ -609,6 +610,79 @@ $(document).ready( function () {
 	})
 	$("#endWorkEdit").on('click', function(e){
 		hideValidate($("#endWorkEdit"))
+	})
+	
+	/*View all currentUser's leave requests*/
+	$('#medicalVacation').click(function(e){
+		e.preventDefault()
+		
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#vacationTable')) {
+			vacationTable = $('#vacationTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/leaveRequest",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'startDate'},
+					{ data: 'endDate'},
+					{ data: 'type'},
+					{ data: 'description'},
+					{ data: 'approved'}]
+			})
+		} else {
+			vacationTable.ajax.reload()
+		}
+	});
+	
+	/*Show form for creating leave request*/
+	$('#makeVacationRequest').click(function(e){
+		e.preventDefault()
+		
+		$('.content').hide()
+		$('.nurse-create-leave-request').show()
+	});
+	
+	/*Create leave request*/
+	$('#create_leaveRequest').click(function(e){
+		e.preventDefault()
+		
+		var startDate = $('#startDate').val()
+		var endDate = $('#endDate').val()
+		var type = $('#leaveType').val()
+		
+		var leaveReq = {
+			startDate: startDate,
+			endDate: endDate,
+			type: type
+		}
+		
+		$.ajax({
+			type : "POST",
+			async: false,
+			url : "../../theGoodShepherd/leaveRequest/addNewLeaveRequest",
+			contentType: "application/json",
+			data: JSON.stringify(leaveReq),
+			success : function()  {
+				alert("You successfully sent a leave request!");
+				vacationTable.ajax.reload()
+				$('.content').hide()
+				$('.medical-vacation').show()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	});
+	
+	/*Cancel adding leave request*/
+	$('#cancel_leaveRequest').click(function(e){
+		e.preventDefault()
+		
+		$('.content').hide()
+		$('.medical-vacation').show()
+		$('#startDate').val('')
+		$('#endDate').val('')
 	})
 })
 

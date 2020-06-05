@@ -602,11 +602,26 @@ function filterPredefinedApps(){
 }
 // zakazivanje pregleda
 function schedulePredefinedApp(appId) {
+	var colorEvent;
 	$.ajax({
 		type : "POST",
 		url : "../../theGoodShepherd/appointment/schedule/"+appId,
 		dataType: "json",
 		success : function(output)  {
+			if(output.typeOf == "appointment"){
+				colorEvent = '#48baf7' 
+			}else{
+				colorEvent = '#2aebb4'
+			}
+	        calendar.addEvent({
+				id: output.id,
+		        title: output.appType + " " + output.typeOf + ' with doctor ' + output.doctor,
+		        description: output.appType + " " + output.typeOf + ' with doctor ' + output.doctor,
+		        start: output.date+"T0"+output.startTime+":00:00",
+		        end: output.date+"T0"+output.endTime+":00:00",
+		        color: colorEvent
+		    });
+	        //calendar.render();
 			alert("Succesfully scheduled an appointment!\nAll appointments are visible in 'My appointments' tab.")	
 			predefinedApps.ajax.reload()
 		},
@@ -1000,8 +1015,22 @@ function confirmApp(appId) {
 		type : "POST",
 		url : "../../theGoodShepherd/appointment/confirmApp/"+appId,
 		contentType: "application/json",
-		success : function() {
+		success : function(output) {
+			if(output.typeOf == "appointment"){
+				colorEvent = '#48baf7' 
+			}else{
+				colorEvent = '#2aebb4'
+			}
+	        calendar.addEvent({
+				id: output.id,
+		        title: output.appType + " " + output.typeOf + ' with doctor ' + output.doctor,
+		        description: output.appType + " " + output.typeOf + ' with doctor ' + output.doctor,
+		        start: output.date+"T0"+output.startTime+":00:00",
+		        end: output.date+"T0"+output.endTime+":00:00",
+		        color: colorEvent
+		    });
 			alert("Succesfully accepted an appointment!\nYou can view all your upcoming appointments in the 'Upcoming appointments' tab.")
+			//calendar.render();
 			unconfirmedAppsTable.ajax.reload()
 		},
 		error : function(response) {
@@ -1027,7 +1056,6 @@ function declineApp(appId) {
 /*-----------------------------------------------------*/
 
 function logInPatient(email, password) {
-
 	$.ajax({
 		type : "POST",
 		async: false,

@@ -18,6 +18,7 @@ public class AppointmentDto {
 	private Double price;
 	private Double discount;
 	private Boolean finished;
+	private String typeOf;
 	
 	public AppointmentDto() {}
 	
@@ -35,6 +36,11 @@ public class AppointmentDto {
 		this.price = app.getAppType().getPrice();
 		this.discount = app.getDiscount();
 		this.finished = app.getFinished();
+		if(app.getType() == null) {
+			this.typeOf = "appointment";
+		}else {
+			this.typeOf = "operation";
+		}
 	}
 	
 	
@@ -103,5 +109,13 @@ public class AppointmentDto {
 	}
 	public void setFinished(Boolean finished) {
 		this.finished = finished;
+	}
+
+	public String getTypeOf() {
+		return typeOf;
+	}
+
+	public void setTypeOf(String typeOf) {
+		this.typeOf = typeOf;
 	}
 }

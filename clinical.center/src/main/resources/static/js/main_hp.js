@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: true,
         events: calendarFill(),
         eventClick: function(data){
-        		if(data.event.title == "Appointment" && loggedUser == "doctor"){
+        		if((data.event.title).indexOf("appointment") != -1 && loggedUser == "doctor"){
         			alert(data.event.extendedProps.description+"\nOpening patient's profile..")
         			document.body.scrollTop = 0
         			document.documentElement.scrollTop = 0
@@ -403,6 +403,7 @@ $(document).ready( function () {
 function calendarFill(){
 	var eventsToAdd = []
 	var colorEvent;
+	var eventTitle;
 	$.ajax({
 		type : "GET",
 		async: false,
@@ -411,15 +412,21 @@ function calendarFill(){
 		success : function(output)  {
 			loggedUser = output.user
 			$.each(output.appointments, function(index, appointment){
-				if(appointment.type == "Appointment"){
+				if(appointment.type == "appointment"){
 					colorEvent = '#48baf7' 
 				}else{
 					colorEvent = '#2aebb4'
 				}
+				eventTitle = appointment.appType + " " + appointment.type+' with ';
+				if(loggedUser == "doctor"){
+					eventTitle += 'patient ' + appointment.patient;
+				}else{
+					eventTitle += 'doctor ' + appointment.doctor;
+				}
 				eventsToAdd.push({
 					id: appointment.id,
-			        title: appointment.type,
-			        description: appointment.type+' with patient ' + appointment.patient,
+			        title:  eventTitle,
+			        description: eventTitle,
 			        start: appointment.date+"T"+appointment.startTime+":00:00",
 			        end: appointment.date+"T"+appointment.endTime+":00:00",
 			        color: colorEvent
@@ -439,7 +446,6 @@ function calendarFill(){
 			    });
 			});
 		}
-	})
-	console.log(eventsToAdd);
+	});
 	return eventsToAdd;
 }
