@@ -26,6 +26,7 @@ import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
@@ -81,6 +82,58 @@ public class ClinicController {
 		}
 		
 		return new ResponseEntity<>(clinicsDto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/viewClinicInformation
+	 HTTP request for viewing clinic data for current clinic admin
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/viewClinicInformation")
+	public ResponseEntity<ClinicDto> viewClinic() {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view clinic information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Clinic clinic = clinicService.findOneById(currentUser.getClinic().getId());
+		
+		ClinicDto clinicDto = new ClinicDto(clinic);
+		
+		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/editClinicInformation
+	 HTTP request for editing clinic information
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/editClinicInformation")
+	public ResponseEntity<ClinicDto> editClinic(@RequestBody ClinicDto editedClinic) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can edit clinic information.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		editedClinic.setId(currentUser.getClinic().getId());
+		
+		Clinic clinic = clinicService.update(editedClinic);
+		
+		ClinicDto clinicDto = new ClinicDto(clinic);
+		
+		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
 	}
 	
 	/*

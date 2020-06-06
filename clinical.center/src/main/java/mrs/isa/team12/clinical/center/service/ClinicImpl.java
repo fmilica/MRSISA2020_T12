@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.repository.ClinicRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
@@ -43,6 +45,21 @@ public class ClinicImpl implements ClinicService {
 		return clinic;
 	}
 	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Clinic update(ClinicDto editedClinic) {
+		logger.info("> update id{}", editedClinic.getId());
+		Clinic clinicToUpdate = repository.findOneById(editedClinic.getId());
+		clinicToUpdate.setName(editedClinic.getName());
+		clinicToUpdate.setAddress(editedClinic.getAddress());
+		clinicToUpdate.setCity(editedClinic.getCity());
+		clinicToUpdate.setCountry(editedClinic.getCountry());
+		clinicToUpdate.setDescription(editedClinic.getDescription());
+		Clinic updated = repository.save(clinicToUpdate);
+		logger.info("< update id{}", updated.getId());
+		return updated;
+	}
+
 	@Override
 	public Clinic findOneByName(String name) {
 		logger.info("> findOneByName name:{}", name);

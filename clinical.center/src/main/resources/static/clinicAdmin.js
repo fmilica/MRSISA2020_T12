@@ -1033,6 +1033,83 @@ $(document).ready(function() {
 		}
 	})
 	
+	
+	/*********************************************************************/
+	/*Clinic information*/
+	/*View clinic information*/
+	$("#clinicInformation").on('click', function(e){
+		$.ajax({
+			type : "GET",
+			url : "../../theGoodShepherd/clinics/viewClinicInformation",
+			contentType : "application/json",
+			success : function(output)  {
+				fillClinicInformation(output)
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	
+	/*Edit clinic information*/
+	$("#editClinic").on('click', function(e){
+		$('.content').hide()
+		$('.edit-clinic').show()
+	})
+	
+	/*Save edited clinic information*/
+	$("#saveEditClinic").on('click', function(e){
+		
+		var nameV = $("#nameClinic").val()
+		var addressV = $("#addressClinic").val()
+		var cityV = $("#cityClinic").val()
+		var countryV = $("#countryClinic").val()
+		var descriptionV = $("#descriptionClinic").val()
+		
+		if( !nameV || !addressV || !cityV || !countryV){
+			alert("All required fields must be filled!")
+			return
+		}
+		
+		var editedClinic = {
+			name: nameV,
+			address: addressV,
+			city: cityV,
+			country: countryV,
+			description: descriptionV
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/clinics/editClinicInformation",
+			contentType : "application/json",
+			data : JSON.stringify(editedClinic),
+			success : function(output)  {
+				$('.content').hide()
+				$('.clinic-information').show()
+				fillClinicInformation(output)
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	
+	$("#cancelEditClinic").on('click', function(e){
+		
+		$('.content').hide()
+		$('.clinic-information').show()
+		
+		$("#nameClinic").val($(".clinicName").text())
+		$("#addressClinic").val($("#clinicAddress").text())
+		$("#cityClinic").val($("#clinicCity").text())
+		$("#countryClinic").val($("#clinicCountry").text())
+		$("#descriptionClinic").val($("#clinicDescription").text())
+	})
+	
+	
+	/*********************************************************************/
+	
 	/*Front filter for examination rooms*/
 	$("#filterExamRoom").on('click', function(e){
 		e.preventDefault()
@@ -1045,6 +1122,26 @@ $(document).ready(function() {
 		filterOperationRooms()
 	})
 })
+
+function fillClinicInformation(output){
+	$(".clinicName").text(output.name)
+	$("#nameClinic").val(output.name)
+	
+	$("#clinicRating").text(output.rating)
+	
+	$("#clinicAddress").text(output.address)
+	$("#addressClinic").val(output.address)
+	
+	$("#clinicCity").text(output.city)
+	$("#cityClinic").val(output.city)
+	
+	$("#clinicCountry").text(output.country)
+	$("#countryClinic").val(output.country)
+	
+	$("#clinicDescription").text(output.description)
+	$("#descriptionClinic").val(output.description)
+	
+}
 
 function viewPersonalInformation(){
 	// obracamo se serveru samo prvi put
