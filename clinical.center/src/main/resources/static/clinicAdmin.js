@@ -151,7 +151,15 @@ $(document).ready(function() {
 		hideValidate($("#password"))
 		hideValidate($("#passwordConfirm"))
 	})
-	
+
+	/* Izmena podataka klinike */
+	$('#editClinic').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.edit-clinic').show()
+	})
+	/*-------------------------*/
+
 	/*------------------------------------------------------------------------*/
 	
 	/* Kreiranje novog predefinisanog pregleda - administrator klinike */

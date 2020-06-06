@@ -468,7 +468,126 @@
 
 				<!-- Clinic information content -->
 				<div class="content clinic-information">
-					clinic information
+					<div class="row justify-content-md-center">
+						<div class="col-md-5">
+							<div class="card card-topline-theme">
+								<div class="card-body no-padding height-9">
+									<div class="row justify-content-md-center">
+										<div class="profile-userpic">
+											<img src="../../img/icons/index/clinic_admin.png" class="img-responsive" alt="">
+										</div>
+									</div>
+									<div class="profile-usertitle">
+										<div class="profile-usertitle-name clinicName"></div>
+									</div>
+									<hr>
+									<button id="editClinic" class="btn btn-info edit-clinic-btn">Edit clinic</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-7">
+							<div class="card">
+								<div class="card-head card-topline-theme">
+									<header>About</header>
+								</div>
+								<div class="card-body">
+									<div class="medical-record">
+										<h5>Name<span class="pull-right clinicName"></span></h5>
+										<h5>Rating<span id="clinicRating" class="pull-right"></span></h5>
+										<h5>Address<span id="clinicAddress" class="pull-right"></span></h5>
+										<h5>City<span id="clinicCity" class="pull-right"></span></h5>
+										<h5>Country<span id="clinicCountry" class="pull-right"></span></h5>
+										<h5>Description<span id="clinicDescription" class="pull-right"></span></h5>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="card card-topline-theme">
+								<div class="card-head card-topline-theme">
+									<header>View on Map</header>
+								</div>
+								<div class="card-body no-padding height-9" style="height: 210px;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Edit clinic information -->
+				<div class = "content edit-clinic">
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Edit clinic - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nameClinic" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="addressClinic" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="cityClinic" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="countryClinic" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Description
+													</label>
+													<div class="col-md-7">
+														<textarea id="descriptionClinic" data-required="1"  class="form-control textarea-height">
+														</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="saveEditClinic" type="submit" class="btn btn-info">Save</button>
+														<button id="cancelEditClinic" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Clinic appointments content -->

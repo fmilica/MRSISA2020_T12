@@ -286,7 +286,10 @@ i {
     height: 30px !important;
 }
 .predefined-app-btn {
-    margin: -3px 15px 5px 62px !important;
+    margin: -3px 15px 5px 67px !important;
+}
+.edit-clinic-btn {
+    margin: -3px 15px 5px 134px !important;
 }
 .back-btn {
     float: right;
@@ -548,8 +551,12 @@ i {
 .clinic-oper-rooms {
     display: none;
 }
-.clinic-edit-ordination{
+.clinic-edit-ordination {
 	display: none;
+}
+.edit-clinic {
+	display: none;
+
 }
 
 /* Medical personnel */
