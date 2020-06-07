@@ -184,10 +184,17 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
-    // Clinic appointments
-    $('#clinicAppointments').click(function() {
+    // Clinic available appointments
+    $('#clinicPredefinedAppointments').click(function() {
         $('.content').hide()
-        $('.clinic-appointments').show()
+        $('.clinic-predefined-appointments').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
+    // Clinic upcoming appointments
+    $('#clinicUpcomingAppointments').click(function() {
+        $('.content').hide()
+        $('.clinic-upcoming-appointments').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

@@ -261,3 +261,7 @@ insert into leave(id, version, start_date, end_date, leave_type, medical_personn
 values ('69', '0', '2020-05-27', '2020-06-03', '0', '10', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('70', '0', '69', 'false', '', 'true');
+
+/*Mother and child klinika jedan pregled koji je potvrdjen ali nema jos pacijenta da bi predefined appointments prikazivao nesto*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version, is_active)
+values ('71', 'false', '2020-06-07', '16', '17', 'true', '6', '9', '12', '19', '0', 'true');

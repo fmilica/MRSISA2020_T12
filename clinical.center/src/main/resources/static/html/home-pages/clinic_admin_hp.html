@@ -160,8 +160,13 @@
 	                                    </a>
                                     </li>
                                     <li class="nav-item">
-	                                    <a id="clinicAppointments" class="nav-link ">
-	                                        <span class="title">Appointments</span>
+	                                    <a id="clinicPredefinedAppointments" class="nav-link ">
+	                                        <span class="title">Available appointments</span>
+	                                    </a>
+                                    </li>
+                                    <li class="nav-item">
+	                                    <a id="clinicUpcomingAppointments" class="nav-link ">
+	                                        <span class="title">Upcoming appointments</span>
 	                                    </a>
                                     </li>
                                     <li class="nav-item">
@@ -590,17 +595,58 @@
 					</div>
 				</div>
 
-				<!-- Clinic appointments content -->
-				<div class="content clinic-appointments">
+				<!-- Clinic predefined appointments content -->
+				<div class="content clinic-predefined-appointments">
 					<div class="table-view">
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="card card-box">
 									<div class="card-head">
-										<header>Appointments</header>
+										<header>Available appointments</header>
 									</div>
 									<div class="card-body">
-										<table id="appointmentTable" class="display">
+										<table id="predefinedAppointmentTable" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type</th>
+													<th>Doctor</th>
+													<th>Ordination</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Appointment type</th>
+													<th>Doctor</th>
+													<th>Ordination</th>
+													<th>Date</th>
+													<th>Start time</th>
+													<th>End time</th>
+													<th>Actions</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Clinic upcoming appointments content -->
+				<div class="content clinic-upcoming-appointments">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Upcoming appointments</header>
+									</div>
+									<div class="card-body">
+										<table id="upcomingAppointmentsTable" class="display">
 											<thead>
 												<tr>
 													<th>Appointment type</th>

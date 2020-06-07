@@ -33,7 +33,6 @@ import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
-import mrs.isa.team12.clinical.center.model.Leave;
 import mrs.isa.team12.clinical.center.model.LeaveRequest;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Ordination;
@@ -83,7 +82,6 @@ public class AppointmentController {
 		this.leaveReqService = leaveReqService;
 	}
 	
-	
 	/*
 	 url: GET localhost:8081/theGoodShepherd/appointment
 	 HTTP request for getting all appointments in one clinic
@@ -107,6 +105,84 @@ public class AppointmentController {
 			dto.add(new AppointmentDto(a));
 		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/freePredefined
+	 HTTP request for getting all clinics free predefined appointments
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/freePredefined", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentDto>> getAllClinicFreePredefinedAppointments() {
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical administrators can view clinic appointments.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByClinicIdAndPatient(currentUser.getClinic().getId(), null);
+		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
+		for(Appointment a : appointments) {
+			dto.add(new AppointmentDto(a));
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/upcoming
+	 HTTP request for getting all upcoming clinic appointments
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/upcoming", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentDto>> getAllClinicUpcomingAppointments() {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical administrators can view clinic appointments.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByClinicIdAndFinished(currentUser.getClinic().getId(), false);
+		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
+		for(Appointment a : appointments) {
+			if(a.getDoctor() != null && a.getPatient() != null & a.getOrdination() != null) {
+				dto.add(new AppointmentDto(a));
+			}
+		}
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+		
+	/*
+	 url: GET localhost:8081/theGoodShepherd/appointment/delete/{appointmentId}
+	 HTTP request for deleting appointment
+	 parameter: String
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/delete/{appointmentId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteAppointment(@PathVariable Long appointmentId) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admins can remove appointments from their clinic.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Appointment appointment = appointmentService.findById(appointmentId);
+		
+		appointmentService.delete(appointment);
 	}
 
 	/*

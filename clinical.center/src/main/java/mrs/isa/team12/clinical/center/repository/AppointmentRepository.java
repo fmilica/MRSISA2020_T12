@@ -26,4 +26,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
 	List<Appointment> findAllByDoctorId(Long id);
 	
 	List<Appointment> findAllByPatientId(Long id);
+	
+	List<Appointment> findAllByClinicIdAndFinished(Long id, Boolean finished);
 }

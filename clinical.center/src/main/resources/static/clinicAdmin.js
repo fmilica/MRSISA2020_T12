@@ -3,7 +3,8 @@ var appTypeTable;
 var doctorTable;
 var examReqTable;
 var examRoomTable;
-var appointmentTable;
+var predefinedAppointmentTable;
+var upcomingAppointmentTable;
 var createAppTable;
 var operReqTable;
 var operRoomTable;
@@ -255,10 +256,16 @@ $(document).ready(function() {
 	})
 	/********************************************/
 
-	/*View clinic appointments*/
-	$("#clinicAppointments").on('click', function(e){
+	/*View clinic predefined appointments*/
+	$("#clinicPredefinedAppointments").on('click', function(e){
 		e.preventDefault()
 		viewAppointments()
+	})
+	
+	/*View clinic upcoming appointments*/
+	$("#clinicUpcomingAppointments").on('click', function(e){
+		e.preventDefault()
+		viewUpcomingAppointments()
 	})
 	
 	/*View all ordinations*/
@@ -1109,6 +1116,24 @@ $(document).ready(function() {
 	
 	
 	/*********************************************************************/
+	/* Delete and edit appointments*/
+	$('body').on('click', 'span.delete-appointment', function() {
+		var appointmentId = $(this).attr('id')
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/appointment/delete/" + appointmentId ,
+			success : function(output)  {
+				alert("Appointment successfuly deleted!")
+				predefinedAppointmentTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	
+	/*********************************************************************/
 	
 	/*Front filter for examination rooms*/
 	$("#filterExamRoom").on('click', function(e){
@@ -1358,25 +1383,56 @@ function initialiseCreateAppTable(availableDoctors) {
 
 function viewAppointments(){
 	//nije inicijalizovana tabela
-	if (!$.fn.DataTable.isDataTable('#appointmentTable')) {
-		appointmentTable = $('#appointmentTable').DataTable({
+	if (!$.fn.DataTable.isDataTable('#predefinedAppointmentTable')) {
+		predefinedAppointmentTable = $('#predefinedAppointmentTable').DataTable({
 			ajax: {
-				url: "../../theGoodShepherd/appointment",
+				url: "../../theGoodShepherd/appointment/freePredefined",
 				dataSrc: ''
 			},
 			columns: [
 				{ data: 'appType'},
 				{ data: 'doctor'},
-				{ 
-					data: null,
+				{ data : 'ordination'},
+				{ data: 'date'},
+				{ data: null,
 					render: function(data) {
-						if(data.patient == null){
-							return "Free appointment"
-						}else{
-							return data.patient
-						}
+						return data.startTime + ":00"
 					}
 				},
+				{ data: null,
+					render: function(data) {
+						return data.endTime + ":00"
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return  '<div class="table-action-btns">'+
+									'<span id="'+data.id+'" class="table-action delete-appointment"><i class="fas fa-trash"></i></span>'+
+								'</div>'
+					}
+				}
+				]
+		})
+	}else {
+		// jeste inicijalizovana
+		predefinedAppointmentTable.ajax.url( "../../theGoodShepherd/appointment/freePredefined")
+		predefinedAppointmentTable.ajax.reload()
+	}
+}
+
+function viewUpcomingAppointments(){
+	//nije inicijalizovana tabela
+	if (!$.fn.DataTable.isDataTable('#upcomingAppointmentsTable')) {
+		upcomingAppointmentTable = $('#upcomingAppointmentsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/appointment/upcoming",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'appType'},
+				{ data: 'doctor'},
+				{ data: 'patient'},
 				{ data : 'ordination'},
 				{ data: 'date'},
 				{ data: null,
@@ -1393,8 +1449,8 @@ function viewAppointments(){
 		})
 	}else {
 		// jeste inicijalizovana
-		appointmentTable.ajax.url( "../../theGoodShepherd/appointment")
-		appointmentTable.ajax.reload()
+		upcomingAppointmentTable.ajax.url( "../../theGoodShepherd/appointment/upcoming")
+		upcomingAppointmentTable.ajax.reload()
 	}
 }
 

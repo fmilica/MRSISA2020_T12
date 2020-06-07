@@ -497,7 +497,11 @@ i {
 .clinic-information {
     display: none;
 }
-.clinic-appointments {
+.clinic-predefined-appointments {
+    display: none;
+}
+.clinic-upcoming-appointments
+{
     display: none;
 }
 .clinic-doctors {
