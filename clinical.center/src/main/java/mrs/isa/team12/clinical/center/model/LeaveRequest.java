@@ -1,7 +1,7 @@
 package mrs.isa.team12.clinical.center.model;
 
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +30,7 @@ public class LeaveRequest {
 	@Column(name="is_active")
 	private Boolean active;
 	
-	@OneToOne(cascade = {ALL}, fetch = LAZY)
+	@OneToOne(cascade = {ALL}, fetch = EAGER)
 	@JoinColumn(name = "leave_id")
 	private Leave leave;
 	

@@ -530,6 +530,9 @@ i {
 .clinic-vacation {
     display: none;
 }
+.leave-req-decline{
+	display: none;
+}
 .clinic-addDoctor {
     display: none;
 }

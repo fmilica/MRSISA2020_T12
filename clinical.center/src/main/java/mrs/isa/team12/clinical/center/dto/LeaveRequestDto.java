@@ -11,6 +11,8 @@ public class LeaveRequestDto {
 	private String type;
 	private String description;
 	private String approved;
+	private String user;
+	private Long id;
 	
 	public LeaveRequestDto() {}
 	
@@ -29,6 +31,8 @@ public class LeaveRequestDto {
 		}else {
 			this.approved = "No";
 		}
+		this.user = lr.getLeave().getMedicalPersone().getName() + " " + lr.getLeave().getMedicalPersone().getSurname();
+		this.id = lr.getId();
 	}
 
 	public String getStartDate() {
@@ -69,5 +73,21 @@ public class LeaveRequestDto {
 
 	public void setApproved(String approved) {
 		this.approved = approved;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

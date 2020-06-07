@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: true,
         events: calendarFill(),
         eventClick: function(data){
-        		if((data.event.title).indexOf("appointment") != -1 && loggedUser == "doctor"){
+        		if((data.event.title).indexOf("appointment") != -1 && loggedUser == "doctor" && data.event.id != ""){
         			alert(data.event.extendedProps.description+"\nOpening patient's profile..")
         			document.body.scrollTop = 0
         			document.documentElement.scrollTop = 0
@@ -424,11 +424,15 @@ function calendarFill(){
 				}else{
 					colorEvent = '#2aebb4'
 				}
-				eventTitle = appointment.appType + " " + appointment.type+' with ';
-				if(loggedUser == "doctor"){
-					eventTitle += 'patient ' + appointment.patient;
+				if(appointment.predefined){
+					eventTitle = appointment.appType + " predefined appointment"
 				}else{
-					eventTitle += 'doctor ' + appointment.doctor;
+					eventTitle = appointment.appType + " " + appointment.type+' with '
+					if(loggedUser == "doctor"){
+						eventTitle += 'patient ' + appointment.patient
+					}else{
+						eventTitle += 'doctor ' + appointment.doctor
+					}
 				}
 				eventsToAdd.push({
 					id: appointment.id,

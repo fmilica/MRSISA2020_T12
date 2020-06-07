@@ -1,6 +1,9 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.LeaveRequest;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.repository.AppointmentRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
@@ -161,6 +166,49 @@ public class AppointmentServiceImpl implements AppointmentService{
 		logger.info("> findAllByPatientId");
 		List<Appointment> apps = appointmentRepository.findAllByPatientId(id);
 		logger.info("< findAllByPatientId");
+		return apps;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void deleteAppointments(Doctor d, LeaveRequest lr) {
+		logger.info("> deleteAppointments");
+		
+		List<Appointment> apps = findAllByDoctorIdAndDateBetween(d.getId(), lr.getLeave().getStartDate(), lr.getLeave().getEndDate());
+		
+		for (Appointment app : apps) {
+			app.setActive(false);
+			appointmentRepository.save(app);
+			//obavesti pacijenta
+		}
+		
+		Set<Doctor> doctors = new HashSet<Doctor>();
+		doctors.add(d);
+		
+		List<Appointment> oper = findAllByDoctorsIn(doctors);
+		
+		for (Appointment app : oper) {
+			app.setActive(false);
+			appointmentRepository.save(app);
+			//obavesti pacijenta
+		}
+		
+		logger.info("< deleteAppointments");
+	}
+
+	@Override
+	public List<Appointment> findAllByDoctorsIn(Set<Doctor> doctors) {
+		logger.info("> findAllByDoctorsIn");
+		List<Appointment> apps = appointmentRepository.findAllByDoctorsIn(doctors);
+		logger.info("< findAllByDoctorsIn");
+		return apps;
+	}
+	
+	@Override
+	public List<Appointment> findAllByDoctorIdAndDateBetween(Long id, Date d1, Date d2) {
+		logger.info("> findAllByDoctorIdAndDateBetween");
+		List<Appointment> apps = appointmentRepository.findAllByDoctorIdAndDateBetween(id,d1,d2);
+		logger.info("< findAllByDoctorIdAndDateBetween");
 		return apps;
 	}
 	

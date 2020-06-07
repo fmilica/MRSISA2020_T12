@@ -32,4 +32,6 @@ public interface ClinicAdminService {
 	@Async
 	public void sendAppOperRequestNotification(Long clinicId, Doctor doctor, String type);
 	
+	@Async
+	public void sendLeaveRequestNotification(Long clinicId);
 }

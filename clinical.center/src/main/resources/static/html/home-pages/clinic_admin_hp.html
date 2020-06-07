@@ -1234,7 +1234,82 @@
 
 				<!-- Clinic vacation/paid leave content -->
 				<div class="content clinic-vacation">
-					clinic vacation/paid leave
+					<!-- Clinic vacation/paid leave content -->
+				<div class="content clinic-vacation">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Vacation/Leave Requests</header>
+									</div>
+									<div class="card-body">
+										<table id="vacationTable" class="display">
+											<thead>
+												<tr>
+													<th>Medical Person</th>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Approved</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Medical Person</th>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Approved</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Decline Leave requests content -->
+				<div class="content leave-req-decline">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Decline Leave Request</header>
+									</div>
+									<div class="card-body">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Description
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<textarea id="descriptionLeaReq" data-required="1"  class="form-control textarea-height">
+														</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="decline_leareq" type="button" class="btn btn-info">Decline</button>
+														<button id="cancel_decline" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
 				</div>
 
 

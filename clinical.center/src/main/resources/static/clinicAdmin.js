@@ -8,6 +8,8 @@ var upcomingAppointmentTable;
 var createAppTable;
 var operReqTable;
 var operRoomTable;
+var vacationTable;
+var declineId;
 
 var changedExamTime = false;
 
@@ -1133,6 +1135,70 @@ $(document).ready(function() {
 		})
 	})
 	
+	$('#clinicVacation').click(function(e){
+		e.preventDefault()
+		
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#vacationTable')) {
+			vacationTable = $('#vacationTable').DataTable({
+				ajax: {
+					url: "../../theGoodShepherd/leaveRequest/currentAdmin",
+					dataSrc: ''
+				},
+				columns: [
+					{ data: 'user'},
+					{ data: 'startDate'},
+					{ data: 'endDate'},
+					{ data: 'type'},
+					{ data: null,
+						render: function(data){
+							return '<button name="acceptRequest" class="btn btn-info add-button" onclick="acceptReq('+ data.id +')">Accept</button>' +
+							'<button name="declineRequest" class="btn btn-info add-button" onclick="declineReq('+ data.id +')">Decline</button>'
+						}
+					}]
+			})
+		} else {
+			vacationTable.ajax.reload()
+		}
+	});
+	
+	$('#decline_leareq').click(function(e){
+		var desc = $('#descriptionLeaReq').val().trim()
+		
+		if(!desc){
+			alert("All required fields must be filled!")
+	    	return;
+		}
+		//kursor ceka
+		$("body").css("cursor", "progress")
+		$.ajax({
+	        type : "POST",
+	        url : "../../theGoodShepherd/leaveRequest/declineLeaveRequest",
+	        contentType : "application/json",
+	        //dataType: "json",
+	        data : JSON.stringify({
+	            "id" : declineId,
+	            "description": desc
+	        }),
+	        success : function()  {
+	        	vacationTable.ajax.reload();
+	        	$('.content').hide()
+	    		$('.clinic-vacation').show()
+				alert("Leave request rejected!")
+				$("body").css("cursor", "default");
+	        },
+	        error : function(response) {
+	        	alert(response.responseJSON.message)
+	        }
+		})
+	});
+	
+	$('#cancel_decline').click(function(e){
+		$('.content').hide()
+		$('.clinic-vacation').show()
+		$('#descriptionLeaReq').empty()
+	});
+	
 	/*********************************************************************/
 	
 	/*Front filter for examination rooms*/
@@ -1734,4 +1800,34 @@ function logInClinicAdmin(email, password){
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+function acceptReq(id){
+	
+	//kursor ceka
+	$("body").css("cursor", "progress")
+	$.ajax({
+        type : "POST",
+        url : "/theGoodShepherd/leaveRequest/acceptLeaveRequest",
+        contentType : "application/json",
+        //dataType: "json",
+        data : JSON.stringify({
+            "id" : id
+        }),
+        success : function()  {
+        	vacationTable.ajax.reload();
+        	$('.content').hide()
+    		$('.clinic-vacation').show()
+    		$("body").css("cursor", "default");
+            alert("Leave request accepted!")
+        },
+        error : function(response) {
+        	alert(response.responseJSON.message)
+        }
+    })
+}
+function declineReq(id){
+	declineId = id;
+	$('.content').hide()
+	$('.leave-req-decline').show()
 }

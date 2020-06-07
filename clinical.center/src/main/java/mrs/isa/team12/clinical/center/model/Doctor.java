@@ -11,19 +11,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Where;
 
 import mrs.isa.team12.clinical.center.model.enums.Specialization;
 
 @Entity
 @Table(name="doctor")
-@Where(clause="is_active=1")
 public class Doctor extends MedicalPersonnel {
 	
 	@Column(name = "specialization", unique = false, nullable = false)
@@ -38,10 +33,6 @@ public class Doctor extends MedicalPersonnel {
 	
 	@Column(name = "rating", unique = false, nullable = true)
 	private Double rating;
-	
-	@ManyToOne
-	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
-	private Clinic clinic;
 	
 	//@OneToMany(cascade = {ALL}, fetch = LAZY)
 	//dodato za probu kaskadnog brisanja
@@ -71,7 +62,6 @@ public class Doctor extends MedicalPersonnel {
 		this.startWork = startWork;
 		this.endWork = endWork;
 		this.rating = rating;
-		this.clinic = clinic;
 		this.appointmentTypes = appointmentTypes;
 		this.appointments = appointments;
 		this.ratings = ratings;
@@ -95,12 +85,6 @@ public class Doctor extends MedicalPersonnel {
 	}
 	public void setRating(Double rating) {
 		this.rating = rating;
-	}
-	public Clinic getClinic() {
-		return clinic;
-	}
-	public void setClinic(Clinic clinic) {
-		this.clinic = clinic;
 	}
 	public Set<AppointmentType> getAppointmentTypes() {
 		return appointmentTypes;
@@ -142,7 +126,7 @@ public class Doctor extends MedicalPersonnel {
 	@Override
 	public String toString() {
 		return super.toString() + "Doctor [specialization=" + specialization + ", startWork=" + startWork + ", endWork=" + endWork
-				+ ", rating=" + rating + ", clinic=" + clinic + ", appointmentTypes=" + appointmentTypes
+				+ ", rating=" + rating + ", appointmentTypes=" + appointmentTypes
 				+ ", appointments=" + appointments + ", ratings=" + ratings + "]";
 	}
 
@@ -183,5 +167,13 @@ public class Doctor extends MedicalPersonnel {
 			}
 		}
 		return times;
+	}
+
+	public Set<Appointment> getOperationAppointments() {
+		return operationAppointments;
+	}
+
+	public void setOperationAppointments(Set<Appointment> operationAppointments) {
+		this.operationAppointments = operationAppointments;
 	}
 }

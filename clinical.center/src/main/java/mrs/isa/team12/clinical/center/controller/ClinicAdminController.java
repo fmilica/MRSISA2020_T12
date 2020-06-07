@@ -386,6 +386,7 @@ public class ClinicAdminController {
 		}
 		//postavi confirmed na true kod AppointmentRequest i Appointment
 		appointmentReq.setApproved(true);
+		appointmentReq.getAppointment().setConfirmed(true);
 		appointmentReq.getAppointment().setDate(appointmentRequest.getDate());
 		appointmentReq.getAppointment().setStartTime(appointmentRequest.getTime());
 		appointmentReq.getAppointment().setEndTime(appointmentRequest.getTime() + appointmentReq.getAppointment().getAppType().getDuration());

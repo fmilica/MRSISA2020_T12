@@ -1,8 +1,12 @@
 package mrs.isa.team12.clinical.center.service.interfaces;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.LeaveRequest;
 import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface AppointmentService {
@@ -12,6 +16,8 @@ public interface AppointmentService {
 	Appointment save(Appointment a);
 	
 	void delete(Appointment a);
+	
+	void deleteAppointments(Doctor d, LeaveRequest lr);
 	
 	Appointment update(Long appId) throws Exception;
 	
@@ -36,4 +42,8 @@ public interface AppointmentService {
 	List<Appointment> findAllByDoctorId(Long id);
 	
 	List<Appointment> findAllByPatientId(Long id);
+	
+	List<Appointment> findAllByDoctorIdAndDateBetween(Long id, Date d1, Date d2);
+	
+	List<Appointment> findAllByDoctorsIn(Set<Doctor> doctors);
 }
