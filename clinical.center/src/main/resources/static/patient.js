@@ -49,19 +49,17 @@ $(document).ready(function() {
         $('.patient-edit-profile').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
-        editPersonalInformation()
 	})
 	
 	$('#confirmEdit').click(function(e) {
 		e.preventDefault()
 		saveUpdatedProfile()
-		document.body.scrollTop = 0
-        document.documentElement.scrollTop = 0
 	})
 
 	$('#cancelEdit').click(function(e) {
 		e.preventDefault()
 		$('.content').hide()
+		fillEditForm()
 		$('.patient-profile').show()
 		document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
@@ -378,7 +376,7 @@ $(document).ready(function() {
 })
 
 /*Profile*/
-
+/*
 function editPersonalInformation(){
 	$.ajax({
 		type : "GET",
@@ -402,7 +400,7 @@ function editPersonalInformation(){
 		}
 	})
 }
-
+*/
 function saveUpdatedProfile(){
 	var emailV = $("#emailEdit").val()
 	var nameV = $("#nameEdit").val()
@@ -448,8 +446,9 @@ function saveUpdatedProfile(){
 		dataType : "json",
 		data : JSON.stringify(newPatient),
 		success : function(response)  {
-			edited = true
 			fillProfile(response)
+			document.body.scrollTop = 0
+			document.documentElement.scrollTop = 0
 			alert("Succesfully edited personal information.")
 		},
 		error : function(response) {
@@ -861,6 +860,31 @@ function fillProfile(data){
 	} else {
 		medicalReportTable.clear().rows.add(data.medicalRecords.medicalReports).draw();
 	}
+	$("#emailEdit").val(data.email)
+	$("#nameEdit").val(data.name)
+	$("#surnameEdit").val(data.surname)
+	$("#genderEdit").val(data.gender);
+	$("#dateOfBirthEdit").val(data.dateOfBirth)
+	$("#phoneNumberEdit").val(data.phoneNumber)
+	$("#securityNumberEdit").val(data.securityNumber)
+	$("#addressEdit").val(data.address)
+	$("#cityEdit").val(data.city)
+	$("#countryEdit").val(data.country)
+}
+
+function fillEditForm() {
+	// fill edit form
+	$("#emailEdit").val($("#email").text())
+	var fullName = $(".fullName").text().split(" ")
+	$("#nameEdit").val(fullName[0])
+	$("#surnameEdit").val(fullName[2])
+	$("#genderEdit").val($("#gender").text());
+	$("#dateOfBirthEdit").val($("#dateOfBirth").text())
+	$("#phoneNumberEdit").val($("#phoneNumber").text())
+	var fullAddress = $("#address").text().split(", ")
+	$("#addressEdit").val(fullAddress[0])
+	$("#cityEdit").val(fullAddress[1])
+	$("#countryEdit").val(fullAddress[2])
 }
 
 /*-----------------------------------------------------*/

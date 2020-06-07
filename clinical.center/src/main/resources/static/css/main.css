@@ -53,6 +53,10 @@ h1, h2, h3,
 h4, h5 {
     font-family: Poppins-Regular, sans-serif !important;
 }
+h3 {
+    line-height: 0px;
+    display: inline;
+}
 
 .dropdown-menu {
     font-family: Poppins-Regular, sans-serif !important;
@@ -97,15 +101,6 @@ i {
     margin-right: auto;
     width: 30%;
 }
-/*
-.notification {
-    text-align: center;
-    display: inline;
-    text-shadow: none;
-    position: absolute;
-    right: 50px;
-    background-color: red;
-}*/
 
 .sidebar-container {
     min-height: 222vh;
@@ -115,6 +110,10 @@ i {
 .scroll {
     height: 100%;
     overflow-y: auto;
+}
+.scroll-table {
+    height: 225px;
+    overflow-y: scroll;
 }
 
 .sidemenu-container {
