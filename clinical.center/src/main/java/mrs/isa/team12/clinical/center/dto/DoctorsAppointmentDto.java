@@ -14,13 +14,14 @@ public class DoctorsAppointmentDto {
 	private String endTime;
 	private String type;
 	private String appType;
+	private boolean predefined;
 	
 	public DoctorsAppointmentDto() {
 		super();
 	}
 
 	public DoctorsAppointmentDto(String id, String patient, String ordination, Date date, String startTime,
-			String endTime, String type, String appType, String doctor) {
+			String endTime, String type, String appType, String doctor, boolean predefined ) {
 		super();
 		this.id = id;
 		this.patient = patient;
@@ -31,11 +32,19 @@ public class DoctorsAppointmentDto {
 		this.type = type;
 		this.appType = appType;
 		this.doctor = doctor;
+		this.predefined = predefined;
 	}
 
 	public DoctorsAppointmentDto(Appointment a) {
-		this.id = a.getPatient().getSecurityNumber();
-		this.patient = a.getPatient().getName() + " " + a.getPatient().getSurname();
+		if(a.getPatient() == null) {
+			this.id = "";
+			this.patient = "Predefined appointment";
+			this.predefined = true;
+		}else {
+			this.id = a.getPatient().getSecurityNumber();
+			this.patient = a.getPatient().getName() + " " + a.getPatient().getSurname();
+			this.predefined = false;
+		}
 		this.ordination = a.getOrdination().getOrdinationNumber() + " - " +a.getOrdination().getName();
 		this.date = a.getDate();
 		if(a.getStartTime()<=9) {
@@ -127,5 +136,13 @@ public class DoctorsAppointmentDto {
 
 	public void setDoctor(String doctor) {
 		this.doctor = doctor;
+	}
+
+	public Boolean getPredefined() {
+		return predefined;
+	}
+
+	public void setPredefined(Boolean predefined) {
+		this.predefined = predefined;
 	}
 }

@@ -202,4 +202,26 @@ public class ClinicAdminImpl implements ClinicAdminService {
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 	}
+
+	@Override
+	public void sendLeaveRequestNotification(Long clinicId) {
+		List<ClinicAdmin> admins = findAllByClinicId(clinicId);
+		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
+		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
+		System.out.println("Slanje emaila...");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		String[] to = new String[admins.size()];
+		int i = 0;
+		for (ClinicAdmin ca : admins) {
+			to[i] = ca.getEmail();
+			i++;
+		}
+		mail.setTo(to);
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("New leave request!");
+		mail.setText("Hello Admin,\n\n"  + "You have new leave requests waiting to be accepted or declined!\n" + 
+				"\nBest wishes,\nClinical center The Good Shepherd");
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
 }

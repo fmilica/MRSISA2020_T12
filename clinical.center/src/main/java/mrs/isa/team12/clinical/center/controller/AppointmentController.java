@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +39,7 @@ import mrs.isa.team12.clinical.center.model.LeaveRequest;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
@@ -582,6 +585,7 @@ public class AppointmentController {
 		Doctor doctor = null;
 		Nurse nurse = null;
 		Patient patient = null;
+		RegisteredUser ru = null;
 		try {
 			doctor = (Doctor) session.getAttribute("currentUser");
 		}catch(ClassCastException e) {
@@ -591,21 +595,29 @@ public class AppointmentController {
 				try {
 					patient = (Patient) session.getAttribute("currentUser");
 				}catch(ClassCastException exc) {
-					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors,nurses and patients can view their callendar.");
+					ru = (RegisteredUser) session.getAttribute("currentUser");
+					//throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only doctors,nurses and patients can view their callendar.");
 				}
 			}
 		}
-		if(doctor == null && nurse == null && patient == null) {
+		
+		/*if(doctor == null && nurse == null && patient == null && ru==null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
-		}
+		}*/
+		
 		List<DoctorsAppointmentDto> appDtos = new ArrayList<DoctorsAppointmentDto>();
 		List<LeaveDto> reqDtos = new ArrayList<LeaveDto>();
 		List<Appointment> apps;
+		List<Appointment> oper;
 		List<LeaveRequest> reqs;
 		if(doctor != null) {
 			apps = appointmentService.findAllByDoctorId(doctor.getId());
+			Set<Doctor> doctors = new HashSet<Doctor>();
+			doctors.add(doctor);
+			oper = appointmentService.findAllByDoctorsIn(doctors);
 			reqs = leaveReqService.findAllByLeaveMedicalPersoneId(doctor.getId());
 			
+			//doktorovi pregledi i operacije
 			for (Appointment ar : apps) {
 				if(ar.getAppointmentRequest() == null) {
 					if(ar.getConfirmed()) {
@@ -617,6 +629,19 @@ public class AppointmentController {
 					}
 				}
 			}
+			//operacije u kojima doktor ucestvuje
+			for (Appointment ar : oper) {
+				if(ar.getAppointmentRequest() == null) {
+					if(ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}else {
+					if(ar.getAppointmentRequest().getApproved() && ar.getConfirmed()) {
+						appDtos.add(new DoctorsAppointmentDto(ar));
+					}
+				}
+			}
+			//bolovanje i odmori doktora
 			for (LeaveRequest leaveRequest : reqs) {
 				if(leaveRequest.getApproved()) {
 					reqDtos.add(new LeaveDto(leaveRequest.getLeave().getStartDate(), leaveRequest.getLeave().getEndDate(), leaveRequest.getLeave().getType()+""));
@@ -634,7 +659,7 @@ public class AppointmentController {
 				}
 			}
 			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos, "nurse"), HttpStatus.CREATED);
-		}else {
+		}else if (patient != null){
 			apps = appointmentService.findAllByPatientId(patient.getId());
 			
 			for (Appointment ar : apps) {
@@ -650,6 +675,10 @@ public class AppointmentController {
 			}
 			
 			return new ResponseEntity<>(new CalendarDto(reqDtos, appDtos, "patient"), HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>(new CalendarDto(), HttpStatus.CREATED);
 		}
 	}
+	
+	
 }
