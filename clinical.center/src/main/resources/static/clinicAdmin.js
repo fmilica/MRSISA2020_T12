@@ -8,6 +8,7 @@ var upcomingAppointmentTable;
 var createAppTable;
 var operReqTable;
 var operRoomTable;
+var doctorRating;
 
 var changedExamTime = false;
 
@@ -255,6 +256,12 @@ $(document).ready(function() {
 		})
 	})
 	/********************************************/
+	
+	/*View clinic reports*/
+	$("#clinicReports").on('click', function(e){
+		e.preventDefault()
+		viewClinicReport()
+	})
 
 	/*View clinic predefined appointments*/
 	$("#clinicPredefinedAppointments").on('click', function(e){
@@ -1453,6 +1460,61 @@ function viewUpcomingAppointments(){
 		upcomingAppointmentTable.ajax.reload()
 	}
 }
+
+/*******************************************/
+
+//TREBA DA SE POPUNE I GRAFIKONI I NE ZNAM NI JA STA
+function viewClinicReport(){
+	$.ajax({
+		type : "GET",
+		url : "../../theGoodShepherd/clinics/viewClinicInformation",
+		dataType : "application/json",
+		success : function(output){
+			$("imeKlinike").val(output.name)
+			$("ocenaKlinike").val(output.rating)
+			if (!$.fn.DataTable.isDataTable('#nazivTabele')) {
+				doctorRating = $('#nazivTabele').DataTable({
+				data: output.doctorRatings,
+				columns: [
+					{ data: 'fullName'},
+					{ data: 'rating'}]
+			})
+			}
+			 var ctx = $('nazivCharta');
+			 myLineChart = new Chart(ctx, {
+			    type: 'line',
+			    options: {
+			    	tooltips: {
+			    		mode: 'index',
+			    		intersect: false,
+			    	},
+				    scales: {
+				        yAxes: [{
+				          scaleLabel: {
+				            display: true,
+				            labelString: 'Number of Appointments'
+				          }
+				        }],
+				        xAxes: [{
+				          scaleLabel: {
+				            display: true,
+				            labelString: 'hours'
+				          }
+					    }]
+				    }
+			    }   
+			 });
+		}else{
+			doctorRating.clear().rows.add(output.doctorRatings).draw();
+		}
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+/*******************************************/
 
 function scheduleOrdination(ordinationId, currentDate, time) {
 	examReq.ordId = ordinationId

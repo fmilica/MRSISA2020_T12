@@ -32,7 +32,6 @@ import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
-import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
 @RestController
@@ -40,7 +39,6 @@ import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 public class ClinicController {
 	
 	private ClinicService clinicService;
-	private ClinicalCenterService centerService;
 	private DoctorService doctorService;
 	private AppointmentTypeService appointmentTypeService;
 	
@@ -48,10 +46,9 @@ public class ClinicController {
 	private HttpSession session;
 	
 	@Autowired
-	public ClinicController(ClinicService clinicService, ClinicalCenterService centerService, 
+	public ClinicController(ClinicService clinicService,
 			DoctorService doctorService, AppointmentTypeService appointmentTypeService) {
 		this.clinicService = clinicService;
-		this.centerService = centerService;
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
 	}
@@ -105,6 +102,8 @@ public class ClinicController {
 		Clinic clinic = clinicService.findOneById(currentUser.getClinic().getId());
 		
 		ClinicDto clinicDto = new ClinicDto(clinic);
+		
+		clinicDto.setDoctorRatings(currentUser.getClinic().getDoctors());
 		
 		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
 	}

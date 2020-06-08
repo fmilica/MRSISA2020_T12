@@ -1,6 +1,10 @@
 package mrs.isa.team12.clinical.center.dto;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.Doctor;
 
 public class ClinicDto {
 	
@@ -11,6 +15,7 @@ public class ClinicDto {
 	private String city;
 	private String country;
 	private String description;
+	private ArrayList<DoctorRatingDto> doctorRatings;
 	
 	public ClinicDto() {}
 	
@@ -66,5 +71,15 @@ public class ClinicDto {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public ArrayList<DoctorRatingDto> getDoctorRatings() {
+		return doctorRatings;
+	}
+	public void setDoctorRatings(Set<Doctor> doctors) {
+		ArrayList<DoctorRatingDto> doctorRating = new ArrayList<DoctorRatingDto>();
+		for(Doctor d : doctors) {
+			doctorRating.add(new DoctorRatingDto(d));
+		}
+		this.doctorRatings = doctorRating;
 	}
 }
