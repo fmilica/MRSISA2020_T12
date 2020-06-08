@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
@@ -103,9 +104,39 @@ public class ClinicController {
 		
 		ClinicDto clinicDto = new ClinicDto(clinic);
 		
-		clinicDto.setDoctorRatings(currentUser.getClinic().getDoctors());
+		clinicDto.setDoctorRatings(clinic.getDoctors());
 		
 		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
+	}
+	
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/viewPricelist
+	 HTTP request for viewing clinic pricelist
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/viewPricelist")
+	public ResponseEntity<List<AppointmentTypeDto>> viewClinicPricelist() {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view clinic pricelist.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Clinic clinic = clinicService.findOneById(currentUser.getClinic().getId());
+		
+		List<AppointmentTypeDto> pricelist = new ArrayList<AppointmentTypeDto>();
+		
+		for(AppointmentType at : clinic.getAppointmentTypes()) {
+			pricelist.add(new AppointmentTypeDto(at));
+		}
+		
+		return new ResponseEntity<>(pricelist, HttpStatus.OK);
 	}
 	
 	/*

@@ -9,6 +9,7 @@ var createAppTable;
 var operReqTable;
 var operRoomTable;
 var doctorRating;
+var pricelist;
 var vacationTable;
 var declineId;
 
@@ -265,6 +266,16 @@ $(document).ready(function() {
 		e.preventDefault()
 		viewClinicReport()
 	})
+	
+	/********************************************/
+	
+	/*View clinic pricelist*/
+	$("#clinicPricelist").on('click', function(e){
+		e.preventDefault()
+		viewClinicPricelist()
+	})
+	
+	/********************************************/
 
 	/*View clinic predefined appointments*/
 	$("#clinicPredefinedAppointments").on('click', function(e){
@@ -586,6 +597,7 @@ $(document).ready(function() {
 					}
 				}]
 			})
+		}else{
 		}
 	})
 	
@@ -1535,12 +1547,12 @@ function viewClinicReport(){
 	$.ajax({
 		type : "GET",
 		url : "../../theGoodShepherd/clinics/viewClinicInformation",
-		dataType : "application/json",
+		contentType : "application/json",
 		success : function(output){
-			$("imeKlinike").val(output.name)
-			$("ocenaKlinike").val(output.rating)
-			if (!$.fn.DataTable.isDataTable('#nazivTabele')) {
-				doctorRating = $('#nazivTabele').DataTable({
+			$(".clinicName").text(output.name)
+			$("#clinicRatingBig").text(output.rating)
+			if (!$.fn.DataTable.isDataTable('#doctorRatingTable')) {
+				doctorRating = $('#doctorRatingTable').DataTable({
 				data: output.doctorRatings,
 				columns: [
 					{ data: 'fullName'},
@@ -1549,7 +1561,7 @@ function viewClinicReport(){
 			} else{
 				doctorRating.clear().rows.add(output.doctorRatings).draw();
 			}
-			var ctx = $('nazivCharta');
+			/*var ctx = $('nazivCharta');
 			myLineChart = new Chart(ctx, {
 			    type: 'line',
 			    options: {
@@ -1572,12 +1584,38 @@ function viewClinicReport(){
 					    }]
 				    }
 			    }   
-			 })
+			 })*/
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
 		}
 	})
+}
+
+/*******************************************/
+
+function viewClinicPricelist(){
+	if (!$.fn.DataTable.isDataTable('#clinicPricelistTable')) {
+		pricelist = $('#clinicPricelistTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/clinics/viewPricelist",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{ 
+					data: null,
+					render: function(data) {
+						return data.price + "&euro"
+					}
+				}
+				]
+		})
+	}else {
+		// jeste inicijalizovana
+		pricelist.ajax.url( "../../theGoodShepherd/clinics/viewPricelist")
+		pricelist.ajax.reload()
+	}
 }
 
 /*******************************************/

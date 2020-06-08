@@ -10,7 +10,7 @@ public class DoctorRatingDto {
 	public DoctorRatingDto() {}
 	
 	public DoctorRatingDto(Doctor doctor) {
-		this.fullName = doctor.getName() + doctor.getSurname();
+		this.fullName = doctor.getName() + " " + doctor.getSurname();
 		this.rating = doctor.getRating();
 	}
 	
