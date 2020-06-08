@@ -1561,7 +1561,7 @@ function viewClinicReport(){
 			} else{
 				doctorRating.clear().rows.add(output.doctorRatings).draw();
 			}
-			/*var ctx = $('nazivCharta');
+			var ctx = $('#appointmentReport');
 			myLineChart = new Chart(ctx, {
 			    type: 'line',
 			    options: {
@@ -1573,7 +1573,7 @@ function viewClinicReport(){
 				        yAxes: [{
 				          scaleLabel: {
 				            display: true,
-				            labelString: 'Number of Appointments'
+				            labelString: 'number of appointments'
 				          }
 				        }],
 				        xAxes: [{
@@ -1584,7 +1584,7 @@ function viewClinicReport(){
 					    }]
 				    }
 			    }   
-			 })*/
+			 })
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
