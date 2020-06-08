@@ -73,7 +73,7 @@
 
  						<!-- start manage user dropdown -->
  						<li class="dropdown dropdown-user">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <img alt="PA" src="../../img/icons/user.png" style=" border-radius: 90%; border:10px;"/>
                                 <span id="shownNameSurname" class="username username-hide-on-mobile"></span>
                                 <i class="fa fa-angle-down"></i>
@@ -277,10 +277,15 @@
 							<div class="card-body no-padding height-9">
 								<div class="user-btm-box">
 									<div class="row text-center m-t-10">
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Full name</strong>
-											<p class="fullName"></p>
+										<div class="col-md-12">
+											<strong>Full name</strong>
+											<p id = "fullName" class="fullName"></p>
 										</div>
-										<div class="col-lg-6 col-md-12 col-sm-6"><strong>Email</strong>
+									</div>
+									<hr>
+									<div class="row text-center m-t-10">
+										<div class="col-md-12">
+											<strong>Email</strong>
 											<p id="email"></p>
 										</div>
 									</div>

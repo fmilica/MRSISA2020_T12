@@ -66,8 +66,8 @@ insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('19
 insert into appointment_type_doctor (appointment_type_id, doctor_id) values ('49', '48');
 
 /* Medicinske sestre */
-insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, version, is_active) 
-values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', '1990-06-15', 'Adresa', 'City', 'Country', '44', '66', '0', 'true');
+insert into nurse (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, version, is_active, clinic_id) 
+values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', '1990-06-15', 'Adresa', 'City', 'Country', '44', '66', '0', 'true', '6');
 
 /* Pacijenti i njihovi zdravstveni kartoni*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active) 
@@ -185,12 +185,12 @@ where id = '27';
 
 /*Zahtev za operaciju*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, is_active)
-values ('55', 'false', '2020-05-25', '13', '15', 'false', '29', '6', '9', '12', '0', '0', 'true');
+values ('74', 'false', '2020-05-25', '13', '15', 'false', '29', '6', '9', '12', '0', '0', 'true');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
-values ('56', '55', '2020-05-15', 'false', '6', '0', 'true');
+values ('75', '74', '2020-05-15', 'false', '6', '0', 'true');
 update appointment
-set appointment_request_id = '56'
-where id = '55';
+set appointment_request_id = '75'
+where id = '74';
 
 /*Zahtev za operaciju*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, ordination_id, is_active)
@@ -261,6 +261,10 @@ insert into leave(id, version, start_date, end_date, leave_type, medical_personn
 values ('69', '0', '2020-05-27', '2020-06-03', '0', '10', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('70', '0', '69', 'false', '', 'true');
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
+values ('72', '0', '2020-06-13', '2020-06-30', '0', '9', 'true');
+insert into leave_request(id, version, leave_id, approved, description, is_active)
+values ('73', '0', '72', 'false', '', 'true');
 
 /*Mother and child klinika jedan pregled koji je potvrdjen ali nema jos pacijenta da bi predefined appointments prikazivao nesto*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version, is_active)

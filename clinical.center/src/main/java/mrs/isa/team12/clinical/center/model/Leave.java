@@ -45,7 +45,7 @@ public class Leave {
 	@Column(name = "leave_type", nullable = false, unique = false)
 	private LeaveType type;
 	
-	@ManyToOne(fetch = LAZY)
+	@ManyToOne
 	@JoinColumn(name= "medical_personnel_id", referencedColumnName = "id", nullable = false)
 	private MedicalPersonnel medicalPersone;
 	

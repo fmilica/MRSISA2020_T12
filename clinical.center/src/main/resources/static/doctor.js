@@ -627,7 +627,6 @@ $(document).ready( function () {
 					{ data: 'startDate'},
 					{ data: 'endDate'},
 					{ data: 'type'},
-					{ data: 'description'},
 					{ data: 'approved'}]
 			})
 		} else {

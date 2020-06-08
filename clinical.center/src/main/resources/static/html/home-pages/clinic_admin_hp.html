@@ -57,6 +57,9 @@
 	<!-- Select2 -->
 	<link href="../../js/library/select2/css/select2.min.css" rel="stylesheet" />
 	<script src="../../js/library/select2/js/select2.min.js"></script>
+
+	<!-- ChartJS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </head>
 
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-cyan">
@@ -473,11 +476,11 @@
 
 				<!-- Clinic information content -->
 				<div class="content clinic-information">
-					<div class="row justify-content-md-center">
+					<div class="row">
 						<div class="col-md-5">
 							<div class="card card-topline-theme">
 								<div class="card-body no-padding height-9">
-									<div class="row justify-content-md-center">
+									<div class="row">
 										<div class="profile-userpic">
 											<img src="../../img/icons/index/clinic_admin.png" class="img-responsive" alt="">
 										</div>
@@ -799,7 +802,36 @@
 
 				<!-- Clinic pricelist content -->
 				<div class="content clinic-pricelist">
-					clinic pricelist
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Clinic's pricelist</header>
+									</div>
+									<div class="card-body">
+										<table id="clinicPricelist" class="display">
+											<thead>
+												<tr>
+													<th>Appointment type name </th>
+													<th>Duration</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Appointment type name </th>
+													<th>Duration</th>
+													<th>Price</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Clinic create an appointment content -->
@@ -888,7 +920,129 @@
 
 				<!-- Clinic reports content -->
 				<div class="content clinic-reports">
-					clinic reports
+					<div class="row">
+						<div class="col-md-5">
+							<div class="card card-topline-theme">
+								<div class="card-head">
+									<header>Clinic rating</header>
+								</div>
+								<div class="card-body no-padding height-9">
+									<div class="row">
+										<div class="profile-userpic">
+											<img src="../../img/icons/index/clinic_admin.png" class="img-responsive" alt="">
+										</div>
+									</div>
+									<div class="profile-usertitle">
+										<div class="profile-usertitle-name clinicName">KLINIKA JEDAN</div>
+									</div>
+									<hr>
+									<div class="profile-usertitle">
+										<h3>Rating: </h3><h3 id="clinicRating">9.8</h3>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="card card-topline-theme">
+								<div class="card-head">
+									<header>Doctor ratings</header>
+								</div>
+								<div class="card-body no-padding height-9 scroll-table">
+									<table id="doctorRatingTable" class="display">
+										<thead>
+											<tr>
+												<th>Doctor</th>
+												<th>Rating</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+											<tr>
+												<td>Doca</td>
+												<td>9</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<th>Doctor</th>
+												<th>Rating</th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card card-topline-theme">
+								<div class="card-head">
+									<header>Appointments report</header>
+								</div>
+								<div class="card-body no-padding height-9">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="card card-topline-theme">
+								<div class="card-head">
+									<header>Income report</header>
+								</div>
+								<div class="card-body no-padding height-9">
+								</div>
+							</div>
+						</div>
 				</div>
 
 				<!-- Clinic examination request content -->
@@ -1080,7 +1234,82 @@
 
 				<!-- Clinic vacation/paid leave content -->
 				<div class="content clinic-vacation">
-					clinic vacation/paid leave
+					<!-- Clinic vacation/paid leave content -->
+				<div class="content clinic-vacation">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Vacation/Leave Requests</header>
+									</div>
+									<div class="card-body">
+										<table id="vacationTable" class="display">
+											<thead>
+												<tr>
+													<th>Medical Person</th>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Approved</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Medical Person</th>
+													<th>Start Date</th>
+													<th>End Date</th>
+													<th>Type</th>
+													<th>Approved</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Decline Leave requests content -->
+				<div class="content leave-req-decline">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Decline Leave Request</header>
+									</div>
+									<div class="card-body">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Description
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<textarea id="descriptionLeaReq" data-required="1"  class="form-control textarea-height">
+														</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="decline_leareq" type="button" class="btn btn-info">Decline</button>
+														<button id="cancel_decline" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
 				</div>
 
 
