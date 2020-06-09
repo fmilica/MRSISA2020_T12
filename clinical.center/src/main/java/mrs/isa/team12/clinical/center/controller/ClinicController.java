@@ -4,8 +4,11 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,16 +24,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.AppointmentReportsDto;
 import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
@@ -42,16 +48,18 @@ public class ClinicController {
 	private ClinicService clinicService;
 	private DoctorService doctorService;
 	private AppointmentTypeService appointmentTypeService;
+	private AppointmentService appointmentService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public ClinicController(ClinicService clinicService,
-			DoctorService doctorService, AppointmentTypeService appointmentTypeService) {
+			DoctorService doctorService, AppointmentTypeService appointmentTypeService, AppointmentService appointmentService) {
 		this.clinicService = clinicService;
 		this.doctorService = doctorService;
 		this.appointmentTypeService = appointmentTypeService;
+		this.appointmentService = appointmentService;
 	}
 	
 	/*
@@ -109,6 +117,52 @@ public class ClinicController {
 		return new ResponseEntity<>(clinicDto, HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/calculateAppReport/{startDate}/{endDate}
+	 HTTP request for viewing clinic pricelist
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/calculateAppReport/{startDate}/{endDate}")
+	public ResponseEntity<AppointmentReportsDto> calculateAppReport(@PathVariable Date startDate, @PathVariable Date endDate) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view clinic reports.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM");
+		
+		HashMap<Date, Integer> dates = new HashMap<Date, Integer>();
+		ArrayList<String> datesStrings = new ArrayList<String>();
+		ArrayList<Integer> counts = new ArrayList<Integer>();
+		
+		while(startDate.before(endDate)) {
+			dates.put(startDate, 0);
+			startDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByClinicIdAndFinished(currentUser.getClinic().getId(), true);
+		
+		for(Appointment a : appointments) {
+			if(dates.containsKey(a.getDate())) {
+				Integer count = dates.get(a.getDate());
+				dates.put(a.getDate(), ++count);
+			}
+		}
+		
+		TreeMap<Date, Integer> sorted = new TreeMap<>(dates); 
+        for (Map.Entry<Date, Integer> entry : sorted.entrySet()) {
+        	datesStrings.add(format.format(entry.getKey()));
+        	counts.add(entry.getValue());
+        } 
+		
+		return new ResponseEntity<>(new AppointmentReportsDto(datesStrings, counts), HttpStatus.OK);
+	}
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/clinics/viewPricelist

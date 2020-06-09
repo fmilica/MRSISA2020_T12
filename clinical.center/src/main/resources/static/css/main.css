@@ -432,6 +432,13 @@ i {
     display: inline-block;
 }
 /*
+* Reports
+*/
+.reportDates {
+	margin: 5px;
+	margin-bottom: 15px;
+}
+/*
 * jQuery dynamic
 */
 /* Change password */

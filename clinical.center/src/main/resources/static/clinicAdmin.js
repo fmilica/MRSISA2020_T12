@@ -13,6 +13,8 @@ var pricelist;
 var vacationTable;
 var declineId;
 
+var appRepChart;
+
 var changedExamTime = false;
 
 var availableOrdinations;
@@ -265,6 +267,12 @@ $(document).ready(function() {
 	$("#clinicReports").on('click', function(e){
 		e.preventDefault()
 		viewClinicReport()
+	})
+	
+	/*Fill appointment graph report*/
+	$("#calcAppReport").on('click', function(e){
+		e.preventDefault()
+		calculateAppReport()
 	})
 	
 	/********************************************/
@@ -1561,30 +1569,7 @@ function viewClinicReport(){
 			} else{
 				doctorRating.clear().rows.add(output.doctorRatings).draw();
 			}
-			var ctx = $('#appointmentReport');
-			myLineChart = new Chart(ctx, {
-			    type: 'line',
-			    options: {
-			    	tooltips: {
-			    		mode: 'index',
-			    		intersect: false,
-			    	},
-				    scales: {
-				        yAxes: [{
-				          scaleLabel: {
-				            display: true,
-				            labelString: 'number of appointments'
-				          }
-				        }],
-				        xAxes: [{
-				          scaleLabel: {
-				            display: true,
-				            labelString: 'hours'
-				          }
-					    }]
-				    }
-			    }   
-			 })
+			
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
@@ -1616,6 +1601,82 @@ function viewClinicPricelist(){
 		pricelist.ajax.url( "../../theGoodShepherd/clinics/viewPricelist")
 		pricelist.ajax.reload()
 	}
+}
+
+function createAppRepGraph(){
+	var ctx = $('#appointmentReport');
+	appRepChart = new Chart(ctx, {
+	    type: 'line',
+	    options: {
+	    	tooltips: {
+	    		mode: 'index',
+	    		intersect: false,
+	    	},
+		    scales: {
+		        yAxes: [{
+		          scaleLabel: {
+		            display: true,
+		            labelString: 'number of appointments'
+		          },
+		          ticks: {
+		              beginAtZero: true,
+		              callback: function(value) {if (value % 1 === 0) {return value;}}
+		          }
+		        }],
+		        xAxes: [{
+		          scaleLabel: {
+		            display: true,
+		            labelString: 'dates'
+		          }
+			    }]
+		    }
+	    }   
+	 })
+}
+
+function removeAppRepGraph(){
+	
+	 $("#appointmentReport").remove()
+	 appRepChart = null
+	 $("#appointmentReportDiv").append("<canvas id=\"appointmentReport\"></canvas>")
+	 
+	 createAppRepGraph()
+}
+
+/*******************************************/
+
+function calculateAppReport(){
+	
+	var startDate = $("#startAppReport").val()
+	var endDate = $("#endAppReport").val()
+	
+	removeAppRepGraph()
+	
+	$.ajax({
+		type : "GET",
+		url : "../../theGoodShepherd/clinics/calculateAppReport/" + startDate + "/" + endDate,
+		contentType : "application/json",
+		success : function(output){
+			
+			appRepChart.data.labels = output.dates
+			 
+			appRepChart.data.datasets.push({
+				 label: "Appointment count",
+				 backgroundColor: "#2abfcc",
+				 borderColor: "#2abfcc",
+				 pointBackgroundColor: "#2abfcc",
+				 pointBorderColor: "#2abfcc",
+				 pointHoverRadius: 5,
+				 fill: 'start',
+				 data: output.count
+			 })
+
+			 appRepChart.update()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
 }
 
 /*******************************************/
