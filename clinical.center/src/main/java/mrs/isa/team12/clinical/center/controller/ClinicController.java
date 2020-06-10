@@ -29,6 +29,7 @@ import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
 import mrs.isa.team12.clinical.center.dto.DoctorDto;
+import mrs.isa.team12.clinical.center.dto.IncomeReportsDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
@@ -119,7 +120,7 @@ public class ClinicController {
 	
 	/*
 	 url: POST localhost:8081/theGoodShepherd/clinics/calculateAppReport/{startDate}/{endDate}
-	 HTTP request for viewing clinic pricelist
+	 HTTP request for calculating number of appointments in given period of time
 	 returns ResponseEntity object
 	 */
 	@GetMapping(value = "/calculateAppReport/{startDate}/{endDate}")
@@ -129,7 +130,7 @@ public class ClinicController {
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view clinic reports.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view number of appointments.");
 		}
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
@@ -140,6 +141,7 @@ public class ClinicController {
 		HashMap<Date, Integer> dates = new HashMap<Date, Integer>();
 		ArrayList<String> datesStrings = new ArrayList<String>();
 		ArrayList<Integer> counts = new ArrayList<Integer>();
+		int total = 0;
 		
 		while(startDate.before(endDate)) {
 			dates.put(startDate, 0);
@@ -152,6 +154,7 @@ public class ClinicController {
 			if(dates.containsKey(a.getDate())) {
 				Integer count = dates.get(a.getDate());
 				dates.put(a.getDate(), ++count);
+				total++;
 			}
 		}
 		
@@ -161,7 +164,57 @@ public class ClinicController {
         	counts.add(entry.getValue());
         } 
 		
-		return new ResponseEntity<>(new AppointmentReportsDto(datesStrings, counts), HttpStatus.OK);
+		return new ResponseEntity<>(new AppointmentReportsDto(datesStrings, counts, total), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/clinics/calculateIncReport/{startDate}/{endDate}
+	 HTTP request for calculating clinic income in given period of time
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/calculateIncReport/{startDate}/{endDate}")
+	public ResponseEntity<IncomeReportsDto> calculateIncReport(@PathVariable Date startDate, @PathVariable Date endDate) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a clinic admin can view clinic income.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM");
+		
+		HashMap<Date, Double> dates = new HashMap<Date, Double>();
+		ArrayList<String> datesStrings = new ArrayList<String>();
+		ArrayList<Double> income = new ArrayList<Double>();
+		int total = 0;
+		
+		while(startDate.before(endDate)) {
+			dates.put(startDate, 0.0);
+			startDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
+		}
+		
+		List<Appointment> appointments = appointmentService.findAllByClinicIdAndFinished(currentUser.getClinic().getId(), true);
+		
+		for(Appointment a : appointments) {
+			if(dates.containsKey(a.getDate())) {
+				Double inc = dates.get(a.getDate());
+				inc += a.getPrice();
+				dates.put(a.getDate(), inc);
+				total += a.getPrice();
+			}
+		}
+		
+		TreeMap<Date, Double> sorted = new TreeMap<>(dates); 
+       for (Map.Entry<Date, Double> entry : sorted.entrySet()) {
+	       	datesStrings.add(format.format(entry.getKey()));
+	       	income.add(entry.getValue());
+       } 
+		
+		return new ResponseEntity<>(new IncomeReportsDto(datesStrings, income, total), HttpStatus.OK);
 	}
 	
 	/*

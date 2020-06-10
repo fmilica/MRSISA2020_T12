@@ -979,6 +979,9 @@
 										<input type="date" id="endAppReport" class="col-md-4 reportDates">
 										<input type="button" value="Calculate" id="calcAppReport" class="btn-info col-md-3 reportDates">
 									</div>
+									<div class="row">
+										<label><b>Total number of appointments:</b></label><label id="totalNumApp"></label>
+									</div>
 									<canvas id="appointmentReport"></canvas>
 								</div>
 							</div>
@@ -988,7 +991,18 @@
 								<div class="card-head">
 									<header>Income report</header>
 								</div>
-								<div class="card-body no-padding height-9">
+								<div id = "incomeReportDiv" class="card-body no-padding height-9">
+									<div class="row">
+										<label><b>Pick start and end date for report:</b></label>
+									</div>
+									<div class="row">
+										<input type="date" id="startIncReport" class="col-md-4 reportDates">
+										<input type="date" id="endIncReport" class="col-md-4 reportDates">
+										<input type="button" value="Calculate" id="calcIncReport" class="btn-info col-md-3 reportDates">
+									</div>
+									<div class="row">
+										<label><b>Total income:</b></label><label id="totalIncApp"></label>
+									</div>
 									<canvas id="incomeReport"></canvas>
 								</div>
 							</div>

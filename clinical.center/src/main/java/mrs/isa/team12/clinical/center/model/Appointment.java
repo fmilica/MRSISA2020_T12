@@ -68,11 +68,7 @@ public class Appointment {
 	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "medical_report_id")
 	private MedicalReport medicalReport;
-/*
-	@ManyToOne
-	@JoinColumn(name= "medical_record_id", referencedColumnName = "id", nullable = true)
-	private MedicalRecords medicalRecords;
-*/
+	
 	@ManyToOne
 	@JoinColumn(name="ordination_id", referencedColumnName = "id", nullable = true)
 	private Ordination ordination;
@@ -102,6 +98,10 @@ public class Appointment {
 	@JoinColumn(name = "appointment_request_id")
 	private AppointmentRequest appointmentRequest;
 	
+	//Dodata cena i u appointment zbog izmene cenovnika i da ta izmena ne utice direktno na sve appointmente koji su prosli
+	@Column(name = "price", unique = false, nullable = false)
+	private double price;
+	
 	public Appointment() {}
 
 	public Appointment(Date date, Integer startTime, AppointmentType type,
@@ -116,6 +116,7 @@ public class Appointment {
 		this.doctor = doctor;
 		this.clinic = clinic;
 		this.patient = patient;
+		this.price = type.getPrice();
 		this.active = true;
 	}
 
@@ -131,6 +132,7 @@ public class Appointment {
 		this.ordination = ordination;
 		this.doctor = doctor;
 		this.clinic = clinic;
+		this.price = type.getPrice();
 		this.active = true;
 	}
 	
@@ -147,6 +149,7 @@ public class Appointment {
 		this.medicalReport = medicalReport;
 		this.ordination = ordination;
 		this.doctor = doctor;
+		this.price = type.getPrice();
 		this.active = true;
 	}
 	
@@ -285,23 +288,16 @@ public class Appointment {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
-	/*
-	public MedicalRecords getMedicalRecords() {
-		return medicalRecords;
-	}
-
-	public void setMedicalRecords(MedicalRecords medicalRecords) {
-		this.medicalRecords = medicalRecords;
-	}
-*/
+	
 	public void addDoctor(Doctor d) {
 		this.doctors.add(d);
 	}
-	
-	@Override
-	public String toString() {
-		return "Appointment [id=" + id + "]";
+
+	public double getPrice() {
+		return price;
 	}
-	
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 }

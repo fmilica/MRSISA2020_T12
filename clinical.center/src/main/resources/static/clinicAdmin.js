@@ -14,6 +14,7 @@ var vacationTable;
 var declineId;
 
 var appRepChart;
+var appIncChart;
 
 var changedExamTime = false;
 
@@ -273,6 +274,12 @@ $(document).ready(function() {
 	$("#calcAppReport").on('click', function(e){
 		e.preventDefault()
 		calculateAppReport()
+	})
+	
+	/*Fill income graph report*/
+	$("#calcIncReport").on('click', function(e){
+		e.preventDefault()
+		calculateIncReport()
 	})
 	
 	/********************************************/
@@ -1603,6 +1610,9 @@ function viewClinicPricelist(){
 	}
 }
 
+/*Number of appointments graph*/
+/*******************************************/
+
 function createAppRepGraph(){
 	var ctx = $('#appointmentReport');
 	appRepChart = new Chart(ctx, {
@@ -1650,6 +1660,16 @@ function calculateAppReport(){
 	var startDate = $("#startAppReport").val()
 	var endDate = $("#endAppReport").val()
 	
+	if( !startDate || !endDate){
+		alert("Start and end date must be chosen!")
+		return
+	}
+	
+	if( startDate > endDate){
+		alert("Start date must be before end date!")
+		return
+	}
+	
 	removeAppRepGraph()
 	
 	$.ajax({
@@ -1657,6 +1677,8 @@ function calculateAppReport(){
 		url : "../../theGoodShepherd/clinics/calculateAppReport/" + startDate + "/" + endDate,
 		contentType : "application/json",
 		success : function(output){
+			
+			$("#totalNumApp").text(" " + output.total)
 			
 			appRepChart.data.labels = output.dates
 			 
@@ -1672,6 +1694,99 @@ function calculateAppReport(){
 			 })
 
 			 appRepChart.update()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+/*******************************************/
+
+/*Income graph*/
+/*******************************************/
+
+function createIncRepGraph(){
+	var ctx = $('#incomeReport');
+	appIncChart = new Chart(ctx, {
+	    type: 'line',
+	    options: {
+	    	tooltips: {
+	    		mode: 'index',
+	    		intersect: false,
+	    	},
+		    scales: {
+		        yAxes: [{
+		          scaleLabel: {
+		            display: true,
+		            labelString: 'income €'
+		          },
+		          ticks: {
+		              beginAtZero: true,
+		              callback: function(value) {if (value % 1 === 0) {return value;}}
+		          }
+		        }],
+		        xAxes: [{
+		          scaleLabel: {
+		            display: true,
+		            labelString: 'dates'
+		          }
+			    }]
+		    }
+	    }   
+	 })
+}
+
+function removeIncRepGraph(){
+	
+	 $("#incomeReport").remove()
+	 appIncChart = null
+	 $("#incomeReportDiv").append("<canvas id=\"incomeReport\"></canvas>")
+	 
+	 createIncRepGraph()
+}
+
+/*******************************************/
+
+function calculateIncReport(){
+	
+	var startDate = $("#startIncReport").val()
+	var endDate = $("#endIncReport").val()
+	
+	if( !startDate || !endDate){
+		alert("Start and end date must be chosen!")
+		return
+	}
+	
+	if( startDate > endDate){
+		alert("Start date must be before end date!")
+		return
+	}
+	
+	removeIncRepGraph()
+	
+	$.ajax({
+		type : "GET",
+		url : "../../theGoodShepherd/clinics/calculateIncReport/" + startDate + "/" + endDate,
+		contentType : "application/json",
+		success : function(output){
+			
+			$("#totalIncApp").text(" " + output.total + "€")
+			
+			appIncChart.data.labels = output.dates
+			 
+			appIncChart.data.datasets.push({
+				 label: "Income",
+				 backgroundColor: "#2abfcc",
+				 borderColor: "#2abfcc",
+				 pointBackgroundColor: "#2abfcc",
+				 pointBorderColor: "#2abfcc",
+				 pointHoverRadius: 5,
+				 fill: 'start',
+				 data: output.income
+			 })
+
+			 appIncChart.update()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

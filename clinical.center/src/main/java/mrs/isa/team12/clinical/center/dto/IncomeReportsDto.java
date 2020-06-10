@@ -2,31 +2,31 @@ package mrs.isa.team12.clinical.center.dto;
 
 import java.util.ArrayList;
 
-public class AppointmentReportsDto {
+public class IncomeReportsDto {
 	
 	private ArrayList<String> dates;
-	private ArrayList<Integer> count;
+	private ArrayList<Double> income;
 	private int total;
 	
-	public AppointmentReportsDto() {}
+	public IncomeReportsDto() {}
 	
-	public AppointmentReportsDto(ArrayList<String> dates, ArrayList<Integer> count, int total) {
+	public IncomeReportsDto(ArrayList<String> dates, ArrayList<Double> income, int total) {
 		this.dates = dates;
-		this.count = count;
+		this.income = income;
 		this.total = total;
 	}
-
+	
 	public ArrayList<String> getDates() {
 		return dates;
 	}
 	public void setDates(ArrayList<String> dates) {
 		this.dates = dates;
 	}
-	public ArrayList<Integer> getCount() {
-		return count;
+	public ArrayList<Double> getIncome() {
+		return income;
 	}
-	public void setCount(ArrayList<Integer> count) {
-		this.count = count;
+	public void setIncome(ArrayList<Double> income) {
+		this.income = income;
 	}
 	public int getTotal() {
 		return total;
