@@ -13,7 +13,7 @@ public interface AppointmentService {
 	
 	Appointment findById(Long id);
 	
-	Appointment save(Appointment a);
+	Appointment save(Appointment a) throws Exception;
 	
 	void delete(Appointment a);
 	

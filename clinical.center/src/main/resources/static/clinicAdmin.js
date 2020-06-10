@@ -450,7 +450,7 @@ $(document).ready(function() {
 					data: null,
 					render: function(data) {
 						return  '<div class="table-action-btns">'+
-									'<span id="'+data.id+'" class="table-action edit-appType"><i class="fas fa-edit"></i></span>'+
+									'<span id="'+data.id+'" name="'+data.version+'" class="table-action edit-appType"><i class="fas fa-edit"></i></span>'+
 									'<span id="'+data.id+'" class="table-action delete-appType"><i class="fas fa-trash"></i></span>'+
 								'</div>'
 						}
@@ -815,7 +815,7 @@ $(document).ready(function() {
 		var durationV = $('#edit_appointment_duration').val()
 		var priceV = $('#edit_appointment_price').val()
 		
-		if(!nameV || !durationV || priceV){
+		if(!nameV || !durationV || !priceV){
 			alert("All fields must be filled")
 			return
 		}
@@ -840,6 +840,9 @@ $(document).ready(function() {
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
+				$(".content").hide()
+				$(".clinic-appTypes").show()
+				appTypeTable.ajax.reload()
 			}
 		})
 	})
@@ -1598,7 +1601,7 @@ function viewClinicPricelist(){
 				{ 
 					data: null,
 					render: function(data) {
-						return data.price + "&euro"
+						return data.price + "&euro;"
 					}
 				}
 				]

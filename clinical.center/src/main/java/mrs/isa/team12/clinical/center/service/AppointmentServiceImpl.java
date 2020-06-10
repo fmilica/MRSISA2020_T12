@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityExistsException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +44,18 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	@Override
-	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
 	@Transactional(readOnly = false)
 	public Appointment save(Appointment a) {
 		logger.info("> create");
-		Appointment app = appointmentRepository.save(a);
-		logger.info("< create");
-		return app;
+		List<Appointment> existing = appointmentRepository.findAllExisting(a.getDoctor().getId(), a.getDate(), a.getStartTime(), a.getEndTime());
+		if (existing.isEmpty()) {
+			Appointment app = appointmentRepository.save(a);
+			logger.info("< create");
+			return app;
+		} else {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
 	}
 
 	@Override

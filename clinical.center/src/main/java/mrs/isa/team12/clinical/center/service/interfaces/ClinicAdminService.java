@@ -2,6 +2,7 @@ package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Async;
 
 import mrs.isa.team12.clinical.center.dto.ClinicAdminPersonalInformationDto;
@@ -18,7 +19,7 @@ public interface ClinicAdminService {
 	
 	ClinicAdmin updatePassword(Long id, String newPassword);
 	
-	ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile);
+	ClinicAdmin update(ClinicAdminPersonalInformationDto editedProfile) throws ObjectOptimisticLockingFailureException;
 	
 	ClinicAdmin findOneByEmail(String email);
 	

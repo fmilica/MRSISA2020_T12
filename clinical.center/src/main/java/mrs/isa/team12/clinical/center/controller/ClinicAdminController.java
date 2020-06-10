@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,6 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
-import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
@@ -139,12 +139,14 @@ public class ClinicAdminController {
 		
 		editedProfile.setId(currentUser.getId());
 		
-		ClinicAdmin clinicAdmin = adminService.update(editedProfile);
-		
-		// postavljanje novog, izmenjenog doktora na sesiju
-		session.setAttribute("currentUser", clinicAdmin);
-		
-		return new ResponseEntity<>(new ClinicAdminPersonalInformationDto(clinicAdmin), HttpStatus.OK);
+		try {
+			ClinicAdmin clinicAdmin = adminService.update(editedProfile);
+			// postavljanje novog, izmenjenog administratora klinike na sesiju
+			session.setAttribute("currentUser", clinicAdmin);
+			return new ResponseEntity<>(new ClinicAdminPersonalInformationDto(clinicAdmin), HttpStatus.OK);
+		} catch (ObjectOptimisticLockingFailureException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Your personal information has been edited, try again.");
+		}
 	}
 
 	/*
@@ -214,6 +216,7 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic with given name does not exist.");
 		}
 		
+		clinicAdmin.setActive(true);
 		clinic.add(clinicAdmin);
 		clinicService.save(clinic);
 		
@@ -324,7 +327,7 @@ public class ClinicAdminController {
 		//sacuvati sve u bazama
 		doctorService.save(doctor);
 		clinicService.save(clinic);
-		appointmentService.save(appointmentReq.getAppointment());
+		//appointmentService.update(appointmentReq.getAppointment());
 		try {
 			doctorService.sendDoctorNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
 					appointmentReq.getAppointment(), true, appointmentReq.getAppointment().getDoctor());
@@ -411,7 +414,7 @@ public class ClinicAdminController {
 		//sacuvati sve u bazama
 		doctorService.save(doctor);
 		clinicService.save(clinic);
-		appointmentService.save(appointmentReq.getAppointment());
+		//appointmentService.update(appointmentReq.getAppointment());
 		try {
 			doctorService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
 					appointmentReq.getAppointment(), true, appointmentReq.getAppointment().getDoctors());

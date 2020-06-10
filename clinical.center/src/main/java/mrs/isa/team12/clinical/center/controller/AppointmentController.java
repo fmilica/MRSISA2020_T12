@@ -403,13 +403,18 @@ public class AppointmentController {
 																		//confirmed, finished
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, d, c, patient);
 		
+		try {
+			appointment = appointmentService.save(appointment);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+		}
+		
 		// klinici dodamo novi pregled
 		c.addAppointment(appointment);
 		// doktoru dodamo novi pregled
 		d.addAppointment(appointment);
 		// pacijentu dodamo novi pregled
 		patient.addAppointment(appointment);
-		appointment = appointmentService.save(appointment);
 		
 		Date today = new Date(new java.util.Date().getTime());
 		// kreiramo zahtev za pregled
@@ -419,7 +424,7 @@ public class AppointmentController {
 		
 		// dodavanje u appointment njegov appointment request
 		appointment.setAppointmentRequest(appRequest);
-		appointmentService.save(appointment);
+		//appointmentService.update(appointment);
 
 		return new ResponseEntity<>(appDto, HttpStatus.OK);
 	}
@@ -459,14 +464,18 @@ public class AppointmentController {
 		
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, appDto.getDiscount(), true, false, o, d, c);
 		
+		try {
+			appointment = appointmentService.save(appointment);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+		}
+		
 		// klinici dodamo novi pregled
 		c.addAppointment(appointment);
 		// doktoru dodamo novi pregled
 		d.addAppointment(appointment);
 		// ordinaciji dodamo novi pregled
 		o.addAppointment(appointment);
-		
-		appointment = appointmentService.save(appointment);
 		
 		return new ResponseEntity<>(new AppointmentDto(appointment), HttpStatus.OK);
 	}
@@ -546,13 +555,18 @@ public class AppointmentController {
 			appType = "Appointment";
 		}
 		
+		try {
+			appointment = appointmentService.save(appointment);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+		}
+		
 		// klinici dodamo novi pregled
 		clinic.addAppointment(appointment);
 		// doktoru dodamo novi pregled
 		doctor.addAppointment(appointment);
 		// pacijentu dodamo novi pregled
 		patient.addAppointment(appointment);
-		appointment = appointmentService.save(appointment);
 		
 		// kreiramo zahtev za pregled
 		Date today = new Date(new java.util.Date().getTime());
@@ -562,7 +576,7 @@ public class AppointmentController {
 		
 		// dodavanje u appointment njegov appointment request
 		appointment.setAppointmentRequest(appRequest);
-		appointmentService.save(appointment);
+		//appointmentService.update(appointment);
 		
 		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA FOLLOWUP, DA NE KAZEM KONTROLU!
 		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA OPERACIJU!

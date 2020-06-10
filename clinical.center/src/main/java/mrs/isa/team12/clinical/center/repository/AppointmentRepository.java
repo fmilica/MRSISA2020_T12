@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Doctor;
@@ -12,7 +13,7 @@ import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
-	
+		
 	Appointment findOneById(Long id);
 	
 	List<Appointment> findAllByPatientIdAndDoctorId(Long patientId, Long doctorId);
@@ -38,4 +39,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
 	List<Appointment> findAllByTypeAndDoctorsIn(OrdinationType ot, Set<Doctor> doctors);
 	
 	List<Appointment> findAllByDoctorIdAndDateBetween(Long id, Date d1, Date d2);
+	
+	@Query("SELECT a "
+			+ "FROM Appointment a "
+			+ "WHERE a.doctor.id = ?1 "
+			+ "AND a.date = ?2 "
+			+ "AND ( "
+			+ "((a.startTime BETWEEN ?3 AND ?4) AND (a.endTime BETWEEN ?3 AND ?4)) "
+			+ "OR (a.startTime <= ?3 AND a.endTime >= ?4)"
+			+ ")")
+	/*@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})*/
+	List<Appointment> findAllExisting(Long doctorId, Date appDate, Integer startTime, Integer endTime);
 }

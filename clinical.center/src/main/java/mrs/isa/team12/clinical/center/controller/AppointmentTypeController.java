@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -202,7 +203,11 @@ public class AppointmentTypeController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment type with given name already exists!");
 		}
 		
-		appointmentTypeService.update(appType, editedAppTypeDto);
+		try {
+			appointmentTypeService.update(appType, editedAppTypeDto);
+		} catch (ObjectOptimisticLockingFailureException  e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to edit has been edited. Please try again.");
+		}
 	}
 	
 	/*
@@ -226,6 +231,9 @@ public class AppointmentTypeController {
 		}
 		
 		AppointmentType appType = appointmentTypeService.findOneById(appTypeId);
+		if (appType == null) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to delete has been deleted.");
+		}
 		
 		//provera da li tip pregleda ima zakazane preglede
 		//ukoliko ima zakazane preglede ne moze biti obrisan
@@ -234,7 +242,11 @@ public class AppointmentTypeController {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment type with scheduled appointments cant be deleted!");
 			}
 		}
-		appointmentTypeService.delete(appType);
+		try {
+			appointmentTypeService.delete(appType);
+		} catch (ObjectOptimisticLockingFailureException  e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to delete has been edited. Please try again.");
+		}
 	}
 
 }

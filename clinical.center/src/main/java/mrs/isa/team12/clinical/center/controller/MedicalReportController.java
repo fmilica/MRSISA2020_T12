@@ -124,7 +124,7 @@ public class MedicalReportController {
 		
 		//diagnosisService.save(medicalReport.getDiagnosis());
 		medicalReportService.save(medicalReport);
-		appointmentService.save(appointment);
+		//appointmentService.update(appointment);
 		
 		medicalReportDto = new MedicalReportDto(medicalReport);
 		

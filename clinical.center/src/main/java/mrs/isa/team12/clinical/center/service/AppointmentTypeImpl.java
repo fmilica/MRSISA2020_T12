@@ -51,11 +51,12 @@ public class AppointmentTypeImpl implements AppointmentTypeService {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public AppointmentType update(AppointmentType at, AppointmentTypeDto edited) {
 		logger.info("> update id:{}", at.getId());
-		at.setName(edited.getName());
-		at.setDuration(edited.getDuration());
-		at.setPrice(edited.getPrice());
-		AppointmentType updated = appointmentTypeRep.save(at);
-		logger.info("< update id:{}", at.getId());
+		AppointmentType forUpdate = appointmentTypeRep.findOneById(at.getId());
+		forUpdate.setName(edited.getName());
+		forUpdate.setDuration(edited.getDuration());
+		forUpdate.setPrice(edited.getPrice());
+		AppointmentType updated = appointmentTypeRep.save(forUpdate);
+		logger.info("< update id:{}", forUpdate.getId());
 		return updated;
 	}
 
