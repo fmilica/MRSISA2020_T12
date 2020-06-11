@@ -471,9 +471,10 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
-    $('#patientMedicalRecord').click(function() {
+    /* Patient visited doctors and clinics */
+    $('#patientsDoctorsClinics').click(function() {
         $('.content').hide()
-        $('.patient-medicalRecord').show()
+        $('.patient-visited-doctors-clinics').show()
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })

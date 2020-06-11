@@ -408,11 +408,11 @@ public class AppointmentController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
 		}
-		
-		// klinici dodamo novi pregled
+		// ova dodavanja se vrse tek kada se zahtev prihvati
+		/*// klinici dodamo novi pregled
 		c.addAppointment(appointment);
 		// doktoru dodamo novi pregled
-		d.addAppointment(appointment);
+		d.addAppointment(appointment);*/
 		// pacijentu dodamo novi pregled
 		patient.addAppointment(appointment);
 		
@@ -499,11 +499,23 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		//Patient patient = patientService.findOneById(currentUser.getId());
+		Patient patient = patientService.findOneById(currentUser.getId());
 		Appointment app;
 		try {
-			app = appointmentService.update(currentUser, appId); //ovde promenjeno sa patient na currentUser jer vec ga imamo, sto bi ga dobavljali
-			app.getAppType();
+			app = appointmentService.update(patient, appId); 
+			//ovde promenjeno sa patient na currentUser jer vec ga imamo, sto bi ga dobavljali
+			//sada je promenjeno na patient jer ne mozemo da dodamo nesto pacijentu pregled u transakciji zbog lazyLoad
+			
+			/*
+			// doktoru dodajemo novog pacijenta
+			Doctor doctor = app.getDoctor();
+			doctor = doctorService.update(doctor, patient);
+			// klinici dodajemo novog pacijenta
+			Clinic clinic = app.getClinic();
+			clinic = clinicService.update(clinic, patient);
+			*/
+			
+			// slanje notifikacije
 			adminService.sendNotificaitionAsync(null, currentUser, app, true, false, true);
 		} catch (NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
@@ -520,7 +532,7 @@ public class AppointmentController {
 	@PostMapping(value = "/createFollowupRequest",
 				 consumes = MediaType.APPLICATION_JSON_VALUE,
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentFollowupDto> createPredefinedAppointment(@RequestBody AppointmentFollowupDto appDto) {
+	public ResponseEntity<AppointmentFollowupDto> createFollowupAppointment(@RequestBody AppointmentFollowupDto appDto) {
 		Doctor currentUser;
 		try {
 			currentUser = (Doctor) session.getAttribute("currentUser");

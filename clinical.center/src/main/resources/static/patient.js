@@ -25,6 +25,8 @@ var medicalReportTable;
 var finishedAppsTable;
 var confirmedAppsTable;
 var unconfirmedAppsTable;
+var visitedDoctorsTable;
+var visitedClinicsTable;
 
 $(document).ready(function() {
 
@@ -377,6 +379,27 @@ $(document).ready(function() {
 		$('.content').hide()
 		$('.patient-unconfirmed-apps').show()
 	})
+	/*---------------------------------------------------------------*/
+
+	/*---------------------------------------------------------------*/
+	/* View doctors and clinics visited */
+	$('#patientsDoctorsClinics').click(function() {
+		initialiseVisitedDoctorsTable()
+		initialiseVisitedClinicsTable()
+	})
+	// pretplata na klin na dugmad za ocenjivanje
+	$('body').on('click', 'button.rate-doctor-btn', function() {
+		// dobavljanje id-a doktora
+		var doctorId = $(this).attr('id')
+		var rating = $("#ratingD"+doctorId).val()
+		rateDoctor(doctorId, rating)
+	});
+	$('body').on('click', 'button.rate-clinic-btn', function() {
+		// dobavljanje id-a klinike
+		var clinicId = $(this).attr('id')
+		var rating = $("#ratingC"+clinicId).val()
+		rateClinic(clinicId, rating)
+	});
 	/*---------------------------------------------------------------*/
 })
 
@@ -1119,6 +1142,107 @@ function declineApp(appId) {
 		success : function() {
 			alert("Succesfully declined an appointment!\nThis appointment does no longer exist among yours.")
 			unconfirmedAppsTable.ajax.reload()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+/*-----------------------------------------------------*/
+
+function initialiseVisitedDoctorsTable() {
+	if (!$.fn.DataTable.isDataTable('#visitedDoctorsTable')) {
+		visitedDoctorsTable = $('#visitedDoctorsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/patient/getVisitedDoctors",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'fullName'},
+				{ data: 'specialization'},
+				{ data: 'clinicName'},
+				{ data: 'rating'},
+				{ data: null,
+					render: function(data){
+						var select = '<select class="table-action form-control input-height" id="ratingD'+data.id+'">'
+									+ '<option value="'+1+'">1</option>'
+									+ '<option value="'+2+'">2</option>'
+									+ '<option value="'+3+'">3</option>'
+									+ '<option value="'+4+'">4</option>'
+									+ '<option value="'+5+'">5</option>'
+									+ '</select>'
+						var btn =  '<button id="'+data.id+'" class="table-action btn btn-info rate-doctor-btn">Rate</button>'
+						var div = '<div class="table-action-btns">'+select+btn+'</div>'
+						if (data.rated) {
+							return "You already rated this doctor."
+						} else {
+							return div
+						}
+					}
+				}
+			]
+		})
+	} else {
+		visitedDoctorsTable.ajax.reload()
+	}
+}
+function rateDoctor(doctorId, rating) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/patient/rateDoctor/"+doctorId+"/"+rating,
+		contentType: "application/json",
+		success : function(output)  {
+			alert("You succesfully rated a doctor!")
+			visitedDoctorsTable.ajax.reload()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+function initialiseVisitedClinicsTable() {
+	if (!$.fn.DataTable.isDataTable('#visitedClinicsTable')) {
+		visitedClinicsTable = $('#visitedClinicsTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/patient/getVisitedClinics",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{ data: 'fullAddress'},
+				{ data: 'rating'},
+				{ data: null,
+					render: function(data){
+						var select = '<select class="table-action form-control input-height" id="ratingC'+data.id+'">'
+									+ '<option value="'+1+'">1</option>'
+									+ '<option value="'+2+'">2</option>'
+									+ '<option value="'+3+'">3</option>'
+									+ '<option value="'+4+'">4</option>'
+									+ '<option value="'+5+'">5</option>'
+									+ '</select>'
+						var btn = '<button id="'+data.id+'" class="table-action btn btn-info rate-clinic-btn">Rate</button>'
+						var div = '<div class="table-action-btns">'+select+btn+'</div>'
+						if (data.rated) {
+							return "You already rated this clinic."
+						} else {
+							return div
+						}
+					}
+				}
+			]
+		})
+	} else {
+		visitedClinicsTable.ajax.reload()
+	}
+}
+function rateClinic(clinicId, rating) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/patient/rateClinic/"+clinicId+"/"+rating,
+		contentType: "application/json",
+		success : function(output)  {
+			alert("You succesfully rated a clinic!")
+			visitedClinicsTable.ajax.reload()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

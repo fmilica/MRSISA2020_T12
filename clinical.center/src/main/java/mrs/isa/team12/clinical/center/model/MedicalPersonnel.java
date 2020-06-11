@@ -6,7 +6,6 @@ import static javax.persistence.FetchType.LAZY;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -44,26 +43,18 @@ public abstract class MedicalPersonnel extends RegisteredUser {
 	public Set<Leave> getLeaveList() {
 		return leaveList;
 	}
-
-
 	public void setLeaveList(Set<Leave> leaveList) {
 		this.leaveList = leaveList;
 	}
-
-
 	public Set<Patient> getPatients() {
 		return patients;
 	}
-
-
 	public void setPatients(Set<Patient> patients) {
 		this.patients = patients;
 	}
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}

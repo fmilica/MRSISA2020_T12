@@ -322,15 +322,22 @@ public class ClinicAdminController {
 		Clinic clinic = clinicService.findOneById(appointmentReq.getClinic().getId());
 		clinic.addAppointment(appointmentReq.getAppointment());
 		
+		/*
+		// dodati pacijenta klinici i doktoru
+		clinic = clinicService.update(clinic, appointmentReq.getAppointment().getPatient());
+		doctor = doctorService.update(doctor, appointmentReq.getAppointment().getPatient());
+		*/
+		
 		try {
 			ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
 		}catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
 		}
 		
+		/* trebalo bi da se snima sve u update gore */
 		//sacuvati sve u bazama
-		doctorService.save(doctor);
-		clinicService.save(clinic);
+		//doctorService.save(doctor);
+		//clinicService.save(clinic);
 		//appointmentService.update(appointmentReq.getAppointment());
 		try {
 			doctorService.sendDoctorNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 

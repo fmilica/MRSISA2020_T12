@@ -62,7 +62,9 @@ public class MedicalReport {
 	@JoinColumn(name = "nurse_id", referencedColumnName = "id", nullable = true)
 	private Nurse nurse;
 	
-	public MedicalReport() {}
+	public MedicalReport() {
+		this.active = true;
+	}
 	
 	public MedicalReport(Long id, String description, Set<Prescription> prescriptions, 
 			Diagnosis diagnosis, Appointment appointment) {

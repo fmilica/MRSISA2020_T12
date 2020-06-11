@@ -25,6 +25,10 @@ public interface DoctorService {
 	
 	Doctor update(Doctor d, Appointment a);
 	
+	Doctor update(Doctor d, Patient p);
+	
+	Doctor updateRating(Doctor d);
+	
 	Doctor findOneByEmail(String email);
 	
 	List<Doctor> findAll();

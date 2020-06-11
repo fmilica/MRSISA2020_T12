@@ -40,7 +40,7 @@ values ('100', 'novi', 'novi', 'Novi', 'Novic', 'male', '1989-07-20', '', '', ''
 
 /*Doktori nase prve klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 
-values ('9', 'jovadoktor1@gmail.com', 'jovajova1', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '14', '0', 'true', 'true');
+values ('9', 'jovadoktor1@gmail.com', 'jovajova1', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '21', '0', 'true', 'true');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 
 values ('10', 'zovadoktorka@gmail.com', 'zovazova1', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16', '0', 'true', 'true');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 

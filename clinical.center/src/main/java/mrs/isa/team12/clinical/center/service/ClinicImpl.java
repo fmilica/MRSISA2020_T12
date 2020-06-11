@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.Rating;
 import mrs.isa.team12.clinical.center.repository.ClinicRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 
@@ -58,6 +60,33 @@ public class ClinicImpl implements ClinicService {
 		Clinic updated = repository.save(clinicToUpdate);
 		logger.info("< update id{}", updated.getId());
 		return updated;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Clinic update(Clinic c, Patient p) {
+		logger.info("> update id{}", c.getId());
+		Clinic clinicToUpdate = repository.findOneById(c.getId());
+		clinicToUpdate.addPatient(p);
+		Clinic updated = repository.save(clinicToUpdate);
+		logger.info("< update id{}", updated.getId());
+		return updated;
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Clinic updateRating(Clinic c) {
+		Clinic clinicToUpdate = repository.findOneById(c.getId());
+		logger.info("> update id{}", clinicToUpdate.getId());
+		int ratingSum = 0;
+		for(Rating r : clinicToUpdate.getRatings()) {
+			ratingSum += r.getRating();
+		}
+		double newRating = ratingSum / clinicToUpdate.getRatings().size();
+		clinicToUpdate.setRating(newRating);
+		Clinic updated = repository.save(clinicToUpdate);
+		logger.info("< update id{}", updated.getId());
+		return updated; 
 	}
 
 	@Override

@@ -6,10 +6,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//Main function
+// Main function
 @SpringBootApplication
 // podrska za asinhrone zadatke
 @EnableAsync
+// podrska za transakcije
 @EnableTransactionManagement
 @EnableJpaRepositories
 public class Application {

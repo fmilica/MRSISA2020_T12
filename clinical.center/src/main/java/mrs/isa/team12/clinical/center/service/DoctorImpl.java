@@ -22,6 +22,7 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.Rating;
 import mrs.isa.team12.clinical.center.repository.DoctorRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 
@@ -52,7 +53,7 @@ public class DoctorImpl implements DoctorService {
 	}
 	
 	@Override
-	@Transactional( readOnly = false)
+	@Transactional(readOnly = false)
 	public Doctor save(Doctor d) {
 		logger.info("> create");
 		Doctor doctor =  doctorRep.save(d);
@@ -118,6 +119,33 @@ public class DoctorImpl implements DoctorService {
 		return updated; 
 	}
 	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Doctor update(Doctor d, Patient p) {
+		Doctor doctorToUpdate = doctorRep.findOneById(d.getId());
+		logger.info("> update id{}", doctorToUpdate.getId());
+		doctorToUpdate.addPatient(p);
+		Doctor updated = doctorRep.save(doctorToUpdate);
+		logger.info("< update id{}", doctorToUpdate.getId());
+		return updated; 
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Doctor updateRating(Doctor d) {
+		Doctor doctorToUpdate = doctorRep.findOneById(d.getId());
+		logger.info("> update id{}", doctorToUpdate.getId());
+		int ratingSum = 0;
+		for(Rating r : doctorToUpdate.getRatings()) {
+			ratingSum += r.getRating();
+		}
+		double newRating = ratingSum / doctorToUpdate.getRatings().size();
+		doctorToUpdate.setRating(newRating);
+		Doctor updated = doctorRep.save(doctorToUpdate);
+		logger.info("< update id{}", updated.getId());
+		return updated; 
+	}
+
 	@Override
 	public Doctor findOneByEmail(String email) {
 		logger.info("> findOneByEmail email:{}", email);

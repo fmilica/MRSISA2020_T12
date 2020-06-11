@@ -198,6 +198,18 @@ public class RegisteredUser {
 	public void setLogged(Boolean logged) {
 		this.logged = logged;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+	        return true;
+	    if (obj == null)
+	        return false;
+	    if (!(obj instanceof RegisteredUser))
+			return false;
+	    RegisteredUser user = (RegisteredUser) obj;
+	    return this.id.equals(user.getId());
+	}
 
 	@Override
 	public String toString() {

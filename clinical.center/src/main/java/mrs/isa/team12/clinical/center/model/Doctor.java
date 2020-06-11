@@ -122,6 +122,10 @@ public class Doctor extends MedicalPersonnel {
 	public void addAppointment(Appointment appointment) {
 		this.appointments.add(appointment);
 	}
+	
+	public void addPatient(Patient patient) {
+		this.getPatients().add(patient);
+	}
 
 	@Override
 	public String toString() {
@@ -175,5 +179,14 @@ public class Doctor extends MedicalPersonnel {
 
 	public void setOperationAppointments(Set<Appointment> operationAppointments) {
 		this.operationAppointments = operationAppointments;
+	}
+	
+	public Boolean alreadyRated(Long patientId) {
+		for(Rating r: this.ratings) {
+			if(r.getPatient().getId() == patientId) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

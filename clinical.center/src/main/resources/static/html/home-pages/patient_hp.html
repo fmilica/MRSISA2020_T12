@@ -185,16 +185,9 @@
 								</ul>
 							</li>
 							<li class="nav-item">
-	                            <a id="patientsDoctors" class="nav-link nav-toggle">
+	                            <a id="patientsDoctorsClinics" class="nav-link nav-toggle">
 									<img class="icon" src="../../img/icons/medical_record.png">
-									<span class="title">My doctors</span>
-									<span class="arrow"></span>
-								</a>
-							</li>
-							<li class="nav-item">
-	                            <a id="patientsClinics" class="nav-link nav-toggle">
-									<img class="icon" src="../../img/icons/medical_record.png">
-									<span class="title">My clinics</span>
+									<span class="title">My doctors and clinics</span>
 									<span class="arrow"></span>
 								</a>
 							</li>
@@ -996,9 +989,72 @@
 					</div>
 				</div>
 
-				<!-- Patient medical record content -->
-				<div class="content patient-medicalRecord">
-					patient medical record
+				<!-- Patient visited doctors and clinics content -->
+				<div class="content patient-visited-doctors-clinics">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>My Doctors</header>
+									</div>
+									<div class="card-body">
+										<table id="visitedDoctorsTable" class="display">
+											<thead>
+												<tr>
+													<th>Doctor name</th>
+													<th>Specialization</th>
+													<th>Clinic</th>
+													<th>Current rating</th>
+													<th>Rate</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Doctor name</th>
+													<th>Specialization</th>
+													<th>Clinic</th>
+													<th>Current rating</th>
+													<th>Rate</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>My Clinics</header>
+									</div>
+									<div class="card-body">
+										<table id="visitedClinicsTable" class="display">
+											<thead>
+												<tr>
+													<th>Clinic name</th>
+													<th>Address</th>
+													<th>Current rating</th>
+													<th>Rate</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Clinic name</th>
+													<th>Address</th>
+													<th>Current rating</th>
+													<th>Rate</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<!-- end page content -->
 			</div>

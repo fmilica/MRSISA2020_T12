@@ -44,6 +44,15 @@ public class Rating {
 	
 	public Rating() {}
 
+	public Rating(Integer rating, Doctor doctor, Clinic clinic, Patient patient) {
+		super();
+		this.rating = rating;
+		this.doctor = doctor;
+		this.clinic = clinic;
+		this.patient = patient;
+		this.active = true;
+	}
+	
 	public Rating(Long id, Integer rating, Doctor doctor, Clinic clinic, Patient patient) {
 		super();
 		this.id = id;
@@ -60,10 +69,10 @@ public class Rating {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Integer getRated() {
+	public Integer getRating() {
 		return rating;
 	}
-	public void setRated(Integer rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
 	public Doctor getDoctor() {

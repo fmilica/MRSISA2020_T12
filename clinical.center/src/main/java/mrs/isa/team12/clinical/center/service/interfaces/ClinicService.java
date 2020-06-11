@@ -4,6 +4,7 @@ import java.util.List;
 
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.model.Clinic;
+import mrs.isa.team12.clinical.center.model.Patient;
 
 public interface ClinicService {
 	
@@ -12,6 +13,10 @@ public interface ClinicService {
 	Clinic save(Clinic c);
 	
 	Clinic update(ClinicDto editedClinic);
+	
+	Clinic update(Clinic c, Patient p);
+	
+	Clinic updateRating(Clinic c);
 	
 	List<Clinic> findAll();
 	

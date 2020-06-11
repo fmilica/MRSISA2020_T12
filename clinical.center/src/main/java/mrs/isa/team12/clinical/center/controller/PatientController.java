@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.dto.ClinicPatientDto;
+import mrs.isa.team12.clinical.center.dto.ClinicRatingDto;
+import mrs.isa.team12.clinical.center.dto.DoctorRatingDto;
 import mrs.isa.team12.clinical.center.dto.MedicalRecordDto;
 import mrs.isa.team12.clinical.center.dto.PatientDto;
 import mrs.isa.team12.clinical.center.dto.PatientProfileDto;
@@ -33,14 +36,17 @@ import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.MedicalReport;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Patient;
+import mrs.isa.team12.clinical.center.model.Rating;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.MedicalReportService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
+import mrs.isa.team12.clinical.center.service.interfaces.RatingService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
 
@@ -50,29 +56,34 @@ public class PatientController {
 
 	private PatientService patientService;
 	private ClinicService clinicService;
+	private DoctorService doctorService;
 	private ClinicalCenterAdminService centerAdminService;
 	private AppointmentService appointmentService;
 	private ClinicAdminService clinicAdminService;
 	private RegisteredUserService userService;
 	private RegistrationRequestService registrationService;
 	private MedicalReportService medicalReportService;
+	private RatingService ratingService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public PatientController(PatientService patientService,
-			ClinicService clinicService, AppointmentService appointmentService, ClinicAdminService clinicAdminService,
+	public PatientController(PatientService patientService, ClinicService clinicService, 
+			DoctorService doctorService, AppointmentService appointmentService, ClinicAdminService clinicAdminService,
 			RegisteredUserService userService, RegistrationRequestService registrationService,
-			ClinicalCenterAdminService centerAdminService, MedicalReportService medicalReportService) {
+			ClinicalCenterAdminService centerAdminService, MedicalReportService medicalReportService, 
+			RatingService ratingService) {
 		this.patientService = patientService;
 		this.clinicService = clinicService;
+		this.doctorService = doctorService;
 		this.centerAdminService = centerAdminService;
 		this.appointmentService = appointmentService;
 		this.clinicAdminService = clinicAdminService;
 		this.userService = userService;
 		this.registrationService = registrationService;
 		this.medicalReportService = medicalReportService;
+		this.ratingService = ratingService;
 	}
 	
 
@@ -429,7 +440,7 @@ public class PatientController {
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view  all clinics.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view all clinics.");
 		}
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
@@ -444,5 +455,125 @@ public class PatientController {
 			clinicsDto.add(clinic);
 		}
 		return new ResponseEntity<>(clinicsDto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/patient/getVisitedDoctors
+	 HTTP request for viewing all visited doctors
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/getVisitedDoctors", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<DoctorRatingDto>> getVisitedDoctors() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view doctors he has visited.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		currentUser = patientService.findOneById(currentUser.getId());
+		
+		List<DoctorRatingDto> visitedDoctors = new ArrayList<DoctorRatingDto>();
+		
+		List<Doctor> allDoctors = doctorService.findAll();
+		for(Doctor d : allDoctors) {
+			if (d.getPatients().contains(currentUser)) {
+				visitedDoctors.add(new DoctorRatingDto(d, currentUser.getId()));
+			}
+		}
+		
+		return new ResponseEntity<>(visitedDoctors, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/patient/getVisitedClinics
+	 HTTP request for viewing all visited clinics
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/getVisitedClinics", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ClinicRatingDto>> getVisitedClinics() {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can view doctors he has visited.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		currentUser = patientService.findOneById(currentUser.getId());
+		
+		List<ClinicRatingDto> visitedClinics = new ArrayList<ClinicRatingDto>();
+		
+		List<Clinic> allClinics = clinicService.findAll();
+		for(Clinic c : allClinics) {
+			if (c.getPatients().contains(currentUser)) {
+				visitedClinics.add(new ClinicRatingDto(c, currentUser.getId()));
+			}
+		}
+		
+		return new ResponseEntity<>(visitedClinics, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/rateDoctor/{doctorId}/{rating}
+	 HTTP request for rating a doctor
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/rateDoctor/{doctorId}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DoctorRatingDto> rateDoctor(@PathVariable Long doctorId, @PathVariable Integer rating) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can rate a doctor.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient patient = patientService.findOneById(currentUser.getId());
+		Doctor doctor = doctorService.findOneById(doctorId);
+		
+		Rating r = new Rating(rating, doctor, null, patient);
+		
+		r = ratingService.save(r);
+		
+		doctorService.updateRating(doctor);
+		
+		return new ResponseEntity<>(new DoctorRatingDto(doctor), HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/patient/rateClinic/{clinicId}/{rating}
+	 HTTP request for rating a clinic
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/rateClinic/{clinicId}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ClinicDto> rateClinic(@PathVariable Long clinicId, @PathVariable Integer rating) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patient can rate a doctor.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Patient patient = patientService.findOneById(currentUser.getId());
+		Clinic clinic = clinicService.findOneById(clinicId);
+		
+		Rating r = new Rating(rating, null, clinic, patient);
+		
+		r = ratingService.save(r);
+		
+		clinicService.updateRating(clinic);
+		
+		return new ResponseEntity<>(new ClinicDto(clinic), HttpStatus.OK);
 	}
 }

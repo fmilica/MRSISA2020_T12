@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -69,8 +72,10 @@ public class Clinic {
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
 	private Set<Nurse> nurses;
 	
-	@OneToMany(cascade = {ALL}, fetch = LAZY)
-	// NEMA VEZU U KONTRA SMERU
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "clinic_patient", 
+				joinColumns = @JoinColumn(name = "clinic_id"),
+				inverseJoinColumns = @JoinColumn(name = "patient_id"))
 	private Set<Patient> patients;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
@@ -284,6 +289,10 @@ public class Clinic {
 		this.appointments.add(a);
 	}
 	
+	public void addPatient(Patient p) {
+		this.patients.add(p);
+	}
+	
 	public AppointmentType getOneAppointmentType(String name) {
 		for (AppointmentType ap : appointmentTypes) {
 			if(ap.getName().equals(name)) {
@@ -301,6 +310,15 @@ public class Clinic {
 			}
 		}
 		return available;
+	}
+	
+	public Boolean alreadyRated(Long patientId) {
+		for(Rating r: this.ratings) {
+			if(r.getPatient().getId() == patientId) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override

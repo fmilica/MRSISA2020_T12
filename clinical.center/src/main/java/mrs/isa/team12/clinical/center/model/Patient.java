@@ -103,6 +103,11 @@ public class Patient extends RegisteredUser {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
+	@Override
 	public String toString() {
 		return super.toString() + "Patient [appointments=" + appointments + ", medicalRecords=" + medicalRecords + ", clinicalCentre="
 				+ clinicalCentre + ", ratings=" + ratings + "]";

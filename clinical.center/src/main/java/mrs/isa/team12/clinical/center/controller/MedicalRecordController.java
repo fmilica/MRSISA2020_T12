@@ -74,6 +74,7 @@ public class MedicalRecordController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
+		/*OVDE UPDATE NA SERVICE*/
 		MedicalRecords medicalRecord = medicalRecordsService.findOneById(medicalRecordDto.getId());
 		
 		if(medicalRecord == null) {

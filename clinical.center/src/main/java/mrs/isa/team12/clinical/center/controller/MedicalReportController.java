@@ -20,13 +20,16 @@ import org.springframework.web.server.ResponseStatusException;
 import mrs.isa.team12.clinical.center.dto.MedicalReportDto;
 import mrs.isa.team12.clinical.center.dto.MedicalReportVerifyDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Diagnosis;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.MedicalReport;
 import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.Prescription;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.MedicalReportService;
 import mrs.isa.team12.clinical.center.service.interfaces.PrescriptionService;
 
@@ -38,17 +41,21 @@ public class MedicalReportController {
 	private AppointmentService appointmentService;
 	private DiagnosisService diagnosisService;
 	private PrescriptionService prescriptionService;
+	private ClinicService clinicService;
+	private DoctorService doctorService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public MedicalReportController(MedicalReportService mrs, AppointmentService as, DiagnosisService ds,
-			PrescriptionService ps) {
+			PrescriptionService ps, ClinicService clinicService, DoctorService doctorService) {
 		this.medicalReportService = mrs;
 		this.appointmentService = as;
 		this.diagnosisService = ds;
 		this.prescriptionService = ps;
+		this.clinicService = clinicService;
+		this.doctorService = doctorService;
 	}
 	
 	/*
@@ -125,6 +132,13 @@ public class MedicalReportController {
 		//diagnosisService.save(medicalReport.getDiagnosis());
 		medicalReportService.save(medicalReport);
 		//appointmentService.update(appointment);
+		
+		// kada se zavrsi pregled, klinici i doktorima dodajemo novog pacijenta
+		// doktoru dodajemo novog pacijenta
+		doctor = doctorService.update(doctor, appointment.getPatient());
+		// klinici dodajemo novog pacijenta
+		Clinic clinic = appointment.getClinic();
+		clinic = clinicService.update(clinic, appointment.getPatient());
 		
 		medicalReportDto = new MedicalReportDto(medicalReport);
 		
