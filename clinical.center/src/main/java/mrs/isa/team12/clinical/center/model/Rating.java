@@ -1,17 +1,11 @@
 package mrs.isa.team12.clinical.center.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
-
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -33,8 +27,8 @@ public class Rating {
 	@Column(name="is_active")
 	private Boolean active;
 	
-	@Column(name = "rated", unique = false, nullable = false )
-	private int rated;
+	@Column(name = "rating", unique = false, nullable = false )
+	private Integer rating;
 	
 	@ManyToOne
 	@JoinColumn(name="doctor_id", referencedColumnName = "id", nullable = true)
@@ -45,81 +39,55 @@ public class Rating {
 	private Clinic clinic;
 	
 	@ManyToOne
-	@JoinColumn(name="patient_id", referencedColumnName = "id", nullable = true)
+	@JoinColumn(name="patient_id", referencedColumnName = "id", nullable = false)
 	private Patient patient;
-	
-	@ManyToMany(cascade = {ALL}, fetch = LAZY)
-	@JoinColumn(name = "report_id", referencedColumnName = "id", nullable = true)
-	private Set<Report> reports;
 	
 	public Rating() {}
 
-	public Rating(Long id, int rated, Doctor doctor, Clinic clinic, Patient patient, Set<Report> reports) {
+	public Rating(Long id, Integer rating, Doctor doctor, Clinic clinic, Patient patient) {
 		super();
 		this.id = id;
-		this.rated = rated;
+		this.rating = rating;
 		this.doctor = doctor;
 		this.clinic = clinic;
 		this.patient = patient;
-		this.reports = reports;
 		this.active = true;
 	}
 
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public int getRated() {
-		return rated;
+	public Integer getRated() {
+		return rating;
 	}
-
-	public void setRated(int rated) {
-		this.rated = rated;
+	public void setRated(Integer rating) {
+		this.rating = rating;
 	}
-
 	public Doctor getDoctor() {
 		return doctor;
 	}
-
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
 	public Patient getPatient() {
 		return patient;
 	}
-
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
-	public Set<Report> getReports() {
-		return reports;
-	}
-
-	public void setReports(Set<Report> reports) {
-		this.reports = reports;
-	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
-	
 }

@@ -21,8 +21,6 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "clinic")
 @Where(clause="is_active=true")
@@ -59,11 +57,6 @@ public class Clinic {
 	@ManyToOne
 	@JoinColumn(name = "clinical_center_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
-	
-	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "report_id")
-	@JsonBackReference("clinic-report")
-	private Report report;
 	
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "diagnose_perscription_id")
@@ -120,7 +113,7 @@ public class Clinic {
 	}
 
 	public Clinic(Long id, String name, String address, String city, String country, String description, Double rating,
-			ClinicalCentre clinicalCentre, Report report,
+			ClinicalCentre clinicalCentre, 
 			DiagnosePerscription diagnosePerscription, Set<Doctor> doctors, Set<Nurse> nurses, Set<Patient> patients,
 			Set<AppointmentType> appointmentTypes, Set<Appointment> appointments, Set<ClinicAdmin> admins, 
 			Set<Ordination> ordinations, Set<AppointmentRequest> appointmentRequests, 
@@ -134,7 +127,6 @@ public class Clinic {
 		this.description = description;
 		this.rating = rating;
 		this.clinicalCentre = clinicalCentre;
-		this.report = report;
 		this.diagnosePerscription = diagnosePerscription;
 		this.doctors = doctors;
 		this.nurses = nurses;
@@ -196,12 +188,6 @@ public class Clinic {
 	}
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
-	}
-	public Report getReport() {
-		return report;
-	}
-	public void setReport(Report report) {
-		this.report = report;
 	}
 	public DiagnosePerscription getDiagnosePerscription() {
 		return diagnosePerscription;
