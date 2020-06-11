@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +28,13 @@ import mrs.isa.team12.clinical.center.dto.OrdinationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Ordination;
 import mrs.isa.team12.clinical.center.model.enums.OrdinationType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
+import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 
 @RestController
@@ -38,15 +43,16 @@ public class OrdinationController {
 
 	private OrdinationService ordinationService;
 	private AppointmentRequestService appointmentRequestService;
+	private ClinicService clinicService;
 	
 	@Autowired
 	private HttpSession session;
 	
-	@Autowired
 	public OrdinationController(OrdinationService ordinationService, 
-			AppointmentRequestService appointmentRequestService) {
+			AppointmentRequestService appointmentRequestService, ClinicService clinicService ) {
 		this.ordinationService = ordinationService;
 		this.appointmentRequestService = appointmentRequestService;
+		this.clinicService = clinicService;
 	}
 	
 	/*
@@ -513,4 +519,88 @@ public class OrdinationController {
 		// vracamo sve sobe za pregled
 		return new ResponseEntity<>(satisfyingOrdinations, HttpStatus.OK);
 	}
+	
+	
+	/*Zakazivanje soba za pregled ili sala za operaciju*/
+	@Scheduled(cron = "${schedule.cron}")
+	public void schedule() {
+		FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("mojFajl.txt");
+			myWriter.write("Haloooooo");
+		    myWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		List<Clinic> clinics = clinicService.findAll();
+		
+		for (Clinic c : clinics) {
+			for(AppointmentRequest ar : c.getAppointmentRequests()) {
+				if(ar.getApproved() == false) {
+					//SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+					
+					Date examDate = ar.getAppointment().getDate();
+					AppointmentType examType = ar.getAppointment().getAppType();
+					Doctor examDoctor = ar.getAppointment().getDoctor();
+					Integer examStartTime = ar.getAppointment().getStartTime();
+					Integer examEndTime = ar.getAppointment().getEndTime();
+					
+					//sve ordinacije te klinike
+					List<Ordination> examRooms = ordinationService.findAllByClinicIdAndType(c.getId(), OrdinationType.ConsultingRoom);
+					
+					
+					//Da li neka sala zadovoljava za to vreme tog doktora i sve 
+					boolean satisfying = false;
+					
+					//prolazimo kroz ordinacije te klinike i uzmemo prvu na koju naidjemo da nam odgovara
+					for (Ordination o : examRooms) {
+						// uzimamo u obzir trenutnu ordinaciju
+						// prolazimo kroz zakazane preglede u toj ordinaciji
+						if (o.getAppointments() != null) {
+							for (Appointment a : o.getAppointments()) {
+								// proveravamo da li ima za taj datum zakazan pregled
+								if (a.getDate().equals(examDate)) {
+									// proveravamo od kada do kada traje zakazani pregled
+									if (examEndTime <= a.getStartTime() || examStartTime >= a.getEndTime()) {
+										ar.getAppointment().setOrdination(o);
+										satisfying = true;
+										break;
+									}
+									
+								}
+							}
+						}
+					}
+					//nijedna ordinacija ne zadovoljava trazeno vreme i datum 
+					if(!satisfying) {
+						// trazimo prvo slobodno vreme za koje ima slobodnu ordinaciju i da je doktor slobodan
+						Date newExamDate = examDate;
+						List<Integer> examRoomFree;
+						while(true) {
+							for (Ordination o : examRooms) {
+								// idemo kroz datume dok ne nadjemo prvi za koji zadovoljavaju
+								// kada je doktor slobodan
+								List<Integer> doctorFree = examDoctor.getAvailableTimesForDateAndType(newExamDate, examType);
+								examRoomFree = o.getAvailableTimesForDateAndType(newExamDate, examType);
+								// presek slobodnih vremena
+								examRoomFree.retainAll(doctorFree);
+								if(!examRoomFree.isEmpty()) {
+									ar.getAppointment().setDate(newExamDate);
+									ar.getAppointment().setStartTime(examRoomFree.get(0));
+									ar.getAppointment().setEndTime(examRoomFree.get(0) + ar.getAppointment().getAppType().getDuration());
+									ar.getAppointment().setOrdination(o);
+									break;
+								}
+							}
+							// ne postoje slobodni za doktora i ordinaciju ni za jednu ordinaciju uvecavamo datum i pokusavamo za naredni
+							// uvecavamo dan za jedan
+							newExamDate = new Date(examDate.getTime() + (1000 * 60 * 60 * 24));
+						}
+					}
+				}
+			}
+				
+		}
+	}
+	
 }
