@@ -1,3 +1,8 @@
+var accessToken = "zY8x5DiT6IjNIoPjDSrIDhuiL7XI56A7RuNyqQjQsL8D2nVyJOC9eQTv59EaBxmH"
+var map = null;
+var clinicMapIcon;
+var existingMarker = null;
+
 var price;
 var duration;
 
@@ -523,8 +528,51 @@ function fillClinicInfo(clinicId, clinicName) {
 			$('#clinicAddress').text(output.address)
 			$('#clinicCity').text(output.city)
 			$('#clinicCountry').text(output.country)
+			initialiseClinicMarker(output.address, output.city, output.country)
 			$('#clinicDescription').text(output.description)
 			viewAvailableApps(clinicId, clinicName)
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+// inicijalizacija mape sa klinikom
+function initialiseClinicMap() {
+	// create map
+	map = new L.map('clinicOnMap', { zoomControl: false }).setView([35, -26], 2.5)
+	// add tile layer to map (actual map)
+    L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}.png?access-token='+accessToken, {
+        attribution: "<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors",
+        minZoom: 2.5,
+        zoomControl: false,
+	}).addTo(map)
+	// create clinic icon
+	clinicMapIcon = L.icon({
+		iconUrl: '../../img/icons/index/clinic_admin.png',
+		shadowUrl: '../../img/icons/index/clinic_admin_shadow.png',
+		iconSize:     [40, 40], // size of the icon
+		iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
+	})
+}
+function initialiseClinicMarker(clinicAddress, clinicCity, clinicCountry) {
+	if (!map) {
+		// inicijalizacija mapa klinika
+		initialiseClinicMap()
+	}
+	var mapGeoApiUrl = "https://api.jawg.io/places/v1/search?text="+clinicAddress+" "+clinicCity+" "+clinicCountry+"&access-token="+accessToken+"&size=1"
+	$.ajax({
+		type : "GET",
+		url : mapGeoApiUrl,
+		dataType: "json",
+		success : function(output)  {
+			var coordinates = output.features[0].geometry.coordinates
+			if (existingMarker) {
+				var newLatLng = new L.LatLng(coordinates[1], coordinates[0]);
+    			existingMarker.setLatLng(newLatLng); 
+			} else {
+				existingMarker = L.marker([coordinates[1], coordinates[0]], {icon: clinicMapIcon}).addTo(map)
+			}
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

@@ -2,13 +2,13 @@ insert into clinical_centre (id, name, version, is_active) values ('1', 'The Goo
 
 /*Jedina klinika koju imamo za sada*/
 insert into clinic (id, name, address, city, country, description, rating, clinical_center_id, version, is_active) 
-values ('6', 'Saint Mary Clinic', 'Lipov Gaj 23', 'Novi Sad', 'Srbija', 'Mother and child clinic', '4.6', '1', '0', 'true');
+values ('6', 'Saint Mary Clinic', 'Zeleznicka 12', 'Novi Sad', 'Srbija', 'Mother and child clinic', '4.6', '1', '0', 'true');
 /*Druga samo za probu*/
 insert into clinic (id, name, address, city, country, description, rating, clinical_center_id, version, is_active) 
-values ('17', 'Dr Gray Clinic', 'Aleksandar Veliki 11', 'Nis', 'Srbija', 'First cardio clinic', '4.9', '1', '0', 'true');
+values ('17', 'Dr Gray Clinic', 'Novosadska 1', 'Nis', 'Srbija', 'First cardio clinic', '4.9', '1', '0', 'true');
 /*Treca samo za probu*/
 insert into clinic (id, name, address, city, country, description, rating, clinical_center_id, version, is_active) 
-values ('18', 'Shephered United Clinic', 'Puskinova 3', 'Beograd', 'Srbija', 'Our united front for health', '4.3', '1', '0', 'true');
+values ('18', 'Shephered United Clinic', 'Koste Jovanovica 87', 'Beograd', 'Srbija', 'Our united front for health', '4.3', '1', '0', 'true');
 
 /*Odinacije*/
 /*Prva klinika*/

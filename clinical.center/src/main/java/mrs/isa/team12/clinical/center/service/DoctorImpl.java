@@ -42,6 +42,8 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
+	// zbog @Lock anotacije u repository klasi
 	public Doctor findOneById(Long id) {
 		logger.info("> findOneById id:{}", id);
 		Doctor doctor =  doctorRep.findOneById(id);
@@ -99,6 +101,17 @@ public class DoctorImpl implements DoctorService {
 		Doctor updated = doctorRep.save(doctorToUpdate);
 		logger.info("< update id{}", editedDoctor.getId());
 		return updated;
+	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Doctor update(Doctor d, Appointment a) {
+		Doctor doctorToUpdate = doctorRep.findOneById(d.getId());
+		logger.info("> update id{}", doctorToUpdate.getId());
+		doctorToUpdate.addAppointment(a);
+		Doctor updated = doctorRep.save(doctorToUpdate);
+		logger.info("< update id{}", doctorToUpdate.getId());
+		return updated; 
 	}
 	
 	@Override

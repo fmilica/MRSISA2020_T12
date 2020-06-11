@@ -45,6 +45,10 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
+	<!-- Maps - Leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="../../img/icons/logo/favicon.png"/>
 
@@ -567,6 +571,20 @@
 										<h5>City<span id="clinicCity" class="pull-right"></span></h5>
 										<h5>Country<span id="clinicCountry" class="pull-right"></span></h5>
 										<h5>Description<span id="clinicDescription" class="pull-right"></span></h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card card-topline-theme">
+								<div class="card-head card-topline-theme">
+									<header>View on Map</header>
+								</div>
+								<div class="card-body no-padding height-9">
+									<div id="clinicOnMap" style="height: 290px;">
+										<!-- JS map inicialization -->
 									</div>
 								</div>
 							</div>

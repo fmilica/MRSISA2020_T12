@@ -23,6 +23,8 @@ public interface DoctorService {
 	
 	Doctor update(DoctorPersonalInformationDto editedDoctor, Set<AppointmentType> appTypes);
 	
+	Doctor update(Doctor d, Appointment a);
+	
 	Doctor findOneByEmail(String email);
 	
 	List<Doctor> findAll();
