@@ -51,6 +51,10 @@ public class NurseImpl implements NurseService {
 		logger.info("> update id:{}", id);
 		
 		Nurse nurseToUpdate = nurseRep.findOneById(id);
+		String oldPassword = nurseToUpdate.getPassword();
+		if(oldPassword.equals(newPassword)) {
+			return null;
+		}
 		
 		nurseToUpdate.setPassword(newPassword);
 		nurseToUpdate.setLogged(true);

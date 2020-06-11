@@ -82,6 +82,10 @@ public class NurseController {
 		
 		Nurse updated = nurseService.updatePassword(currentUser.getId(), password);
 		
+		if(updated == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password cant be same as old!");
+		}
+		
 		session.setAttribute("currentUser", updated);
 		
 		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);

@@ -64,6 +64,10 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	public ClinicAdmin updatePassword(Long id, String newPassword) {
 		logger.info("> update id:{}", id);
 		ClinicAdmin clinicAdminToUpdate = clinicAdminRep.findOneById(id);
+		String oldPassword = clinicAdminToUpdate.getPassword();
+		if(oldPassword.equals(newPassword)) {
+			return null;
+		}
 		clinicAdminToUpdate.setPassword(newPassword);
 		clinicAdminToUpdate.setLogged(true);
 		clinicAdminRep.save(clinicAdminToUpdate);

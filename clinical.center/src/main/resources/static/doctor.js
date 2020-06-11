@@ -906,6 +906,7 @@ function changePassword() {
 			$("#password").val("")
 			$("#passwordConfirm").val("")
 			logger = true
+			$('#cancelChangePasswordBtn').show()
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)

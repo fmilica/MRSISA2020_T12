@@ -87,11 +87,20 @@ public class PatientImpl implements PatientService {
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Patient updatePassword(Long id, String newPassword) {
+		logger.info("update id:{}", id);
 		Patient patientToUpdate = patientRep.findOneById(id);
+		String oldPassword = patientToUpdate.getPassword();
+		if(oldPassword.equals(newPassword)) {
+			return null;
+		}
 		patientToUpdate.setPassword(newPassword);
+		patientToUpdate.setLogged(true);
 		
-		return patientRep.save(patientToUpdate);
+		Patient p = patientRep.save(patientToUpdate);
+		logger.info("update id:{}", id);
+		return p;
 	}
 
 	@Override

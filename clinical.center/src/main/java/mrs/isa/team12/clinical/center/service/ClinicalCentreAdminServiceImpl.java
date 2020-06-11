@@ -61,6 +61,10 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	public ClinicalCentreAdmin updatePassword(Long id, String newPassword) {
 		logger.info("> update id:{}", id);
 		ClinicalCentreAdmin clinicalCentreAdminToUpdate = clinicCentreAdminRep.findOneById(id);
+		String oldPassword = clinicalCentreAdminToUpdate.getPassword();
+		if(oldPassword.equals(newPassword)) {
+			return null;
+		}
 		clinicalCentreAdminToUpdate.setPassword(newPassword);
 		clinicalCentreAdminToUpdate.setLogged(true);
 		clinicCentreAdminRep.save(clinicalCentreAdminToUpdate);

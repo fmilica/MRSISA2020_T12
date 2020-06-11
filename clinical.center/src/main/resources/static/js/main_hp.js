@@ -4,8 +4,9 @@ var logger = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-
-    calendar = new FullCalendar.Calendar(calendarEl, {
+    
+    
+	calendar = new FullCalendar.Calendar(calendarEl, {
         height: 450,
         plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list'],
         header: {
@@ -25,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     		}
     	}
     );
-    calendar.render();
+	if(!loggedUser == ""){
+		calendar.render();
+	}
   });
 
 $(document).ready( function () {

@@ -163,6 +163,10 @@ public class PatientController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given id doesn't exist!");
 		}
 		
+		if(updated == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password cant be same as old!");
+		}
+		
 		session.setAttribute("currentUser", updated);
 		
 		return new ResponseEntity<>(new RegisteredUserDto(updated), HttpStatus.OK);

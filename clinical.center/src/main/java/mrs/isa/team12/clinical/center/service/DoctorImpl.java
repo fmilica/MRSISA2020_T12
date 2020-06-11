@@ -74,6 +74,10 @@ public class DoctorImpl implements DoctorService {
 	public Doctor updatePassword(Long doctorId, String newPassword) {
 		logger.info("> update id{}", doctorId);
 		Doctor doctorToUpdate = doctorRep.findOneById(doctorId);
+		String oldPassword = doctorToUpdate.getPassword();
+        if(oldPassword.equals(newPassword)) {
+            return null;
+        }
 		doctorToUpdate.setPassword(newPassword);
 		doctorToUpdate.setLogged(true);
 		Doctor updated = doctorRep.save(doctorToUpdate);
