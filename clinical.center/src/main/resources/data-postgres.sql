@@ -33,7 +33,7 @@ insert into clinic_admin (id, email, password, name, surname, gender, date_of_bi
 values ('8', 'felisimadolanovski@gmail.com', 'felidola1', 'Felisima', 'Dolanovski', 'female', '1978-05-20', 'Adresa1', 'Grad1', 'Ukrajina', '55', '11', '17', '0', 'true', 'true');
 
 insert into clinic_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number,clinic_id, version, is_active, logged) 
-values ('22', 'perapera2359@gmail.com', 'perapera2', 'Petar', 'Isailovic', 'male', '1989-07-20', 'Kralja Petra I 42', 'Nis', 'Srbija', '55', '98', '6', '0', 'true', 'false');
+values ('22', 'perapera2359@gmail.com', 'perapera2', 'Petar', 'Isailovic', 'male', '1989-07-20', 'Kralja Petra I 42', 'Nis', 'Srbija', '55', '98', '6', '0', 'true', 'true');
 
 insert into clinic_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number,clinic_id, version, is_active, logged) 
 values ('100', 'novi', 'novi', 'Novi', 'Novic', 'male', '1989-07-20', '', '', '', '555', '100', '6', '0', 'true', 'true');

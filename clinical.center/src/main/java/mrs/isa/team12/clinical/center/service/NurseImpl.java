@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +88,7 @@ public class NurseImpl implements NurseService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public Nurse save(Nurse nurse) {
 		logger.info("> create");
 		
@@ -93,6 +96,24 @@ public class NurseImpl implements NurseService {
 		
 		logger.info("< create");
 		return n;
+	}
+
+	@Override
+	public List<Nurse> findAllByClinicId(Long id) {
+		logger.info("> findAllByClinicId id:{}", id);
+		List<Nurse> n = nurseRep.findAllByClinicId(id);
+		logger.info("< findAllByClinicId id:{}", id);
+		return n;
+	}
+
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void delete(Nurse n) {
+		logger.info("> delete id:{}", n.getId());
+		n.setActive(false);
+		nurseRep.save(n);
+		logger.info("< delete id:{}", n.getId());
 	}
 
 }

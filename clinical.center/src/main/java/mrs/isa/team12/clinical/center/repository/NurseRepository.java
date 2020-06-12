@@ -1,5 +1,7 @@
 package mrs.isa.team12.clinical.center.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import mrs.isa.team12.clinical.center.model.Nurse;
@@ -11,4 +13,5 @@ public interface NurseRepository extends JpaRepository<Nurse, Long>{
 
 	Nurse findOneByEmail(String email);
 	
+	List<Nurse> findAllByClinicId(Long id);
 }

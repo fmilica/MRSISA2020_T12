@@ -1,6 +1,7 @@
 package mrs.isa.team12.clinical.center.dto;
 
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.enums.Specialization;
 
 public class DoctorDto {
@@ -37,6 +38,20 @@ public class DoctorDto {
 		this.startWork = doctor.getStartWork();
 		this.endWork = doctor.getEndWork();
 		this.rating = doctor.getRating();
+	}
+	
+	public DoctorDto(Nurse n) {
+		this.id = n.getId();
+		this.email = n.getEmail();
+		this.name = n.getName();
+		this.surname = n.getSurname();
+		this.gender = n.getGender();
+		this.dateOfBirth = n.getDateOfBirth();
+		this.address = n.getAddress();
+		this.city = n.getCity();
+		this.country = n.getCountry();
+		this.phoneNumber = n.getPhoneNumber();
+		this.securityNumber = n.getSecurityNumber();
 	}
 	
 	public Long getId() {

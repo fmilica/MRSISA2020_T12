@@ -248,6 +248,12 @@ $(document).ready( function () {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
     })
+    $('#clinicNurses').click(function() {
+        $('.content').hide()
+        $('.clinic-nurses').show()
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    })
     // Clinic ordinations
     $('#clinicOrdinations').click(function() {
         $('.content').hide()
@@ -334,6 +340,11 @@ $(document).ready( function () {
         $('.content').hide()
         $('.clinic-addDoctor').show()
     })
+    // Clinic add nurse
+    $('#addNurse').click(function() {
+		$('.content').hide()
+		$('.clinic-addNurse').show()
+	})
     // Clinic add ordination
     $('#addOrdination').click(function() {
         $('.content').hide()

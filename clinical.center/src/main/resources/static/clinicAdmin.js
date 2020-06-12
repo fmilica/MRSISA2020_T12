@@ -17,6 +17,7 @@ var doctorRating;
 var pricelist;
 var vacationTable;
 var declineId;
+var nurseTable;
 
 var appRepChart;
 var appIncChart;
@@ -52,6 +53,7 @@ $(document).ready(function() {
 	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
 	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
 	document.getElementById("dateOfBirthDoctor").max = new Date().toISOString().split("T")[0];
+	document.getElementById("dateOfBirthNurse").max = new Date().toISOString().split("T")[0];
 	
 	//select2 radi zbog ovoga
 	$.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -565,7 +567,7 @@ $(document).ready(function() {
 	$("#clinicDoctors").on('click', function(event){
 		event.preventDefault()
 		// inicijalizujemo je ako vec nismo
-		if (!$.fn.DataTable.isDataTable('#ordinationTable')) {
+		if (!$.fn.DataTable.isDataTable('#doctorTable')) {
 			doctorTable = $('#doctorTable').DataTable({
 			ajax: {
 				url: "../../theGoodShepherd/clinicAdmin/getDoctors",
@@ -741,6 +743,140 @@ $(document).ready(function() {
   		document.documentElement.scrollTop = 0
 	})
 	
+	/*View all nurses */
+	$("#clinicNurses").on('click', function(event){
+		event.preventDefault()
+		// inicijalizujemo je ako vec nismo
+		if (!$.fn.DataTable.isDataTable('#nurseTable')) {
+			nurseTable = $('#nurseTable').DataTable({
+			ajax: {
+				url: "../../theGoodShepherd/clinicAdmin/getNurses",
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'email'},
+				{ data: 'name'},
+				{ data: 'surname'},
+				{ data: 'gender'},
+				{ data: null,
+					render: function (data) {
+						if(data.phoneNumber == ''){
+							return '/'
+						}else{
+							return data.phoneNumber
+						}
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						var adresa=  data.address + ", " + data.city + ", " + data.country
+						if(adresa == ', , '){
+							return '/'
+						}else{
+							return adresa
+						}
+					}
+				},
+				{
+					data: null,
+					render: function(data) {
+						return  '<div class="table-action-btns">'+
+									'<span id="'+data.id+'" class="table-action delete-nurse"><i class="fas fa-trash"></i></span>'+
+								'</div>'
+					}
+				}]
+			})
+		}else{
+		}
+	})
+	
+	/*Adding new nurse*/
+	$("#submit_nurse").on('click', function(event){
+		event.preventDefault()
+		
+		var emailV = $("#nurseEmail").val()
+		var nameV = $("#firstNameNurse").val()
+		var surnameV = $("#lastNameNurse").val()
+		var passwordV = $("#passwordNurse").val()
+		var genderV = $("#genderNurse").val()
+		var dateOfBirthV = $("#dateOfBirthNurse").val()
+		var securityNumV = $("#securityNumberNurse").val()
+		var phoneNumberV = $("#phoneNumberNurse").val()
+		var addressV = $("#addressNurse").val()
+		var cityV = $("#cityNurse").val()
+		var countryV = $("#countryNurse").val()
+		
+		if(!emailV || !nameV || !surnameV || !passwordV || !genderV ||
+				!dateOfBirthV || !securityNumV){
+			alert("Not all required fields are filled!")
+			return;
+		}
+		
+		if(isNaN(securityNumV)){
+			alert("Security number must be a number!")
+			return;
+		}
+		
+		var dateObject = new Date(dateOfBirthV);
+        var currentDate = new Date();
+        
+        if(currentDate < dateObject){
+            alert("Wrong date of birth!")
+            return;
+        }
+		
+		var newNurse = {
+			email: emailV,
+			name: nameV,
+			surname: surnameV,
+			password: passwordV,
+			gender: genderV,
+			dateOfBirth: dateOfBirthV,
+			securityNumber: securityNumV,
+			phoneNumber: phoneNumberV,
+			address: addressV,
+			city: cityV,
+			country: countryV
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "../../theGoodShepherd/nurse/addNewNurse",
+			contentType : "application/json",
+			dataType : "json",
+			data : JSON.stringify(newNurse),
+			success : function(response){
+				// vrati ga na pregled svih doktora
+				alert("New nurse saved!")
+				$('.content').hide()
+				$('.clinic-nurses').show()
+				// ciscenje forme za novo dodavanje
+				clearNurseForm()
+				nurseTable.ajax.reload()
+				// scroll to top of page
+				document.body.scrollTop = 0
+				document.documentElement.scrollTop = 0
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+
+	$("#cancel_nurse").on('click', function(event){
+		event.preventDefault()
+		clearNurseForm()
+		$('.clinic-addNurse').hide()
+		$('.clinic-nurses').show()
+		hideValidate($("#passwordNurse"))
+		hideValidate($("#confirm-passwordNurse"))
+		hideValidate($("#securityNumberNurse"))
+		// scroll to top of page
+		document.body.scrollTop = 0
+  		document.documentElement.scrollTop = 0
+	})
+	
 	/*Check if securityNumber is number*/
 	$("#securityNumberDoctor").on('blur', function(e){
 		e.preventDefault()
@@ -784,6 +920,25 @@ $(document).ready(function() {
 			success : function(output)  {
 				alert("Doctor successfuly deleted!")
 				doctorTable.ajax.reload()
+			},
+			error : function(response) {
+				alert(response.responseJSON.message)
+			}
+		})
+	})
+	/********************************************************************************/
+	
+	/*Delete nurse*/
+	/*--------------------------------------------------*/
+	$('body').on('click', 'span.delete-nurse', function() {
+		var doctorId = $(this).attr('id')
+		$.ajax({
+			type : "GET",
+			async: false,
+			url : "../../theGoodShepherd/nurse/delete/" + doctorId ,
+			success : function(output)  {
+				alert("Nurse successfuly deleted!")
+				nurseTable.ajax.reload()
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -2111,6 +2266,19 @@ function clearDoctorForm() {
 	$("#addressDoctor").val('')
 	$("#cityDoctor").val('')
 	$("#countryDoctor").val('')
+}
+
+function clearNurseForm() {
+	$("#nurseEmail").val('')
+	$("#firstNameNurse").val('')
+	$("#lastNameNurse").val('')
+	$("#passwordNurse").val('')
+	$("#dateOfBirthNurse").val('')
+	$("#securityNumberNurse").val('')
+	$("#phoneNumberNurse").val('')
+	$("#addressNurse").val('')
+	$("#cityNurse").val('')
+	$("#countryNurse").val('')
 }
 
 

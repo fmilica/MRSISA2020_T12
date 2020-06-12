@@ -182,6 +182,11 @@
 	                                    </a>
                                     </li>
                                     <li class="nav-item">
+	                                    <a id="clinicNurses" class="nav-link ">
+	                                        <span class="title">Nurses</span>
+	                                    </a>
+                                    </li>
+                                    <li class="nav-item">
 	                                    <a id="clinicOrdinations" class="nav-link ">
 	                                        <span class="title">Ordinations</span>
 	                                    </a>
@@ -722,6 +727,48 @@
 													<th>Specialization</th>
 													<th>Start work</th>
 													<th>End work</th>
+													<th>Phone Number</th>
+													<th>Address</th>
+													<th>Actions</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Clinic nurses content -->
+				<div class="content clinic-nurses">
+					<div class="table-view">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Nurses</header>
+									</div>
+									<div class="card-body">
+										<button id="addNurse" class="btn btn-info add-button">Add new nurse</button>
+										<table id="nurseTable" class="display">
+											<thead>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
+													<th>Phone Number</th>
+													<th>Address</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Email</th>
+													<th>Name</th>
+													<th>Surname</th>
+													<th>Gender</th>
 													<th>Phone Number</th>
 													<th>Address</th>
 													<th>Actions</th>
@@ -1446,6 +1493,135 @@
 					</div>
 					<!-- end add form -->
 				</div>
+				
+				<!-- Add nurse -->
+				<div class="content clinic-addNurse">
+					<!-- add form -->
+					<div class="add">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Add new nurse - Basic information</header>
+									</div>
+									<div class="card-body" id="bar-parent">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Email address
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="nurseEmail" name="nurseEmail" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														First Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="firstNameNurse" name="firstNameNurse" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Last Name
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="lastNameNurse" data-required="1"  class="form-control input-height"/>
+													</div>
+												</div>
+												<div class="form-group row"  >
+													<label class="control-label col-md-3">
+														Password
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<input type="text" id="passwordNurse" data-required="1"  class="form-control input-height"/>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Gender
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7">
+														<select class="form-control input-height" id="genderNurse">
+															<option selected="selected" value="male">Male</option>
+															<option value="female">Female</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+			                                            Date Of Birth
+			                                            <span class="required"> * </span>
+			                                        </label>
+			                                        <div class="col-md-7">
+			                                        <input id="dateOfBirthNurse" type="date" class="form-control">
+			                                        </div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Security Number
+														<span class="required"> * </span>
+													</label>
+													<div class="col-md-7 validate-input" data-validate="Must be a number!">
+														<input id="securityNumberNurse" type="text" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Phone Number
+													</label>
+													<div class="col-md-7">
+														<input id="phoneNumberNurse" type="text" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Address
+													</label>
+													<div class="col-md-7">
+														<input id="addressNurse" type="text" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														City
+													</label>
+													<div class="col-md-7">
+														<input id="cityNurse" type="text" id="city" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+												<div class="form-group row">
+													<label class="control-label col-md-3">
+														Country
+													</label>
+													<div class="col-md-7">
+														<input id="countryNurse" type="text" id="country" data-required="1"  class="form-control input-height" />
+													</div>
+												</div>
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="offset-md-3 col-md-12 form-buttons">
+														<button id="submit_nurse" type="submit" class="btn btn-info">Create</button>
+														<button id="cancel_nurse" type="button" class="btn btn-default">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end add form -->
+				</div>
 
 				<!-- Add ordination -->
 				<div class="content clinic-addOrdination">
@@ -1713,7 +1889,7 @@
         
 			</div>
 			<!-- end page container -->
-		</div>
+		<!-- </div> -->
         <!-- start footer -->
         <div class="page-footer">
             <div class="page-footer-inner"> 2020 &copy; The Good Shepherd Clinics - Your health care companion
@@ -1723,7 +1899,7 @@
 			</div>
 		</div>
     <!-- end footer -->
-	</div>
+	<!--</div> -->
 	<script src="../../clinicAdmin.js"></script>
 </body>
 </html>

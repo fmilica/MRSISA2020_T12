@@ -471,6 +471,7 @@ public class DoctorController {
 		// sacuvamo ga
 		doctor.setClinic(admin.getClinic());
 		doctor.setActive(true);
+		doctor.setLogged(false);
 		Doctor saved = doctorService.save(doctor);
 		
 		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);

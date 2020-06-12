@@ -14,23 +14,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import mrs.isa.team12.clinical.center.dto.DoctorDto;
 import mrs.isa.team12.clinical.center.dto.NursePersonalInformationDto;
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.ClinicAdmin;
+import mrs.isa.team12.clinical.center.model.Doctor;
 import mrs.isa.team12.clinical.center.model.Nurse;
+import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.NurseImpl;
+import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
 @RestController
 @RequestMapping("theGoodShepherd/nurse")
 public class NurseController {
 
 	private NurseImpl nurseService;
+	private RegisteredUserService userService;
 
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public NurseController(NurseImpl nurseService) {
+	public NurseController(NurseImpl nurseService, RegisteredUserService userService) {
 		this.nurseService = nurseService;
+		this.userService = userService;
 	}
 	
 	/*
@@ -148,4 +156,69 @@ public class NurseController {
 		return new ResponseEntity<>(new NursePersonalInformationDto(nurse), HttpStatus.OK);
 	}
 	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/doctor/addNewNurse
+	 HTTP request for adding new nurse
+	 receives Nurse object nurse
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/addNewNurse")
+	public ResponseEntity<DoctorDto> addNewDoctor(@RequestBody Nurse nurse) {
+		
+		ClinicAdmin admin;
+		try {
+			admin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can add new doctors.");
+		}
+		if (admin == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		RegisteredUser existing = userService.findOneByEmail(nurse.getEmail());
+		if (existing != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		existing = userService.findOneBySecurityNumber(nurse.getSecurityNumber());
+		if (existing != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified security number already exists!");
+		}
+		// ne postoji u bazi
+		// sacuvamo ga
+		nurse.setClinic(admin.getClinic());
+		nurse.setActive(true);
+		nurse.setLogged(false);
+		Nurse saved = nurseService.save(nurse);
+		
+		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/doctor/delete/{nurseId}
+	 HTTP request for deleting doctor
+	 parameter: String
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "/delete/{nurseId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteDoctor(@PathVariable Long nurseId) {
+		
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic admins can remove doctors from their clinic.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Nurse nurse = nurseService.findOneById(nurseId);
+		
+		if(nurse == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Nurse with given id doesn't exist!");
+		}
+
+		nurseService.delete(nurse);
+	}
 }

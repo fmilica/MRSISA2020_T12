@@ -28,12 +28,14 @@ import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentRequestService;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
+import mrs.isa.team12.clinical.center.service.interfaces.NurseService;
 import mrs.isa.team12.clinical.center.service.interfaces.OrdinationService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 
@@ -49,6 +51,7 @@ public class ClinicAdminController {
 	private AppointmentService appointmentService;
 	private OrdinationService ordinationService;
 	private RegisteredUserService userService;
+	private NurseService nurseService;
 	
 	@Autowired
 	private HttpSession session;
@@ -56,7 +59,7 @@ public class ClinicAdminController {
 	@Autowired
 	public ClinicAdminController(ClinicAdminService adminService, ClinicService clinicService,
 			DoctorService doctorService, AppointmentRequestService appointmentReqService, AppointmentService appointmentService,
-			OrdinationService ordinationService, RegisteredUserService userService) {
+			OrdinationService ordinationService, RegisteredUserService userService, NurseService nurseService) {
 		this.adminService = adminService;
 		this.clinicService = clinicService;
 		this.doctorService = doctorService;
@@ -64,6 +67,7 @@ public class ClinicAdminController {
 		this.appointmentService = appointmentService;
 		this.ordinationService = ordinationService;
 		this.userService = userService;
+		this.nurseService = nurseService;
 	}
 	
 	/*
@@ -221,6 +225,7 @@ public class ClinicAdminController {
 		}
 		
 		clinicAdmin.setActive(true);
+		clinicAdmin.setLogged(false);
 		clinic.add(clinicAdmin);
 		clinicService.save(clinic);
 		
@@ -274,7 +279,7 @@ public class ClinicAdminController {
 		try {
 			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
 		} catch (ClassCastException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinical center administrators can view  all clinic administrators.");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view  all clinic doctors.");
 		}
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
@@ -285,6 +290,36 @@ public class ClinicAdminController {
 		
 		for(Doctor d : doctors) {
 			dto.add(new DoctorDto(d));
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: GET localhost:8081/theGoodShepherd/clinicAdmin/getDoctors
+	 HTTP request for viewing doctors in clinic admins clinic
+	 returns ResponseEntity object
+	 */
+	@GetMapping(value = "getNurses" ,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<DoctorDto>> getNurses() {
+		
+		// da li je neko ulogovan
+		// da li je odgovarajuceg tipa
+		ClinicAdmin currentUser;
+		try {
+			currentUser = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can view  all clinic nurses.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<Nurse> nurses = nurseService.findAllByClinicId(currentUser.getClinic().getId());
+		List<DoctorDto> dto = new ArrayList<DoctorDto>();
+		
+		for(Nurse n : nurses) {
+			dto.add(new DoctorDto(n));
 		}
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);

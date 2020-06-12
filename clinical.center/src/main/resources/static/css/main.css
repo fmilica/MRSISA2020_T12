@@ -626,6 +626,12 @@ i {
 .nurse-patient-profile{
 	display: none;
 }
+.clinic-nurses{
+	display: none;
+}
+.clinic-addNurse{
+	display: none;
+}
 
 /* Patient */
 .patient-viewAllClinics {

@@ -244,6 +244,7 @@ public class ClinicalCenterAdminController {
 		clinicalCentre.add(clinicalCentreAdmin);
 		
 		clinicalCentreAdmin.setClinicalCentre(clinicalCentre);
+		clinicalCentreAdmin.setLogged(false);
 		clinicalCenterAdminService.save(clinicalCentreAdmin);
 		ClinicalCentreAdminDto dto = new ClinicalCentreAdminDto(clinicalCentreAdmin);
 		//centreService.save(clinicalCentre);
