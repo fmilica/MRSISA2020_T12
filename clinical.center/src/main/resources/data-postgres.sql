@@ -73,8 +73,8 @@ insert into nurse (id, email, password, name, surname, gender, date_of_birth, ad
 values ('15', 'zikambrat@gmail.com', 'zikazika1', 'Zika', 'Zikic', 'male', '1990-06-15', 'Adresa', 'City', 'Country', '44', '66', '0', 'true', '6', 'false');
 
 /* Pacijenti i njihovi zdravstveni kartoni*/
-insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active) 
-values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', '1993-06-01', 'Adresa', 'City', 'Country', '55', '77', '1', '0', 'true');
+insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active, logged) 
+values ('16', 'srdjanmilic12@gmail.com', 'srdjabroj1', 'Srdjan', 'Milic', 'male', '1993-06-01', 'Adresa', 'City', 'Country', '55', '77', '1', '0', 'true', 'true');
 /*Potvrdjen zahtev za registraciju*/
 insert into registration_request(id, registered_user_id, approved, description, version, is_active) 
 values ('56', '16', 'true', '', '0', 'true');
@@ -83,8 +83,8 @@ values ('30' ,'180', '60', '120/60', 'A','No allergies', '16', '0', 'true');
 update patient
 set medical_record_id = '30', registration_request_id = '56'
 where id = '16';
-insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active) 
-values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '55', '111', '1', '0', 'true');
+insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active, logged) 
+values ('29', 'milkapacijent@gmail.com', 'milka12!', 'Milka', 'Jagodic', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '55', '111', '1', '0', 'true', 'true');
 /*Potvrdjen zahtev za registraciju*/
 insert into registration_request(id, registered_user_id, approved, description, version, is_active) 
 values ('55', '29', 'true', '', '0', 'true');
@@ -93,11 +93,15 @@ values ('43' ,'163', '67', '130/80', 'AB-','Polen', '29', '0', 'true');
 update patient
 set medical_record_id = '43', registration_request_id = '55'
 where id = '29';
-/*Nova registracija pacijenta
-insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version) 
-values ('30', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0');
-insert into registration_request(id, registered_user_id, approved, description, version) 
-values ('31', '30', 'false', '', '0');*/
+
+/*Nova registracija pacijenta*/
+insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active, logged) 
+values ('80', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0', 'true', 'false');
+insert into registration_request(id, registered_user_id, approved, description, version, is_active) 
+values ('81', '80', 'false', '', '0', 'true');
+update patient
+set registration_request_id = '81'
+where id = '80';
 
 /*Jedan pregled potvrdjen i zavrsen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, ordination_id, is_active, price)

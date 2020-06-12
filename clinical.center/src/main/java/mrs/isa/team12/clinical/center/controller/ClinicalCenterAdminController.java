@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
+import mrs.isa.team12.clinical.center.model.events.OnRegistrationCompleteEvent;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
 import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
@@ -44,6 +47,9 @@ public class ClinicalCenterAdminController {
 
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
 	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService, ClinicalCenterService centreService, 
@@ -252,7 +258,7 @@ public class ClinicalCenterAdminController {
 	 */
 	@PostMapping(value = "/acceptRegistrationRequest",
 			 consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void acceptRegistrationRequest(@RequestBody RegistrationRequest regReq) {
+	public void acceptRegistrationRequest(@RequestBody RegistrationRequest regReq, HttpServletRequest request) {
 		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
@@ -269,10 +275,11 @@ public class ClinicalCenterAdminController {
 		RegistrationRequest registrationRequest;
 		try {
 			registrationRequest = registrationService.update(regReq.getId(), true);
+			String appUrl = session.getServletContext().getContextPath();
+	        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registrationRequest.getUser(), request.getLocale(), appUrl));
+			//Patient user = patientService.findOneById(registrationRequest.getUser().getId());
 			
-			Patient user = patientService.findOneById(registrationRequest.getUser().getId());
-			
-			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, registrationRequest.getDescription(), true);
+			//clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(), registrationRequest.getDescription(), true);
 		}catch(NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data with requested id doesn't exist!");
 		}catch( Exception e ){

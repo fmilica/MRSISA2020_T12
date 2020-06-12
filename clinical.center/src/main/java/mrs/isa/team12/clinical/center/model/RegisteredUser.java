@@ -67,6 +67,9 @@ public class RegisteredUser {
 	@Column(name = "logged")
 	private Boolean logged;
 	
+	@Column(name = "token")
+	private String token;
+	
 	public RegisteredUser() {}
 	
 	public RegisteredUser(String email, String password, String name, String surname, String gender, 
@@ -217,5 +220,12 @@ public class RegisteredUser {
 				+ ", surname=" + surname + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth + ", address="
 				+ address + ", city=" + city + ", country=" + country + ", phoneNumber=" + phoneNumber
 				+ ", securityNumber=" + securityNumber + "]";
+	}
+
+	public String getVerificationToken() {
+		return token;
+	}
+	public void setVerificationToken(String verificationToken) {
+		this.token = verificationToken;
 	}
 }
