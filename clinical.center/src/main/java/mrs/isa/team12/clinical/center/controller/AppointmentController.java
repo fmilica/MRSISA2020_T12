@@ -182,10 +182,18 @@ public class AppointmentController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-		
+
+		try {
+			appointmentService.delete(appointmentId);
+		} catch (NoSuchElementException e1) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment with given id doesn't exist.");
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this appointment has been modified.\nYou can try again.");
+		}
+		/*
 		Appointment appointment = appointmentService.findById(appointmentId);
-		
 		appointmentService.delete(appointment);
+		*/
 	}
 
 	/*
@@ -322,8 +330,13 @@ public class AppointmentController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		Appointment app = appointmentService.findById(appId);
-		appointmentService.delete(app);
+		try {
+			appointmentService.delete(appId);
+		} catch (NoSuchElementException e1) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment with given id doesn't exist.");
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this appointment has been modified.\nYou can try again.");
+		}
 
 		// PACIJENT MOZE DA PRIHVATI/ODBIJE SAMO NE-PREDEFINISANE
 		// PREDEFINISANI IDU DIREKTNO U NJIHOVE POTVRDJENE
@@ -399,7 +412,15 @@ public class AppointmentController {
 		}
 		AppointmentType type = appointmentTypeService.findOneByNameAndClinicId(appDto.getAppTypeName(), appDto.getClinicId());
 		Clinic c = clinicService.findOneById(appDto.getClinicId());
-		Doctor d = doctorService.findOneById(appDto.getDoctorId());
+		
+		Doctor d;
+		try {
+			d = doctorService.findOneById(appDto.getDoctorId());
+		} catch (NoSuchElementException e1) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Doctor with given id doesn't exist.");
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+		}
 																		//confirmed, finished
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, d, c, patient);
 		
@@ -590,10 +611,6 @@ public class AppointmentController {
 		appointment.setAppointmentRequest(appRequest);
 		//appointmentService.update(appointment);
 		
-		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA FOLLOWUP, DA NE KAZEM KONTROLU!
-		// SLANJE MEJLA SVIM ADMINIMA KLINIKE DA IMAJU NOVI ZAHTEV ZA OPERACIJU!
-		// ZAVISNO OD TIPA NARAVNO
-		// GORE VEC IMA IF ZA TIP, AKO MOZE DA SE IZKORISTI
 		adminService.sendAppOperRequestNotification(currentUser.getClinic().getId(), doctor, appType);
 		
 		return new ResponseEntity<>(appDto, HttpStatus.OK);

@@ -1,7 +1,5 @@
 package mrs.isa.team12.clinical.center.controller;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -524,15 +522,9 @@ public class OrdinationController {
 	/*Zakazivanje soba za pregled ili sala za operaciju*/
 	@Scheduled(cron = "${schedule.cron}")
 	public void schedule() {
-		FileWriter myWriter;
-		try {
-			myWriter = new FileWriter("mojFajl.txt");
-			myWriter.write("Haloooooo");
-		    myWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		List<Clinic> clinics = clinicService.findAll();
+		Clinic clina = clinicService.findOneById(new Long(6));
+		clina.getAppointmentRequests();
 		
 		for (Clinic c : clinics) {
 			for(AppointmentRequest ar : c.getAppointmentRequests()) {

@@ -15,10 +15,10 @@ public interface AppointmentService {
 	
 	Appointment save(Appointment a) throws Exception;
 	
-	void delete(Appointment a);
+	void delete(Long appId) throws Exception;
 	
 	void deleteAppointments(Doctor d, LeaveRequest lr);
-	
+
 	Appointment update(Long appId) throws Exception;
 	
 	Appointment update(Patient patient, Long appId) throws Exception;

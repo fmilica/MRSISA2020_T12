@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.service;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,7 +46,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public Appointment save(Appointment a) {
 		logger.info("> create");
 		List<Appointment> existing = appointmentRepository.findAllExisting(a.getDoctor().getId(), a.getDate(), a.getStartTime(), a.getEndTime());
@@ -60,10 +62,14 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void delete(Appointment app) {
-		logger.info("> delete id:{}", app.getId());
+	public void delete(Long appId) {
+		logger.info("> delete id:{}", appId);
+		Appointment app = appointmentRepository.findOneById(appId);
+		if (app == null) {
+			throw new NoSuchElementException();
+		}
 		app.setActive(false);
-		appointmentRepository.save(app);
+		app = appointmentRepository.save(app);
 		logger.info("< delete id:{}", app.getId());
 	}
 
