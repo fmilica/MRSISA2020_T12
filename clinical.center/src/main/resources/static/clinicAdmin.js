@@ -2034,7 +2034,6 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 	examReq.date = currentDate
 	examReq.time = time
 	
-	alert("You scheduled an operation room for an operation!")
 	$.ajax({
 		type : "POST",
 		async : false,
@@ -2048,6 +2047,7 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 			doctors: doctors
 		}),
 		success : function(){
+			alert("You scheduled an operation room for an operation!")
 			operReqTable.ajax.reload()
 			$('#operRoomBody').empty()
 			// scroll to top of page

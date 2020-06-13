@@ -266,6 +266,11 @@ public class DoctorImpl implements DoctorService {
 		logger.info("> update id:{}", id);
 		//ZAKLJUCAN DO KRAJA TRANSAKCIJE
 		Doctor d = doctorRep.findOneByIdPessimistic(id);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		if(d == null) {
 			throw new NoSuchElementException();
 		}

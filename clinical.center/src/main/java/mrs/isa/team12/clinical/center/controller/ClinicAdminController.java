@@ -2,10 +2,12 @@ package mrs.isa.team12.clinical.center.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -438,6 +440,9 @@ public class ClinicAdminController {
 		if(appointmentReq == null) { 
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
 		}
+		if(appointmentReq.getApproved() == true) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "This appointment request has already been dealt with!");
+		}
 		//postavi confirmed na true kod AppointmentRequest i Appointment
 		appointmentReq.setApproved(true);
 		appointmentReq.getAppointment().setConfirmed(true);
@@ -446,10 +451,17 @@ public class ClinicAdminController {
 		appointmentReq.getAppointment().setEndTime(appointmentRequest.getTime() + appointmentReq.getAppointment().getAppType().getDuration());
 		//dodati appointment doktoru, pacijentu i svima kojima treba
 		for (Long d : appointmentRequest.getDoctors()) {
-			Doctor doc = doctorService.update(appointmentReq, d);
-			if(doc == null) {
+			try {
+				Doctor doc = doctorService.update(appointmentReq, d);
+				if(doc == null) {
+					throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime one of the doctors became unavailable.\nTry again!");
+				}
+			}catch(PessimisticLockingFailureException e) {
 				throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime one of the doctors became unavailable.\nTry again!");
+			}catch(ObjectOptimisticLockingFailureException e1) {
+				throw new ResponseStatusException(HttpStatus.CONFLICT, "This operation request has been dealt with!");
 			}
+			
 		}
 		//Doctor doctor = doctorService.findOneByEmail(appointmentReq.getAppointment().getDoctor().getEmail());
 		//doctor.addAppointment(appointmentReq.getAppointment());
@@ -458,14 +470,25 @@ public class ClinicAdminController {
 		
 		try {
 			ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
-		}catch(Exception e) {
+		}catch(NoSuchElementException e1) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
+		}catch(Exception e2) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Ordination became unavailable in the meantime!");
 		}
 		
 		//sacuvati sve u bazama
 		//doctorService.save(doctor);
 		clinicService.save(clinic);
-		//appointmentService.update(appointmentReq.getAppointment());
+		try {
+			appointmentService.update(appointmentReq.getAppointment().getId());
+		} catch(ObjectOptimisticLockingFailureException e1) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "This operation request has been dealt with!");
+		} catch (NoSuchElementException e2) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
+		}
+		catch (Exception e) {
+			
+		}
 		try {
 			doctorService.sendNotificaitionAsync(currentAdmin, appointmentReq.getAppointment().getPatient(), 
 					appointmentReq.getAppointment(), true, appointmentReq.getAppointment().getDoctors());

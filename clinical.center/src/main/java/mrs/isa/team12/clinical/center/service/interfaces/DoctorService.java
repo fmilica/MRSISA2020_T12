@@ -3,6 +3,8 @@ package mrs.isa.team12.clinical.center.service.interfaces;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.dao.PessimisticLockingFailureException;
+
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
@@ -30,7 +32,7 @@ public interface DoctorService {
 	
 	Doctor updateRating(Doctor d);
 	
-	Doctor update(AppointmentRequest ar, Long id);
+	Doctor update(AppointmentRequest ar, Long id) throws PessimisticLockingFailureException;
 	
 	Doctor findOneByEmail(String email);
 	

@@ -4,10 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.LockModeType;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import mrs.isa.team12.clinical.center.model.Appointment;
