@@ -5,6 +5,7 @@ import java.util.Set;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -28,6 +29,8 @@ public interface DoctorService {
 	Doctor update(Doctor d, Patient p);
 	
 	Doctor updateRating(Doctor d);
+	
+	Doctor update(AppointmentRequest ar, Long id);
 	
 	Doctor findOneByEmail(String email);
 	

@@ -2037,6 +2037,7 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 	alert("You scheduled an operation room for an operation!")
 	$.ajax({
 		type : "POST",
+		async : false,
 		url : "../../theGoodShepherd/clinicAdmin/acceptOperationRequest",
 		contentType : "application/json",
 		data : JSON.stringify({
@@ -2058,6 +2059,10 @@ function scheduleOperation(ordinationId, currentDate, time, doctors) {
 		},
 		error : function(response) {
 			alert(response.responseJSON.message)
+			operReqTable.ajax.reload()
+			$('.content').hide()
+			$('.clinic-clinicOperReq').show()
+			$('.clinic-oper-rooms').hide()
 		}
 	})
 }

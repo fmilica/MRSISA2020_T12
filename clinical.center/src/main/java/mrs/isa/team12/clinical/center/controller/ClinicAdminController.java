@@ -428,9 +428,14 @@ public class ClinicAdminController {
 		if(session.getAttribute("currentUser") == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-		ClinicAdmin currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
+		ClinicAdmin currentAdmin;
+		try {
+			currentAdmin = (ClinicAdmin) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only clinic administrators can accept operation requests.");
+		}
 		AppointmentRequest appointmentReq = appointmentReqService.findOneById(appointmentRequest.getReqId());
-		if(appointmentReq == null) { //mozda bi ovde trebalo proveriti da li je to neki koji je pre prihvacen/odbijen? mozda kasnije..
+		if(appointmentReq == null) { 
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment request doesn't exist!");
 		}
 		//postavi confirmed na true kod AppointmentRequest i Appointment
@@ -441,13 +446,13 @@ public class ClinicAdminController {
 		appointmentReq.getAppointment().setEndTime(appointmentRequest.getTime() + appointmentReq.getAppointment().getAppType().getDuration());
 		//dodati appointment doktoru, pacijentu i svima kojima treba
 		for (Long d : appointmentRequest.getDoctors()) {
-			Doctor doc = doctorService.findOneById(d);
-			appointmentReq.getAppointment().addDoctor(doc);
-			doc.addAppointment(appointmentReq.getAppointment());
-			doctorService.save(doc);
+			Doctor doc = doctorService.update(appointmentReq, d);
+			if(doc == null) {
+				throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime one of the doctors became unavailable.\nTry again!");
+			}
 		}
-		Doctor doctor = doctorService.findOneByEmail(appointmentReq.getAppointment().getDoctor().getEmail());
-		doctor.addAppointment(appointmentReq.getAppointment());
+		//Doctor doctor = doctorService.findOneByEmail(appointmentReq.getAppointment().getDoctor().getEmail());
+		//doctor.addAppointment(appointmentReq.getAppointment());
 		Clinic clinic = clinicService.findOneById(appointmentReq.getClinic().getId());
 		clinic.addAppointment(appointmentReq.getAppointment());
 		
@@ -458,7 +463,7 @@ public class ClinicAdminController {
 		}
 		
 		//sacuvati sve u bazama
-		doctorService.save(doctor);
+		//doctorService.save(doctor);
 		clinicService.save(clinic);
 		//appointmentService.update(appointmentReq.getAppointment());
 		try {

@@ -10,9 +10,6 @@ public interface RegistrationRequestRepository extends JpaRepository<Registratio
 	
 	RegistrationRequest findOneById(Long id);
 	
-	RegistrationRequest save(RegistrationRequest rr);
-	
 	List<RegistrationRequest> findAll();
 	
-	void deleteById(Long id);
 }

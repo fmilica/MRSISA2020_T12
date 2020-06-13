@@ -3,6 +3,7 @@ package mrs.isa.team12.clinical.center.service;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.DoctorPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
+import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
@@ -256,6 +258,35 @@ public class DoctorImpl implements DoctorService {
 		}
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Doctor update(AppointmentRequest ar, Long id) {
+		logger.info("> update id:{}", id);
+		//ZAKLJUCAN DO KRAJA TRANSAKCIJE
+		Doctor d = doctorRep.findOneByIdPessimistic(id);
+		if(d == null) {
+			throw new NoSuchElementException();
+		}
+		for (Appointment a : d.getAppointments()) {
+			/*(a.startTime BETWEEN ?3 AND ?4) "+
+			"						AND (a.endTime BETWEEN ?3 AND ?4)"+
+			"					)" + 
+			"					OR (a.startTime <= ?3 AND a.endTime >= ?4)" + */
+			if(a.getDate().equals(ar.getAppointment().getDate()) && (
+						((a.getStartTime()>= ar.getAppointment().getStartTime() && a.getStartTime() <= ar.getAppointment().getEndTime())
+						&& (a.getEndTime() >= ar.getAppointment().getStartTime() && a.getEndTime() <= ar.getAppointment().getEndTime()))
+						|| (a.getStartTime() <= ar.getAppointment().getStartTime() && a.getEndTime() >= ar.getAppointment().getEndTime()))) {
+				
+				return null;
+			}
+		}
+		ar.getAppointment().addDoctor(d);
+		d.addAppointment(ar.getAppointment());
+		d = doctorRep.save(d);
+		logger.info("< update id:{}", id);
+		return d;
 	}
 
 }

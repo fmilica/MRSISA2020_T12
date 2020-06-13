@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
@@ -34,11 +35,16 @@ public class RegistrationListener implements
 		}
     }
  
-    private void confirmRegistration(OnRegistrationCompleteEvent event) throws Exception {
+    private void confirmRegistration(OnRegistrationCompleteEvent event) throws ObjectOptimisticLockingFailureException {
     	mailSender.setUsername(env.getProperty("spring.mail.username"));
     	mailSender.setPassword(env.getProperty("spring.mail.password"));
         String token = UUID.randomUUID().toString();
-        RegisteredUser user = service.updateVerificationToken(event.getUser(), token);
+        RegisteredUser user = null;
+		try {
+			user = service.updateVerificationToken(event.getUser(), token);
+		} catch (Exception e) {
+			System.out.println("----------------------------------------------------------");
+		}
          
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";

@@ -788,6 +788,9 @@ $(document).ready(function() {
 	        },
 	        error : function(response) {
 	        	alert(response.responseJSON.message)
+	        	requestsTable.ajax.reload();
+	        	$('.content').hide()
+	    		$('.registration-req').show()
 	        }
 		})
 	})
@@ -985,6 +988,7 @@ function acceptReq(id){
         },
         error : function(response) {
         	alert(response.responseJSON.message)
+        	requestsTable.ajax.reload();
         }
     })
 }

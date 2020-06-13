@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 
 import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
-import mrs.isa.team12.clinical.center.model.RegisteredUser;
 
 public interface ClinicalCenterAdminService {
 	
@@ -27,5 +26,5 @@ public interface ClinicalCenterAdminService {
 	public void sendNotificaitionAsync();
 	
 	@Async
-	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance);
+	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, String user, String description, boolean acceptance);
 }

@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,13 +26,10 @@ import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformation
 import mrs.isa.team12.clinical.center.dto.RegisteredUserDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentre;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
-import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.model.events.OnRegistrationCompleteEvent;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
-import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterService;
-import mrs.isa.team12.clinical.center.service.interfaces.PatientService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegisteredUserService;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
 
@@ -40,9 +38,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestServ
 public class ClinicalCenterAdminController {
 
 	private ClinicalCenterAdminService clinicalCenterAdminService;
-	private ClinicalCenterService centreService;
 	private RegistrationRequestService registrationService;
-	private PatientService patientService;
 	private RegisteredUserService userService;
 
 	@Autowired
@@ -52,12 +48,10 @@ public class ClinicalCenterAdminController {
 	ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
-	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService, ClinicalCenterService centreService, 
-			RegistrationRequestService registrationService, PatientService patientService, RegisteredUserService userService) {
+	public ClinicalCenterAdminController(ClinicalCenterAdminService clinicalCenterAdminService,  
+			RegistrationRequestService registrationService, RegisteredUserService userService) {
 		this.clinicalCenterAdminService = clinicalCenterAdminService;
-		this.centreService = centreService;
 		this.registrationService = registrationService;
-		this.patientService = patientService;
 		this.userService = userService;
 	}
 	
@@ -197,7 +191,7 @@ public class ClinicalCenterAdminController {
 			
 		ClinicalCentreAdmin clinicalCentreAdmin = clinicalCenterAdminService.update(editedProfile);
 		
-		// postavljanje novog, izmenjenog doktora na sesiju
+		// postavljanje novog, izmenjenog administratora klinickog centra na sesiju
 		session.setAttribute("currentUser", clinicalCentreAdmin);
 		
 		return new ResponseEntity<>(new ClinicalCentreAdminPersonalInformationDto(clinicalCentreAdmin), HttpStatus.OK);
@@ -213,7 +207,6 @@ public class ClinicalCenterAdminController {
 			 consumes = MediaType.APPLICATION_JSON_VALUE, 
 			 produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ClinicalCentreAdminDto> createClinicalCentreAdmin(@RequestBody ClinicalCentreAdmin clinicalCentreAdmin) {
-		
 		// da li je neko ulogovan
 		// da li je odgovarajuceg tipa
 		ClinicalCentreAdmin currentUser;
@@ -230,25 +223,20 @@ public class ClinicalCenterAdminController {
 		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
 		}
-		
 		user = userService.findOneBySecurityNumber(clinicalCentreAdmin.getSecurityNumber());
 		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given security number already exists!");
 		}
 		
-		ClinicalCentre clinicalCentre = centreService.findOneByName(currentUser.getClinicalCentre().getName());
-		if(clinicalCentre == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinical centre with given name does not exist.");
-		}
-		
+		currentUser = clinicalCenterAdminService.findOneById(currentUser.getId());
+		ClinicalCentre clinicalCentre = currentUser.getClinicalCentre();
 		clinicalCentre.add(clinicalCentreAdmin);
-		
 		clinicalCentreAdmin.setClinicalCentre(clinicalCentre);
 		clinicalCentreAdmin.setLogged(false);
-		clinicalCenterAdminService.save(clinicalCentreAdmin);
-		ClinicalCentreAdminDto dto = new ClinicalCentreAdminDto(clinicalCentreAdmin);
-		//centreService.save(clinicalCentre);
 		
+		clinicalCenterAdminService.save(clinicalCentreAdmin);
+		
+		ClinicalCentreAdminDto dto = new ClinicalCentreAdminDto(clinicalCentreAdmin);
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);
 	}
 	
@@ -276,15 +264,14 @@ public class ClinicalCenterAdminController {
 		RegistrationRequest registrationRequest;
 		try {
 			registrationRequest = registrationService.update(regReq.getId(), true);
-			String appUrl = session.getServletContext().getContextPath();
-	        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registrationRequest.getUser(), request.getLocale(), appUrl));
-			//Patient user = patientService.findOneById(registrationRequest.getUser().getId());
 			
-			//clinicalCenterAdminService.sendNotificaitionAsync(currentUser, registrationRequest.getUser(), registrationRequest.getDescription(), true);
+			// slanje email-a sa linkom
+			String appUrl = session.getServletContext().getContextPath();
+	        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registrationRequest.getUser(), request.getLocale(), appUrl));			
 		}catch(NoSuchElementException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data with requested id doesn't exist!");
-		}catch( Exception e ){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sepcified registration request doesn't exist!");
+		}catch(ObjectOptimisticLockingFailureException e1 ){
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Registration request was dealt with in the meantime.");
 		}
 	}
 	
@@ -309,13 +296,16 @@ public class ClinicalCenterAdminController {
 		}
 		
 		//pokusam da obrisem samo patient i nadam se da ce pobrisati i ostalo
+		String rr = null;
 		try {
-			Patient user = patientService.deleteByRequestId(regReq.getId());
-			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, user, regReq.getDescription(), false);
-		}catch( NoSuchElementException e) {
+			rr = registrationService.delete(regReq.getId());
+			clinicalCenterAdminService.sendNotificaitionAsync(currentUser, rr, regReq.getDescription(), false);
+		}catch(NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patient with requested id doesn't exist!");
-		}catch( Exception e ){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}catch(ObjectOptimisticLockingFailureException e1 ){
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Registration request was dealt with in the meantime.");
 		}
+		
 	}
+
 }

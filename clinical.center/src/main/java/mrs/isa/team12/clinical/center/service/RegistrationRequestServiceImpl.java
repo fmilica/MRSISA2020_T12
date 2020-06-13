@@ -1,15 +1,16 @@
 package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.RegistrationRequest;
 import mrs.isa.team12.clinical.center.repository.RegistrationRequestRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.RegistrationRequestService;
@@ -40,24 +41,30 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public RegistrationRequest update(Long reqId, boolean approved) {
 		logger.info("> update id:{}", reqId);
-		
 		RegistrationRequest rr = this.findOneById(reqId);
-		
-		rr.setApproved(approved);
-		
+		if(rr.getApproved() == true) {
+			throw new ObjectOptimisticLockingFailureException(RegistrationRequest.class, rr);
+		}
+		rr.setApproved(true);
 		requestRepository.save(rr);
 		logger.info("< update id:{}", rr.getId());
 		return rr;
 	}
-	/*
+	
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void deleteById(Long id) {
+	public String delete(Long id) {
 		logger.info("> delete id:{}", id);
-		requestRepository.deleteById(id);
+		RegistrationRequest rr = requestRepository.findOneById(id);
+		if(rr == null) {
+			throw new NoSuchElementException();
+		}
+		rr.setActive(false);
+		rr = requestRepository.save(rr);
 		logger.info("< delete id:{}", id);
+		return rr.getUser().getEmail();
 	}
-	*/
+	
 	@Override
 	public List<RegistrationRequest> findAll() {
 		logger.info("> findAll");

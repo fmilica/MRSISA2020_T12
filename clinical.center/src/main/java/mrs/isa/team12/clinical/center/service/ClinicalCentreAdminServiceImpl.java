@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.ClinicalCentreAdminPersonalInformationDto;
 import mrs.isa.team12.clinical.center.model.ClinicalCentreAdmin;
-import mrs.isa.team12.clinical.center.model.RegisteredUser;
 import mrs.isa.team12.clinical.center.repository.ClinicalCentreAdminRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicalCenterAdminService;
 
@@ -128,21 +127,21 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 
 	@Override
 	@Async
-	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, RegisteredUser user, String description, boolean acceptance) {
+	public void sendNotificaitionAsync(ClinicalCentreAdmin admin, String user, String description, boolean acceptance) {
 		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
 		javaMailSender.setPassword(env.getProperty("spring.mail.password"));
 		System.out.println("Slanje emaila...");
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
+		mail.setTo(user);
 		javaMailSender.setUsername(env.getProperty("spring.mail.username"));
 		if(acceptance == true) {
 			mail.setSubject("Registration request accepted!");
-			mail.setText("Hello " + user.getName() + ",\n\nAdmin " + admin.getEmail() + " accepted your registration request!\n" + 
+			mail.setText("Hello " + user + ",\n\nAdmin " + admin.getEmail() + " accepted your registration request!\n" + 
 					"You can login now! Wellcome! " +
 					"\nBest wishes,\nClinical center The Good Shepherd");
 		}else {
 			mail.setSubject("Registration request rejected!");
-			mail.setText("Hello " + user.getName() + ",\n\nAdmin " + admin.getEmail() + " declined your registration request!\n" +
+			mail.setText("Hello " + user + ",\n\nAdmin " + admin.getEmail() + " declined your registration request!\n" +
 					"With proper explanation:\"" + description + "\"" +
 					"\nBest wishes,\nClinical center The Good Shepherd");
 		}
