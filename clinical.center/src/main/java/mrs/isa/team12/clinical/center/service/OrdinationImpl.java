@@ -2,10 +2,13 @@ package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +47,16 @@ public class OrdinationImpl implements OrdinationService {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Ordination update(Ordination o, OrdinationDto edited) {
 		logger.info("> update id:{}", o.getId());
-		o.setName(edited.getName());
-		o.setOrdinationNumber(edited.getOrdinationNumber());
-		o.setType(edited.getType());
-		Ordination updated = ordinationRep.save(o);
-		logger.info("< update id:{}", o.getId());
-		return updated;
+		Ordination newOrdination = this.findOneByNameAndOrdinationNumber(edited.getName(), edited.getOrdinationNumber());
+		if( newOrdination == null) {
+			o.setName(edited.getName());
+			o.setOrdinationNumber(edited.getOrdinationNumber());
+			o.setType(edited.getType());
+			Ordination updated = ordinationRep.save(o);
+			logger.info("< update id:{}", o.getId());
+			return updated;
+		}
+		throw new EntityExistsException();
 	}
 	
 	@Override
@@ -121,12 +128,18 @@ public class OrdinationImpl implements OrdinationService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public Ordination save(Ordination o) {
 		logger.info("> create");
-		Ordination ord = ordinationRep.save(o);
+		Ordination ordination = this.findOneByName(o.getName());
+		if( ordination != null) {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
+		o.setActive(true);
+		Ordination saved = ordinationRep.save(o);
 		logger.info("< create");
-		return ord;
+		return saved;
 	}
 
 	@Override

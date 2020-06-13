@@ -2,10 +2,13 @@ package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,14 +91,18 @@ public class NurseImpl implements NurseService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public Nurse save(Nurse nurse) {
 		logger.info("> create");
-		
-		Nurse n = nurseRep.save(nurse);
-		
+		Nurse n = nurseRep.findOneByEmail(nurse.getEmail());
+		if( n!= null) {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
+		nurse.setActive(true);
+		Nurse saved = nurseRep.save(nurse);
 		logger.info("< create");
-		return n;
+		return saved;
 	}
 
 	@Override

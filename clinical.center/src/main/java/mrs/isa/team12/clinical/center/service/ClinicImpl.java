@@ -2,10 +2,13 @@ package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +40,19 @@ public class ClinicImpl implements ClinicService {
 		return clinic;
 	}
 	
-	//ne znam :(
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public Clinic save(Clinic c) {
 		logger.info("> create");
-		Clinic clinic = repository.save(c);
+		Clinic clinic = repository.findOneByName(c.getName());
+		if(clinic!=null) {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
+		c.setActive(true);
+		Clinic saved = repository.save(c);
 		logger.info("< create");
-		return clinic;
+		return saved;
 	}
 	
 	@Override
@@ -52,14 +60,18 @@ public class ClinicImpl implements ClinicService {
 	public Clinic update(ClinicDto editedClinic) {
 		logger.info("> update id{}", editedClinic.getId());
 		Clinic clinicToUpdate = repository.findOneById(editedClinic.getId());
-		clinicToUpdate.setName(editedClinic.getName());
-		clinicToUpdate.setAddress(editedClinic.getAddress());
-		clinicToUpdate.setCity(editedClinic.getCity());
-		clinicToUpdate.setCountry(editedClinic.getCountry());
-		clinicToUpdate.setDescription(editedClinic.getDescription());
-		Clinic updated = repository.save(clinicToUpdate);
-		logger.info("< update id{}", updated.getId());
-		return updated;
+		Clinic newClinic = this.findOneByName(editedClinic.getName());
+		if( newClinic == null || clinicToUpdate.getName().equals(newClinic.getName())) {
+			clinicToUpdate.setName(editedClinic.getName());
+			clinicToUpdate.setAddress(editedClinic.getAddress());
+			clinicToUpdate.setCity(editedClinic.getCity());
+			clinicToUpdate.setCountry(editedClinic.getCountry());
+			clinicToUpdate.setDescription(editedClinic.getDescription());
+			Clinic updated = repository.save(clinicToUpdate);
+			logger.info("< update id{}", updated.getId());
+			return updated;
+		}
+		throw new EntityExistsException();
 	}
 	
 	@Override
