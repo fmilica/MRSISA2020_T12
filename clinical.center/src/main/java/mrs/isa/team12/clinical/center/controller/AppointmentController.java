@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -186,7 +187,7 @@ public class AppointmentController {
 		try {
 			appointmentService.delete(appointmentId);
 		} catch (NoSuchElementException e1) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment with given id doesn't exist.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist.");
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this appointment has been modified.\nYou can try again.");
 		}
@@ -306,7 +307,7 @@ public class AppointmentController {
 		try {
 			app = appointmentService.update(appId);
 		} catch (NoSuchElementException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist.");
 		}
 		
 		return new ResponseEntity<>(new AppointmentDto(app), HttpStatus.OK);
@@ -333,7 +334,7 @@ public class AppointmentController {
 		try {
 			appointmentService.delete(appId);
 		} catch (NoSuchElementException e1) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment with given id doesn't exist.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist.");
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this appointment has been modified.\nYou can try again.");
 		}
@@ -413,21 +414,14 @@ public class AppointmentController {
 		AppointmentType type = appointmentTypeService.findOneByNameAndClinicId(appDto.getAppTypeName(), appDto.getClinicId());
 		Clinic c = clinicService.findOneById(appDto.getClinicId());
 		
-		Doctor d;
-		try {
-			d = doctorService.findOneById(appDto.getDoctorId());
-		} catch (NoSuchElementException e1) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Doctor with given id doesn't exist.");
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
-		}
+		Doctor d = doctorService.findOneById(appDto.getDoctorId());
 																		//confirmed, finished
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, d, c, patient);
 		
 		try {
 			appointment = appointmentService.save(appointment);
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the inconvinience, you can schedule another appointment.");
 		}
 		// ova dodavanja se vrse tek kada se zahtev prihvati
 		/*// klinici dodamo novi pregled
@@ -524,22 +518,13 @@ public class AppointmentController {
 		Appointment app;
 		try {
 			app = appointmentService.update(patient, appId); 
-			//ovde promenjeno sa patient na currentUser jer vec ga imamo, sto bi ga dobavljali
-			//sada je promenjeno na patient jer ne mozemo da dodamo nesto pacijentu pregled u transakciji zbog lazyLoad
-			
-			/*
-			// doktoru dodajemo novog pacijenta
-			Doctor doctor = app.getDoctor();
-			doctor = doctorService.update(doctor, patient);
-			// klinici dodajemo novog pacijenta
-			Clinic clinic = app.getClinic();
-			clinic = clinicService.update(clinic, patient);
-			*/
 			
 			// slanje notifikacije
 			adminService.sendNotificaitionAsync(null, currentUser, app, true, false, true);
-		} catch (NoSuchElementException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist!");
+		} catch (NoSuchElementException e1) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist.");
+		} catch (ObjectOptimisticLockingFailureException e2) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the inconvinience, you can schedule another appointment.");
 		}
 		return new ResponseEntity<>(new AppointmentDto(app), HttpStatus.OK);
 	}
@@ -591,7 +576,7 @@ public class AppointmentController {
 		try {
 			appointment = appointmentService.save(appointment);
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the unconvinience, you can schedule another appointment.");
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the inconvinience, you can schedule another appointment.");
 		}
 		
 		// klinici dodamo novi pregled

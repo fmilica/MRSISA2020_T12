@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,7 @@ public class ClinicalCentreAdminServiceImpl implements ClinicalCenterAdminServic
 	
 	@Override
 	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public ClinicalCentreAdmin save(ClinicalCentreAdmin cca) {
 		logger.info("> create");
 		ClinicalCentreAdmin clinicCentreAdmin = clinicCentreAdminRep.save(cca);

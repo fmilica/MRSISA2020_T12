@@ -51,8 +51,8 @@ public class PatientImpl implements PatientService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Patient deleteByRequestId(Long id) {
+		logger.info("> delete id{}:", id);
 		Patient p = this.findOneByRegistrationRequestId(id);
-		logger.info("> delete id{}:", p.getId());
 		p.setActive(false);
 		patientRep.save(p);
 		logger.info("< delete id{}:", p.getId());

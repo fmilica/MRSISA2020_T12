@@ -3,8 +3,10 @@ package mrs.isa.team12.clinical.center.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,24 +159,17 @@ public class AppointmentTypeController {
 			Doctor d1 = doctorService.findOneById(d.getId());
 			certified.add(d1);
 		}
+		// dodavanje doktora u tip pregleda
+		appType.setDoctors(certified);
 		
-		AppointmentType existing = appointmentTypeService.findOneByNameAndClinicId(appType.getName(), currentUser.getClinic().getId());
-		
-		if (existing == null) {
-			/*		SOME BODY HEEELP OPEN CONNE CTI ON!!!!!*/
-			// ne postoji u bazi
-			
-			//currentUser.getClinic().addAppType(appType);
-			appType.setClinic(currentUser.getClinic());
-			appType.setDoctors(certified);
-			appType.setActive(true);
-			AppointmentType saved = appointmentTypeService.save(appType);
-			
+		try {
+			AppointmentType saved = appointmentTypeService.save(appType, currentUser.getClinic());
 			return new ResponseEntity<>(new AppointmentTypeDto(saved), HttpStatus.CREATED);
+		} catch (EntityExistsException e1) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment type with given name already exists!");
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, an appointment type with same name has been added.\nYou can add a new appointment type.");
 		}
-		
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment type with given name already exists!");
-		
 	}
 	
 	/*
@@ -196,17 +191,13 @@ public class AppointmentTypeController {
 		if (currentUser == null) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
-		
-		AppointmentType appType = appointmentTypeService.findOneById(editedAppTypeDto.getId());
-		
-		if(!editedAppTypeDto.getName().equals(appType.getName()) && appointmentTypeService.findOneByNameAndClinicId(editedAppTypeDto.getName(), currentUser.getClinic().getId()) != null) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment type with given name already exists!");
-		}
-		
+
 		try {
-			appointmentTypeService.update(appType, editedAppTypeDto);
-		} catch (ObjectOptimisticLockingFailureException  e) {
+			appointmentTypeService.update(editedAppTypeDto, currentUser.getClinic().getId());
+		} catch (ObjectOptimisticLockingFailureException  e1) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to edit has been edited. Please try again.");
+		} catch (EntityExistsException e2) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointment type with given name already exists!");
 		}
 	}
 	
@@ -230,22 +221,17 @@ public class AppointmentTypeController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		AppointmentType appType = appointmentTypeService.findOneById(appTypeId);
-		if (appType == null) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to delete has been deleted.");
-		}
-		
-		//provera da li tip pregleda ima zakazane preglede
-		//ukoliko ima zakazane preglede ne moze biti obrisan
-		for(Appointment a : appType.getAppointments()) {
-			if(!a.getFinished()) {
+		try {
+			AppointmentType edited = appointmentTypeService.delete(appTypeId);
+			//provera da li tip pregleda ima zakazane preglede
+			//ukoliko ima zakazane preglede ne moze biti obrisan
+			if (edited == null) {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Appointment type with scheduled appointments cant be deleted!");
 			}
-		}
-		try {
-			appointmentTypeService.delete(appType);
-		} catch (ObjectOptimisticLockingFailureException  e) {
+		} catch (ObjectOptimisticLockingFailureException  e1) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Appointment type you're trying to delete has been edited. Please try again.");
+		} catch (NoSuchElementException e2) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment type does not exist.");
 		}
 	}
 

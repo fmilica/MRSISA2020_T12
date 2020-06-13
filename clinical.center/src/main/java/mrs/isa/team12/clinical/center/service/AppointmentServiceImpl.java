@@ -46,7 +46,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	@Override
-	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public Appointment save(Appointment a) {
 		logger.info("> create");
 		List<Appointment> existing = appointmentRepository.findAllExisting(a.getDoctor().getId(), a.getDate(), a.getStartTime(), a.getEndTime());
@@ -90,7 +90,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Appointment update(Patient patient, Long appId) throws ResponseStatusException {
 		logger.info("> update id:{}", appId);
-		// pronalenje pregleda
+		// pronalazenje pregleda
 		Appointment app = this.findById(appId);
 		// postavljanje unakrsne veze sa pacijentom
 		app.setPatient(patient);

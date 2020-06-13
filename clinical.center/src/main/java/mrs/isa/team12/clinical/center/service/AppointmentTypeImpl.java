@@ -1,17 +1,23 @@
 package mrs.isa.team12.clinical.center.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
+
+import javax.persistence.EntityExistsException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.repository.AppointmentTypeRepository;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentTypeService;
 
@@ -29,35 +35,67 @@ public class AppointmentTypeImpl implements AppointmentTypeService {
 	}
 	
 	//cuvanje u bazu treba da bude pesimisticko je l ? posto on jos ne postoji, to da je pitamo jer ja ne znam kako to
-	@Transactional(readOnly = false)
+	// bavo :3
+	/*@Transactional(readOnly = false)
 	@Override
 	public AppointmentType save(AppointmentType at) {
 		logger.info("> create");
 		AppointmentType appType = appointmentTypeRep.save(at);
 		logger.info("< create");
 		return appType;
+	}*/
+
+	@Override
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+	public AppointmentType save(AppointmentType appType, Clinic c) {
+		logger.info("> create");
+		AppointmentType at = findOneByNameAndClinicId(appType.getName(), c.getId());
+		if (at != null) {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
+		appType.setClinic(c);
+		appType.setActive(true);
+		AppointmentType saved = appointmentTypeRep.save(appType);
+		logger.info("< create");
+		return saved;
 	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void delete(AppointmentType at) {
-		logger.info("> delete id:{}", at.getId());
-		at.setActive(false);
-		appointmentTypeRep.save(at);
-		logger.info("< delete id:{}", at.getId());
+	public AppointmentType delete(Long appTypeId) {
+		logger.info("> delete id:{}", appTypeId);
+		AppointmentType appType = this.findOneById(appTypeId);
+		if (appType == null) {
+			throw new NoSuchElementException();
+		}
+		// provera da li postoji zakazan pregled za ovaj tip
+		for(Appointment a : appType.getAppointments()) {
+			if(!a.getFinished()) {
+				return null;
+			}
+		}
+		appType.setActive(false);
+		appType = appointmentTypeRep.save(appType);
+		logger.info("< delete id:{}", appType.getId());
+		return appType;
 	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public AppointmentType update(AppointmentType at, AppointmentTypeDto edited) {
-		logger.info("> update id:{}", at.getId());
-		AppointmentType forUpdate = appointmentTypeRep.findOneById(at.getId());
-		forUpdate.setName(edited.getName());
-		forUpdate.setDuration(edited.getDuration());
-		forUpdate.setPrice(edited.getPrice());
-		AppointmentType updated = appointmentTypeRep.save(forUpdate);
-		logger.info("< update id:{}", forUpdate.getId());
-		return updated;
+	public AppointmentType update(AppointmentTypeDto edited, Long clinicId) {
+		logger.info("> update id:{}", edited.getId());
+		AppointmentType forUpdate = appointmentTypeRep.findOneById(edited.getId());
+		AppointmentType newAppType = this.findOneByNameAndClinicId(edited.getName(), clinicId);
+		if(newAppType == null || forUpdate.getName().equals(newAppType.getName())) {
+			forUpdate.setName(edited.getName());
+			forUpdate.setDuration(edited.getDuration());
+			forUpdate.setPrice(edited.getPrice());
+			AppointmentType updated = appointmentTypeRep.save(forUpdate);
+			logger.info("< update id:{}", forUpdate.getId());
+			return updated;
+		}
+		throw new EntityExistsException();
 	}
 
 	@Override

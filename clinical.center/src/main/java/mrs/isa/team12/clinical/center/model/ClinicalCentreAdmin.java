@@ -1,6 +1,5 @@
 package mrs.isa.team12.clinical.center.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +14,9 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
 	
-	public ClinicalCentreAdmin() {}
+	public ClinicalCentreAdmin() {
+		super();
+	}
 
 	public ClinicalCentreAdmin(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city,String country, 

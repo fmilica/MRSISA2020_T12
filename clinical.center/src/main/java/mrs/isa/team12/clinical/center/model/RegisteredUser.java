@@ -70,7 +70,9 @@ public class RegisteredUser {
 	@Column(name = "token")
 	private String token;
 	
-	public RegisteredUser() {}
+	public RegisteredUser() {
+		this.active = true;
+	}
 	
 	public RegisteredUser(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city, String country, 

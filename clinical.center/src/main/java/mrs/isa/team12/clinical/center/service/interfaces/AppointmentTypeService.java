@@ -1,20 +1,27 @@
 package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
+
+import javax.persistence.EntityExistsException;
 
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import mrs.isa.team12.clinical.center.dto.AppointmentTypeDto;
 import mrs.isa.team12.clinical.center.model.AppointmentType;
+import mrs.isa.team12.clinical.center.model.Clinic;
 
 public interface AppointmentTypeService {
 	
-	AppointmentType save(AppointmentType at);
+	// ne treba da postoji
+	//AppointmentType save(AppointmentType at);
 	
-	void delete(AppointmentType at) throws ObjectOptimisticLockingFailureException;
+	AppointmentType save(AppointmentType at, Clinic c);
 	
-	AppointmentType update(AppointmentType at, AppointmentTypeDto edited) throws ObjectOptimisticLockingFailureException;
+	AppointmentType delete(Long appTypeId) throws ObjectOptimisticLockingFailureException, NoSuchElementException;
+	
+	AppointmentType update(AppointmentTypeDto edited, Long clinicId) throws ObjectOptimisticLockingFailureException, EntityExistsException;
 	
 	AppointmentType findOneById(Long id);
 	
