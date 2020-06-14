@@ -358,6 +358,16 @@ public class DoctorController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
+		if (appTypeName.equals("all") && appDate.equals("all")) {
+			// dobavljanje svih doktora jedne klinike
+			List<Doctor> allDoctors = doctorService.findAllByClinicId(clinicId);
+			List<DoctorFreeTimesDto> doctors = new ArrayList<DoctorFreeTimesDto>();
+			for (Doctor d : allDoctors) {
+				doctors.add(new DoctorFreeTimesDto(d, null));
+			}
+			return new ResponseEntity<>(doctors, HttpStatus.OK);
+		}
+		
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
 		try {

@@ -49,7 +49,8 @@ public class OrdinationImpl implements OrdinationService {
 	public Ordination update(Ordination o, OrdinationDto edited) {
 		logger.info("> update id:{}", o.getId());
 		Ordination newOrdination = this.findOneByNameAndOrdinationNumber(edited.getName(), edited.getOrdinationNumber());
-		if( newOrdination == null) {
+		if (newOrdination == null || 
+				(newOrdination.getName().equals(edited.getName()) && newOrdination.getOrdinationNumber() == edited.getOrdinationNumber())) {
 			o.setName(edited.getName());
 			o.setOrdinationNumber(edited.getOrdinationNumber());
 			o.setType(edited.getType());

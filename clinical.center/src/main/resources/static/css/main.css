@@ -287,6 +287,9 @@ i {
 .predefined-app-btn {
     margin: -3px 15px 5px 67px !important;
 }
+.clinic-doctors-btn {
+    margin: 3px 0 0 89px !important;
+}
 .edit-clinic-btn {
     margin: -3px 15px 5px 134px !important;
 }
@@ -649,6 +652,9 @@ i {
 .patient-clinics {
     display: none;
 }
+.clinic-all-doctors {
+    display: none;
+}
 /*.patient-apps {
     display: none;
 }*/
@@ -672,4 +678,7 @@ i {
 }
 .patient-edit-profile{
 	display: none;
+}
+.patient-visited-doctors-clinics {
+    display: none;
 }

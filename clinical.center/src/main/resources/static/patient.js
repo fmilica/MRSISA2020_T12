@@ -6,6 +6,8 @@ var existingMarker = null;
 var price;
 var duration;
 
+var doctorSchedule = null;
+
 var newAppointment = {
 	date: "",
 	appTypeName: "",
@@ -21,6 +23,7 @@ var allClinicsTable;
 var predefinedApps;
 var clinicsTable;
 var doctorsClinicTable;
+var allDoctorsClinicTable;
 var medicalReportTable;
 var finishedAppsTable;
 var confirmedAppsTable;
@@ -180,6 +183,52 @@ $(document).ready(function() {
 		$('.view-predefined').show()
 	})
 
+	// pregled svih doktora jedne klinike
+	$('#viewDoctors').click(function(e) {
+		e.preventDefault()
+		$('.content').hide()
+		$('.clinic-all-doctors').show()
+		// dobavljanje appTypes klinike
+		doctorSchedule = true
+		getClinicAppTypes(newAppointment.clinicId)
+		newAppointment.appTypeName="all"
+		newAppointment.date="all"
+		newAppointment.appDuration=""
+		initialiseClinicAllDoctors(newAppointment.clinicId, newAppointment.clinicName)
+		//OVDE
+	})
+
+	// filtriranje doktora
+	$('#filterDoctors').click(function(e) {
+		e.preventDefault()
+		// postavljanje parametara pregleda
+		var date = $('#filterAllAppDate').val()
+		newAppointment.date = date
+		var appTypeName = $('#filterClinicAppType').val()
+		newAppointment.appTypeName = appTypeName
+		var duration = $('#filterClinicAppType option[value="' + appTypeName + '"]').attr("name")
+		newAppointment.appDuration = duration
+		allDoctorsClinicTable.ajax.url( "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+newAppointment.clinicId)
+		allDoctorsClinicTable.ajax.reload()
+	})
+	// ponistavanje filtera doktora
+	$('#clearDoctorsFilter').click(function(e) {
+		e.preventDefault()
+		// skidanje parametra pregleda
+		newAppointment.date = "all"
+		newAppointment.appTypeName = "all"
+		newAppointment.appDuration = ""
+		// dobavljanje svih klinika ponovo
+		allDoctorsClinicTable.ajax.url( "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+newAppointment.clinicId)
+		allDoctorsClinicTable.ajax.reload()
+	})
+
+	// filtriranje doktora klinike po atributima
+	$("#filterAllDoctorsByAtributes").on('click', function(e){
+		e.preventDefault()
+		filterAllDoctors()
+	})
+
 	// vracanje na pregled klinike
 	$('#predefinedBack').click(function(e) {
 		e.preventDefault()
@@ -200,6 +249,8 @@ $(document).ready(function() {
 		var clinicId = $(this).attr('id')
 		var clinicName = $(this).attr('name')
 		fillClinicInfo(clinicId, clinicName)
+		newAppointment.clinicId = clinicId
+		newAppointment.clinicName = clinicName
 		$('.content').hide()
 		$('.view-clinic').show()
 	});
@@ -226,6 +277,7 @@ $(document).ready(function() {
 		var tokens = atributes.split('|')
 		newAppointment.appDuration = tokens[2]
 		newAppointment.clinicName = tokens[0]
+		doctorSchedule = false
 		initialiseClinicDoctors(clinicId, tokens[0])
 	});
 	$('body').on('click', 'button.table-button-doctor', function() {
@@ -257,10 +309,16 @@ $(document).ready(function() {
 					  "You will get an email when a clinic administrator confirms it.\n" +
 					  "The appointment then becomes visible in 'Unconfirmed appointments' tab.")
 				$('.content').hide()
-				$('.patient-createNewApp').show()
+				if (doctorSchedule == true) {
+					$('.clinic-all-doctors').show()
+					allDoctorsClinicTable.ajax.reload()
+				} else {
+					$('.patient-createNewApp').show()
+				}
 			},
 			error: function(response) {
 				alert(response.responseJSON.message)
+				allDoctorsClinicTable.ajax.reload()
 			}
 		})
 
@@ -284,7 +342,11 @@ $(document).ready(function() {
 	$('#cancelApp').on('click', function(e){
 		e.preventDefault()
 		$('.patient-confirm-app').hide()
-		$('.patient-createNewApp').show()
+		if (doctorSchedule == true) {
+			$('.clinic-all-doctors').show()
+		} else {
+			$('.patient-createNewApp').show()
+		}
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
 	})
@@ -352,7 +414,7 @@ $(document).ready(function() {
 		filterClinics()
 	})
 	
-	/*Filter doctors by name and surname*/
+	/*Filter doctors by name and surname and rating */
 	$("#filterDoctorsByAtributes").on('click', function(e){
 		e.preventDefault()
 		filterDoctors()
@@ -579,7 +641,6 @@ function initialiseClinicMap() {
 	// create clinic icon
 	clinicMapIcon = L.icon({
 		iconUrl: '../../img/icons/index/clinic_admin.png',
-		shadowUrl: '../../img/icons/index/clinic_admin_shadow.png',
 		iconSize:     [40, 40], // size of the icon
 		iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
 	})
@@ -717,6 +778,7 @@ function filterDoctors(){
 	doctorsClinicTable
 	.column(0).search(nameV)
 	.column(1).search(surnameV)
+	.column(2).search(ratingV)
     .draw();
 }
 
@@ -866,6 +928,94 @@ function initialiseClinicDoctors(clinicId, clinicName) {
 		doctorsClinicTable.ajax.reload()
 		$('#doctorTableDiv').show()
 	}
+}
+
+function getClinicAppTypes(clinicId) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/appointmentType/getClinicTypes/"+clinicId,
+		contentType: "application/json",
+		success : function(data) {
+			$('#filterClinicAppType').find('option').remove()
+			$.each(data, function(index, appType) {
+				var option = '<option name="'+appType.duration+'" value="'+appType.name+'">'+appType.name+'</option>'
+				$("#filterClinicAppType").append(option)
+				//$("#filterClinicAppType").append(new Option(appType.name, appType.name));
+			})
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
+}
+
+function initialiseClinicAllDoctors(clinicId, clinicName) {
+	// popunjavamo podatke o pregledu
+	newAppointment.clinicId = clinicId
+	newAppointment.clinicName = clinicName
+
+	// dodavanje imena klinike u naslov tabele
+	$('#allDoctorsClinic').text("Doctors from " + clinicName)
+
+	// provara da je tabela vec inicijalizovana
+	if (!$.fn.DataTable.isDataTable('#allDoctorsClinicTable')) {
+		// nije inicijalizovana
+		// inicijalizacija same tabele
+		allDoctorsClinicTable = $('#allDoctorsClinicTable').DataTable({
+			responsive: true,
+			ajax: {
+				url: "../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+clinicId,
+				dataSrc: ''
+			},
+			columns: [
+				{ data: 'name'},
+				{ data: 'surname'},
+				{ data: 'rating'},
+				{
+					data: null,
+					render: function (data) {
+						if (data.availableTimes == null) {
+							return 'Specify date and appointment type to view available times.'
+						}
+						var availableTimes = data.availableTimes == null ? [] : (data.availableTimes instanceof Array ? data.availableTimes : [data.availableTimes])
+						var options = ""
+						for (var i = 0; i < availableTimes.length; i++) {
+							options += '<option value="'+availableTimes[i]+'">'+availableTimes[i]+':00</option>'
+						}
+						return '<select class="form-control input-height available-times" id="time'+data.id+'">' + 
+								options + '</select>'
+					}
+				},
+				{
+					data: null,
+					render: function (data) {
+						if (newAppointment.appTypeName && newAppointment.date && newAppointment.appDuration) {
+							var button = '<button id="'+data.id+'" name="' + data.name + ' ' + data.surname + '"class="btn btn-info table-button-doctor">Schedule</button>';
+							return button;
+						} else {
+							return "Choose all parameters to schedule"
+						}
+					}
+				}
+			]
+		})
+	} else {
+		// jeste inicijalizovana
+		allDoctorsClinicTable.ajax.url("../../theGoodShepherd/doctor/certified/clinic/"+newAppointment.appTypeName+"/"+newAppointment.date+"/"+clinicId)
+		allDoctorsClinicTable.ajax.reload()
+	}
+}
+
+function filterAllDoctors() {
+	var nameV = $('#allDoctorName').val()
+	var surnameV = $('#allDoctorSurname').val()
+	var ratingV = $('#allDoctorRating').val()
+	
+	allDoctorsClinicTable
+	.column(0).search(nameV)
+	.column(1).search(surnameV)
+	.column(2).search(ratingV)
+    .draw();
 }
 
 function createAppointment(doctorId, time) {

@@ -554,6 +554,7 @@
 									</div>
 									<hr>
 									<button id="viewPredefined" class="btn btn-info predefined-app-btn">View predefined appointments</button>
+									<button id="viewDoctors" class="btn btn-info clinic-doctors-btn">View all clinic doctors</button>
 								</div>
 							</div>
 						</div>
@@ -659,6 +660,105 @@
 						</div>
 					</div>
 				</div>
+				<!-- Schedule from all clinic doctors view-->
+				<div class="content clinic-all-doctors">
+					<!-- Schedule filter -->
+					<div class="schedule-appointment">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="card card-box">
+									<div class="card-head">
+										<header>Schedule an appointment</header>
+									</div>
+									<div class="card-body">
+										<form class="form-horizontal">
+											<div class="form-body">
+												<div class="form-group row">
+													<label class="control-label col-md-2">
+														Date:
+													</label>
+													<div class="col-md-3">
+														<input id="filterAllAppDate" type="date" class="form-control date-filter">
+													</div>
+													<label class="control-label col-md-3">
+														Appointment type:
+													</label>
+													<div class="col-md-3">
+														<select  id="filterClinicAppType" class="form-control input-height">
+														</select>
+													</div>
+												</div>
+												<div class="form-actions">
+													<div class="row">
+														<div class="offset-md-3 col-md-12 form-buttons">
+															<button id="filterDoctors" type="submit" class="btn btn-info filter-btn">Filter doctors</button>
+															<button id="clearDoctorsFilter" type="submit" class="btn btn-info filter-btn">Clear filter</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- All clinic doctors -->
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="card card-box">
+								<div class="card-head">
+									<header id="allDoctorsClinic"></header>
+								</div>
+								<div class="card-body">
+									<div class="form-group row">
+										<label class="control-label col-md-1">
+											Name:
+										</label>
+										<div class="col-md-2">
+											<input type="text" id="allDoctorName" data-required="1"  class="form-control doctor-input-height" />
+										</div>
+										<label class="control-label col-md-1">
+											Surname:
+										</label>
+										<div class="col-md-2">
+											<input type="text" id="allDoctorSurname" data-required="1"  class="form-control doctor-input-height" />
+										</div>
+										<label class="control-label col-md-1">
+											Rating:
+										</label>
+										<div class="col-md-2">
+											<input type="text" id="allDoctorRating" data-required="1"  class="form-control doctor-input-height" />
+										</div>
+										<div class="col-md-2">
+											<button id="filterAllDoctorsByAtributes" type="submit" class="btn btn-info doctor-filter-btn">Filter</button>
+										</div>
+									</div>
+									<table id="allDoctorsClinicTable" class="display">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Surname</th>
+												<th>Rating</th>
+												<th>Available times</th>
+												<th>Schedule</th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th>Name</th>
+												<th>Surname</th>
+												<th>Rating</th>
+												<th>Available times</th>
+												<th>Schedule</th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<!-- Patient create new appointment -->
 				<div class="content patient-createNewApp">
@@ -679,11 +779,6 @@
 													</label>
 													<div class="col-md-3">
 														<input id="filterAppDate" type="date" class="form-control date-filter">
-														<!--<div class="input-group date form_date " data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-															<input id="filterAppDate" class="form-control input-height" size="16" placeholder="date of Birth" type="text" value="23/07/1988">
-															<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-														</div>
-														<input type="hidden" id="dtp_input2" value="" />-->
 													</div>
 													<label class="control-label col-md-3">
 														Appointment type:
@@ -946,7 +1041,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- Patients uncofirmed appointments - pending acceptance -->
+				<!-- Patients unconfirmed appointments - pending acceptance -->
 				<div class="content patient-unconfirmed-apps">
 					<div class="table-view">
 						<div class="row">

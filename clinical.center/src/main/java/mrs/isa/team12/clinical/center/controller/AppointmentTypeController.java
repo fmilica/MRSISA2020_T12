@@ -66,15 +66,38 @@ public class AppointmentTypeController {
 		}
 		
 		List<AppointmentType> appTypes = appointmentTypeService.findAll();
-		/*Set<String> appTypeNames = new HashSet<String>();
-		for (AppointmentType appType : appTypes) {
-			appTypeNames.add(appType.getName());
-		}*/
 		Set<String> appTypesUniqueNames = new HashSet<String>();
 		for (AppointmentType appType : appTypes) {
 			appTypesUniqueNames.add(appType.getName());
 		}
 		return new ResponseEntity<>(appTypesUniqueNames, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/appointmentType/getClinicTypes/{clinicId}
+	 HTTP request for getting all clinic appointment types
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value = "/getClinicTypes/{clinicId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AppointmentTypeDto>> getClinicAppTypes(@PathVariable("clinicId") Long clinicId) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only patients can view all clinic appointment types.");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		List<AppointmentType> clinicsTypes = appointmentTypeService.findAllByClinicId(clinicId);
+		List<AppointmentTypeDto> clinicsTypesDtos = new ArrayList<AppointmentTypeDto>();
+		for(AppointmentType a : clinicsTypes) {
+			clinicsTypesDtos.add(new AppointmentTypeDto(a));
+		}
+		
+		return new ResponseEntity<>(clinicsTypesDtos, HttpStatus.OK);
 	}
 	
 	/*

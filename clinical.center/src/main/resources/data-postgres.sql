@@ -44,7 +44,7 @@ values ('100', 'novi', 'novi', 'Novi', 'Novic', 'male', '1989-07-20', '', '', ''
 
 /*Doktori nase prve klinike*/
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 
-values ('9', 'jovadoktor1@gmail.com', 'jovajova1', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '21', '0', 'true', 'true');
+values ('9', 'jovadoktor1@gmail.com', 'jovajova1', 'Jova', 'Jovic', 'male', '1965-03-01', 'Isidorina 3', 'Novi Sad', 'Srbija', '55', '33', '4.7', '6', '4', '6', '24', '0', 'true', 'true');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 
 values ('10', 'zovadoktorka@gmail.com', 'zovazova1', 'Zova', 'Zovic', 'female', '1980-07-09', 'Knez Mihailova 2', 'Beograd', 'Srbija', '55', '44', '4.3', '6', '5', '8', '16', '0', 'true', 'true');
 insert into doctor (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, rating, clinic_id, specialization, start_work, end_work, version, is_active, logged) 
@@ -133,6 +133,11 @@ values ('53', '79');
 /*Jedan pregled potvrdjen i zavrsen*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, ordination_id, is_active, price)
 values ('21', 'true', '2020-05-13', '16', '20', 'true', '16', '6', '9', '19', '0', '20', 'true', '90');
+/*Dodavanje u tabele lekar-pacijent i klinika-pacijent*/
+insert into medical_personnel_patient(medical_personnel_id, patient_id)
+values ('9', '16');
+insert into clinic_patient(clinic_id, patient_id)
+values ('6', '16');
 
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, is_active, nurse_id)
@@ -165,6 +170,10 @@ values ('38', '36', '2020-05-20', 'true', '6', '0', 'true');
 update appointment
 set appointment_request_id = '38'
 where id = '36';
+insert into medical_personnel_patient(medical_personnel_id, patient_id)
+values ('9', '29');
+insert into clinic_patient(clinic_id, patient_id)
+values ('6', '29');
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id, is_active)
 values ('81', 'Pacijent prepisani novi lekovi za vitiligo.', '31', '36', '0', 'true', '15', 'true');
@@ -226,6 +235,10 @@ values ('24', '23', '2020-05-15', 'true', '17', '0', 'true');
 update appointment
 set appointment_request_id = '24'
 where id = '23';
+insert into medical_personnel_patient(medical_personnel_id, patient_id)
+values ('11', '16');
+insert into clinic_patient(clinic_id, patient_id)
+values ('17', '16');
 
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id, is_active)
@@ -282,7 +295,7 @@ where id = '25';
 
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id, is_active)
-values ('85', 'Pacijent prepisani novi lekovi za vitiligo.', '31', '25', '0', 'true', '15', 'true');
+values ('85', 'Pacijentu prepisani novi lekovi za vitiligo.', '31', '25', '0', 'true', '15', 'true');
 /*Lekovi prepisani ovim izvestajem gore*/
 /*insert into medical_report_perscription(medical_report_id, prescription_id)
 values ('85', '35');*/
@@ -299,6 +312,8 @@ values ('28', '27', '2020-05-20', 'true', '6', '0', 'true');
 update appointment
 set appointment_request_id = '28'
 where id = '27';
+insert into medical_personnel_patient(medical_personnel_id, patient_id)
+values ('10', '29');
 
 /*Ne overen recept*/
 /*Medical report (izvestaj doktora)*/
