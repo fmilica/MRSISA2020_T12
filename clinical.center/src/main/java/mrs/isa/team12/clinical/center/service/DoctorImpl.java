@@ -271,7 +271,7 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW/*, isolation = Isolation.REPEATABLE_READ*/)
 	public Doctor update(AppointmentRequest ar, Long id) {
 		logger.info("> update id:{}", id);
 		Doctor d = doctorRep.findOneById(id);

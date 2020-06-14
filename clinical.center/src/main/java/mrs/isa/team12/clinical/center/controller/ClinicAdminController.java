@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -376,7 +377,9 @@ public class ClinicAdminController {
 			}
 		} catch(ObjectOptimisticLockingFailureException e1) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this ordination became unavailable.\nTry again.");
-		} catch(NoSuchElementException e2) {
+		} catch(CannotAcquireLockException e2) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this ordination became unavailable.\nTry again.");
+		} catch(NoSuchElementException e3) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
 		}
 		
@@ -482,11 +485,16 @@ public class ClinicAdminController {
 		}
 		
 		try {
-			ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
-		}catch(NoSuchElementException e1) {
+			Ordination o = ordinationService.update(appointmentRequest.getOrdId(), appointmentReq);
+			if (o == null) {
+				throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this ordination became unavailable.\nTry again.");
+			}
+		} catch(ObjectOptimisticLockingFailureException e1) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this ordination became unavailable.\nTry again.");
+		} catch(CannotAcquireLockException e2) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime this ordination became unavailable.\nTry again.");
+		} catch(NoSuchElementException e3) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ordination with given id doesn't exist!");
-		}catch(Exception e2) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "Ordination became unavailable in the meantime!");
 		}
 		
 		//sacuvati sve u bazama
