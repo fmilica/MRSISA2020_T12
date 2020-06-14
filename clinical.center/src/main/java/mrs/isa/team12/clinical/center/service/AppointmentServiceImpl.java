@@ -80,6 +80,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		// pronalenje pregleda
 		Appointment app = this.findById(appId);
 		app.setConfirmed(true);
+		app.getAppointmentRequest().setApproved(true);
 		// snimanje u bazu
 		appointmentRepository.save(app);
 		logger.info("< update id:{}", app.getId());
@@ -222,6 +223,14 @@ public class AppointmentServiceImpl implements AppointmentService{
 		logger.info("> findAllByDoctorIdAndDateBetween");
 		List<Appointment> apps = appointmentRepository.findAllByDoctorIdAndDateBetween(id,d1,d2);
 		logger.info("< findAllByDoctorIdAndDateBetween");
+		return apps;
+	}
+
+	@Override
+	public List<Appointment> findAllByOrdinationId(Long id) {
+		logger.info("> findAllByOrdinationId id:{id}", id);
+		List<Appointment> apps = appointmentRepository.findAllByOrdinationId(id);
+		logger.info("> findAllByOrdinationId id:{id}", id);
 		return apps;
 	}
 	

@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 @Entity
 public abstract class MedicalPersonnel extends RegisteredUser {
 	
-	@OneToMany(cascade = {ALL}, fetch = LAZY)
+	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "medicalPersone")
 	private Set<Leave> leaveList;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +49,7 @@ public class OrdinationController {
 	private HttpSession session;
 	
 	public OrdinationController(OrdinationService ordinationService, 
-			AppointmentRequestService appointmentRequestService, ClinicService clinicService ) {
+			AppointmentRequestService appointmentRequestService, ClinicService clinicService) {
 		this.ordinationService = ordinationService;
 		this.appointmentRequestService = appointmentRequestService;
 		this.clinicService = clinicService;
@@ -521,13 +523,12 @@ public class OrdinationController {
 	
 	/*Zakazivanje soba za pregled ili sala za operaciju*/
 	@Scheduled(cron = "${schedule.cron}")
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void schedule() {
 		List<Clinic> clinics = clinicService.findAll();
-		Clinic clina = clinicService.findOneById(new Long(6));
-		clina.getAppointmentRequests();
 		
 		for (Clinic c : clinics) {
-			for(AppointmentRequest ar : c.getAppointmentRequests()) {
+			for(AppointmentRequest ar : c.getAppointmentRequests()) { 
 				if(ar.getApproved() == false) {
 					//SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 					
@@ -568,7 +569,8 @@ public class OrdinationController {
 						// trazimo prvo slobodno vreme za koje ima slobodnu ordinaciju i da je doktor slobodan
 						Date newExamDate = examDate;
 						List<Integer> examRoomFree;
-						while(true) {
+						boolean loop = true; 
+						while(loop) {
 							for (Ordination o : examRooms) {
 								// idemo kroz datume dok ne nadjemo prvi za koji zadovoljavaju
 								// kada je doktor slobodan
@@ -581,6 +583,9 @@ public class OrdinationController {
 									ar.getAppointment().setStartTime(examRoomFree.get(0));
 									ar.getAppointment().setEndTime(examRoomFree.get(0) + ar.getAppointment().getAppType().getDuration());
 									ar.getAppointment().setOrdination(o);
+									ar.setApproved(true);
+									//appointmentRequestService.update(ar);
+									loop = false;
 									break;
 								}
 							}
@@ -588,11 +593,14 @@ public class OrdinationController {
 							// uvecavamo dan za jedan
 							newExamDate = new Date(examDate.getTime() + (1000 * 60 * 60 * 24));
 						}
+					}else {
+						ar.setApproved(true);
+						//appointmentRequestService.update(ar);
 					}
 				}
 			}
-				
 		}
+		System.out.println("KSENIJA KAZE DA AKO JE PROSLO NE MORA DA SE PROVERAVA DODATNO, JA BIH DA VIDIM OVAJ ISPIS I DA NE MORAM DODATNO DA PROVERAVAM!!!!!!!!!!!!!!!!!!!!!");
 	}
 	
 }

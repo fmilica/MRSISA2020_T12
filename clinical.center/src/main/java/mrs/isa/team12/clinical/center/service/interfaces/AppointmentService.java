@@ -46,4 +46,6 @@ public interface AppointmentService {
 	List<Appointment> findAllByDoctorIdAndDateBetween(Long id, Date d1, Date d2);
 	
 	List<Appointment> findAllByDoctorsIn(Set<Doctor> doctors);
+	
+	List<Appointment> findAllByOrdinationId(Long id);
 }

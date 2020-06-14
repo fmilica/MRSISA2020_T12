@@ -1162,7 +1162,6 @@ $(document).ready(function() {
 			doctorsV.push(parseInt($(this).attr("id")))
 		});
 		
-		console.log(doctorsV)
 		scheduleOperation(ordinationId, currentDate, time, doctorsV)
 	});
 	

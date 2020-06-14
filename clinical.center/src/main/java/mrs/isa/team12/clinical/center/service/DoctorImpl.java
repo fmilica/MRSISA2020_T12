@@ -24,6 +24,7 @@ import mrs.isa.team12.clinical.center.model.AppointmentType;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.ClinicAdmin;
 import mrs.isa.team12.clinical.center.model.Doctor;
+import mrs.isa.team12.clinical.center.model.Leave;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.Rating;
 import mrs.isa.team12.clinical.center.repository.DoctorRepository;
@@ -276,6 +277,14 @@ public class DoctorImpl implements DoctorService {
 							((a.getStartTime()>= ar.getAppointment().getStartTime() && a.getStartTime() <= ar.getAppointment().getEndTime())
 							&& (a.getEndTime() >= ar.getAppointment().getStartTime() && a.getEndTime() <= ar.getAppointment().getEndTime()))
 							|| (a.getStartTime() <= ar.getAppointment().getStartTime() && a.getEndTime() >= ar.getAppointment().getEndTime()))) {
+					logger.info("< DoctorNoLongerAvailable", id);
+					return null;
+				}
+			}
+		}
+		for (Leave l : d.getLeaveList()) {
+			if(l.getLeaveRequest().getApproved()) {
+				if((ar.getAppointment().getDate().after(l.getStartDate()) && ar.getAppointment().getDate().before(l.getEndDate()))){
 					logger.info("< DoctorNoLongerAvailable", id);
 					return null;
 				}

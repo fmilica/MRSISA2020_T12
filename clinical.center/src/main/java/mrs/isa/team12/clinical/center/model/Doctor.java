@@ -139,6 +139,14 @@ public class Doctor extends MedicalPersonnel {
 		// slobodna vremena za taj dan i tog doktora
 		List<Integer> times = new ArrayList<Integer>();
 								// da bi se pregled zavrsio za vreme radnog vremena doktora
+		for (Leave l : getLeaveList()) {
+			if(l.getLeaveRequest().getApproved()) {
+				if((date.after(l.getStartDate()) && date.before(l.getEndDate()))){
+					return times;
+				}
+			}
+		}
+		
 		for (int i = this.getStartWork(); i <= this.getEndWork() - type.getDuration(); i++) {
 			times.add(i);
 		}

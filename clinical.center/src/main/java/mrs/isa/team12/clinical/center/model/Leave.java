@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -111,5 +112,12 @@ public class Leave {
 	public void setMedicalPersone(MedicalPersonnel medicalPersone) {
 		this.medicalPersone = medicalPersone;
 	}
-	
+
+	public LeaveRequest getLeaveRequest() {
+		return leaveRequest;
+	}
+
+	public void setLeaveRequest(LeaveRequest leaveRequest) {
+		this.leaveRequest = leaveRequest;
+	}
 }

@@ -29,7 +29,7 @@ insert into clinical_centre_admin (id, email, password, name, surname, gender, d
 values ('7', 'thegoodshepherdadm@gmail.com', 'admin1tgs', 'Ksenija', 'Prcic', 'female', '1990-06-15', 'Adresa', 'City', 'Country', '55', '22', '1', '0', 'true', 'true');
 
 insert into clinical_centre_admin (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active, logged) 
-values ('100', 'noviadmin@gmail.com', 'a', 'Ksenija', 'Prcic', 'female', '1990-06-15', 'Adresa', 'City', 'Country', '55', '28454', '1', '0', 'true', 'true');
+values ('101', 'noviadmin@gmail.com', 'a', 'Ksenija', 'Prcic', 'female', '1990-06-15', 'Adresa', 'City', 'Country', '55', '28454', '1', '0', 'true', 'true');
 
 
 /*Admin klinike*/
@@ -129,15 +129,7 @@ insert into appointment_request (id, appointment_id, request_date, approved, cli
 values ('38', '36', '2020-05-20', 'false', '6', '0', 'true');
 update appointment
 set appointment_request_id = '38'
-/*PROBA*/
 where id = '36';
-insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price)
-values ('105', 'false', '2020-05-21', '06', '07', 'false', '29', '6', '10', '12', '0', 'true', '30');
-insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
-values ('106', '36', '2020-05-20', 'false', '6', '0', 'true');
-update appointment
-set appointment_request_id = '106'
-where id = '105';
 /*NE preklapa se sa jednim drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price)
 values ('41', 'false', '2020-05-21', '08', '09', 'false', '29', '6', '9', '12', '0', 'true' , '30');
@@ -212,14 +204,8 @@ set appointment_request_id = '75'
 where id = '74';
 
 /*Zahtev za operaciju*/
-/*PROBA*/
-insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, is_active, price)
-values ('90', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', 'true', '30');
-insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
-values ('91', '74', '2020-05-15', 'false', '6', '0', 'true');
-update appointment
-set appointment_request_id = '91'
-where id = '90';
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, ordination_id, is_active, price)
+values ('62', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', '19', 'true', '30');
 
 /*Sifarnik*/
 insert into diagnose_perscription (id, version, is_active)
@@ -270,26 +256,51 @@ insert into leave(id, version, start_date, end_date, leave_type, medical_personn
 values ('60', '0', '2020-05-27', '2020-06-03', '0', '15', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('61', '0', '60', 'false', '', 'true');
+update leave
+set leave_request_id = '61'
+where id = '60';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
 values ('63', '0', '2020-06-06', '2020-06-13', '1', '15', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('64', '0', '63', 'true', '', 'true');
+update leave
+set leave_request_id = '64'
+where id = '63';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
 values ('65', '0', '2020-05-27', '2020-06-03', '0', '9', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('66', '0', '65', 'true', '', 'true');
+update leave
+set leave_request_id = '66'
+where id = '65';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
 values ('67', '0', '2020-05-02', '2020-05-07', '1', '9', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('68', '0', '67', 'true', '', 'true');
+update leave
+set leave_request_id = '68'
+where id = '67';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
 values ('69', '0', '2020-05-27', '2020-06-03', '0', '10', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('70', '0', '69', 'false', '', 'true');
+update leave
+set leave_request_id = '70'
+where id = '69';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
 values ('72', '0', '2020-06-13', '2020-06-30', '0', '9', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('73', '0', '72', 'false', '', 'true');
+update leave
+set leave_request_id = '73'
+where id = '72';
+insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
+values ('200', '0', '2020-05-22', '2020-06-03', '0', '10', 'true');
+insert into leave_request(id, version, leave_id, approved, description, is_active)
+values ('201', '0', '200', 'true', '', 'true');
+update leave
+set leave_request_id = '201'
+where id = '200';
 
 /*Mother and child klinika jedan pregled koji je potvrdjen ali nema jos pacijenta da bi predefined appointments prikazivao nesto*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version, is_active, price)

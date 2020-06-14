@@ -298,6 +298,8 @@ public class DoctorController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
+		
+		
 		// parsiranje datuma
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
@@ -410,7 +412,7 @@ public class DoctorController {
 		List<DoctorDto> freeCertifiedClinicDoctors = new ArrayList<DoctorDto>();
 		
 		for (Doctor d : certifiedClinicDoctors) {
-			if(!d.getEmail().equals(ar.getAppointment().getDoctor().getEmail())) {
+			if((!d.getEmail().equals(ar.getAppointment().getDoctor().getEmail())) && !(d.getAvailableTimesForDateAndType(ar.getAppointment().getDate(), type).isEmpty()) ) {
 				freeCertifiedClinicDoctors.add(new DoctorDto(d));
 			}
 		}

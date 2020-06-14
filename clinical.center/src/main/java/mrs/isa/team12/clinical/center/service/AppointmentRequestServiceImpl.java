@@ -78,4 +78,14 @@ public class AppointmentRequestServiceImpl implements AppointmentRequestService{
 		return ars;
 	}
 
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public AppointmentRequest update(AppointmentRequest ar) {
+		logger.info("> update id:{}", ar.getId());
+		ar.setApproved(true);
+		ar = appointmentRequestRep.save(ar);
+		logger.info("< update id:{}", ar.getId());
+		return ar;
+	}
+
 }

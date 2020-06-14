@@ -57,4 +57,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
 	// moramo zakljucati podatke te dok god traje transakcija
 	// Repeatable read bi nam verovatno pomogao!
 	List<Appointment> findAllExisting(Long doctorId, Date appDate, Integer startTime, Integer endTime);
+	
+	List<Appointment> findAllByOrdinationId(Long id);
 }

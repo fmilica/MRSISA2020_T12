@@ -415,6 +415,7 @@ public class AppointmentController {
 		Clinic c = clinicService.findOneById(appDto.getClinicId());
 		
 		Doctor d = doctorService.findOneById(appDto.getDoctorId());
+		
 																		//confirmed, finished
 		Appointment appointment = new Appointment(date, appDto.getTime(), type, false, false, d, c, patient);
 		
