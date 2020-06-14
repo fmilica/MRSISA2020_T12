@@ -43,6 +43,14 @@ public class MedicalReportServiceImpl implements MedicalReportService{
 		logger.info("< findAll");
 		return medicalReport;
 	}
+	
+	@Override
+	public List<MedicalReport> findAllByVerified(boolean verified) {
+		logger.info("> findAllByVerified verified:{}", verified);
+		List<MedicalReport> medicalReport = medicalreportRepository.findAllByVerified(verified);
+		logger.info("< findAllByVerified verified:{}", verified);
+		return medicalReport;
+	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)

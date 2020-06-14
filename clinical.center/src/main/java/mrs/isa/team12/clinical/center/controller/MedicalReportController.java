@@ -9,6 +9,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +34,7 @@ import mrs.isa.team12.clinical.center.service.interfaces.ClinicService;
 import mrs.isa.team12.clinical.center.service.interfaces.DiagnosisService;
 import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.MedicalReportService;
+import mrs.isa.team12.clinical.center.service.interfaces.NurseService;
 import mrs.isa.team12.clinical.center.service.interfaces.PrescriptionService;
 
 @RestController
@@ -43,19 +47,21 @@ public class MedicalReportController {
 	private PrescriptionService prescriptionService;
 	private ClinicService clinicService;
 	private DoctorService doctorService;
+	private NurseService nurseService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
 	public MedicalReportController(MedicalReportService mrs, AppointmentService as, DiagnosisService ds,
-			PrescriptionService ps, ClinicService clinicService, DoctorService doctorService) {
+			PrescriptionService ps, ClinicService clinicService, DoctorService doctorService, NurseService nurseService) {
 		this.medicalReportService = mrs;
 		this.appointmentService = as;
 		this.diagnosisService = ds;
 		this.prescriptionService = ps;
 		this.clinicService = clinicService;
 		this.doctorService = doctorService;
+		this.nurseService = nurseService;
 	}
 	
 	/*
@@ -168,6 +174,18 @@ public class MedicalReportController {
 			medicalReportService.update(medicalRecordId, nurse);
 		}catch(NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medical report with given id doesn't exist!");
+		}
+	}
+	
+	/*Overavanje neoverenih recepata na kraju dana*/
+	@Scheduled(cron = "${schedule.cron}")
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void verify() {
+		List<MedicalReport> prescriptions = medicalReportService.findAllByVerified(false);
+		Nurse nurse = nurseService.findAll().get(0);
+		for(MedicalReport mr : prescriptions) {
+			mr.setVerified(true);
+			mr.setNurse(nurse);
 		}
 	}
 }

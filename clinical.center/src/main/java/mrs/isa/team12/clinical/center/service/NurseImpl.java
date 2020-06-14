@@ -49,6 +49,14 @@ public class NurseImpl implements NurseService {
 		logger.info("< findOneByEmail");
 		return n;
 	}
+	
+	@Override
+	public List<Nurse> findAll() {
+		logger.info("> findAll");
+		List<Nurse> nurses = nurseRep.findAll();
+		logger.info("< findAll");
+		return nurses;
+	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)

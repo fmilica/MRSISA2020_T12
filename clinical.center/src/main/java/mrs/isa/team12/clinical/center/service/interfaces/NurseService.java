@@ -13,6 +13,8 @@ public interface NurseService {
 	
 	Nurse findOneByEmail(String email);
 	
+	List<Nurse> findAll();
+	
 	Nurse updatePassword(Long id, String newPassword) throws Exception;
 	
 	Nurse update(NursePersonalInformationDto editedProfile) throws Exception;

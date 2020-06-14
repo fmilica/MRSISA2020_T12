@@ -12,6 +12,8 @@ public interface MedicalReportRepository extends JpaRepository<MedicalReport, Lo
 	
 	List<MedicalReport> findAll();
 	
+	List<MedicalReport> findAllByVerified(boolean verified);
+	
 	MedicalReport findOneById(Long id);
 	
 	List<MedicalReport> findAllByNurseIdAndAppointmentPatientId(Long nurse_id, Long patient_id);

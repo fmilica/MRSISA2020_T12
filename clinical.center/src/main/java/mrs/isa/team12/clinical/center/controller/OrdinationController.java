@@ -521,10 +521,10 @@ public class OrdinationController {
 	}
 	
 	
-	/*Zakazivanje soba za pregled ili sala za operaciju*/
+	/*Zakazivanje soba za pregled*/
 	@Scheduled(cron = "${schedule.cron}")
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void schedule() {
+	public void scheduleExamination() {
 		List<Clinic> clinics = clinicService.findAll();
 		
 		for (Clinic c : clinics) {
@@ -603,4 +603,85 @@ public class OrdinationController {
 		System.out.println("KSENIJA KAZE DA AKO JE PROSLO NE MORA DA SE PROVERAVA DODATNO, JA BIH DA VIDIM OVAJ ISPIS I DA NE MORAM DODATNO DA PROVERAVAM!!!!!!!!!!!!!!!!!!!!!");
 	}
 	
+	/*Zakazivanje operacija*/
+	@Scheduled(cron = "${schedule.cron}")
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public void scheduleOperation() {
+		List<Clinic> clinics = clinicService.findAll();
+		
+		for (Clinic c : clinics) {
+			for(AppointmentRequest ar : c.getAppointmentRequests()) { 
+				if(ar.getApproved() == false) {
+					//SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+					
+					Date examDate = ar.getAppointment().getDate();
+					AppointmentType examType = ar.getAppointment().getAppType();
+					Doctor examDoctor = ar.getAppointment().getDoctor();
+					Integer examStartTime = ar.getAppointment().getStartTime();
+					Integer examEndTime = ar.getAppointment().getEndTime();
+					
+					//sve ordinacije te klinike
+					List<Ordination> examRooms = ordinationService.findAllByClinicIdAndType(c.getId(), OrdinationType.OperatingRoom);
+					
+					
+					//Da li neka sala zadovoljava za to vreme tog doktora i sve 
+					boolean satisfying = false;
+					
+					//prolazimo kroz ordinacije te klinike i uzmemo prvu na koju naidjemo da nam odgovara
+					for (Ordination o : examRooms) {
+						// uzimamo u obzir trenutnu ordinaciju
+						// prolazimo kroz zakazane preglede u toj ordinaciji
+						if (o.getAppointments() != null) {
+							for (Appointment a : o.getAppointments()) {
+								// proveravamo da li ima za taj datum zakazan pregled
+								if (a.getDate().equals(examDate)) {
+									// proveravamo od kada do kada traje zakazani pregled
+									if (examEndTime <= a.getStartTime() || examStartTime >= a.getEndTime()) {
+										ar.getAppointment().setOrdination(o);
+										satisfying = true;
+										break;
+									}
+									
+								}
+							}
+						}
+					}
+					//nijedna ordinacija ne zadovoljava trazeno vreme i datum 
+					if(!satisfying) {
+						// trazimo prvo slobodno vreme za koje ima slobodnu ordinaciju i da je doktor slobodan
+						Date newExamDate = examDate;
+						List<Integer> examRoomFree;
+						boolean loop = true; 
+						while(loop) {
+							for (Ordination o : examRooms) {
+								// idemo kroz datume dok ne nadjemo prvi za koji zadovoljavaju
+								// kada je doktor slobodan
+								List<Integer> doctorFree = examDoctor.getAvailableTimesForDateAndType(newExamDate, examType);
+								examRoomFree = o.getAvailableTimesForDateAndType(newExamDate, examType);
+								// presek slobodnih vremena
+								examRoomFree.retainAll(doctorFree);
+								if(!examRoomFree.isEmpty()) {
+									ar.getAppointment().setDate(newExamDate);
+									ar.getAppointment().setStartTime(examRoomFree.get(0));
+									ar.getAppointment().setEndTime(examRoomFree.get(0) + ar.getAppointment().getAppType().getDuration());
+									ar.getAppointment().setOrdination(o);
+									ar.setApproved(true);
+									//appointmentRequestService.update(ar);
+									loop = false;
+									break;
+								}
+							}
+							// ne postoje slobodni za doktora i ordinaciju ni za jednu ordinaciju uvecavamo datum i pokusavamo za naredni
+							// uvecavamo dan za jedan
+							newExamDate = new Date(examDate.getTime() + (1000 * 60 * 60 * 24));
+						}
+					}else {
+						ar.setApproved(true);
+						//appointmentRequestService.update(ar);
+					}
+				}
+			}
+		}
+		System.out.println("KSENIJA KAZE DA AKO JE PROSLO NE MORA DA SE PROVERAVA DODATNO, JA BIH DA VIDIM OVAJ ISPIS I DA NE MORAM DODATNO DA PROVERAVAM!!!!!!!!!!!!!!!!!!!!!");
+	}
 }

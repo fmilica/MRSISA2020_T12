@@ -15,5 +15,7 @@ public interface MedicalReportService {
 	
 	List<MedicalReport> findAll();
 	
+	List<MedicalReport> findAllByVerified(boolean verified);
+	
 	List<MedicalReport> findAllByNurseIdAndAppointmentPatientId(Long nurse_id, Long patient_id);
 }
