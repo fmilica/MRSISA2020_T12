@@ -134,7 +134,7 @@ public class OrdinationImpl implements OrdinationService {
 	public Ordination save(Ordination o) {
 		logger.info("> create");
 		Ordination ordination = this.findOneByName(o.getName());
-		if( ordination != null) {
+		if (ordination != null) {
 			logger.info("< EntityExistsException");
 			throw new EntityExistsException();
 		}
@@ -180,7 +180,7 @@ public class OrdinationImpl implements OrdinationService {
 		if(o == null) {
 			logger.info("> create");
 			ord.setClinic(clinic);
-			this.save(ord);
+			ordinationRep.save(ord);
 			logger.info("< create");
 			return ord;
 		}
