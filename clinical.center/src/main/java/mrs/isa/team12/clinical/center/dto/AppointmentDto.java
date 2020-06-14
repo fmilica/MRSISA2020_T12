@@ -19,6 +19,7 @@ public class AppointmentDto {
 	private Double discount;
 	private Boolean finished;
 	private String typeOf;
+	private Boolean canCancel;
 	
 	public AppointmentDto() {}
 	
@@ -41,6 +42,11 @@ public class AppointmentDto {
 		}else {
 			this.typeOf = "operation";
 		}
+	}
+	
+	public AppointmentDto(Appointment app, Boolean canCancel) {
+		this(app);
+		this.canCancel = canCancel;
 	}
 	
 	
@@ -117,5 +123,13 @@ public class AppointmentDto {
 
 	public void setTypeOf(String typeOf) {
 		this.typeOf = typeOf;
+	}
+
+	public Boolean getCanCancel() {
+		return canCancel;
+	}
+
+	public void setCanCancel(Boolean canCancel) {
+		this.canCancel = canCancel;
 	}
 }

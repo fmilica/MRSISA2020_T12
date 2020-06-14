@@ -373,6 +373,12 @@ $(document).ready(function() {
 		$('.content').hide()
 		$('.patient-confirmed-apps').show()
 	})
+	// cancel confirmed appointment
+	$('body').on('click', 'button.cancel-app-btn', function() {
+		// dobavljanje id-a pregleda
+		var appId = $(this).attr('id')
+		cancelAppointment(appId)
+	});
 	// view unconfirmed appointments
 	$('#unconfirmedApps').click(function() {
 		initialiseUnconfirmedApps()
@@ -1044,12 +1050,37 @@ function initialiseConfirmedApps() {
 						}
 					}
 				},
-				{ data: 'doctor'}
+				{ data: 'doctor'},
+				{ 
+					data: null,
+					render: function(data) {
+						if (data.canCancel) {
+							return '<button id="'+data.id+'" class="table-action btn btn-info cancel-app-btn">Cancel</button>'
+						} else {
+							return 'You can no longer cancel this appointment.'
+						}
+					}
+				}
 			]
 		})
 	} else {
 		confirmedAppsTable.ajax.reload()
 	}
+}
+// cancel appointment
+function cancelAppointment(appId) {
+	$.ajax({
+		type : "POST",
+		url : "../../theGoodShepherd/appointment/cancel/"+appId,
+		contentType: "application/json",
+		success : function(output)  {
+			alert("You succesfully canceled an appointment!")
+			confirmedAppsTable.ajax.reload()
+		},
+		error : function(response) {
+			alert(response.responseJSON.message)
+		}
+	})
 }
 
 function initialiseUnconfirmedApps() {

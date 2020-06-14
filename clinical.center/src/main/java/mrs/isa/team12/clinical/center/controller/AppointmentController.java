@@ -246,11 +246,58 @@ public class AppointmentController {
 		//List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmed(currentUser.getId(), true);
 		List<Appointment> appointments = appointmentService.findAllByPatientIdAndConfirmedAndFinished(currentUser.getId(), true, false);
 		
+		Date currentDateTime = new Date(System.currentTimeMillis());
+		
 		List<AppointmentDto> dto = new ArrayList<AppointmentDto>();
 		for(Appointment a : appointments) {
-			dto.add(new AppointmentDto(a));
+			long diff = a.getDate().getTime() + (1000 * 60 * a.getStartTime()) - currentDateTime.getTime();
+			long diffHours = diff / (60 * 60 * 1000);
+			if (diffHours < 24) {
+				dto.add(new AppointmentDto(a, false));
+			} else {
+				dto.add(new AppointmentDto(a, true));
+			}
 		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	/*
+	 url: POST localhost:8081/theGoodShepherd/appointment/cancel/{appId}
+	 HTTP request for canciling an existing appointment
+	 returns ResponseEntity object
+	 */
+	@PostMapping(value="cancel/{appId}",
+				produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> cancelAppointemnt(@PathVariable("appId") Long appId) {
+		Patient currentUser;
+		try {
+			currentUser = (Patient) session.getAttribute("currentUser");
+		} catch (ClassCastException e) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a patient can cancel his appointment!");
+		}
+		if (currentUser == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
+		}
+		
+		Appointment app = appointmentService.findById(appId);
+		
+		if(app.getPatient().getId() != currentUser.getId()) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your apppointments!");
+		}
+		
+		Date currentDateTime = new Date(System.currentTimeMillis());
+		long diff = app.getDate().getTime() + (1000 * 60 * app.getStartTime()) - currentDateTime.getTime();
+		long diffHours = diff / (60 * 60 * 1000);
+		
+		if (diffHours >= 24) {
+			try {
+				appointmentService.delete(appId);
+			} catch (Exception e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified appointment does not exist.");
+			}
+			return new ResponseEntity<>(appId, HttpStatus.OK);
+		}
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can no longer delete this appointment!");
 	}
 	
 	/*

@@ -165,7 +165,6 @@ values ('38', '36', '2020-05-20', 'true', '6', '0', 'true');
 update appointment
 set appointment_request_id = '38'
 where id = '36';
-
 /*Medical report (izvestaj doktora)*/
 insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id, is_active)
 values ('81', 'Pacijent prepisani novi lekovi za vitiligo.', '31', '36', '0', 'true', '15', 'true');
