@@ -42,7 +42,6 @@ public class RegistrationRequest {
 	public RegistrationRequest() {}
 	
 	public RegistrationRequest(RegisteredUser user, Boolean approved, String description) {
-		super();
 		this.user = user;
 		this.approved = approved;
 		this.description = description;
@@ -52,19 +51,15 @@ public class RegistrationRequest {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public RegisteredUser getUser() {
 		return user;
 	}
-
 	public void setUser(RegisteredUser user) {
 		this.user = user;
 	}
-
 	public Boolean getApproved() {
 		return approved;
 	}
@@ -77,11 +72,9 @@ public class RegistrationRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
