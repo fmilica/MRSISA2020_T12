@@ -219,7 +219,7 @@ public class ClinicalCenterAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 
-		RegisteredUser user = userService.findOneByEmail(clinicalCentreAdmin.getEmail());
+		RegisteredUser user = userService.emailExists(clinicalCentreAdmin.getEmail());
 		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
 		}
@@ -234,7 +234,11 @@ public class ClinicalCenterAdminController {
 		clinicalCentreAdmin.setClinicalCentre(clinicalCentre);
 		clinicalCentreAdmin.setLogged(false);
 		
-		clinicalCenterAdminService.save(clinicalCentreAdmin);
+		try {
+			clinicalCenterAdminService.save(clinicalCentreAdmin);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
 		
 		ClinicalCentreAdminDto dto = new ClinicalCentreAdminDto(clinicalCentreAdmin);
 		return new ResponseEntity<>(dto, HttpStatus.CREATED);

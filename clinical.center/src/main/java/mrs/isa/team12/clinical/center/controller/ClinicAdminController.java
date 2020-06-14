@@ -212,7 +212,7 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		RegisteredUser user = userService.findOneByEmail(clinicAdmin.getEmail());
+		RegisteredUser user = userService.emailExists(clinicAdmin.getEmail());
 		if (user != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with given email already exists!");
 		}
@@ -228,7 +228,12 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic with given name does not exist.");
 		}
 		
-		clinicAdmin = adminService.save(clinicAdmin);
+		try {
+			clinicAdmin = adminService.save(clinicAdmin);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		
 		clinic.add(clinicAdmin);
 		//clinicService.save(clinic);
 		

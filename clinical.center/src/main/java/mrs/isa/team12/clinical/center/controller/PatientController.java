@@ -114,7 +114,14 @@ public class PatientController {
 		List<Patient> patients = patientService.findAll();
 		List<PatientsDto> dto = new ArrayList<PatientsDto>();
 		for(Patient p : patients) {
-			dto.add(new PatientsDto(p));
+			if(p.getRegistrationRequest() == null) {
+				dto.add(new PatientsDto(p));
+			}
+			else {
+				if(p.getRegistrationRequest().getApproved()) {
+					dto.add(new PatientsDto(p));
+				}
+			}
 		}
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -388,7 +395,13 @@ public class PatientController {
 		// sacuvamo ga
 		RegistrationRequest regReq = new RegistrationRequest(patient, false, "");
 		patient.setActive(false);
-		Patient saved = patientService.save(patient);
+		Patient saved = null;
+		try {
+			saved = patientService.save(patient);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
+		
 		registrationService.save(regReq);
 		// dodavanje reference na registration request
 		saved = patientService.update(saved, regReq);

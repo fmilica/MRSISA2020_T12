@@ -70,4 +70,12 @@ public class RegisteredUserImpl implements RegisteredUserService {
 		RegisteredUser r = rep.save(ru);
 		return r;
 	}
+
+	@Override
+	public RegisteredUser emailExists(String email) {
+		if(rep.findOneByEmail(email) != null || rep.findOneByEmailAndActive(email, false) != null) {
+			return new RegisteredUser();
+		}
+		return null;
+	}
 }

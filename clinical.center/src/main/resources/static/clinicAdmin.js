@@ -921,39 +921,42 @@ $(document).ready(function() {
 	/*Delete doctor*/
 	/*--------------------------------------------------*/
 	$('body').on('click', 'span.delete-doctor', function() {
-		//preslatko Eva hvala ti :3 <3 <333
-		var doctorId = $(this).attr('id')
-		$.ajax({
-			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/doctor/delete/" + doctorId ,
-			success : function(output)  {
-				alert("Doctor successfuly deleted!")
-				doctorTable.ajax.reload()
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
+		if (confirm('Are you sure you want to delete selected doctor?')) {
+			var doctorId = $(this).attr('id')
+			$.ajax({
+				type : "GET",
+				async: false,
+				url : "../../theGoodShepherd/doctor/delete/" + doctorId ,
+				success : function(output)  {
+					alert("Doctor successfuly deleted!")
+					doctorTable.ajax.reload()
+				},
+				error : function(response) {
+					alert(response.responseJSON.message)
+				}
+			})
+		}
 	})
 	/********************************************************************************/
 	
 	/*Delete nurse*/
 	/*--------------------------------------------------*/
 	$('body').on('click', 'span.delete-nurse', function() {
-		var doctorId = $(this).attr('id')
-		$.ajax({
-			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/nurse/delete/" + doctorId ,
-			success : function(output)  {
-				alert("Nurse successfuly deleted!")
-				nurseTable.ajax.reload()
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
+		if (confirm('Are you sure you want to delete selected nurse?')) {
+			var doctorId = $(this).attr('id')
+			$.ajax({
+				type : "GET",
+				async: false,
+				url : "../../theGoodShepherd/nurse/delete/" + doctorId ,
+				success : function(output)  {
+					alert("Nurse successfuly deleted!")
+					nurseTable.ajax.reload()
+				},
+				error : function(response) {
+					alert(response.responseJSON.message)
+				}
+			})
+		}
 	})
 	/********************************************************************************/
 	
@@ -975,7 +978,6 @@ $(document).ready(function() {
 				alert(response.responseJSON.message)
 			}
 		})
-		
 		// OVO JE KUL NE TREBA OVO DA ZABORAVIMO MOZDA ZATREBA
 		/*var tr = $(this).closest('tr')
 		var selectedAppType = appTypeTable.row(tr).data()*/
@@ -1261,6 +1263,10 @@ $(document).ready(function() {
 			contentType : "application/json",
 			success : function(output)  {
 				fillClinicInformation(output)
+				$('.content').hide()
+		        $('.clinic-information').show()
+		        document.body.scrollTop = 0
+		        document.documentElement.scrollTop = 0
 			},
 			error : function(response) {
 				alert(response.responseJSON.message)
@@ -1276,7 +1282,7 @@ $(document).ready(function() {
 	
 	/*Save edited clinic information*/
 	$("#saveEditClinic").on('click', function(e){
-		
+		e.preventDefault()
 		var nameV = $("#nameClinic").val()
 		var addressV = $("#addressClinic").val()
 		var cityV = $("#cityClinic").val()
@@ -1285,6 +1291,8 @@ $(document).ready(function() {
 		
 		if( !nameV || !addressV || !cityV || !countryV){
 			alert("All required fields must be filled!")
+			$('.content').hide()
+			$('.edit-clinic').show()
 			return
 		}
 		
@@ -1313,7 +1321,7 @@ $(document).ready(function() {
 	})
 	
 	$("#cancelEditClinic").on('click', function(e){
-		
+		e.preventDefault()
 		$('.content').hide()
 		$('.clinic-information').show()
 		
@@ -1328,19 +1336,21 @@ $(document).ready(function() {
 	/*********************************************************************/
 	/* Delete and edit appointments*/
 	$('body').on('click', 'span.delete-appointment', function() {
-		var appointmentId = $(this).attr('id')
-		$.ajax({
-			type : "GET",
-			async: false,
-			url : "../../theGoodShepherd/appointment/delete/" + appointmentId ,
-			success : function(output)  {
-				alert("Appointment successfuly deleted!")
-				predefinedAppointmentTable.ajax.reload()
-			},
-			error : function(response) {
-				alert(response.responseJSON.message)
-			}
-		})
+		if (confirm('Are you sure you want to delete selected appointment?')) {
+			var appointmentId = $(this).attr('id')
+			$.ajax({
+				type : "GET",
+				async: false,
+				url : "../../theGoodShepherd/appointment/delete/" + appointmentId ,
+				success : function(output)  {
+					alert("Appointment successfuly deleted!")
+					predefinedAppointmentTable.ajax.reload()
+				},
+				error : function(response) {
+					alert(response.responseJSON.message)
+				}
+			})
+		}
 	})
 	
 	$('#clinicVacation').click(function(e){

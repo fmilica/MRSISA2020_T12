@@ -585,6 +585,7 @@ public class OrdinationController {
 									ar.getAppointment().setOrdination(o);
 									ar.setApproved(true);
 									//appointmentRequestService.update(ar);
+									
 									loop = false;
 									break;
 								}
@@ -595,12 +596,12 @@ public class OrdinationController {
 						}
 					}else {
 						ar.setApproved(true);
+						
 						//appointmentRequestService.update(ar);
 					}
 				}
 			}
 		}
-		System.out.println("KSENIJA KAZE DA AKO JE PROSLO NE MORA DA SE PROVERAVA DODATNO, JA BIH DA VIDIM OVAJ ISPIS I DA NE MORAM DODATNO DA PROVERAVAM!!!!!!!!!!!!!!!!!!!!!");
 	}
 	
 	/*Zakazivanje operacija*/
@@ -682,6 +683,5 @@ public class OrdinationController {
 				}
 			}
 		}
-		System.out.println("KSENIJA KAZE DA AKO JE PROSLO NE MORA DA SE PROVERAVA DODATNO, JA BIH DA VIDIM OVAJ ISPIS I DA NE MORAM DODATNO DA PROVERAVAM!!!!!!!!!!!!!!!!!!!!!");
 	}
 }

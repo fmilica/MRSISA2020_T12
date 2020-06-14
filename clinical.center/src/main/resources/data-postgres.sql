@@ -100,7 +100,7 @@ where id = '29';
 
 /*Nova registracija pacijenta*/
 insert into patient (id, email, password, name, surname, gender, date_of_birth, address, city, country, phone_number, security_number, clinical_centre_id, version, is_active, logged) 
-values ('80', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0', 'false', 'false');
+values ('80', 'dolanovkatarina@gmail.com', 'katarina1!', 'Katarina', 'Dolanov', 'female', '1993-06-01', 'Adresa', 'City', 'Country', '5500', '7700', '1', '0', 'true', 'false');
 insert into registration_request(id, registered_user_id, approved, description, version, is_active) 
 values ('81', '80', 'false', '', '0', 'true');
 update patient

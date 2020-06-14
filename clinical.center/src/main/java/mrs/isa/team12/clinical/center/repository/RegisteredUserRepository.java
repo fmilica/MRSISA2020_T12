@@ -14,4 +14,6 @@ public interface RegisteredUserRepository extends JpaRepository<RegisteredUser, 
 	Patient findOneByToken(String token);
 
 	Patient findOneById(Long id);
+	
+	RegisteredUser findOneByEmailAndActive(String email, Boolean activity);
 }

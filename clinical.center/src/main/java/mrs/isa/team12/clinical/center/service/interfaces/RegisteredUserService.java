@@ -13,4 +13,6 @@ public interface RegisteredUserService {
 	RegisteredUser findOneByVerificationToken(String token);
 		
 	RegisteredUser save(RegisteredUser ru);
+	
+	RegisteredUser emailExists(String email);
 }

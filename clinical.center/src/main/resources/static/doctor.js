@@ -63,7 +63,6 @@ $(document).ready( function () {
 	/*Change password*/
 	$('#changePasswordBtn').click(function(e) {
 		e.preventDefault()
-		$('#cancelChangePasswordBtn').show()
 		changePassword()
 	})
 

@@ -471,7 +471,7 @@ public class DoctorController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user loged in!");
 		}
 		
-		RegisteredUser existing = userService.findOneByEmail(doctor.getEmail());
+		RegisteredUser existing = userService.emailExists(doctor.getEmail());
 		if (existing != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
 		}
@@ -484,7 +484,12 @@ public class DoctorController {
 		doctor.setClinic(admin.getClinic());
 		doctor.setActive(true);
 		doctor.setLogged(false);
-		Doctor saved = doctorService.save(doctor);
+		Doctor saved = null;
+		try {
+			saved = doctorService.save(doctor);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
 		
 		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
 	}

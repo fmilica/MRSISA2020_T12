@@ -148,3 +148,16 @@ $(document).ready(function() {
 
         $(thisAlert).removeClass('alert-validate');
     }
+    
+  //proverava da li je email napisan u zapisu nesto@nesto.nesto
+    function validEmail(email){
+    	var arr1 = []
+    	var arr2 = []
+    	if(email.includes("@")){
+    		arr1 = email.split("@")  // nesto i nesto.nesto
+    		if(arr1[1].includes(".")){
+    			return true
+    		}
+    	}
+    	return false
+    }

@@ -188,7 +188,12 @@ public class NurseController {
 		nurse.setClinic(admin.getClinic());
 		nurse.setActive(true);
 		nurse.setLogged(false);
-		Nurse saved = nurseService.save(nurse);
+		Nurse saved = null;
+		try {
+			saved = nurseService.save(nurse);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with specified email already exists!");
+		}
 		
 		return new ResponseEntity<>(new DoctorDto(saved), HttpStatus.CREATED);
 	}
