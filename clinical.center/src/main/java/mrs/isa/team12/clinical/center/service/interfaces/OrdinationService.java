@@ -1,6 +1,9 @@
 package mrs.isa.team12.clinical.center.service.interfaces;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import mrs.isa.team12.clinical.center.dto.OrdinationDto;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
@@ -16,7 +19,7 @@ public interface OrdinationService {
 	
 	Ordination update(Ordination o, OrdinationDto edited);
 	
-	void update(Long id, AppointmentRequest ar) throws Exception;
+	Ordination update(Long id, AppointmentRequest ar) throws ObjectOptimisticLockingFailureException, NoSuchElementException;
 	
 	Ordination update(Long clinicId, String name, Integer ordNumber, Ordination ord, Clinic clinic);
 

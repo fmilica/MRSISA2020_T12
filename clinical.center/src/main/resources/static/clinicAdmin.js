@@ -2008,13 +2008,13 @@ function scheduleOrdination(ordinationId, currentDate, time) {
 	examReq.ordId = ordinationId
 	examReq.date = currentDate
 	examReq.time = time
-	alert("You scheduled an examination room for an appointment!")
 	$.ajax({
 		type : "POST",
 		url : "../../theGoodShepherd/clinicAdmin/acceptAppointmentRequest",
 		contentType : "application/json",
 		data : JSON.stringify(examReq),
 		success : function(){
+			alert("You scheduled an examination room for an appointment!")
 			$('.content').hide()
 			$('.clinic-clinicExamReq').show()
 			$('.clinic-exam-rooms').hide()

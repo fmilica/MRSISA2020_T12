@@ -11,6 +11,6 @@ public interface RegisteredUserService {
 	RegisteredUser updateVerificationToken(RegisteredUser user, String token) throws Exception;
 	
 	RegisteredUser findOneByVerificationToken(String token);
-	
+		
 	RegisteredUser save(RegisteredUser ru);
 }

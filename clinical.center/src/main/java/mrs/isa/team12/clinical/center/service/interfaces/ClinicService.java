@@ -7,6 +7,7 @@ import javax.persistence.EntityExistsException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Patient;
 
@@ -19,6 +20,8 @@ public interface ClinicService {
 	Clinic update(ClinicDto editedClinic) throws ObjectOptimisticLockingFailureException, EntityExistsException;
 	
 	Clinic update(Clinic c, Patient p);
+	
+	Clinic update(Long clinicId, Appointment a);
 	
 	Clinic updateRating(Clinic c);
 	

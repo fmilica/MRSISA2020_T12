@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.OrdinationDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.AppointmentRequest;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Ordination;
@@ -151,14 +152,24 @@ public class OrdinationImpl implements OrdinationService {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void update(Long id, AppointmentRequest ar) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+	public Ordination update(Long id, AppointmentRequest ar) {
 		logger.info("> update id:{}",id);
 		Ordination o = this.findOneById(id);
+		for (Appointment a : o.getAppointments()) {
+			if(a.getDate().equals(ar.getAppointment().getDate()) && (
+						((a.getStartTime()>= ar.getAppointment().getStartTime() && a.getStartTime() <= ar.getAppointment().getEndTime())
+						&& (a.getEndTime() >= ar.getAppointment().getStartTime() && a.getEndTime() <= ar.getAppointment().getEndTime()))
+						|| (a.getStartTime() <= ar.getAppointment().getStartTime() && a.getEndTime() >= ar.getAppointment().getEndTime()))) {
+				logger.info("< OrdinationNoLongerAvailable", id);
+				return null;
+			}
+		}
 		o.addAppointment(ar.getAppointment());
 		ar.getAppointment().setOrdination(o);
-		ordinationRep.save(o);
+		o = ordinationRep.save(o);
 		logger.info("< update id:{}",id);
+		return o;
 	}
 
 	@Override

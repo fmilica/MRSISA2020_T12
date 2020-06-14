@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
+import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
 import mrs.isa.team12.clinical.center.model.Patient;
 import mrs.isa.team12.clinical.center.model.Rating;
@@ -84,12 +85,23 @@ public class ClinicImpl implements ClinicService {
 		logger.info("< update id{}", updated.getId());
 		return updated;
 	}
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+	public Clinic update(Long clinicId, Appointment a) {
+		logger.info("> update id{}", clinicId);
+		Clinic clinicToUpdate = repository.findOneById(clinicId);
+		clinicToUpdate.addAppointment(a);
+		Clinic updated = repository.save(clinicToUpdate);
+		logger.info("< update id{}", updated.getId());
+		return updated;
+	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Clinic updateRating(Clinic c) {
+		logger.info("> update id{}", c.getId());
 		Clinic clinicToUpdate = repository.findOneById(c.getId());
-		logger.info("> update id{}", clinicToUpdate.getId());
 		int ratingSum = 0;
 		for(Rating r : clinicToUpdate.getRatings()) {
 			ratingSum += r.getRating();

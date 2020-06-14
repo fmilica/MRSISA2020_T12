@@ -13,6 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -261,30 +262,23 @@ public class DoctorImpl implements DoctorService {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
 	public Doctor update(AppointmentRequest ar, Long id) {
 		logger.info("> update id:{}", id);
-		//ZAKLJUCAN DO KRAJA TRANSAKCIJE
-		Doctor d = doctorRep.findOneByIdPessimistic(id);
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Doctor d = doctorRep.findOneById(id);
 		if(d == null) {
+			logger.info("< NoSuchElementException", id);
 			throw new NoSuchElementException();
 		}
 		for (Appointment a : d.getAppointments()) {
-			/*(a.startTime BETWEEN ?3 AND ?4) "+
-			"						AND (a.endTime BETWEEN ?3 AND ?4)"+
-			"					)" + 
-			"					OR (a.startTime <= ?3 AND a.endTime >= ?4)" + */
-			if(a.getDate().equals(ar.getAppointment().getDate()) && (
-						((a.getStartTime()>= ar.getAppointment().getStartTime() && a.getStartTime() <= ar.getAppointment().getEndTime())
-						&& (a.getEndTime() >= ar.getAppointment().getStartTime() && a.getEndTime() <= ar.getAppointment().getEndTime()))
-						|| (a.getStartTime() <= ar.getAppointment().getStartTime() && a.getEndTime() >= ar.getAppointment().getEndTime()))) {
-				
-				return null;
+			if (a.getConfirmed()) {
+				if(a.getDate().equals(ar.getAppointment().getDate()) && (
+							((a.getStartTime()>= ar.getAppointment().getStartTime() && a.getStartTime() <= ar.getAppointment().getEndTime())
+							&& (a.getEndTime() >= ar.getAppointment().getStartTime() && a.getEndTime() <= ar.getAppointment().getEndTime()))
+							|| (a.getStartTime() <= ar.getAppointment().getStartTime() && a.getEndTime() >= ar.getAppointment().getEndTime()))) {
+					logger.info("< DoctorNoLongerAvailable", id);
+					return null;
+				}
 			}
 		}
 		ar.getAppointment().addDoctor(d);

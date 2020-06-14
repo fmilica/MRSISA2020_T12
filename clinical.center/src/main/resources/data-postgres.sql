@@ -129,7 +129,15 @@ insert into appointment_request (id, appointment_id, request_date, approved, cli
 values ('38', '36', '2020-05-20', 'false', '6', '0', 'true');
 update appointment
 set appointment_request_id = '38'
+/*PROBA*/
 where id = '36';
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price)
+values ('105', 'false', '2020-05-21', '06', '07', 'false', '29', '6', '10', '12', '0', 'true', '30');
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
+values ('106', '36', '2020-05-20', 'false', '6', '0', 'true');
+update appointment
+set appointment_request_id = '106'
+where id = '105';
 /*NE preklapa se sa jednim drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price)
 values ('41', 'false', '2020-05-21', '08', '09', 'false', '29', '6', '9', '12', '0', 'true' , '30');
@@ -204,8 +212,14 @@ set appointment_request_id = '75'
 where id = '74';
 
 /*Zahtev za operaciju*/
-insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, ordination_id, is_active, price)
-values ('62', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', '19', 'true', '30');
+/*PROBA*/
+insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_type, version, is_active, price)
+values ('90', 'false', '2020-06-25', '13', '15', 'true', '29', '6', '9', '12', '0', '0', 'true', '30');
+insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
+values ('91', '74', '2020-05-15', 'false', '6', '0', 'true');
+update appointment
+set appointment_request_id = '91'
+where id = '90';
 
 /*Sifarnik*/
 insert into diagnose_perscription (id, version, is_active)
