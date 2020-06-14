@@ -64,50 +64,34 @@ public class AppointmentRequest {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Appointment getAppointment() {
 		return appointment;
 	}
-
 	public void setAppointment(Appointment appointment) {
 		this.appointment = appointment;
 	}
-
 	public Date getRequestDate() {
 		return requestDate;
 	}
-
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
-
 	public Boolean getApproved() {
 		return approved;
 	}
-
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
-	
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-	
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
-	}
-
-	@Override
-	public String toString() {
-		return "AppointmentRequest [id=" + id + ", appointment=" + appointment + ", requestDate=" + requestDate
-				+ ", approved=" + approved + "]";
 	}
 }

@@ -37,7 +37,6 @@ public class DiagnosePerscription {
 	public DiagnosePerscription() {}
 
 	public DiagnosePerscription(Long id) {
-		super();
 		this.id = id;
 		this.active = true;
 	}
@@ -45,29 +44,19 @@ public class DiagnosePerscription {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Set<Diagnosis> getDiagnosis() {
 		return diagnosis;
 	}
-
 	public void setDiagnosis(Set<Diagnosis> diagnosis) {
 		this.diagnosis = diagnosis;
 	}
-	
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
-	}
-
-	@Override
-	public String toString() {
-		return "[id=" + id + "]";
 	}
 }

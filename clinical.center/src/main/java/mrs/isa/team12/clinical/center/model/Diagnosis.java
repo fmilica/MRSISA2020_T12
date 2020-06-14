@@ -39,7 +39,6 @@ public class Diagnosis {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-	//CascadeType.PERSIST, CascadeType.MERGE
 	@ManyToMany(mappedBy = "diagnosis")
 	private Set<Prescription> prescriptions;
 	
@@ -53,7 +52,6 @@ public class Diagnosis {
 	public Diagnosis() {}
 
 	public Diagnosis(String name) {
-		super();
 		this.name = name;
 		this.active = true;
 	}
@@ -84,60 +82,43 @@ public class Diagnosis {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public Set<Prescription> getPrescriptions() {
 		return prescriptions;
 	}
-
 	public void setPrescriptions(Set<Prescription> prescriptions) {
 		this.prescriptions = prescriptions;
 	}
-
 	public Set<MedicalReport> getMedicalReports() {
 		return medicalReports;
 	}
-
 	public void setMedicalReports(Set<MedicalReport> medicalReports) {
 		this.medicalReports = medicalReports;
 	}
-
 	public DiagnosePerscription getDiagnosePerscription() {
 		return diagnosePerscription;
 	}
-
 	public void setDiagnosePerscription(DiagnosePerscription diagnosePerscription) {
 		this.diagnosePerscription = diagnosePerscription;
 	}
-	
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
 	public void addPrescription(Prescription p) {
 		if(this.prescriptions == null) {
 			this.prescriptions = new HashSet<Prescription>();
 		}
 		this.prescriptions.add(p);
-	}
-
-	@Override
-	public String toString() {
-		return "Diagnosis [id=" + id + ", name=" + name + ", diagnosePerscription=" + diagnosePerscription + "]";
 	}
 }

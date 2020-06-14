@@ -49,8 +49,6 @@ public class MedicalReport {
 				inverseJoinColumns = @JoinColumn(name = "prescription_id"))
 	private Set<Prescription> prescriptions;
 	
-	// trebalo bi manyToMany, jer moze dati vise dijagnoza jednom pacijentu
-	// (moze oboljevati od n stvari, ali neka, imacemo zdrave pacijente)
 	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
 	private Diagnosis diagnosis;
@@ -108,7 +106,6 @@ public class MedicalReport {
 	public void setDiagnosis(Diagnosis diagnosis) {
 		this.diagnosis = diagnosis;
 	}
-	
 	public boolean isVerified() {
 		return verified;
 	}
@@ -116,7 +113,6 @@ public class MedicalReport {
 	public void setVerified(boolean verified) {
 		this.verified = verified;
 	}
-
 	public void addPrescription(Prescription p) {
 		if(this.prescriptions == null) {
 			this.prescriptions = new HashSet<Prescription>();
@@ -125,15 +121,12 @@ public class MedicalReport {
 			this.prescriptions.add(p);
 		}
 	}
-
 	public Nurse getNurse() {
 		return nurse;
 	}
-
 	public void setNurse(Nurse nurse) {
 		this.nurse = nurse;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
@@ -141,5 +134,4 @@ public class MedicalReport {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
 }

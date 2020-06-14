@@ -4,7 +4,6 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,11 +35,9 @@ public class Leave {
 	private Boolean active;
 	
 	@Column(name = "start_date", nullable = false, unique = false)
-	//@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
 	@Column(name = "end_date", nullable = false, unique = false)
-	//@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
 	@Column(name = "leave_type", nullable = false, unique = false)
@@ -57,7 +54,6 @@ public class Leave {
 	public Leave() {}
 	
 	public Leave(Date startDate, Date endDate, LeaveType type, MedicalPersonnel mp) {
-		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.type = type;
@@ -68,51 +64,39 @@ public class Leave {
 	public Date getStartDate() {
 		return startDate;
 	}
-
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
 	public Date getEndDate() {
 		return endDate;
 	}
-
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
 	public LeaveType getType() {
 		return type;
 	}
-
 	public void setType(LeaveType type) {
 		this.type = type;
 	}
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
 	public MedicalPersonnel getMedicalPersone() {
 		return medicalPersone;
 	}
-
 	public void setMedicalPersone(MedicalPersonnel medicalPersone) {
 		this.medicalPersone = medicalPersone;
 	}
-
 	public LeaveRequest getLeaveRequest() {
 		return leaveRequest;
 	}

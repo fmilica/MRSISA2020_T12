@@ -29,9 +29,7 @@ public abstract class MedicalPersonnel extends RegisteredUser {
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = true)
 	private Clinic clinic;
 	
-	public MedicalPersonnel() {
-		super();
-	}
+	public MedicalPersonnel() {}
 
 	public MedicalPersonnel(String email, String password, String name, String suername, String gender,
 			String dateOfBirth, String address, String city, String country, 

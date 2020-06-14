@@ -28,7 +28,6 @@ public class Nurse extends MedicalPersonnel{
 	public Set<MedicalReport> getMedicalReports() {
 		return medicalReports;
 	}
-
 	public void setMedicalReports(Set<MedicalReport> medicalReports) {
 		this.medicalReports = medicalReports;
 	}

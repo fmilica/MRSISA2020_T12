@@ -9,14 +9,11 @@ import javax.persistence.Table;
 @Table(name = "clinical_centre_admin")
 public class ClinicalCentreAdmin extends RegisteredUser{
 	
-	/*Nullable sam promenila na true samo da bih mogla nesto da probam inace treba da bude false*/
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)
 	private ClinicalCentre clinicalCentre;
 	
-	public ClinicalCentreAdmin() {
-		super();
-	}
+	public ClinicalCentreAdmin() {}
 
 	public ClinicalCentreAdmin(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city,String country, 
@@ -28,7 +25,6 @@ public class ClinicalCentreAdmin extends RegisteredUser{
 	public ClinicalCentre getClinicalCentre() {
 		return clinicalCentre;
 	}
-
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}

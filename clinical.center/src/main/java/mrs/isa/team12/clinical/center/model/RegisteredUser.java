@@ -77,7 +77,6 @@ public class RegisteredUser {
 	public RegisteredUser(String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city, String country, 
 			String phoneNumber, String securityNumber, Boolean logged) {
-		super();
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -96,7 +95,6 @@ public class RegisteredUser {
 	public RegisteredUser(Long id, String email, String password, String name, String surname, String gender, 
 			String dateOfBirth, String address, String city, String country, 
 			String phoneNumber, String securityNumber, Boolean logged) {
-		super();
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -179,31 +177,24 @@ public class RegisteredUser {
 	public void setSecurityNumber(String securityNumber) {
 		this.securityNumber = securityNumber;
 	}
-	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
 	public Boolean getLogged() {
 		return logged;
 	}
-
 	public void setLogged(Boolean logged) {
 		this.logged = logged;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -215,15 +206,6 @@ public class RegisteredUser {
 	    RegisteredUser user = (RegisteredUser) obj;
 	    return this.id.equals(user.getId());
 	}
-
-	@Override
-	public String toString() {
-		return "RegisteredUser [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
-				+ ", surname=" + surname + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth + ", address="
-				+ address + ", city=" + city + ", country=" + country + ", phoneNumber=" + phoneNumber
-				+ ", securityNumber=" + securityNumber + "]";
-	}
-
 	public String getVerificationToken() {
 		return token;
 	}

@@ -57,7 +57,6 @@ public class Ordination {
 	public Ordination() {}
 	
 	public Ordination(OrdinationType type, String name, Integer ordinationNumber, Clinic clinic, Set<Appointment> appointments) {
-		super();
 		this.type = type;
 		this.name = name;
 		this.ordinationNumber = ordinationNumber;
@@ -102,25 +101,15 @@ public class Ordination {
 	public void setOrdinationNumber(Integer ordinationNumber) {
 		this.ordinationNumber = ordinationNumber;
 	}
-	
 	public void addAppointment(Appointment a) {
 		this.appointments.add(a);
 	}
-	
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
-	@Override
-	public String toString() {
-		return "Ordination [id=" + id + ", type=" + type + ", name=" + name + ", clinic=" + clinic + ", appointments="
-				+ appointments + "]";
-	}
-	
 	// dobavljanje slobodnih termina ordinacije za odredjeni datum
 	public List<Integer> getAvailableTimesForDateAndType(Date date, AppointmentType type) {
 		// slobodna vremena za taj dan i tu ordinaciju
@@ -158,14 +147,10 @@ public class Ordination {
 		}
 		return times;
 	}
-
 	public Long getVersion() {
 		return version;
 	}
-
 	public void setVersion(Long version) {
 		this.version = version;
 	}
-	
-	
 }

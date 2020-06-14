@@ -49,8 +49,6 @@ public class AppointmentType {
 	@JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
 	private Clinic clinic;
 
-	/*@ManyToOne
-	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)*/
 	@ManyToMany(cascade = {ALL})
     @JoinTable(
         name = "appointment_type_doctor", 
@@ -62,16 +60,6 @@ public class AppointmentType {
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "appType")
 	private Set<Appointment> appointments;
 
-	/*many to many veza jer eto znamo i sami*/
-	/*@ManyToMany(cascade = {
-    CascadeType.PERSIST,
-    CascadeType.MERGE
-	})
-	@JoinTable(name = "post_tag",
-	    joinColumns = @JoinColumn(name = "post_id"),
-	    inverseJoinColumns = @JoinColumn(name = "tag_id")
-	)*/
-	
 	public AppointmentType() {}
 	
 	public AppointmentType(String name, Integer duration, Double price) {
@@ -103,72 +91,51 @@ public class AppointmentType {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
-
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}
-
 	public Set<Doctor> getDoctors() {
 		return doctors;
 	}
-
 	public void setDoctors(Set<Doctor> doctors) {
 		this.doctors = doctors;
 	}
-
 	public Integer getDuration() {
 		return duration;
 	}
-
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
-
 	public Double getPrice() {
 		return price;
 	}
-
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
-	@Override
-	public String toString() {
-		return "AppointmentType [name=" + name + ", duration=" + duration + ", price=" + price + "]";
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o)
@@ -180,29 +147,19 @@ public class AppointmentType {
 	    AppointmentType appType = (AppointmentType) o;
 	    return this.name.equals(appType.getName());
 	}
-	
 	public void addDoctor(Doctor d) {
 		if(!this.doctors.contains(d)) {
 			this.doctors.add(d);
 		}
 	}
-	
 	public void removeDoctor(Doctor d) {
 		if(this.doctors.contains(d)) {
 			this.doctors.remove(d);
 		}
 	}
-	
 	public void addAppointment(Appointment a) {
 		if(!this.appointments.contains(a)) {
 			this.appointments.add(a);
 		}
 	}
-	
-	@Override
-	public int hashCode() {
-	      return name.hashCode();
-	}
-	
-	
 }

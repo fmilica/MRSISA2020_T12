@@ -42,7 +42,6 @@ public class Appointment {
 	private Boolean finished;
 	
 	@Column(name = "app_date", unique = false, nullable = false )
-	//@Temporal(TemporalType.DATE)
 	private Date date;
 	
 	@Column(name = "app_start_time", unique = false, nullable = true )
@@ -81,7 +80,7 @@ public class Appointment {
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = true)
 	private Doctor doctor;
 	
-	//dodato zbog operacija
+	//doctors attending operations
 	@ManyToMany
 	@JoinTable(
 	        name = "appointment_doctors", 
@@ -93,12 +92,10 @@ public class Appointment {
 	@Column(name = "ordination_type", unique = false, nullable = true)
 	private OrdinationType type;
 
-	//OVO SAM DODALA JA KSENIJA DA PROBAM DA OBRISEM APPOINTMENT I APPOINTMENT REQUEST
 	@OneToOne(fetch = LAZY, cascade =  CascadeType.REMOVE, orphanRemoval = true)
 	@JoinColumn(name = "appointment_request_id")
 	private AppointmentRequest appointmentRequest;
 	
-	//Dodata cena i u appointment zbog izmene cenovnika i da ta izmena ne utice direktno na sve appointmente koji su prosli
 	@Column(name = "price", unique = false, nullable = false)
 	private double price;
 	
@@ -156,147 +153,111 @@ public class Appointment {
 	public Set<Doctor> getDoctors() {
 		return doctors;
 	}
-
 	public void setDoctors(Set<Doctor> doctors) {
 		this.doctors = doctors;
 	}
-
 	public OrdinationType getType() {
 		return type;
 	}
-
 	public void setType(OrdinationType type) {
 		this.type = type;
 	}
-	
 	public Boolean getFinished() {
 		return finished;
 	}
-
 	public void setFinished(Boolean finished) {
 		this.finished = finished;
 	}
-
 	public Date getDate() {
 		return date;
 	}
-
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
 	public Integer getStartTime() {
 		return startTime;
 	}
-
 	public void setStartTime(Integer startTime) {
 		this.startTime = startTime;
 	}
-
 	public Integer getEndTime() {
 		return endTime;
 	}
-
 	public void setEndTime(Integer endTime) {
 		this.endTime = endTime;
 	}
-
 	public AppointmentType getAppType() {
 		return appType;
 	}
-
 	public void setAppType(AppointmentType appType) {
 		this.appType = appType;
 	}
-
 	public Double getDiscount() {
 		return discount;
 	}
-
 	public void setDiscount(Double discount) {
 		this.discount = discount;
 	}
-
 	public Boolean getConfirmed() {
 		return confirmed;
 	}
-
 	public void setConfirmed(Boolean confirmed) {
 		this.confirmed = confirmed;
 	}
-
 	public Patient getPatient() {
 		return patient;
 	}
-
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
 	public MedicalReport getMedicalReport() {
 		return medicalReport;
 	}
-
 	public void setMedicalReport(MedicalReport medicalReport) {
 		this.medicalReport = medicalReport;
 	}
-
 	public Ordination getOrdination() {
 		return ordination;
 	}
-
 	public void setOrdination(Ordination ordination) {
 		this.ordination = ordination;
 	}
-
 	public Doctor getDoctor() {
 		return doctor;
 	}
-
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-
 	public Clinic getClinic() {
 		return clinic;
 	}
-
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 	public AppointmentRequest getAppointmentRequest() {
 		return appointmentRequest;
 	}
-
 	public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
 		this.appointmentRequest = appointmentRequest;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
 	public void addDoctor(Doctor d) {
 		this.doctors.add(d);
 	}
-
 	public double getPrice() {
 		return price;
 	}
-
 	public void setPrice(double price) {
 		this.price = price;
 	}

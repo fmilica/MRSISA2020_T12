@@ -43,7 +43,6 @@ public class LeaveRequest {
 	public LeaveRequest() {}
 
 	public LeaveRequest(Leave leave, Boolean approved, String description) {
-		super();
 		this.leave = leave;
 		this.approved = approved;
 		this.description = description;
@@ -53,39 +52,30 @@ public class LeaveRequest {
 	public Leave getLeave() {
 		return leave;
 	}
-
 	public void setLeave(Leave leave) {
 		this.leave = leave;
 	}
-
 	public Boolean getApproved() {
 		return approved;
 	}
-
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}

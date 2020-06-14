@@ -1,6 +1,5 @@
 package mrs.isa.team12.clinical.center.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,7 +10,6 @@ import javax.persistence.Table;
 @Table(name = "clinic_admin")
 public class ClinicAdmin extends RegisteredUser {
 	
-	/*Treba da bude false*/
 	@ManyToOne
 	@JoinColumn(name="clinic_id", referencedColumnName="id", nullable=false)
 	private Clinic clinic;
@@ -37,10 +35,4 @@ public class ClinicAdmin extends RegisteredUser {
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
-	@Override
-	public String toString() {
-		return "ClinicAdmin [clinic=" + clinic + "]";
-	}
-
 }

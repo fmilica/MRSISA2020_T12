@@ -94,16 +94,13 @@ public class Clinic {
 	private Set<AppointmentRequest> appointmentRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY)
-	// NEMA VEZU OD STRANE LEAVE REQUSEST KA OVAMO
+	// NEMA U KONTRA SMERU
 	private Set<LeaveRequest> leaveRequests;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "clinic")
 	private Set<Rating> ratings;
 	
 	public void add(ClinicAdmin clinicAdmin) {
-		/*if (clinicAdmin.getClinic() != null) {
-			clinicAdmin.getClinic().getAdmins().remove(clinicAdmin);
-		}*/
 		clinicAdmin.setClinic(this);
 		this.getAdmins().add(clinicAdmin);
 	}
@@ -112,7 +109,6 @@ public class Clinic {
 	
 
 	public Clinic(String name) {
-		super();
 		this.name = name;
 		this.active = true;
 	}
@@ -123,7 +119,6 @@ public class Clinic {
 			Set<AppointmentType> appointmentTypes, Set<Appointment> appointments, Set<ClinicAdmin> admins, 
 			Set<Ordination> ordinations, Set<AppointmentRequest> appointmentRequests, 
 			Set<LeaveRequest> leaveRequests, Set<Rating> ratings) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -266,7 +261,6 @@ public class Clinic {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
 	public void addAppType(AppointmentType appType) {
 		if(!this.appointmentTypes.contains(appType)) {
 			this.appointmentTypes.add(appType);
@@ -278,21 +272,17 @@ public class Clinic {
 	public Set<ClinicAdmin> getClinicAdmins(){
 		return this.admins;
 	}
-	
 	public void addAppointmentRequest(AppointmentRequest ar) {
 		ar.setClinic(this);
 		this.appointmentRequests.add(ar);
 	}
-	
 	public void addAppointment(Appointment a) {
 		a.setClinic(this);
 		this.appointments.add(a);
 	}
-	
 	public void addPatient(Patient p) {
 		this.patients.add(p);
 	}
-	
 	public AppointmentType getOneAppointmentType(String name) {
 		for (AppointmentType ap : appointmentTypes) {
 			if(ap.getName().equals(name)) {
@@ -301,7 +291,6 @@ public class Clinic {
 		}
 		return null;
 	}
-
 	public List<Appointment> getAvailableAppointments() {
 		List<Appointment> available = new ArrayList<Appointment>();
 		for(Appointment a: appointments) {
@@ -311,7 +300,6 @@ public class Clinic {
 		}
 		return available;
 	}
-	
 	public Boolean alreadyRated(Long patientId) {
 		for(Rating r: this.ratings) {
 			if(r.getPatient().getId() == patientId) {
@@ -320,10 +308,4 @@ public class Clinic {
 		}
 		return false;
 	}
-	
-	@Override
-	public String toString() {
-		return "Clinic [id=" + id + ", name=" + name + ", address=" + address + ", city=" + city + "]";
-	}
-	
 }

@@ -23,7 +23,6 @@ public class Patient extends RegisteredUser {
 	@JoinColumn(name = "medical_record_id")
 	private MedicalRecords medicalRecords;
 	
-	/*nullable = false*/
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = true)
 	private ClinicalCentre clinicalCentre;
@@ -59,57 +58,40 @@ public class Patient extends RegisteredUser {
 	public Set<Appointment> getAppointments() {
 		return appointments;
 	}
-
 	public void setAppointments(Set<Appointment> appointments) {
 		this.appointments = appointments;
 	}
-
 	public MedicalRecords getMedicalRecords() {
 		return medicalRecords;
 	}
-
 	public void setMedicalRecords(MedicalRecords medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
-
 	public ClinicalCentre getClinicalCentre() {
 		return clinicalCentre;
 	}
-
 	public void setClinicalCentre(ClinicalCentre clinicalCentre) {
 		this.clinicalCentre = clinicalCentre;
 	}
-
 	public Set<Rating> getRatings() {
 		return ratings;
 	}
-
 	public void setRatings(Set<Rating> ratings) {
 		this.ratings = ratings;
 	}
-
 	public RegistrationRequest getRegistrationRequest() {
 		return registrationRequest;
 	}
-
 	public void setRegistrationRequest(RegistrationRequest registrationRequest) {
 		this.registrationRequest = registrationRequest;
 	}
-
 	public void addAppointment(Appointment app) {
 		if (!appointments.contains(app)) {
 			appointments.add(app);
 		}
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "Patient [appointments=" + appointments + ", medicalRecords=" + medicalRecords + ", clinicalCentre="
-				+ clinicalCentre + ", ratings=" + ratings + "]";
 	}
 }

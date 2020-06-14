@@ -24,7 +24,6 @@ public class Doctor extends MedicalPersonnel {
 	@Column(name = "specialization", unique = false, nullable = false)
 	private Specialization specialization;
 	
-	// u rasponu od 0 do 24
 	@Column(name = "start_work", unique = false, nullable = false)
 	private Integer startWork;
 	
@@ -34,22 +33,18 @@ public class Doctor extends MedicalPersonnel {
 	@Column(name = "rating", unique = false, nullable = true)
 	private Double rating;
 	
-	//@OneToMany(cascade = {ALL}, fetch = LAZY)
-	//dodato za probu kaskadnog brisanja
 	@ManyToMany(mappedBy = "doctors",  cascade = CascadeType.ALL)
 	private Set<AppointmentType> appointmentTypes;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
 	private Set<Appointment> appointments;
 	
-	//dodato zbog operacija	
 	@ManyToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctors")	
 	private Set<Appointment> operationAppointments;
 	
 	@OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "doctor")
 	private Set<Rating> ratings;
 	
-
 	public Doctor() {}
 
 	public Doctor(Long id) {
@@ -66,7 +61,6 @@ public class Doctor extends MedicalPersonnel {
 		this.appointments = appointments;
 		this.ratings = ratings;
 	}
-
 
 	public Integer getStartWork() {
 		return startWork;
@@ -126,14 +120,6 @@ public class Doctor extends MedicalPersonnel {
 	public void addPatient(Patient patient) {
 		this.getPatients().add(patient);
 	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "Doctor [specialization=" + specialization + ", startWork=" + startWork + ", endWork=" + endWork
-				+ ", rating=" + rating + ", appointmentTypes=" + appointmentTypes
-				+ ", appointments=" + appointments + ", ratings=" + ratings + "]";
-	}
-
 	// dobavljanje slobodnih termina doktora za odredjeni datum
 	public List<Integer> getAvailableTimesForDateAndType(Date date, AppointmentType type) {
 		// slobodna vremena za taj dan i tog doktora
@@ -184,11 +170,9 @@ public class Doctor extends MedicalPersonnel {
 	public Set<Appointment> getOperationAppointments() {
 		return operationAppointments;
 	}
-
 	public void setOperationAppointments(Set<Appointment> operationAppointments) {
 		this.operationAppointments = operationAppointments;
 	}
-	
 	public Boolean alreadyRated(Long patientId) {
 		for(Rating r: this.ratings) {
 			if(r.getPatient().getId() == patientId) {
