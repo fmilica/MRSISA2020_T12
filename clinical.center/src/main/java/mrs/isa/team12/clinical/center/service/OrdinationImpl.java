@@ -152,7 +152,7 @@ public class OrdinationImpl implements OrdinationService {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW/*, isolation = Isolation.REPEATABLE_READ*/)
 	public Ordination update(Long id, AppointmentRequest ar) {
 		logger.info("> update id:{}",id);
 		Ordination o = this.findOneById(id);
