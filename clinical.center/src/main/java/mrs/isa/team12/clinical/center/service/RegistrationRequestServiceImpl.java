@@ -46,6 +46,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
 			throw new ObjectOptimisticLockingFailureException(RegistrationRequest.class, rr);
 		}
 		rr.setApproved(true);
+		rr.getUser().setActive(true);
 		requestRepository.save(rr);
 		logger.info("< update id:{}", rr.getId());
 		return rr;

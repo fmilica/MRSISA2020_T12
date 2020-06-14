@@ -86,7 +86,7 @@ public class MedicalReportController {
 		List<MedicalReportVerifyDto> medicalReportDtos = new ArrayList<MedicalReportVerifyDto>();
 		
 		for (MedicalReport mr : medicalReports) {
-			if(!mr.isVerified()) {
+			if(!mr.isVerified() && !mr.getPrescriptions().isEmpty()) {
 				medicalReportDtos.add(new MedicalReportVerifyDto(mr));
 			}
 		}

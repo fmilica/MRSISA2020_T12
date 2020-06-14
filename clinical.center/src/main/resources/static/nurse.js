@@ -168,6 +168,19 @@ $(document).ready(function(){
 					{
 						data: null,
 						render: function (data) {
+							var medicines = "";
+							$.each(data.prescriptions, function(index, medicine){
+								medicines += medicine
+								if(index != data.prescriptions.length-1){
+									medicines += ", "
+								}
+							})
+						  	return medicines;
+						}
+					},
+					{
+						data: null,
+						render: function (data) {
 							var button = '<button id="'+data.id+'" class="btn btn-info table-button-verify" name="'+data.id+'">Verify</button>';
 						  	return button;
 						}

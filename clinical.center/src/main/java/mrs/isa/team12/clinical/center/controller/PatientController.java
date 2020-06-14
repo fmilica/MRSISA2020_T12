@@ -387,6 +387,7 @@ public class PatientController {
 		// ne postoji u bazi
 		// sacuvamo ga
 		RegistrationRequest regReq = new RegistrationRequest(patient, false, "");
+		patient.setActive(false);
 		Patient saved = patientService.save(patient);
 		registrationService.save(regReq);
 		// dodavanje reference na registration request

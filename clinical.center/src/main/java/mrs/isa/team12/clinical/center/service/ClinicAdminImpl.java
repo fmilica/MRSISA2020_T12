@@ -54,6 +54,8 @@ public class ClinicAdminImpl implements ClinicAdminService {
 	@Override
 	public ClinicAdmin save(ClinicAdmin ca) {
 		logger.info("> create");
+		ca.setActive(true);
+		ca.setLogged(false);
 		ClinicAdmin clinicAdmin = clinicAdminRep.save(ca);
 		logger.info("< create");
 		return clinicAdmin;

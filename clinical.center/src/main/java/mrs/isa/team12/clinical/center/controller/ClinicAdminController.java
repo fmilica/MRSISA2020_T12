@@ -228,10 +228,9 @@ public class ClinicAdminController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clinic with given name does not exist.");
 		}
 		
-		clinicAdmin.setActive(true);
-		clinicAdmin.setLogged(false);
+		clinicAdmin = adminService.save(clinicAdmin);
 		clinic.add(clinicAdmin);
-		clinicService.save(clinic);
+		//clinicService.save(clinic);
 		
 		return new ResponseEntity<>(new ClinicAdminDto(clinicAdmin, clinic.getName()), HttpStatus.CREATED);
 	}

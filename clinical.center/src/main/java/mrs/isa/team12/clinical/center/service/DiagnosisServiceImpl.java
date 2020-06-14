@@ -38,6 +38,7 @@ public class DiagnosisServiceImpl implements DiagnosisService{
 	@Override
 	public Diagnosis save(Diagnosis d) {
 		logger.info("> create");
+		d.setActive(true);
 		Diagnosis diagnosis = diagnosisRepository.save(d);
 		logger.info("< create");
 		return diagnosis;

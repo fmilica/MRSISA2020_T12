@@ -32,6 +32,7 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 	@Transactional(readOnly = false)
 	public Prescription save(Prescription p) {
 		logger.info("> create");
+		p.setActive(true);
 		Prescription pp = prescriptionRepository.save(p);
 		logger.info("< create");
 		return pp;
@@ -43,6 +44,7 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 		Prescription pp = this.findOneByMedicine(medicine);
 		if(pp == null) {
 			logger.info("> create");
+			p.setActive(true);
 			p.setDiagnosis(d);
 			pp = prescriptionRepository.save(p);
 			logger.info("< create");
