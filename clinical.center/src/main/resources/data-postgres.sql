@@ -178,7 +178,7 @@ where id = '36';
 
 /*NE preklapa se sa jednim drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price, ordination_id)
-values ('41', 'true', '2020-05-21', '08', '09', 'true', '29', '6', '9', '12', '0', 'true' , '30', '19');
+values ('41', 'true', '2020-05-28', '08', '09', 'true', '29', '6', '9', '12', '0', 'true' , '30', '19');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
 values ('42', '41', '2020-05-20', 'true', '6', '0', 'true');
 update appointment
@@ -198,7 +198,7 @@ where id = '41';
 
 /*Preklapa se sa drugim vremenom u toj ordinaciji*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, version, is_active, price, ordination_id)
-values ('39', 'true', '2020-05-21', '09', '10', 'true', '29', '6', '9', '12', '0', 'true', '30', '19');
+values ('39', 'true', '2020-05-30', '09', '10', 'true', '29', '6', '9', '12', '0', 'true', '30', '19');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
 values ('40', '39', '2020-05-20', 'true', '6', '0', 'true');
 update appointment
@@ -273,7 +273,7 @@ where id = '57';
 
 /*Jedan potvrdjen - preklapanje sa njim*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, patient_id, clinic_id, doctor_id, app_type, ordination_id, version, is_active, price)
-values ('25', 'true', '2020-05-21', '18', '19', 'true', '29', '6', '9', '12', '20', '0', 'true', '30');
+values ('25', 'true', '2020-06-01', '18', '19', 'true', '29', '6', '9', '12', '20', '0', 'true', '30');
 insert into appointment_request (id, appointment_id, request_date, approved, clinic_id, version, is_active)
 values ('26', '25', '2020-05-15', 'true', '6', '0', 'true');
 update appointment
@@ -302,8 +302,8 @@ where id = '27';
 
 /*Ne overen recept*/
 /*Medical report (izvestaj doktora)*/
-insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, nurse_id, is_active)
-values ('86', 'Pacijent je zdrav.', '53', '27', '0', 'false', '15', 'true');
+insert into medical_report (id, description, diagnosis_id, appointment_id, version, verified, is_active)
+values ('86', 'Pacijent je zdrav.', '53', '27', '0', 'false', 'true');
 /*Lekovi prepisani ovim izvestajem gore*/
 insert into medical_report_perscription(medical_report_id, prescription_id)
 values ('86', '79');
@@ -341,7 +341,7 @@ update leave
 set leave_request_id = '64'
 where id = '63';
 insert into leave(id, version, start_date, end_date, leave_type, medical_personnel_id, is_active)
-values ('65', '0', '2020-05-27', '2020-06-03', '0', '9', 'true');
+values ('65', '0', '2020-06-27', '2020-07-03', '0', '9', 'true');
 insert into leave_request(id, version, leave_id, approved, description, is_active)
 values ('66', '0', '65', 'true', '', 'true');
 update leave
@@ -371,4 +371,4 @@ where id = '72';
 
 /*Mother and child klinika jedan pregled koji je potvrdjen ali nema jos pacijenta da bi predefined appointments prikazivao nesto*/
 insert into appointment (id, app_finished, app_date, app_start_time, app_end_time, confirmed, clinic_id, doctor_id, app_type, ordination_id, version, is_active, price)
-values ('71', 'false', '2020-06-07', '16', '17', 'true', '6', '9', '12', '19', '0', 'true', '30');
+values ('71', 'true', '2020-06-07', '16', '17', 'true', '6', '9', '12', '19', '0', 'true', '30');
