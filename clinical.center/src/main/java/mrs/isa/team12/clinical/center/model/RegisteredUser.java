@@ -196,6 +196,28 @@ public class RegisteredUser {
 		this.logged = logged;
 	}
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((active == null) ? 0 : active.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((logged == null) ? 0 : logged.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + ((securityNumber == null) ? 0 : securityNumber.hashCode());
+		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+		result = prime * result + ((token == null) ? 0 : token.hashCode());
+		result = prime * result + ((version == null) ? 0 : version.hashCode());
+		return result;
+	}
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 	        return true;

@@ -118,7 +118,7 @@ public class ClinicalCentre {
 	}
 	public Clinic getOneClinic(Long id) {
 		for (Clinic clinic : clinics) {
-			if(clinic.getId() == id) {
+			if(clinic.getId().equals(id)) {
 				return clinic;
 			}
 		}
@@ -127,7 +127,7 @@ public class ClinicalCentre {
 	public Doctor getDoctor(Long id) {
 		for (Clinic clinic : clinics) {
 			for (Doctor doctor : clinic.getDoctors()) {
-				if(doctor.getId() == id) {
+				if(doctor.getId().equals(id)) {
 					return doctor;
 				}
 			}

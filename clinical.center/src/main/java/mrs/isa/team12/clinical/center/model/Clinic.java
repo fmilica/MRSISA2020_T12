@@ -302,7 +302,7 @@ public class Clinic {
 	}
 	public Boolean alreadyRated(Long patientId) {
 		for(Rating r: this.ratings) {
-			if(r.getPatient().getId() == patientId) {
+			if(r.getPatient().getId().equals(patientId)) {
 				return true;
 			}
 		}

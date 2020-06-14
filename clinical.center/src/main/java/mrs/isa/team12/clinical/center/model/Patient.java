@@ -91,6 +91,17 @@ public class Patient extends RegisteredUser {
 		}
 	}
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((appointments == null) ? 0 : appointments.hashCode());
+		result = prime * result + ((clinicalCentre == null) ? 0 : clinicalCentre.hashCode());
+		result = prime * result + ((medicalRecords == null) ? 0 : medicalRecords.hashCode());
+		result = prime * result + ((ratings == null) ? 0 : ratings.hashCode());
+		result = prime * result + ((registrationRequest == null) ? 0 : registrationRequest.hashCode());
+		return result;
+	}
+	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
