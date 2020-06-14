@@ -74,7 +74,7 @@ public class MedicalRecordDto {
 	public void setMedicalReports(Set<Appointment> appointments) {
 		if (appointments != null) {
 			for(Appointment a : appointments) {
-				if (a.getFinished()) {
+				if (a.getFinished() && a.getMedicalReport() != null) {
 					MedicalReportDto medicalReport = new MedicalReportDto(a.getMedicalReport());
 					medicalReport.setPrescriptionMedicines(a.getMedicalReport().getPrescriptions());
 					if (this.medicalReports == null) {

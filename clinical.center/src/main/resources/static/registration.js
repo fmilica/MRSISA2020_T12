@@ -28,6 +28,11 @@ $(document).ready(function() {
 			return
 		}
 		
+		if(!validEmail(emailV)){
+			alert("Email must be in form of something@something.something!")
+			return;
+		}
+		
 		if (passwordV1 != passwordV2) {
 			return
 		}

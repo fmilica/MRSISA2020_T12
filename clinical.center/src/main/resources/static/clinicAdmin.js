@@ -649,6 +649,11 @@ $(document).ready(function() {
 			return;
 		}
 		
+		if(!validEmail(emailV)){
+			alert("Email must be in form of something@something.something!")
+			return;
+		}
+		
 		if(isNaN(securityNumV)){
 			alert("Security number must be a number!")
 			return;
@@ -810,6 +815,11 @@ $(document).ready(function() {
 		if(!emailV || !nameV || !surnameV || !passwordV || !genderV ||
 				!dateOfBirthV || !securityNumV){
 			alert("Not all required fields are filled!")
+			return;
+		}
+		
+		if(!validEmail(emailV)){
+			alert("Email must be in form of something@something.something!")
 			return;
 		}
 		
