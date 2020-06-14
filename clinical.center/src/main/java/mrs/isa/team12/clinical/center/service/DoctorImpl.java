@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import javax.persistence.EntityExistsException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +59,18 @@ public class DoctorImpl implements DoctorService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public Doctor save(Doctor d) {
 		logger.info("> create");
-		Doctor doctor =  doctorRep.save(d);
+		Doctor doctor = doctorRep.findOneByEmail(d.getEmail());
+		if(doctor != null) {
+			logger.info("< EntityExistsException");
+			throw new EntityExistsException();
+		}
+		d.setActive(true);
+		Doctor saved =  doctorRep.save(d);
 		logger.info("< create");
-		return doctor;
+		return saved;
 	}
 	
 	@Override
