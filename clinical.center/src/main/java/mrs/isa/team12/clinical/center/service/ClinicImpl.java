@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javassist.expr.Cast;
 import mrs.isa.team12.clinical.center.dto.ClinicDto;
 import mrs.isa.team12.clinical.center.model.Appointment;
 import mrs.isa.team12.clinical.center.model.Clinic;
@@ -106,7 +107,7 @@ public class ClinicImpl implements ClinicService {
 		for(Rating r : clinicToUpdate.getRatings()) {
 			ratingSum += r.getRating();
 		}
-		double newRating = ratingSum / clinicToUpdate.getRatings().size();
+		double newRating = (double) ratingSum / clinicToUpdate.getRatings().size();
 		clinicToUpdate.setRating(newRating);
 		Clinic updated = repository.save(clinicToUpdate);
 		logger.info("< update id{}", updated.getId());

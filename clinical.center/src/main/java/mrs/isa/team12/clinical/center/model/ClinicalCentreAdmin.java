@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "clinical_centre_admin")
-public class ClinicalCentreAdmin extends RegisteredUser{
+public class ClinicalCentreAdmin extends RegisteredUser {
 	
 	@ManyToOne
 	@JoinColumn(name = "clinical_centre_id", referencedColumnName = "id", nullable = false)

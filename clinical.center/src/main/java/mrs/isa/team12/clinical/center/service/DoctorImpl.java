@@ -151,7 +151,7 @@ public class DoctorImpl implements DoctorService {
 		for(Rating r : doctorToUpdate.getRatings()) {
 			ratingSum += r.getRating();
 		}
-		double newRating = ratingSum / doctorToUpdate.getRatings().size();
+		double newRating = (double) ratingSum / doctorToUpdate.getRatings().size();
 		doctorToUpdate.setRating(newRating);
 		Doctor updated = doctorRep.save(doctorToUpdate);
 		logger.info("< update id{}", updated.getId());

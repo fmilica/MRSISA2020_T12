@@ -51,11 +51,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
 			+ "((a.startTime BETWEEN ?3 AND ?4) AND (a.endTime BETWEEN ?3 AND ?4)) "
 			+ "OR (a.startTime <= ?3 AND a.endTime >= ?4)"
 			+ ")")
-	/*@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})*/
-	// nije dovoljno iz razloga sto moze neko u medjuvremenu da izvrsi dodavanje u tom periodu
-	// moramo zakljucati podatke te dok god traje transakcija
-	// Repeatable read bi nam verovatno pomogao!
 	List<Appointment> findAllExisting(Long doctorId, Date appDate, Integer startTime, Integer endTime);
 	
 	List<Appointment> findAllByOrdinationId(Long id);

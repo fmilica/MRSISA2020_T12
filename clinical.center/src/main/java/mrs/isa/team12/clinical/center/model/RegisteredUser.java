@@ -2,6 +2,8 @@ package mrs.isa.team12.clinical.center.model;
 
 import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +20,9 @@ import org.hibernate.annotations.Where;
 @Table(name = "registered_user")
 @Where(clause="is_active=true")
 @Inheritance(strategy=TABLE_PER_CLASS)
-public class RegisteredUser {
+public class RegisteredUser implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)

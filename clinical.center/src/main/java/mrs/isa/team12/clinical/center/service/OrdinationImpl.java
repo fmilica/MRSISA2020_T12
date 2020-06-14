@@ -50,7 +50,7 @@ public class OrdinationImpl implements OrdinationService {
 		logger.info("> update id:{}", o.getId());
 		Ordination newOrdination = this.findOneByNameAndOrdinationNumber(edited.getName(), edited.getOrdinationNumber());
 		if (newOrdination == null || 
-				(newOrdination.getName().equals(edited.getName()) && newOrdination.getOrdinationNumber() == edited.getOrdinationNumber())) {
+				(newOrdination.getName().equals(edited.getName()) && newOrdination.getOrdinationNumber().equals(edited.getOrdinationNumber()))) {
 			o.setName(edited.getName());
 			o.setOrdinationNumber(edited.getOrdinationNumber());
 			o.setType(edited.getType());
@@ -174,7 +174,7 @@ public class OrdinationImpl implements OrdinationService {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public Ordination update(Long clinicId, String name, Integer ordNumber, Ordination ord, Clinic clinic) {
 		Ordination o = this.findOneByClinicIdAndNameAndOrdinationNumber(clinicId, name, ordNumber);
 		if(o == null) {

@@ -45,17 +45,18 @@ public class RegistrationListener implements
 		} catch (Exception e) {
 			System.out.println("----------------------------------------------------------");
 		}
-         
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm.html?token=" + user.getVerificationToken();
-        //String message = messages.getMessage("message.regSucc", null, event.getLocale());
-         
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setFrom(env.getProperty("spring.mail.username"));
-        email.setSubject(subject);																			//"http://localhost:8081"
-        email.setText("Follow this link to activate your profile on The Good Shepherd Clinical Center: " + "\r\n" + "https://tim12-clinical-centre.herokuapp.com" + confirmationUrl);
-        mailSender.send(email);
+        if (user != null) {
+	        String recipientAddress = user.getEmail();
+	        String subject = "Registration Confirmation";
+	        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm.html?token=" + user.getVerificationToken();
+	        //String message = messages.getMessage("message.regSucc", null, event.getLocale());
+	         
+	        SimpleMailMessage email = new SimpleMailMessage();
+	        email.setTo(recipientAddress);
+	        email.setFrom(env.getProperty("spring.mail.username"));
+	        email.setSubject(subject);																			//"http://localhost:8081"
+	        email.setText("Follow this link to activate your profile on The Good Shepherd Clinical Center: " + "\r\n" + "https://tim12-clinical-centre.herokuapp.com" + confirmationUrl);
+	        mailSender.send(email);
+        }
     }
 }

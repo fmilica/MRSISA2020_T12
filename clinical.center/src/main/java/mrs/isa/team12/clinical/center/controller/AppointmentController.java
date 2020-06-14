@@ -281,7 +281,7 @@ public class AppointmentController {
 		
 		Appointment app = appointmentService.findById(appId);
 		
-		if(app.getPatient().getId() != currentUser.getId()) {
+		if(app.getPatient().getId().equals(currentUser.getId())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your apppointments!");
 		}
 		
@@ -471,11 +471,7 @@ public class AppointmentController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "In the meantime, this appointment time became unavailable.\nSorry for the inconvinience, you can schedule another appointment.");
 		}
-		// ova dodavanja se vrse tek kada se zahtev prihvati
-		/*// klinici dodamo novi pregled
-		c.addAppointment(appointment);
-		// doktoru dodamo novi pregled
-		d.addAppointment(appointment);*/
+
 		// pacijentu dodamo novi pregled
 		patient.addAppointment(appointment);
 		

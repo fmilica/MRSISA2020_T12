@@ -91,7 +91,7 @@ public class LeaveRequestController {
 	}
 	
 	/*
-	 url: POST localhost:8081/theGoodShepherd/leaveRequest
+	 url: POST localhost:8081/theGoodShepherd/leaveRequest/addNewLeaveRequest
 	 HTTP request for getting all leave requests of current user
 	 returns ResponseEntity object
 	*/
