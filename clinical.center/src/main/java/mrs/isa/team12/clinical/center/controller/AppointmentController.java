@@ -438,7 +438,7 @@ public class AppointmentController {
 	@PostMapping(value = "createPatientApp",
 				 consumes = MediaType.APPLICATION_JSON_VALUE,
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentPredefinedDto> createPatientApp(@RequestBody AppointmentPredefinedDto appDto) {
+	public ResponseEntity<AppointmentDto> createPatientApp(@RequestBody AppointmentPredefinedDto appDto) {
 		Patient currentUser;
 		try {
 			currentUser = (Patient) session.getAttribute("currentUser");
@@ -484,8 +484,8 @@ public class AppointmentController {
 		// dodavanje u appointment njegov appointment request
 		appointment.setAppointmentRequest(appRequest);
 		//appointmentService.update(appointment);
-
-		return new ResponseEntity<>(appDto, HttpStatus.OK);
+		AppointmentDto dto = new AppointmentDto(appointment);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*
@@ -582,7 +582,7 @@ public class AppointmentController {
 	@PostMapping(value = "/createFollowupRequest",
 				 consumes = MediaType.APPLICATION_JSON_VALUE,
 				 produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AppointmentFollowupDto> createFollowupAppointment(@RequestBody AppointmentFollowupDto appDto) {
+	public ResponseEntity<AppointmentDto> createFollowupAppointment(@RequestBody AppointmentFollowupDto appDto) {
 		Doctor currentUser;
 		try {
 			currentUser = (Doctor) session.getAttribute("currentUser");
@@ -642,7 +642,8 @@ public class AppointmentController {
 		
 		adminService.sendAppOperRequestNotification(currentUser.getClinic().getId(), doctor, appType);
 		
-		return new ResponseEntity<>(appDto, HttpStatus.OK);
+		AppointmentDto dto = new AppointmentDto(appointment);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	/*
