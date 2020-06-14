@@ -29,7 +29,9 @@ import mrs.isa.team12.clinical.center.model.Nurse;
 import mrs.isa.team12.clinical.center.model.enums.LeaveType;
 import mrs.isa.team12.clinical.center.service.interfaces.AppointmentService;
 import mrs.isa.team12.clinical.center.service.interfaces.ClinicAdminService;
+import mrs.isa.team12.clinical.center.service.interfaces.DoctorService;
 import mrs.isa.team12.clinical.center.service.interfaces.LeaveRequestService;
+import mrs.isa.team12.clinical.center.service.interfaces.NurseService;
 
 @RestController
 @RequestMapping("theGoodShepherd/leaveRequest")
@@ -38,15 +40,20 @@ public class LeaveRequestController {
 	private LeaveRequestService leaveRequestService;
 	private AppointmentService appointmentService;
 	private ClinicAdminService clinicAdminService;
+	private DoctorService doctorService;
+	private NurseService nurseService;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	public LeaveRequestController(LeaveRequestService lrs, AppointmentService as, ClinicAdminService cas) {
+	public LeaveRequestController(LeaveRequestService lrs, AppointmentService as, ClinicAdminService cas,
+			DoctorService ds, NurseService ns) {
 		this.leaveRequestService = lrs;
 		this.appointmentService = as;
 		this.clinicAdminService = cas;
+		this.doctorService = ds;
+		this.nurseService = ns;
 	}
 	
 	/*
@@ -112,7 +119,15 @@ public class LeaveRequestController {
 		LeaveType lt = leave.getType().equals("Paid") ? LeaveType.Paid : LeaveType.Vacation;
 		
 		if(nurse == null) {
+			doctor = doctorService.findOneById(doctor.getId());
 			List<Appointment> appointments = appointmentService.findAllByDoctorIdAndDateBetween(mp.getId(), leave.getStartDate(), leave.getEndDate());
+			
+			for (Leave l : doctor.getLeaveList()) {
+				if((leave.getStartDate().after(l.getStartDate()) && leave.getStartDate().before(l.getEndDate())) ||
+						(leave.getEndDate().after(l.getStartDate()) && leave.getEndDate().before(l.getEndDate()))) {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't request a vacation if you already requested leave for that period.");
+				}
+			}
 			
 			if(appointments.size() == 0) {
 				LeaveRequest lr = new LeaveRequest(new Leave(leave.getStartDate(), leave.getEndDate(), lt, mp), false, "");
@@ -121,6 +136,14 @@ public class LeaveRequestController {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't request a vacation if you have appointments in that period.");
 			}
 		}else {
+			nurse = nurseService.findOneById(nurse.getId());
+			for (Leave l : nurse.getLeaveList()) {
+				if((leave.getStartDate().after(l.getStartDate()) && leave.getStartDate().before(l.getEndDate())) ||
+						(leave.getEndDate().after(l.getStartDate()) && leave.getEndDate().before(l.getEndDate()))) {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't request a vacation if you already requested leave for that period.");
+				}
+			}
+			
 			LeaveRequest lr = new LeaveRequest(new Leave(leave.getStartDate(), leave.getEndDate(), lt, mp), false, "");
 			leaveRequestService.save(lr);
 		}

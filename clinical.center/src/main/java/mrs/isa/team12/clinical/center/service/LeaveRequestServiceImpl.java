@@ -73,6 +73,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public LeaveRequest update(Long id) {
 		logger.info("> update id:{}", id);
 		LeaveRequest leaveReq = findOneById(id);

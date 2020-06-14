@@ -14,6 +14,8 @@ $(document).ready(function(){
 
 	// postavljanje maksimalnog datuma rodjenja koji se moze odabrati na danas
 	document.getElementById("dateOfBirthEdit").max = new Date().toISOString().split("T")[0];
+	document.getElementById("startDate").min = new Date().toISOString().split("T")[0];
+	document.getElementById("endDate").min = new Date().toISOString().split("T")[0];
 
 	/*------------------------------------------------------------------------*/
 	/*View profile*/
@@ -234,6 +236,14 @@ $(document).ready(function(){
 			startDate: startDate,
 			endDate: endDate,
 			type: type
+		}
+		
+		var sd = new Date(startDate)
+		var ed = new Date(endDate)
+		
+		if(sd > ed){
+			alert("Start date must be before end date!!")
+			return
 		}
 		
 		$.ajax({

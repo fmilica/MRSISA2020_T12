@@ -236,6 +236,11 @@ $(document).ready(function() {
         	return;
         }
         
+        if(!validEmail(username)){
+			alert("Email must be in form of something@something.something!")
+			return;
+		}
+        
         if(isNaN(security)){
 			alert("Security number must be a number!")
         	return;
@@ -505,6 +510,11 @@ $(document).ready(function() {
         	alert("All required fields must be filled!")
         	return;
         }
+        
+        if(!validEmail(username)){
+			alert("Email must be in form of something@something.something!")
+			return;
+		}
 
         var currentDate = new Date();
         var birthDate = new Date(birth);

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -174,6 +175,8 @@ public class MedicalReportController {
 			medicalReportService.update(medicalRecordId, nurse);
 		}catch(NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medical report with given id doesn't exist!");
+		} catch(ObjectOptimisticLockingFailureException e1) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "Medical report has been dealt with in the meantime!");
 		}
 	}
 	
